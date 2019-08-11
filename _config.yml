@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: HKBlog 
 subtitle:
 description:
 keywords:
-author: John Doe
-language:
+author: HK
+language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://mjava.top
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -39,10 +39,16 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
+  enable: false 
   line_number: true
   auto_detect: false
   tab_replace:
+
+prism_plugin:
+  mode: 'preprocess'    # realtime/preprocess
+  theme: 'tomorrow'
+  line_number: false    # default false
+  custom_css:
   
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -73,9 +79,23 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: hexo-theme-matery 
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: sftp
+  host: mjava.top
+  user: pi
+  pass: zxcv1234
+  remotePath: /var/www/html/blog
+  port: 22
+  agent: $SSH_AUTH_SOCK
+ #type: git
+ #repository:git@github.com:z573419235/hk.github.io.git
+ #branch:master
+
+#search
+search:
+  path: search.xml
+  field: post
