@@ -35,7 +35,7 @@ titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true 
 relative_link: false
 future: true
 highlight:
@@ -91,9 +91,9 @@ deploy:
   remotePath: /var/www/html/blog
   port: 22
   agent: $SSH_AUTH_SOCK
- #type: git
- #repository:git@github.com:z573419235/hk.github.io.git
- #branch:master
+  #type: git
+  #repository: git@github.com:z573419235/hk.github.io.git
+  #branch: master
 
 #search
 search:
