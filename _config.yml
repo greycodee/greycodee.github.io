@@ -6,7 +6,7 @@
 title: HKBlog 
 subtitle:
 description:
-keywords:
+keywords: 技术,心得,总结
 author: HK
 language: zh-CN
 timezone:
@@ -43,7 +43,10 @@ highlight:
   line_number: true
   auto_detect: false
   tab_replace:
-
+#自动根据文章路径分类
+auto_category:
+  enable: true
+  depth: 
 prism_plugin:
   mode: 'preprocess'    # realtime/preprocess
   theme: 'tomorrow'

@@ -4,7 +4,7 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="HKBlog">
+    <meta name="keywords" content="技术,心得,总结">
     <meta name="description" content="HKBlog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -340,6 +340,10 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
                 
             </div>
             <div class="cover-social-link">
+    <a href="https://github.com/z573419235" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
 
 
     <a href="mailto:573419235@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
@@ -411,20 +415,42 @@ $(function () {
             <div class="card">
                 <div class="card-content">
                     
-                        <div class="dream">
+
+                    
+                        
+
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
     
     <div class="title center-align">
-        <i class="fa fa-lightbulb-o"></i>&nbsp;&nbsp;我的梦想
+        <i class="fa fa-music"></i>&nbsp;&nbsp;听听音乐
     </div>
     
     <div class="row">
-        <div class="col l8 offset-l2 m10 offset-m1 s10 offset-s1 center-align text">
-            不是每个人都应该像我这样去建造一座水晶大教堂，但是每个人都应该拥有自己的梦想，设计自己的梦想，追求自己的梦想，实现自己的梦想。梦想是生命的灵魂，是心灵的灯塔，是引导人走向成功的信仰。有了崇高的梦想，只要矢志不渝地追求，梦想就会成为现实，奋斗就会变成壮举，生命就会创造奇迹。——罗伯·舒乐
+        <div class="col l8 offset-l2 m10 offset-m1 s12">
+            <div id="aplayer" class="music"></div>
         </div>
     </div>
 </div>
-                    
 
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script>
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'false' === 'true',
+        autoplay: 'true' === 'true',
+        theme: '#42b983',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'false' === 'true',
+        listMaxHeight: '',
+        audio: JSON.parse('[{"name":"等你下课(with 杨瑞代)","artist":"周杰伦","url":"/medias/music/等你下课(with 杨瑞代) - 周杰伦.mp3","cover":"http://y.gtimg.cn/music/photo_new/T002R300x300M000003bSL0v4bpKAx.jpg?max_age=2592000"},{"name":"告白气球","artist":"周杰伦","url":"/medias/music/告白气球 - 周杰伦.mp3","cover":"http://y.gtimg.cn/music/photo_new/T002R300x300M000003RMaRI1iFoYd.jpg?max_age=2592000"},{"name":"稻香","artist":"周杰伦","url":"/medias/music/稻香 - 周杰伦.mp3","cover":"http://y.gtimg.cn/music/photo_new/T002R300x300M000002Neh8l0uciQZ.jpg?max_age=2592000"},{"name":"给我一首歌的时间","artist":"周杰伦","url":"/medias/music/给我一首歌的时间 - 周杰伦.mp3","cover":"http://y.gtimg.cn/music/photo_new/T002R300x300M000002Neh8l0uciQZ.jpg?max_age=2592000"},{"name":"明天过后","artist":"张杰","url":"http://m10.music.126.net/20190813074822/5f25d1b69b0299f498fc9f3a0357d18e/ymusic/9e9a/93c0/0911/9d11bcbde6c1dd9815f46ca6d50723a6.mp3","cover":"http://p2.music.126.net/ixIs5kkukgNYMmeDsc35_g==/29686813955450.jpg?param=300x300"}]')
+    });
+});
+</script>
                     
 
                     
@@ -446,6 +472,61 @@ $(function () {
     <!-- 所有文章卡片 -->
     <article id="articles" class="container articles">
         <div class="row article-row">
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/08/12/technology/learningExperience/Java/t3/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="t3">
+                            
+                            <span class="card-title">t3</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-12
+                            </span>
+                            <span class="publish-author">
+                                
+                                <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
+                                <!-- 
+                                <a href="/categories/technology/" class="post-category" target="_blank">
+                                    technology
+                                </a>
+                                
+                                <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
+                                    learningExperience
+                                </a>
+                                
+                                <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
+                                    Java
+                                </a>
+                                 -->
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Java/" target="_blank">
+                            <span class="chip bg-color">Java</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
@@ -471,43 +552,16 @@ $(function () {
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fa fa-user fa-fw"></i>
-                                HK
+                                <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
+                                <!-- 
+                                <a href="/categories/essay/" class="post-category" target="_blank">
+                                    essay
+                                </a>
                                 
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/08/12/essay/dailyGrumble/test/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="test">
-                            
-                            <span class="card-title">test</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-12
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fa fa-user fa-fw"></i>
-                                HK
+                                <a href="/categories/essay/dailyGrumble/" class="post-category" target="_blank">
+                                    dailyGrumble
+                                </a>
+                                 -->
                                 
                             </span>
                         </div>
@@ -553,6 +607,10 @@ $(function () {
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/z573419235" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
 
 
     <a href="mailto:573419235@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
