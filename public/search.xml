@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>递归算法-获取jaos中指定key的所有值</title>
+      <link href="/2019/08/17/technology/algorithm/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95-%E8%8E%B7%E5%8F%96jaos%E4%B8%AD%E6%8C%87%E5%AE%9Akey%E7%9A%84%E6%89%80%E6%9C%89%E5%80%BC/"/>
+      <url>/2019/08/17/technology/algorithm/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95-%E8%8E%B7%E5%8F%96jaos%E4%B8%AD%E6%8C%87%E5%AE%9Akey%E7%9A%84%E6%89%80%E6%9C%89%E5%80%BC/</url>
+      
+        <content type="html"><![CDATA[<p>今天在工作中遇到要解析json并获取json里所有指定key的值，再把key的值插入对应的数据映射表。于是写了一个递归算法来取值。</p><h2 id="1-首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包"><a href="#1-首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包" class="headerlink" title="1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包"></a>1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包</h2><pre class=" language-java"><code class="language-java"><span class="token operator">&lt;</span>dependency<span class="token operator">></span>    <span class="token operator">&lt;</span>groupId<span class="token operator">></span>com<span class="token punctuation">.</span>alibaba<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">></span>    <span class="token operator">&lt;</span>artifactId<span class="token operator">></span>fastjson<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">></span>    <span class="token operator">&lt;</span>version<span class="token operator">></span><span class="token number">1.2</span><span class="token punctuation">.</span><span class="token number">58</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">></span></code></pre><h2 id="2-创建两个工具类方法，用来判断传入的是不是json对象或json数组"><a href="#2-创建两个工具类方法，用来判断传入的是不是json对象或json数组" class="headerlink" title="2.创建两个工具类方法，用来判断传入的是不是json对象或json数组"></a>2.创建两个工具类方法，用来判断传入的是不是json对象或json数组</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">isJSONObj</span><span class="token punctuation">(</span>Object json<span class="token punctuation">)</span><span class="token punctuation">{</span>   <span class="token keyword">return</span> json <span class="token keyword">instanceof</span> <span class="token class-name">JSONObject</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">isJSONArray</span><span class="token punctuation">(</span>Object json<span class="token punctuation">)</span><span class="token punctuation">{</span>   <span class="token keyword">return</span> json <span class="token keyword">instanceof</span> <span class="token class-name">JSONArray</span><span class="token punctuation">;</span><span class="token punctuation">}</span></code></pre><blockquote><p>java中的instanceof也称为类型比较运算符，因为它将实例与类型进行比较。它返回true或false。</p></blockquote><h2 id="3-建立核心多态方法"><a href="#3-建立核心多态方法" class="headerlink" title="3.建立核心多态方法"></a>3.建立核心多态方法</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">getJSONValue</span><span class="token punctuation">(</span>JSONObject json<span class="token punctuation">,</span>String k<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> list<span class="token punctuation">)</span><span class="token punctuation">{</span>        <span class="token keyword">for</span> <span class="token punctuation">(</span>Object j<span class="token operator">:</span>json<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isJSONObj</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>                <span class="token comment" spellcheck="true">//是对象</span>                JSONObject j2<span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">parseObject</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token function">getJSONValue</span><span class="token punctuation">(</span>j2<span class="token punctuation">,</span>k<span class="token punctuation">,</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isJSONArray</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>                JSONArray j3<span class="token operator">=</span>JSON<span class="token punctuation">.</span><span class="token function">parseArray</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">//是数组</span>                <span class="token function">getJSONValue</span><span class="token punctuation">(</span>j3<span class="token punctuation">,</span>k<span class="token punctuation">,</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>j<span class="token operator">==</span>k<span class="token punctuation">)</span><span class="token punctuation">{</span>                <span class="token comment" spellcheck="true">//是字符串</span>                list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span>        <span class="token punctuation">}</span>    <span class="token punctuation">}</span>    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">getJSONValue</span><span class="token punctuation">(</span>JSONArray json<span class="token punctuation">,</span>String k<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> list<span class="token punctuation">)</span><span class="token punctuation">{</span>        <span class="token keyword">for</span> <span class="token punctuation">(</span>Object j<span class="token operator">:</span>json<span class="token punctuation">)</span><span class="token punctuation">{</span>            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isJSONObj</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>                <span class="token comment" spellcheck="true">//是对象</span>                JSONObject j2<span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">parseObject</span><span class="token punctuation">(</span>j<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token function">getJSONValue</span><span class="token punctuation">(</span>j2<span class="token punctuation">,</span>k<span class="token punctuation">,</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isJSONArray</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>                <span class="token comment" spellcheck="true">//是数组</span>                JSONArray j3<span class="token operator">=</span>JSON<span class="token punctuation">.</span><span class="token function">parseArray</span><span class="token punctuation">(</span>j<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token function">getJSONValue</span><span class="token punctuation">(</span>j3<span class="token punctuation">,</span>k<span class="token punctuation">,</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span>        <span class="token punctuation">}</span>    <span class="token punctuation">}</span></code></pre><h2 id="4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"><a href="#4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的" class="headerlink" title="4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"></a>4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的</h2><a href="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/示例json.txt" title="示例json.txt">示例json.txt</a><h2 id="5-调用方法"><a href="#5-调用方法" class="headerlink" title="5.调用方法"></a>5.调用方法</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">try</span> <span class="token punctuation">{</span>    File file<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>demo1<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token string">"/2.json"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    FileInputStream fileInputStream<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>    InputStreamReader inputStreamReader<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>fileInputStream<span class="token punctuation">)</span><span class="token punctuation">;</span>    BufferedReader bufferedReader<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span>inputStreamReader<span class="token punctuation">)</span><span class="token punctuation">;</span>    String line<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">;</span>    StringBuffer json<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">StringBuffer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line<span class="token operator">=</span>bufferedReader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">!=</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>        json<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    JSONObject j3<span class="token operator">=</span>JSON<span class="token punctuation">.</span><span class="token function">parseObject</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    List<span class="token operator">&lt;</span>String<span class="token operator">></span> mid<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token function">getId</span><span class="token punctuation">(</span>j3<span class="token punctuation">,</span><span class="token string">"interfaceId"</span><span class="token punctuation">,</span>mid<span class="token punctuation">)</span><span class="token punctuation">;</span>    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>mid<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span></code></pre><h2 id="6-成功获取"><a href="#6-成功获取" class="headerlink" title="6.成功获取"></a>6.成功获取</h2><img src="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/2.png" title="控制台返回"><blockquote><p>demo源码地址：<a href="https://github.com/z573419235/studyDemo" target="_blank" rel="noopener">https://github.com/z573419235/studyDemo</a></p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> technology </category>
+          
+          <category> algorithm </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 递归 </tag>
+            
+            <tag> 算法 </tag>
+            
+            <tag> Json </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Base64影响泰文字段取值问题</title>
       <link href="/2019/08/14/technology/dailyIssue/Java/Base64%E5%BD%B1%E5%93%8D%E6%B3%B0%E6%96%87%E5%AD%97%E6%AE%B5%E5%8F%96%E5%80%BC%E9%97%AE%E9%A2%98/"/>
       <url>/2019/08/14/technology/dailyIssue/Java/Base64%E5%BD%B1%E5%93%8D%E6%B3%B0%E6%96%87%E5%AD%97%E6%AE%B5%E5%8F%96%E5%80%BC%E9%97%AE%E9%A2%98/</url>
@@ -31,56 +64,6 @@
             <tag> 日常踩坑 </tag>
             
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>t3</title>
-      <link href="/2019/08/12/technology/learningExperience/Java/t3/"/>
-      <url>/2019/08/12/technology/learningExperience/Java/t3/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> technology </category>
-          
-          <category> learningExperience </category>
-          
-          <category> Java </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Java </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>t2</title>
-      <link href="/2019/08/12/essay/dailyGrumble/t2/"/>
-      <url>/2019/08/12/essay/dailyGrumble/t2/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> essay </category>
-          
-          <category> dailyGrumble </category>
-          
-      </categories>
-      
       
     </entry>
     

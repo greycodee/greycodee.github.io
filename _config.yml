@@ -4,8 +4,8 @@
 
 # Site
 title: HKBlog 
-subtitle:
-description:
+subtitle: 
+description: 
 keywords: 技术,心得,总结
 author: HK
 language: zh-CN
@@ -13,7 +13,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://mjava.top
+url: https://mjava.top
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -88,9 +88,9 @@ theme: hexo-theme-matery
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: sftp
-  host: mjava.top
-  user: pi
-  pass: zxcv1234
+  host: **** 
+  user: ****
+  pass: **** 
   remotePath: /var/www/html/blog
   port: 22
   agent: $SSH_AUTH_SOCK
@@ -102,3 +102,8 @@ deploy:
 search:
   path: search.xml
   field: post
+
+sitemap: 
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
