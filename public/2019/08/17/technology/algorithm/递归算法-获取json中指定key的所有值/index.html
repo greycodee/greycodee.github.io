@@ -4,7 +4,7 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="递归算法-获取jaos中指定key的所有值, 技术,心得,总结">
+    <meta name="keywords" content="递归算法-获取json中指定key的所有值, 技术,心得,总结">
     <meta name="description" content="今天在工作中遇到要解析json并获取json里所有指定key的值，再把key的值插入对应的数据映射表。于是写了一个递归算法来取值。
 1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包&amp;lt;depend">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>递归算法-获取jaos中指定key的所有值 | HKBlog</title>
+    <title>递归算法-获取json中指定key的所有值 | HKBlog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -261,13 +261,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        递归算法-获取jaos中指定key的所有值
+                        递归算法-获取json中指定key的所有值
                     </div>
                 </div>
             </div>
@@ -425,7 +425,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        433
+                        432
                     </div>
                     
 
@@ -494,7 +494,7 @@
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"><a href="#4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的" class="headerlink" title="4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"></a>4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的</h2><a href="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/示例json.txt" title="示例json.txt">示例json.txt</a>
+<h2 id="4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"><a href="#4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的" class="headerlink" title="4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"></a>4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的</h2><a href="/2019/08/17/technology/algorithm/递归算法-获取json中指定key的所有值/示例json.txt" title="示例json">示例json</a>
 
 <h2 id="5-调用方法"><a href="#5-调用方法" class="headerlink" title="5.调用方法"></a>5.调用方法</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">try</span> <span class="token punctuation">{</span>
     File file<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>demo1<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token string">"/2.json"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -509,12 +509,12 @@
 
     JSONObject j3<span class="token operator">=</span>JSON<span class="token punctuation">.</span><span class="token function">parseObject</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     List<span class="token operator">&lt;</span>String<span class="token operator">></span> mid<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">getId</span><span class="token punctuation">(</span>j3<span class="token punctuation">,</span><span class="token string">"interfaceId"</span><span class="token punctuation">,</span>mid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">getJSONValue</span><span class="token punctuation">(</span>j3<span class="token punctuation">,</span><span class="token string">"interfaceId"</span><span class="token punctuation">,</span>mid<span class="token punctuation">)</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>mid<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="6-成功获取"><a href="#6-成功获取" class="headerlink" title="6.成功获取"></a>6.成功获取</h2><img src="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/2.png" title="控制台返回">
+<h2 id="6-成功获取"><a href="#6-成功获取" class="headerlink" title="6.成功获取"></a>6.成功获取</h2><img src="/2019/08/17/technology/algorithm/递归算法-获取json中指定key的所有值/2.png" title="控制台返回">
 
 <blockquote>
 <p>demo源码地址：<a href="https://github.com/z573419235/studyDemo" target="_blank" rel="noopener">https://github.com/z573419235/studyDemo</a></p>
@@ -553,9 +553,9 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《递归算法-获取jaos中指定key的所有值》
+                    《递归算法-获取json中指定key的所有值》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/17/technology/algorithm/递归算法-获取json中指定key的所有值/" property="cc:attributionName"
                rel="cc:attributionURL">
                 HK
             </a> 采用
@@ -600,13 +600,13 @@
                 <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2019/08/17/technology/algorithm/递归算法-获取jaos中指定key的所有值/">
+                <a href="/2019/08/17/technology/algorithm/递归算法-获取json中指定key的所有值/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="递归算法-获取jaos中指定key的所有值">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="递归算法-获取json中指定key的所有值">
                         
-                        <span class="card-title">递归算法-获取jaos中指定key的所有值</span>
+                        <span class="card-title">递归算法-获取json中指定key的所有值</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -895,7 +895,7 @@ what,日志里面竟然有他们传过来的泰文的值
             <br>
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">711</span>
+                <span class="white-color">710</span>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">

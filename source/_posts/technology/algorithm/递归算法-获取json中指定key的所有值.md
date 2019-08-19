@@ -1,7 +1,7 @@
 ---
-title: 递归算法-获取jaos中指定key的所有值
-top: false
-cover: false
+title: 递归算法-获取json中指定key的所有值
+top: true
+cover: true
 toc: true
 mathjax: true
 tags:
@@ -73,7 +73,7 @@ public static boolean isJSONArray(Object json){
 
 ```
 ## 4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的
-{% asset_link 示例json.txt 示例json.txt%}
+{% asset_link 示例json.txt 示例json%}
 
 ## 5.调用方法
 ```java
@@ -90,7 +90,7 @@ try {
 
     JSONObject j3=JSON.parseObject(json.toString());
     List<String> mid=new ArrayList<>();
-    getId(j3,"interfaceId",mid);
+    getJSONValue(j3,"interfaceId",mid);
     System.out.println(mid.toString());
 }catch (Exception e){
     System.out.println(e.getMessage());
