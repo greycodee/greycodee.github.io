@@ -4,11 +4,10 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Base64影响泰文字段取值问题, 技术,心得,总结">
-    <meta name="description" content="今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作查看日志
-what,日志里面竟然有他们传过来的泰文的值
-
-对比ios和android">
+    <meta name="keywords" content="Java的==和equals, 技术,心得,总结">
+    <meta name="description" content="在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；
+首先看看Java的栈空间和堆空间的地址引用
+==的说明  在Java中，==对比的是两">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +15,7 @@ what,日志里面竟然有他们传过来的泰文的值
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Base64影响泰文字段取值问题 | HKBlog</title>
+    <title>Java的==和equals | HKBlog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -263,13 +262,13 @@ what,日志里面竟然有他们传过来的泰文的值
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Base64影响泰文字段取值问题
+                        Java的==和equals
                     </div>
                 </div>
             </div>
@@ -384,14 +383,6 @@ what,日志里面竟然有他们传过来的泰文的值
                                 <span class="chip bg-color">Java</span>
                             </a>
                         
-                            <a href="/tags/Base64/" target="_blank">
-                                <span class="chip bg-color">Base64</span>
-                            </a>
-                        
-                            <a href="/tags/日常踩坑/" target="_blank">
-                                <span class="chip bg-color">日常踩坑</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -404,11 +395,11 @@ what,日志里面竟然有他们传过来的泰文的值
                                 technology
                             </a>
                         
-                            <a href="/categories/technology/dailyIssue/" class="post-category" target="_blank">
-                                dailyIssue
+                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
+                                learningExperience
                             </a>
                         
-                            <a href="/categories/technology/dailyIssue/Java/" class="post-category" target="_blank">
+                            <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
                                 Java
                             </a>
                         
@@ -420,14 +411,14 @@ what,日志里面竟然有他们传过来的泰文的值
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-08-14
+                    2019-08-20
                 </div>
 
                 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        278
+                        449
                     </div>
                     
 
@@ -450,19 +441,55 @@ what,日志里面竟然有他们传过来的泰文的值
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作"><a href="#今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作" class="headerlink" title="今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作"></a>今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作</h2><h4 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h4><blockquote>
-<p>what,日志里面竟然有他们传过来的泰文的值</p>
+                <p>在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；</p>
+<h2 id="首先看看Java的栈空间和堆空间的地址引用"><a href="#首先看看Java的栈空间和堆空间的地址引用" class="headerlink" title="首先看看Java的栈空间和堆空间的地址引用"></a>首先看看Java的栈空间和堆空间的地址引用</h2><img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/1.png" title="Java栈空间和堆空间">
+<h2 id="的说明"><a href="#的说明" class="headerlink" title="==的说明"></a>==的说明</h2><p>  在Java中，==对比的是两个对象在空间里的地址是否一致,比如上图的s2==s3返回的是false，s5==s6返回的是为true。话不多说，上代码。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">demo2</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String s1<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String s2<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String s3<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        String s4<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String s5<span class="token operator">=</span><span class="token string">"t3"</span><span class="token punctuation">;</span>
+        String s6<span class="token operator">=</span><span class="token string">"t3"</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"s2==s3:"</span><span class="token operator">+</span><span class="token punctuation">(</span>s2<span class="token operator">==</span>s3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"s5==s6:"</span><span class="token operator">+</span><span class="token punctuation">(</span>s5<span class="token operator">==</span>s6<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>结果：</p>
+<img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/2.png" title="控制台输出">
+<blockquote>
+<p>这是因为==比的是在空间里的地址，s2和s3在堆里面是两个不同的对象，所以地址也不同，自然返回就是false。s5和s6是Java的基础数据类型，指向的是常量池里同一个引用，所以地址也相同，返回的就是true。</p>
 </blockquote>
-<h4 id="对比ios和android的数据"><a href="#对比ios和android的数据" class="headerlink" title="对比ios和android的数据"></a>对比ios和android的数据</h4><blockquote>
-<p>发现日志里的数据都是一样的，但是android上传的数据全部传入了mysql数据库，ios的除了泰文，其他的也都传到了库里</p>
-</blockquote>
-<h4 id="确定问题"><a href="#确定问题" class="headerlink" title="确定问题"></a>确定问题</h4><blockquote>
-<p>最后对比发现，android的泰文字段三放在base64字段前面的然后传上来的，ios是放在base64字段后面传上来的，怀疑问题在此处</p>
-</blockquote>
-<h4 id="修复bug"><a href="#修复bug" class="headerlink" title="修复bug"></a>修复bug</h4><blockquote>
-<p>于是叫ios也和android一样，把上传字段的顺序调整了以下，把泰文的字段放在base64字段前面，然后上传。改了之后试了以下，，竟然解决了，2222333333</p>
-</blockquote>
-<p>总结：暂时不知道具体什么原因，有可能是因为base64数据太长了，影响到泰文的字段存储了。</p>
+<h2 id="equals的说明"><a href="#equals的说明" class="headerlink" title="equals的说明"></a>equals的说明</h2><p>  每个Object里的equals都不一样，我们看看String里的源码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span>Object anObject<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String anotherString <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+                i<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>首先它会对比地址，如果地址相等，就直接返回true</li>
+<li>如果地址不相等，就会对比里面的每一个字符，直到完全相等，然后返回true</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>　　所以一般如果是对比两个对象是否相等的话，用==就可以。但是如果你要对比两个值是否相等的话，就要用equals了，因为如果用==就会出现上面明明值相等,返回却是false的情况。</p>
 
             </div>
             <hr/>
@@ -497,9 +524,9 @@ what,日志里面竟然有他们传过来的泰文的值
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《Base64影响泰文字段取值问题》
+                    《Java的==和equals》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/14/technology/dailyIssue/Java/Base64影响泰文字段取值问题/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/20/technology/learningExperience/Java/Java的-和equals/" property="cc:attributionName"
                rel="cc:attributionURL">
                 HK
             </a> 采用
@@ -539,97 +566,31 @@ what,日志里面竟然有他们传过来的泰文的值
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2019/08/17/technology/algorithm/递归算法-获取json中指定key的所有值/">
+                <a href="/2019/08/20/technology/learningExperience/Java/Java的-和equals/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="递归算法-获取json中指定key的所有值">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Java的==和equals">
                         
-                        <span class="card-title">递归算法-获取json中指定key的所有值</span>
+                        <span class="card-title">Java的==和equals</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            今天在工作中遇到要解析json并获取json里所有指定key的值，再把key的值插入对应的数据映射表。于是写了一个递归算法来取值。
-1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包&lt;depend
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-17
-                        </span>
-                        <span class="publish-author">
-                            
-                            <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
-                            <!-- 
-                            <a href="/categories/technology/" class="post-category" target="_blank">
-                                    technology
-                                </a>
-                            
-                            <a href="/categories/technology/algorithm/" class="post-category" target="_blank">
-                                    algorithm
-                                </a>
-                             -->
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Java/" target="_blank">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                    <a href="/tags/递归/" target="_blank">
-                        <span class="chip bg-color">递归</span>
-                    </a>
-                    
-                    <a href="/tags/算法/" target="_blank">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/Json/" target="_blank">
-                        <span class="chip bg-color">Json</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/08/14/technology/dailyIssue/Java/Base64影响泰文字段取值问题/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Base64影响泰文字段取值问题">
-                        
-                        <span class="card-title">Base64影响泰文字段取值问题</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作查看日志
-what,日志里面竟然有他们传过来的泰文的值
-
-对比ios和android
+                            在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；
+首先看看Java的栈空间和堆空间的地址引用
+==的说明  在Java中，==对比的是两
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-14
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-20
                             </span>
                         <span class="publish-author">
                             
@@ -639,11 +600,11 @@ what,日志里面竟然有他们传过来的泰文的值
                                     technology
                                 </a>
                             
-                            <a href="/categories/technology/dailyIssue/" class="post-category" target="_blank">
-                                    dailyIssue
+                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
+                                    learningExperience
                                 </a>
                             
-                            <a href="/categories/technology/dailyIssue/Java/" class="post-category" target="_blank">
+                            <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
                                     Java
                                 </a>
                              -->
@@ -659,12 +620,64 @@ what,日志里面竟然有他们传过来的泰文的值
                         <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/Base64/" target="_blank">
-                        <span class="chip bg-color">Base64</span>
-                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/08/20/technology/learningExperience/Java/Java中String判断为空的4大方法比较/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Java中String判断为空的4大方法比较">
+                        
+                        <span class="card-title">Java中String判断为空的4大方法比较</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1.四大方法public class demo1 {
+   public static void main(String[] args) {
+       String a="";
+       String a2=new String()
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
+                            <!-- 
+                            <a href="/categories/technology/" class="post-category" target="_blank">
+                                    technology
+                                </a>
+                            
+                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
+                                    learningExperience
+                                </a>
+                            
+                            <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
+                                    Java
+                                </a>
+                             -->
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
                     
-                    <a href="/tags/日常踩坑/" target="_blank">
-                        <span class="chip bg-color">日常踩坑</span>
+                    <a href="/tags/Java/" target="_blank">
+                        <span class="chip bg-color">Java</span>
                     </a>
                     
                 </div>

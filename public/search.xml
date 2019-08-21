@@ -4,6 +4,93 @@
   
     
     <entry>
+      <title>Java的==和equals</title>
+      <link href="/2019/08/20/technology/learningExperience/Java/Java%E7%9A%84-%E5%92%8Cequals/"/>
+      <url>/2019/08/20/technology/learningExperience/Java/Java%E7%9A%84-%E5%92%8Cequals/</url>
+      
+        <content type="html"><![CDATA[<p>在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；</p><h2 id="首先看看Java的栈空间和堆空间的地址引用"><a href="#首先看看Java的栈空间和堆空间的地址引用" class="headerlink" title="首先看看Java的栈空间和堆空间的地址引用"></a>首先看看Java的栈空间和堆空间的地址引用</h2><img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/1.png" title="Java栈空间和堆空间"><h2 id="的说明"><a href="#的说明" class="headerlink" title="==的说明"></a>==的说明</h2><p>  在Java中，==对比的是两个对象在空间里的地址是否一致,比如上图的s2==s3返回的是false，s5==s6返回的是为true。话不多说，上代码。</p><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">demo2</span> <span class="token punctuation">{</span>    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>        String s1<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        String s2<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        String s3<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        String s4<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"t3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        String s5<span class="token operator">=</span><span class="token string">"t3"</span><span class="token punctuation">;</span>        String s6<span class="token operator">=</span><span class="token string">"t3"</span><span class="token punctuation">;</span>        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"s2==s3:"</span><span class="token operator">+</span><span class="token punctuation">(</span>s2<span class="token operator">==</span>s3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"s5==s6:"</span><span class="token operator">+</span><span class="token punctuation">(</span>s5<span class="token operator">==</span>s6<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre><p>结果：</p><img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/2.png" title="控制台输出"><blockquote><p>这是因为==比的是在空间里的地址，s2和s3在堆里面是两个不同的对象，所以地址也不同，自然返回就是false。s5和s6是Java的基础数据类型，指向的是常量池里同一个引用，所以地址也相同，返回的就是true。</p></blockquote><h2 id="equals的说明"><a href="#equals的说明" class="headerlink" title="equals的说明"></a>equals的说明</h2><p>  每个Object里的equals都不一样，我们看看String里的源码</p><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span>Object anObject<span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> anObject<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token keyword">if</span> <span class="token punctuation">(</span>anObject <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        String anotherString <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span>anObject<span class="token punctuation">;</span>        <span class="token keyword">int</span> n <span class="token operator">=</span> value<span class="token punctuation">.</span>length<span class="token punctuation">;</span>        <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>            <span class="token keyword">char</span> v1<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>            <span class="token keyword">char</span> v2<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> anotherString<span class="token punctuation">.</span>value<span class="token punctuation">;</span>            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>            <span class="token keyword">while</span> <span class="token punctuation">(</span>n<span class="token operator">--</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>                <span class="token keyword">if</span> <span class="token punctuation">(</span>v1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">!=</span> v2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>                    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>                i<span class="token operator">++</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span>            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>        <span class="token punctuation">}</span>    <span class="token punctuation">}</span>    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span><span class="token punctuation">}</span></code></pre><ul><li>首先它会对比地址，如果地址相等，就直接返回true</li><li>如果地址不相等，就会对比里面的每一个字符，直到完全相等，然后返回true</li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>　　所以一般如果是对比两个对象是否相等的话，用==就可以。但是如果你要对比两个值是否相等的话，就要用equals了，因为如果用==就会出现上面明明值相等,返回却是false的情况。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> technology </category>
+          
+          <category> learningExperience </category>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Java中String判断为空的4大方法比较</title>
+      <link href="/2019/08/20/technology/learningExperience/Java/Java%E4%B8%ADString%E5%88%A4%E6%96%AD%E4%B8%BA%E7%A9%BA%E7%9A%844%E5%A4%A7%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83/"/>
+      <url>/2019/08/20/technology/learningExperience/Java/Java%E4%B8%ADString%E5%88%A4%E6%96%AD%E4%B8%BA%E7%A9%BA%E7%9A%844%E5%A4%A7%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-四大方法"><a href="#1-四大方法" class="headerlink" title="1.四大方法"></a>1.四大方法</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">demo1</span> <span class="token punctuation">{</span>   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>       String a<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">;</span>       String a2<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token operator">==</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token operator">==</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre><h2 id="2-输出结果"><a href="#2-输出结果" class="headerlink" title="2.输出结果"></a>2.输出结果</h2><img src="/2019/08/20/technology/learningExperience/Java/Java中String判断为空的4大方法比较/1.png" title="控制台输出"><blockquote><p>可以看到用”==”判断的那组出现了不一致的情况</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> technology </category>
+          
+          <category> learningExperience </category>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Integer和int区别</title>
+      <link href="/2019/08/19/technology/learningExperience/Java/Integer%E5%92%8Cint%E5%8C%BA%E5%88%AB/"/>
+      <url>/2019/08/19/technology/learningExperience/Java/Integer%E5%92%8Cint%E5%8C%BA%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-两者本质区别"><a href="#1-两者本质区别" class="headerlink" title="1.两者本质区别"></a>1.两者本质区别</h2><p>  int是Java的基础数据类型之一，而Integer是基于int进行封装的一个对象</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> technology </category>
+          
+          <category> learningExperience </category>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>递归算法-获取json中指定key的所有值</title>
       <link href="/2019/08/17/technology/algorithm/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95-%E8%8E%B7%E5%8F%96json%E4%B8%AD%E6%8C%87%E5%AE%9Akey%E7%9A%84%E6%89%80%E6%9C%89%E5%80%BC/"/>
       <url>/2019/08/17/technology/algorithm/%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95-%E8%8E%B7%E5%8F%96json%E4%B8%AD%E6%8C%87%E5%AE%9Akey%E7%9A%84%E6%89%80%E6%9C%89%E5%80%BC/</url>
