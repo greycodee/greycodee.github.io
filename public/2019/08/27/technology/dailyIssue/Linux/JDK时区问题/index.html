@@ -4,11 +4,12 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Java中String判断为空的4大方法比较, 技术,心得,总结">
-    <meta name="description" content="一.四大方法public class demo1 {
-   public static void main(String[] args) {
-       String a=&#34;&#34;;
-       String a2=new String()">
+    <meta name="keywords" content="JDK时区问题, 技术,心得,总结">
+    <meta name="description" content="今天碰到一个大坑，弄了快一个小时才解决掉；
+一个管理台后端服务，用docker隔离了三个容器，oracle,nginx,tomcat;后发现管理台查出来的时间和现实时间相差8个小时，一查是linux时区问题；
+
+
+于是改之,三台容器都输入一">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Java中String判断为空的4大方法比较 | HKBlog</title>
+    <title>JDK时区问题 | HKBlog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -263,13 +264,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Java中String判断为空的4大方法比较
+                        JDK时区问题
                     </div>
                 </div>
             </div>
@@ -384,27 +385,14 @@
                                 <span class="chip bg-color">Java</span>
                             </a>
                         
+                            <a href="/tags/Linux/" target="_blank">
+                                <span class="chip bg-color">Linux</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fa fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/technology/" class="post-category" target="_blank">
-                                technology
-                            </a>
-                        
-                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
-                                learningExperience
-                            </a>
-                        
-                            <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
-                                Java
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -412,14 +400,14 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-08-20
+                    2019-08-27
                 </div>
 
                 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        98
+                        419
                     </div>
                     
 
@@ -442,31 +430,38 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="一-四大方法"><a href="#一-四大方法" class="headerlink" title="一.四大方法"></a>一.四大方法</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">demo1</span> <span class="token punctuation">{</span>
-   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-       String a<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">;</span>
-       String a2<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token operator">==</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token operator">==</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"------------------------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h2 id="二-输出结果"><a href="#二-输出结果" class="headerlink" title="二.输出结果"></a>二.输出结果</h2><img src="/2019/08/20/technology/learningExperience/Java/Java中String判断为空的4大方法比较/1.png" title="控制台输出">
-
+                <p>今天碰到一个大坑，弄了快一个小时才解决掉；</p>
+<p>一个管理台后端服务，用docker隔离了三个容器，oracle,nginx,tomcat;后发现管理台查出来的时间和现实时间相差8个小时，一查是linux时区问题；</p>
+<hr>
+<ul>
+<li>于是改之,三台容器都输入一下代码</li>
+</ul>
+<pre class=" language-shell"><code class="language-shell">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre>
+<p>测试了一下，发现问题docker容器的时区是正确了，可是问题并未得到解决，数据库时间还是慢了8个小时。</p>
+<hr>
+<ul>
+<li>于是又查资料，换另外一种设置时区的方法；</li>
+</ul>
+<pre class=" language-shell"><code class="language-shell">vi /etc/sysconfig/clock</code></pre>
+<p>在里面输入如下内容</p>
+<pre class=" language-shell"><code class="language-shell">ZONE="Asia/Shanghai"
+UTC=false
+ARC=false</code></pre>
+<p>保存，重启，测试。。。。。发现还是一样,快疯了</p>
+<hr>
+<ul>
+<li>第三种方法，设置TZ环境变量</li>
+</ul>
 <blockquote>
-<p>可以看到用”==”判断的那组出现了不一致的情况</p>
+<p>设置环境变量可以在设置系统级别的/etc/profile  ,也可以设置用户级别的home目录的.bashrc。由于用的是docker，防止变量重启失效，只能在.bashrc里设置。在.bashrc加入如下内容：</p>
 </blockquote>
+<pre class=" language-shell"><code class="language-shell">export TZ='CST-8'</code></pre>
+<p>保存：然后执行</p>
+<pre class=" language-shell"><code class="language-shell">source .bashrc</code></pre>
+<p>使设置立即生效。</p>
+<p>重启容器，测试，发现时间正常了。。。。哈哈哈哈</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面问题出在jdk的new Date()方法，所以只要设置jdk所在的那个docker容器的变量就可以，不用每个都设置。jdk的new Date()方法每次调用都会去取环境变量TZ的时区，TZ是TimeZone的缩写，容器内部操作系统并未指定时区（TimeZone）信息，系统默认使用世界标准时（UTC+0),所以导致new Date()出来的数据存库会比当前时间慢8个小时；</p>
 
             </div>
             <hr/>
@@ -501,9 +496,9 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《Java中String判断为空的4大方法比较》
+                    《JDK时区问题》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/20/technology/learningExperience/Java/Java中String判断为空的4大方法比较/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/27/technology/dailyIssue/Linux/JDK时区问题/" property="cc:attributionName"
                rel="cc:attributionURL">
                 HK
             </a> 采用
@@ -543,9 +538,64 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2019/08/27/technology/dailyIssue/Linux/JDK时区问题/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="JDK时区问题">
+                        
+                        <span class="card-title">JDK时区问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            今天碰到一个大坑，弄了快一个小时才解决掉；
+一个管理台后端服务，用docker隔离了三个容器，oracle,nginx,tomcat;后发现管理台查出来的时间和现实时间相差8个小时，一查是linux时区问题；
+
+
+于是改之,三台容器都输入一
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            HK
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/" target="_blank">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/Linux/" target="_blank">
+                        <span class="chip bg-color">Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2019/08/20/technology/learningExperience/Java/Java的-和equals/">
                     <div class="card-image">
@@ -565,66 +615,8 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-20
-                        </span>
-                        <span class="publish-author">
-                            
-                            <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
-                            <!-- 
-                            <a href="/categories/technology/" class="post-category" target="_blank">
-                                    technology
-                                </a>
-                            
-                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
-                                    learningExperience
-                                </a>
-                            
-                            <a href="/categories/technology/learningExperience/Java/" class="post-category" target="_blank">
-                                    Java
-                                </a>
-                             -->
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Java/" target="_blank">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/08/19/technology/learningExperience/Java/Integer和int区别/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Integer和int区别">
-                        
-                        <span class="card-title">Integer和int区别</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            1.两者本质区别  int是Java的基础数据类型之一，而Integer是基于int进行封装的一个对象
-
-                        
-                    </div>
-                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-19
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-20
                             </span>
                         <span class="publish-author">
                             
