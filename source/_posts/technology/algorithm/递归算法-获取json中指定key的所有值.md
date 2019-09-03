@@ -38,7 +38,7 @@ public static boolean isJSONArray(Object json){
 ```
 > java中的instanceof也称为类型比较运算符，因为它将实例与类型进行比较。它返回true或false。
 
-## 3.建立核心多态方法
+## 3.建立核心重载方法
 ```java
     public static void getJSONValue(JSONObject json,String k,List<String> list){
         for (Object j:json.keySet()){

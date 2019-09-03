@@ -394,6 +394,23 @@
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/technology/" class="post-category" target="_blank">
+                                technology
+                            </a>
+                        
+                            <a href="/categories/technology/dailyIssue/" class="post-category" target="_blank">
+                                dailyIssue
+                            </a>
+                        
+                            <a href="/categories/technology/dailyIssue/Linux/" class="post-category" target="_blank">
+                                Linux
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
@@ -538,49 +555,53 @@ ARC=false</code></pre>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
-            </div>
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/08/27/technology/dailyIssue/Linux/JDK时区问题/">
+                <a href="/2019/08/30/technology/learningExperience/Linux/树莓派安装docker/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="JDK时区问题">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="树莓派安装docker">
                         
-                        <span class="card-title">JDK时区问题</span>
+                        <span class="card-title">树莓派安装docker</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            今天碰到一个大坑，弄了快一个小时才解决掉；
-一个管理台后端服务，用docker隔离了三个容器，oracle,nginx,tomcat;后发现管理台查出来的时间和现实时间相差8个小时，一查是linux时区问题；
-
-
-于是改之,三台容器都输入一
+                            前言  和平常x86_64架构的电脑安装docker不同，树莓派是ARM架构的，所以安装步骤比较繁琐一点。
+使用APT源安装docker  更新apt软件源及安装必备组件。为了确认所下载软件包的合法性，还需要添加软件源的 GPG 密钥。
+$
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-27
-                            </span>
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-30
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fa fa-user fa-fw"></i>
-                            HK
+                            <!-- <i class="fa fa-bookmark fa-fw icon-category"></i> -->
+                            <!-- 
+                            <a href="/categories/technology/" class="post-category" target="_blank">
+                                    technology
+                                </a>
+                            
+                            <a href="/categories/technology/learningExperience/" class="post-category" target="_blank">
+                                    learningExperience
+                                </a>
+                            
+                            <a href="/categories/technology/learningExperience/Linux/" class="post-category" target="_blank">
+                                    Linux
+                                </a>
+                             -->
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
-                    
-                    <a href="/tags/Java/" target="_blank">
-                        <span class="chip bg-color">Java</span>
-                    </a>
                     
                     <a href="/tags/Linux/" target="_blank">
                         <span class="chip bg-color">Linux</span>
@@ -796,7 +817,7 @@ ARC=false</code></pre>
         <div class="col s12 m8 l8 copy-right">
             本站所有权归由&copy;<a href="https://github.com/z573419235" target="_blank">HK</a>所有.
             
-			
+			<!-- 
                 <br>
                 
                 <span id="busuanzi_container_site_pv">
@@ -808,15 +829,15 @@ ARC=false</code></pre>
                 <span id="busuanzi_container_site_uv">
                     <i class="fa fa-users"></i>
                     次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
-                </span>
+                </span> -->
                 <!-- <br> -->
 		        <!-- <span id="sitetime"></span> -->
-                
-            
+                <!-- 
+             -->
             <br>
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">1.7k</span>
+                <span class="white-color">2.5k</span>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">

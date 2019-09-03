@@ -463,7 +463,7 @@
 <blockquote>
 <p>java中的instanceof也称为类型比较运算符，因为它将实例与类型进行比较。它返回true或false。</p>
 </blockquote>
-<h2 id="3-建立核心多态方法"><a href="#3-建立核心多态方法" class="headerlink" title="3.建立核心多态方法"></a>3.建立核心多态方法</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">getJSONValue</span><span class="token punctuation">(</span>JSONObject json<span class="token punctuation">,</span>String k<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> list<span class="token punctuation">)</span><span class="token punctuation">{</span>
+<h2 id="3-建立核心重载方法"><a href="#3-建立核心重载方法" class="headerlink" title="3.建立核心重载方法"></a>3.建立核心重载方法</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">getJSONValue</span><span class="token punctuation">(</span>JSONObject json<span class="token punctuation">,</span>String k<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> list<span class="token punctuation">)</span><span class="token punctuation">{</span>
         <span class="token keyword">for</span> <span class="token punctuation">(</span>Object j<span class="token operator">:</span>json<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
             <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">isJSONObj</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">//是对象</span>
@@ -865,7 +865,7 @@ what,日志里面竟然有他们传过来的泰文的值
         <div class="col s12 m8 l8 copy-right">
             本站所有权归由&copy;<a href="https://github.com/z573419235" target="_blank">HK</a>所有.
             
-			
+			<!-- 
                 <br>
                 
                 <span id="busuanzi_container_site_pv">
@@ -877,15 +877,15 @@ what,日志里面竟然有他们传过来的泰文的值
                 <span id="busuanzi_container_site_uv">
                     <i class="fa fa-users"></i>
                     次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
-                </span>
+                </span> -->
                 <!-- <br> -->
 		        <!-- <span id="sitetime"></span> -->
-                
-            
+                <!-- 
+             -->
             <br>
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">1.7k</span>
+                <span class="white-color">2.5k</span>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
