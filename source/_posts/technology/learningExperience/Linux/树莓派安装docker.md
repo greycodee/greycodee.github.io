@@ -6,6 +6,8 @@ toc: true
 mathjax: true
 tags:
   - Linux
+  - Docker
+  - 树莓派
 categories:
   - technology
   - learningExperience

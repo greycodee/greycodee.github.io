@@ -442,7 +442,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；</p>
-<h2 id="首先看看Java的栈空间和堆空间的地址引用"><a href="#首先看看Java的栈空间和堆空间的地址引用" class="headerlink" title="首先看看Java的栈空间和堆空间的地址引用"></a>首先看看Java的栈空间和堆空间的地址引用</h2><img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/1.png" title="Java栈空间和堆空间">
+<h2 id="首先看看Java的栈空间和堆空间的地址引用"><a href="#首先看看Java的栈空间和堆空间的地址引用" class="headerlink" title="首先看看Java的栈空间和堆空间的地址引用"></a>首先看看Java的栈空间和堆空间的地址引用</h2>
 <h2 id="的说明"><a href="#的说明" class="headerlink" title="==的说明"></a>==的说明</h2><p>  在Java中，==对比的是两个对象在空间里的地址是否一致,比如上图的s2==s3返回的是false，s5==s6返回的是为true。话不多说，上代码。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">demo2</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -459,7 +459,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>结果：</p>
-<img src="/2019/08/20/technology/learningExperience/Java/Java的-和equals/2.png" title="控制台输出">
+
 <blockquote>
 <p>这是因为==比的是在空间里的地址，s2和s3在堆里面是两个不同的对象，所以地址也不同，自然返回就是false。s5和s6是Java的基础数据类型，指向的是常量池里同一个引用，所以地址也相同，返回的就是true。</p>
 </blockquote>
@@ -855,7 +855,7 @@
             <br>
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">2.5k</span>
+                <span class="white-color">2.7k</span>
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
