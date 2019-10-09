@@ -474,7 +474,7 @@ Docker拉取镜像  Docker拉取镜像默认是从DockerHub上面拉取，上面
 
 <p>如果显示上面这样，说明已经拉取好了。</p>
 <h3 id="查看镜像"><a href="#查看镜像" class="headerlink" title="查看镜像"></a>查看镜像</h3><pre class=" language-shell"><code class="language-shell">sudo docker images        //查看本地镜像</code></pre>
-
+<img src="/2019/09/03/technology/learningExperience/Linux/Docker/Docker下安装mysql并设置用户权限/dockerimages.png" title="查看本地镜像">
 
 
 
@@ -492,7 +492,7 @@ Docker拉取镜像  Docker拉取镜像默认是从DockerHub上面拉取，上面
 <ul>
 <li>-a        显示所有创建好的容器，如果不加只显示正在运行的容器</li>
 </ul>
-
+<img src="/2019/09/03/technology/learningExperience/Linux/Docker/Docker下安装mysql并设置用户权限/dockerps.png" title="查看容器">
 
 <h2 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h2><h3 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h3><pre class=" language-shell"><code class="language-shell">sudo docker exec -it mysql5.7 bash</code></pre>
 <ul>
@@ -512,7 +512,7 @@ Docker拉取镜像  Docker拉取镜像默认是从DockerHub上面拉取，上面
 <h3 id="刷新权限"><a href="#刷新权限" class="headerlink" title="刷新权限"></a>刷新权限</h3><pre class=" language-sql"><code class="language-sql">flush <span class="token keyword">privileges</span><span class="token punctuation">;</span></code></pre>
 <p>退出mysql命令行</p>
 <pre class=" language-sql"><code class="language-sql"><span class="token keyword">exit</span></code></pre>
-<h3 id="客户端连接测试"><a href="#客户端连接测试" class="headerlink" title="客户端连接测试"></a>客户端连接测试</h3>
+<h3 id="客户端连接测试"><a href="#客户端连接测试" class="headerlink" title="客户端连接测试"></a>客户端连接测试</h3><img src="/2019/09/03/technology/learningExperience/Linux/Docker/Docker下安装mysql并设置用户权限/sqlclient.png" title="进入容器">
 
 <p>成功！</p>
 <h2 id="附加"><a href="#附加" class="headerlink" title="附加"></a>附加</h2><p>如果要重启mysql的话，不用进容器里面，直接重启容器就可以</p>
@@ -601,19 +601,21 @@ Docker拉取镜像  Docker拉取镜像默认是从DockerHub上面拉取，上面
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/09/05/technology/ttts/">
+                <a href="/2019/09/05/technology/dailyIssue/Vue/Cli3-11创建项目慢的问题/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="ttts">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Vue Cli3-11创建项目慢的问题">
                         
-                        <span class="card-title">ttts</span>
+                        <span class="card-title">Vue Cli3-11创建项目慢的问题</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            Vue Cli3.11创建项目慢的问题前言  这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。
+
+网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！
                         
                     </div>
                     <div class="publish-info">
@@ -627,10 +629,30 @@ Docker拉取镜像  Docker拉取镜像默认是从DockerHub上面拉取，上面
                             <a href="/categories/technology/" class="post-category" target="_blank">
                                     technology
                                 </a>
+                            
+                            <a href="/categories/technology/dailyIssue/" class="post-category" target="_blank">
+                                    dailyIssue
+                                </a>
+                            
+                            <a href="/categories/technology/dailyIssue/Vue/" class="post-category" target="_blank">
+                                    Vue
+                                </a>
                              -->
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/日常踩坑/" target="_blank">
+                        <span class="chip bg-color">日常踩坑</span>
+                    </a>
+                    
+                    <a href="/tags/Vue/" target="_blank">
+                        <span class="chip bg-color">Vue</span>
+                    </a>
+                    
                 </div>
                 
             </div>
