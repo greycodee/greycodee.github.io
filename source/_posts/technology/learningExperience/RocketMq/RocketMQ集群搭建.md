@@ -1,6 +1,6 @@
 ---
 title: RocketMQ集群搭建
-top: false
+top: true
 cover: false
 toc: true
 mathjax: true
@@ -298,4 +298,4 @@ rocketmq.config.namesrvAddr=172.16.54.128:9876;172.16.54.130:9876
 
 浏览器访问：
 
-{% asset_img rocketmq_console.png 可视化Console界面%}
+![可视化Console界面](https://mjava.top/img/rocketmq_console.png)

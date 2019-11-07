@@ -40,7 +40,7 @@ sudo docker pull mysql:5.7			//拉取镜像到本地
 
 注：上面mysql:5.7指的是拉取5.7版本的mysql，如果不加直接写mysql的话默认是拉取mysql的最新版本。
 
-{% asset_img dockerpullmysql.png 拉取镜像%}
+![拉取镜像](https://mjava.top/img/dockerpullmysql.png)
 
 如果显示上面这样，说明已经拉取好了。
 
@@ -50,7 +50,7 @@ sudo docker pull mysql:5.7			//拉取镜像到本地
 sudo docker images		//查看本地镜像
 ```
 
-{% asset_img dockerimages.png 查看本地镜像%}
+![查看本地镜像](https://mjava.top/img/dockerimages.png)
 
 
 
@@ -67,7 +67,7 @@ sudo docker run -d -p 3306:3306 --name mysql5.7 -e MYSQL_ROOT_PASSWORD=root mysq
 * --name    自定义容器名字，方便记忆，不设置的话会随机生产
 * -e        容器环境变量
 
-{% asset_img dockerrun.png 创建容器%}
+![创建容器](https://mjava.top/img/dockerrun.png)
 
 创建好的话会显示一串随机生产的id
 
@@ -79,7 +79,7 @@ sudo docker ps -a
 
 * -a        显示所有创建好的容器，如果不加只显示正在运行的容器
 
-{% asset_img dockerps.png 查看容器%}
+![查看容器](https://mjava.top/img/dockerps.png)
 
 ## Mysql
 
@@ -92,7 +92,7 @@ sudo docker exec -it mysql5.7 bash
 * -i        打开STDIN，用于控制台交互
 * -t        分配tty设备，该可以支持终端登录
 
-{% asset_img dockerexec.png 进入容器%}
+![进入容器](https://mjava.top/img/dockerexec.png)
 
 ### 登录mysql
 
@@ -144,7 +144,7 @@ exit
 
 ### 客户端连接测试
 
-{% asset_img sqlclient.png 进入容器%}
+![进入容器](https://mjava.top/img/sqlclient.png)
 
 成功！
 

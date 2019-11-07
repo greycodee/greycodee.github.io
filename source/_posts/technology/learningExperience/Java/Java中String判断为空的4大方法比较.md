@@ -39,6 +39,6 @@ public class demo1 {
 }
 ```
 ## 二.输出结果
-{% asset_img 1.png 控制台输出%}
+![控制台输出](https://mjava.top/img/javaands1.png)
 
 >可以看到用"=="判断的那组出现了不一致的情况
