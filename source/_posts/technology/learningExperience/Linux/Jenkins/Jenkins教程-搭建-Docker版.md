@@ -19,7 +19,15 @@ summary:
 
 # Jenkins教程-搭建(Docker版)
 
+## 目录
 
+- [Jenkins教程-搭建(Docker版)](https://mjava.top/2019/11/07/technology/learningExperience/Linux/Jenkins/Jenkins教程-搭建-Docker版/)
+
+- [Jenkins教程-创建Maven项目](https://mjava.top/2019/11/12/technology/learningExperience/Linux/Jenkins/Jenkins教程-创建Maven项目/)
+
+- [Jenkins教程-Docker+GitLab持续部署持续集成](https://mjava.top/2019/11/12/technology/learningExperience/Linux/Jenkins/Jenkins教程-Docker+GitLab持续部署持续集成/)
+
+  
 
 ## 环境
 
@@ -123,7 +131,14 @@ docker logs jenkins
 
 ![Jenkins安装插件](https://mjava.top/img/jenkins_191107141216.png)
 
+> 如这个界面插件下载失败，直接点继续，进行下一步，具体解决办法可以看这个篇文章
+>
+> [Jenkins初始化界面插件安装失败解决方法](https://mjava.top/2019/11/07/technology/learningExperience/Linux/Jenkins/Jenkins%E5%88%9D%E5%A7%8B%E5%8C%96%E7%95%8C%E9%9D%A2%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/)
+
+
+
 ### 创建用户
+
 设置你的登录账号和密码，然后点保存完成
 ![Jenkins创建用户](https://mjava.top/img/jenkins_20191107160016.png)
 

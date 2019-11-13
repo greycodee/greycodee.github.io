@@ -70,4 +70,5 @@ https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.89/update-center.json
 ![Jenkins](https://mjava.top/img/20191107165947.png)
 
 
-> 安装完全部插件后然后重启Jenkins，插件界面的报错信息才会消失
+> 安装完全部插件后然后重启Jenkins，插件界面的报错信息才会消失;如果遇到插件下载不下来或搜不到，可以看这篇文章：[Jenkins插件版本太旧的更新方法](https://mjava.top/2019/11/12/technology/learningExperience/Linux/Jenkins/Jenkins插件版本太旧的更新方法/)
+
