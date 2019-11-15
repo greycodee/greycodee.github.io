@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="H&KBlog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言  这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！！！下载nrm  看清楚哦，是nrm部署npm！！！nrm 是一个 npm 源管理器，允许你快速地在 npm 源间切换。执行以下命令安装。">
+<meta name="keywords" content="Pit,Vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue Cli3-11创建项目慢的问题">
+<meta property="og:url" content="https://mjava.top/vue/vue-cli3-11-problem/index.html">
+<meta property="og:site_name" content="H&amp;KBlog">
+<meta property="og:description" content="前言  这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！！！下载nrm  看清楚哦，是nrm部署npm！！！nrm 是一个 npm 源管理器，允许你快速地在 npm 源间切换。执行以下命令安装。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mjava.top/images/vuecreate.png">
+<meta property="og:image" content="https://mjava.top/images/nrmls.png">
+<meta property="og:image" content="https://mjava.top/images/nrmuse.png">
+<meta property="og:image" content="https://mjava.top/images/vuecreate2.png">
+<meta property="og:image" content="https://mjava.top/images/vuecreate3.png">
+<meta property="og:updated_time" content="2019-11-14T13:38:37.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue Cli3-11创建项目慢的问题">
+<meta name="twitter:description" content="前言  这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！！！下载nrm  看清楚哦，是nrm部署npm！！！nrm 是一个 npm 源管理器，允许你快速地在 npm 源间切换。执行以下命令安装。">
+<meta name="twitter:image" content="https://mjava.top/images/vuecreate.png">
+
+<link rel="canonical" href="https://mjava.top/vue/vue-cli3-11-problem/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Vue Cli3-11创建项目慢的问题 | H&KBlog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">H&KBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/vue/vue-cli3-11-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="积千里蛙步,汇万里江河">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="H&KBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue Cli3-11创建项目慢的问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-05 16:33:23" itemprop="dateCreated datePublished" datetime="2019-09-05T16:33:23+08:00">2019-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-14 21:38:37" itemprop="dateModified" datetime="2019-11-14T21:38:37+08:00">2019-11-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index">
+                    <span itemprop="name">Vue</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>  这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。</p><p><img src="/images/vuecreate.png" alt="vuecreate"></p><p>网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！！！</p><h2 id="下载nrm"><a href="#下载nrm" class="headerlink" title="下载nrm"></a>下载nrm</h2><p>  看清楚哦，是nrm部署npm！！！nrm 是一个 <code>npm</code> 源管理器，允许你快速地在 <code>npm</code> 源间切换。执行以下命令安装。</p><a id="more"></a>
+
+
+
+<pre class=" language-shell"><code class="language-shell">sudo npm install -g nrm</code></pre>
+<h3 id="测试nrm是否安装成功"><a href="#测试nrm是否安装成功" class="headerlink" title="测试nrm是否安装成功"></a>测试nrm是否安装成功</h3><pre class=" language-shell"><code class="language-shell">nrm -V</code></pre>
+<p>如果输出版本号，则说明安装成功。</p>
+<h2 id="切换npm源"><a href="#切换npm源" class="headerlink" title="切换npm源"></a>切换npm源</h2><pre class=" language-shell"><code class="language-shell">nrm ls</code></pre>
+<p>此命令会列出npm的所有源</p>
+<p><img src="/images/nrmls.png" alt="nrmls"></p>
+<p>可以看到我现在使用的是淘宝的源，现在把他切换到npm的源。</p>
+<pre class=" language-shell"><code class="language-shell">nrm use npm</code></pre>
+<p><img src="/images/nrmuse.png" alt="nrmuse"></p>
+<h2 id="再次创建vue项目"><a href="#再次创建vue项目" class="headerlink" title="再次创建vue项目"></a>再次创建vue项目</h2><pre class=" language-shell"><code class="language-shell">vue create rrr2</code></pre>
+<p><img src="/images/vuecreate2.png" alt="vuecreate2"><br><img src="/images/vuecreate3.png" alt="vuecreate3"></p>
+<p>项目成功创建！！！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pit/" rel="tag"># Pit</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/docker/docker-mysql/" rel="next" title="Docker下安装mysql并设置用户权限">
+                  <i class="fa fa-chevron-left"></i> Docker下安装mysql并设置用户权限
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/rocketmq/rocketmq-cluster-build/" rel="prev" title="RocketMQ集群搭建">
+                  RocketMQ集群搭建 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载nrm"><span class="nav-number">2.</span> <span class="nav-text">下载nrm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试nrm是否安装成功"><span class="nav-number">2.1.</span> <span class="nav-text">测试nrm是否安装成功</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换npm源"><span class="nav-number">3.</span> <span class="nav-text">切换npm源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再次创建vue项目"><span class="nav-number">4.</span> <span class="nav-text">再次创建vue项目</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">积千里蛙步,汇万里江河</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/z573419235" title="GitHub → https://github.com/z573419235" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
