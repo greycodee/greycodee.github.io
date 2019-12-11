@@ -1,5 +1,5 @@
 ---
-title: 《设计模式系例(一)》-单例模式
+title: 设计模式系例-单例模式
 top: true
 cover: false
 toc: true
