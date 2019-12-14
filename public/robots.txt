@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mjava.top/sitemap.xml
+Sitemap: https://mjava.top/baidusitemap.xml

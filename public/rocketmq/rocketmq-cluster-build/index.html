@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="H&KBlog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;环境 JDK1.8 Centos7 主机-两台 centos7_1 :172.16.54.130 centos7_2 :172.16.54.128 软件资源 JDK1.8 :https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downlo">
+<meta name="keywords" content="Linux,RocketMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ集群搭建">
+<meta property="og:url" content="https://mjava.top/rocketmq/rocketmq-cluster-build/index.html">
+<meta property="og:site_name" content="H&amp;KBlog">
+<meta property="og:description" content="本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;环境 JDK1.8 Centos7 主机-两台 centos7_1 :172.16.54.130 centos7_2 :172.16.54.128 软件资源 JDK1.8 :https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downlo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/rocketmq_console.png">
+<meta property="og:updated_time" content="2019-12-07T10:32:40.434Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RocketMQ集群搭建">
+<meta name="twitter:description" content="本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;环境 JDK1.8 Centos7 主机-两台 centos7_1 :172.16.54.130 centos7_2 :172.16.54.128 软件资源 JDK1.8 :https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downlo">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/rocketmq_console.png">
+
+<link rel="canonical" href="https://mjava.top/rocketmq/rocketmq-cluster-build/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>RocketMQ集群搭建 | H&KBlog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">H&KBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/rocketmq/rocketmq-cluster-build/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="积千里蛙步,汇万里江河">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="H&KBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RocketMQ集群搭建
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-09 20:55:36" itemprop="dateCreated datePublished" datetime="2019-10-09T20:55:36+08:00">2019-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RocketMq/" itemprop="url" rel="index">
+                    <span itemprop="name">RocketMq</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>  本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;</p><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>JDK1.8</li>
+<li>Centos7</li>
+</ul><h2 id="主机-两台"><a href="#主机-两台" class="headerlink" title="主机-两台"></a>主机-两台</h2><ul>
+<li>centos7_1 :172.16.54.130</li>
+<li>centos7_2 :172.16.54.128</li>
+</ul><h2 id="软件资源"><a href="#软件资源" class="headerlink" title="软件资源"></a>软件资源</h2><ul>
+<li>JDK1.8 :<a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" rel="noopener external nofollow noreferrer" target="_blank">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a></li>
+<li>RocketMQ4.5.2 :<a href="http://mirrors.tuna.tsinghua.edu.cn/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip" rel="noopener external nofollow noreferrer" target="_blank">http://mirrors.tuna.tsinghua.edu.cn/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip</a></li>
+</ul><a id="more"></a>
+
+
+
+<h2 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h2><p>  首先分别在两台主机上安装JDK1.8，具体安装方法这里就不说了，网上随便搜一搜都有；</p>
+<h2 id="配置RocketMQ"><a href="#配置RocketMQ" class="headerlink" title="配置RocketMQ"></a>配置RocketMQ</h2><p>  把下载的RocketMQ包分别上传到两台服务器上，然后用命令解压:</p>
+  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> unzip rocketmq-all-4.5.2-bin-release.zip</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写配置文件"><a href="#编写配置文件" class="headerlink" title="编写配置文件"></a>编写配置文件</h3><p>  这一步很重要，集群的搭建关键在于配置文件的编写，首先看看RocketMq配置文件的解析:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#所属集群名字 </span><br><span class="line">brokerClusterName=rocketmq-cluster</span><br><span class="line"></span><br><span class="line">#broker名字，每队master和slave保持一致</span><br><span class="line">brokerName=broker-a</span><br><span class="line"></span><br><span class="line">#0 表示 Master，&gt;0 表示 Slave</span><br><span class="line">brokerId=0 </span><br><span class="line"></span><br><span class="line">#指定主机ip</span><br><span class="line">brokerIP1 = 主机IP</span><br><span class="line"></span><br><span class="line">#nameServer地址，分号分割</span><br><span class="line">namesrvAddr=主机IP:9876;主机IP:9876</span><br><span class="line"></span><br><span class="line">#在发送消息时，自动创建服务器不存在的topic，默认创建的队列数 </span><br><span class="line">defaultTopicQueueNums=4</span><br><span class="line"></span><br><span class="line">#是否允许 Broker 自动创建Topic，建议线下开启，线上关闭 </span><br><span class="line">autoCreateTopicEnable=true</span><br><span class="line"></span><br><span class="line">#是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭 </span><br><span class="line">autoCreateSubscriptionGroup=true</span><br><span class="line"></span><br><span class="line">#Broker 对外服务的监听端口 </span><br><span class="line">listenPort=10911</span><br><span class="line"></span><br><span class="line">#删除文件时间点，默认凌晨 4点</span><br><span class="line"> deleteWhen=04</span><br><span class="line"></span><br><span class="line">#文件保留时间，默认 48 小时 </span><br><span class="line">fileReservedTime=120</span><br><span class="line"></span><br><span class="line">#commitLog每个文件的大小默认1G </span><br><span class="line">mapedFileSizeCommitLog=1073741824</span><br><span class="line"></span><br><span class="line">#ConsumeQueue每个文件默认存30W条，根据业务情况调整</span><br><span class="line">mapedFileSizeConsumeQueue=300000</span><br><span class="line"></span><br><span class="line">#检测物理文件磁盘空间</span><br><span class="line">diskMaxUsedSpaceRatio=88</span><br><span class="line"></span><br><span class="line">#存储路径</span><br><span class="line">storePathRootDir=/usr/local/rocketmq/store</span><br><span class="line">#commitLog 存储路径 </span><br><span class="line">storePathCommitLog=/usr/local/rocketmq/store/commitlog</span><br><span class="line">#消费队列存储路径存储路径</span><br><span class="line">storePathConsumeQueue=/usr/local/rocketmq/store/consumequeue</span><br><span class="line">#消息索引存储路径</span><br><span class="line">storePathIndex=/usr/local/rocketmq/store/index</span><br><span class="line">#checkpoint 文件存储路径</span><br><span class="line">storeCheckpoint=/usr/local/rocketmq/store/checkpoint</span><br><span class="line"></span><br><span class="line">#Broker 的角色</span><br><span class="line">#- ASYNC_MASTER 异步复制Master</span><br><span class="line">#- SYNC_MASTER 同步双写Master</span><br><span class="line">#- SLAVE </span><br><span class="line">brokerRole=ASYNC_MASTER</span><br><span class="line"></span><br><span class="line">#刷盘方式</span><br><span class="line">#- ASYNC_FLUSH 异步刷盘</span><br><span class="line">#- SYNC_FLUSH 同步刷盘 flushDiskType=ASYNC_FLUSH</span><br><span class="line">#checkTransactionMessageEnable=false</span><br><span class="line"></span><br><span class="line">#abort 文件存储路径</span><br><span class="line">abortFile=/usr/javawork/apache-rocketmq/store/abort</span><br><span class="line"></span><br><span class="line">#限制的消息大小 maxMessageSize=65536</span><br></pre></td></tr></table></figure>
+
+<p>以上配置可根据个人需求加入到自己的配置文件中；RocketMQ官方已经为我们创建好了简单的集群配置文件，进去解压后的文件夹，在进入到conf文件夹，可以看到里面有三个文件夹：</p>
+<ul>
+<li>2m-2s-async :2个master，2个slave，async异步复制</li>
+<li>2m-2s-sync :2个master，2个slave，sync同步双写</li>
+<li>2m-noslave :2个master,没有slave</li>
+</ul>
+<p>这里我们用async异步复制模式，进入文件夹，分别编辑：</p>
+<h4 id="centos7-1主机编辑如下两个配置文件"><a href="#centos7-1主机编辑如下两个配置文件" class="headerlink" title="centos7_1主机编辑如下两个配置文件"></a>centos7_1主机编辑如下两个配置文件</h4><blockquote>
+<p>注意，master和slave的文件存储路径不能用同一个路径，所以必须要区分开。</p>
+</blockquote>
+<h5 id="broker-a-properties"><a href="#broker-a-properties" class="headerlink" title="broker-a.properties"></a>broker-a.properties</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brokerClusterName=DefaultCluster</span><br><span class="line">brokerName=broker-a</span><br><span class="line">brokerId=0</span><br><span class="line">deleteWhen=04</span><br><span class="line">fileReservedTime=48</span><br><span class="line">brokerRole=ASYNC_MASTER</span><br><span class="line">flushDiskType=ASYNC_FLUSH</span><br><span class="line">namesrvAddr=172.16.54.128:9876;172.16.54.130:9876</span><br><span class="line">listenPort=10911</span><br><span class="line">#存储路径</span><br><span class="line">storePathRootDir=/usr/local/rocketmq/master/store</span><br><span class="line">#commitLog 存储路径 </span><br><span class="line">storePathCommitLog=/usr/local/rocketmq/master/store/commitlog</span><br><span class="line">#消费队列存储路径存储路径</span><br><span class="line">storePathConsumeQueue=/usr/local/rocketmq/master/store/consumequeue</span><br><span class="line">#消息索引存储路径</span><br><span class="line">storePathIndex=/usr/local/rocketmq/master/store/index</span><br><span class="line">#checkpoint 文件存储路径</span><br><span class="line">storeCheckpoint=/usr/local/rocketmq/master/store/checkpoint</span><br></pre></td></tr></table></figure>
+
+<p><em>这个监听端口设置设置成10911后还会自动监听10909,10912这两个端口，所以要配置文件要避免设置到相应的端口。</em></p>
+<h5 id="broker-a-s-properties"><a href="#broker-a-s-properties" class="headerlink" title="broker-a-s.properties"></a>broker-a-s.properties</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brokerClusterName=DefaultCluster</span><br><span class="line">brokerName=broker-a</span><br><span class="line">brokerId=1</span><br><span class="line">deleteWhen=04</span><br><span class="line">fileReservedTime=48</span><br><span class="line">brokerRole=SLAVE</span><br><span class="line">flushDiskType=ASYNC_FLUSH</span><br><span class="line">namesrvAddr=172.16.54.128:9876;172.16.54.130:9876</span><br><span class="line">listenPort=20911</span><br><span class="line">#存储路径</span><br><span class="line">storePathRootDir=/usr/local/rocketmq/slave/store</span><br><span class="line">#commitLog 存储路径 </span><br><span class="line">storePathCommitLog=/usr/local/rocketmq/slave/store/commitlog</span><br><span class="line">#消费队列存储路径存储路径</span><br><span class="line">storePathConsumeQueue=/usr/local/rocketmq/slave/store/consumequeue</span><br><span class="line">#消息索引存储路径</span><br><span class="line">storePathIndex=/usr/local/rocketmq/slave/store/index</span><br><span class="line">#checkpoint 文件存储路径</span><br><span class="line">storeCheckpoint=/usr/local/rocketmq/slave/store/checkpoint</span><br></pre></td></tr></table></figure>
+
+<p><em>这个监听端口设置设置成20911后还会自动监听20909,20912这两个端口，所以要配置文件要避免设置到相应的端口。</em></p>
+<h4 id="centos7-2主机编辑如下两个配置文件"><a href="#centos7-2主机编辑如下两个配置文件" class="headerlink" title="centos7_2主机编辑如下两个配置文件"></a>centos7_2主机编辑如下两个配置文件</h4><h5 id="和centos7-1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。"><a href="#和centos7-1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。" class="headerlink" title="和centos7_1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。"></a>和centos7_1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。</h5><h2 id="设置RocketMQ运行的JVM内存-非必须"><a href="#设置RocketMQ运行的JVM内存-非必须" class="headerlink" title="设置RocketMQ运行的JVM内存(非必须)"></a>设置RocketMQ运行的JVM内存(非必须)</h2><blockquote>
+<p>此项设置非必须，如果你主机内存很大的话可以不设置，RocketMQ默认要8G。</p>
+</blockquote>
+<p>  进入rocketmq-all-4.5.2-bin-release/bin目录，两台主机分别设置runbroker.sh和runserver.sh这两个文件。</p>
+<ul>
+<li>runbroker.sh：找到如下一行配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms8g -Xmx8g -Xmn4g&quot;</span><br><span class="line"></span><br><span class="line">改成：</span><br><span class="line">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn256m&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>runserver.sh: 找到如下一行配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms4g -Xmx4g -Xmn2g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;</span><br><span class="line"></span><br><span class="line">改成：</span><br><span class="line">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn256m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动RocketMQ"><a href="#启动RocketMQ" class="headerlink" title="启动RocketMQ"></a>启动RocketMQ</h2><blockquote>
+<p>启动RocketMQ前为了方便访问，先关闭两台主机的防火墙。执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span> # service firewalld stop</span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+</blockquote>
+<p>  进入rocketmq-all-4.5.2-bin-release/bin这个目录，两台主机分别执行以下命令：</p>
+<ul>
+<li>启动namesrv</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> nohup sh mqnamesrv &amp;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动broker-master</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> nohup sh mqbroker -c ../conf/2m-2s-async/broker-a.properties &amp;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动broker-slave</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> nohup sh mqbroker -c ../conf/2m-2s-async/broker-a-s.properties &amp;</span><br></pre></td></tr></table></figure>
+
+<p><em>注意两台主机启动broker时后面的-c记得加载你配置好的配置文件路径，别加载错了</em></p>
+<h2 id="搭建Console可视化控制台"><a href="#搭建Console可视化控制台" class="headerlink" title="搭建Console可视化控制台"></a>搭建Console可视化控制台</h2><p>  任意一台机器或者本地下载Console源码，地址：<a href="https://github.com/apache/rocketmq-externals，或者有git的话直接用命令拉取：" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/apache/rocketmq-externals，或者有git的话直接用命令拉取：</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> git clone https://github.com/apache/rocketmq-externals.git</span><br></pre></td></tr></table></figure>
+
+<p>进去目录：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> cd rocketmq-externals-master/rocketmq-console</span><br></pre></td></tr></table></figure>
+
+<p>修改配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> vim src/main/resources/application.properties</span><br></pre></td></tr></table></figure>
+
+<p>添加两个namesvr的主机ip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rocketmq.config.namesrvAddr=172.16.54.128:9876;172.16.54.130:9876</span><br></pre></td></tr></table></figure>
+
+<p>然后进项目跟目录，运行项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span> mvn sprint-boot:run</span><br></pre></td></tr></table></figure>
+
+<p>浏览器访问：</p>
+<p><img src="http://cdn.mjava.top/blog/rocketmq_console.png" alt="可视化Console界面"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/RocketMQ/" rel="tag"># RocketMQ</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/vue/vue-cli3-11-problem/" rel="next" title="Vue Cli3-11创建项目慢的问题">
+                  <i class="fa fa-chevron-left"></i> Vue Cli3-11创建项目慢的问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/gof/gof-singleton/" rel="prev" title="设计模式系例-单例模式">
+                  设计模式系例-单例模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主机-两台"><span class="nav-number">2.</span> <span class="nav-text">主机-两台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件资源"><span class="nav-number">3.</span> <span class="nav-text">软件资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装JDK"><span class="nav-number">4.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置RocketMQ"><span class="nav-number">5.</span> <span class="nav-text">配置RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写配置文件"><span class="nav-number">5.1.</span> <span class="nav-text">编写配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#centos7-1主机编辑如下两个配置文件"><span class="nav-number">5.1.1.</span> <span class="nav-text">centos7_1主机编辑如下两个配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#broker-a-properties"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">broker-a.properties</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#broker-a-s-properties"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">broker-a-s.properties</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#centos7-2主机编辑如下两个配置文件"><span class="nav-number">5.1.2.</span> <span class="nav-text">centos7_2主机编辑如下两个配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#和centos7-1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">和centos7_1主机配置一样，这边就不写了，不过brokerName要设置成不同的，我这边设置成broker-b。</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置RocketMQ运行的JVM内存-非必须"><span class="nav-number">6.</span> <span class="nav-text">设置RocketMQ运行的JVM内存(非必须)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动RocketMQ"><span class="nav-number">7.</span> <span class="nav-text">启动RocketMQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Console可视化控制台"><span class="nav-number">8.</span> <span class="nav-text">搭建Console可视化控制台</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">积千里蛙步,汇万里江河</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/z573419235" title="GitHub → https://github.com/z573419235" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  <div class="powered-by">
+    赣ICP备17003482号
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+</body>
+</html>
