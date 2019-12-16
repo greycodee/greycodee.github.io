@@ -1,4 +1,7 @@
 #!/bin/bash
+echo '＝＝＝＝拉取远程＝＝＝＝'
+git pull
+
 echo '＝＝＝＝开始添加本地修改＝＝＝＝'
 
 git add .
