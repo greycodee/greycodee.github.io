@@ -51,17 +51,17 @@
   };
 </script>
 
-  <meta name="description" content="积千里蛙步,汇万里江河">
+  <meta name="description" content="积千里跬步,汇万里江河">
 <meta name="keywords" content="Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue">
 <meta property="og:type" content="website">
 <meta property="og:title" content="H&amp;KBlog">
 <meta property="og:url" content="https://mjava.top/page/3/index.html">
 <meta property="og:site_name" content="H&amp;KBlog">
-<meta property="og:description" content="积千里蛙步,汇万里江河">
+<meta property="og:description" content="积千里跬步,汇万里江河">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="H&amp;KBlog">
-<meta name="twitter:description" content="积千里蛙步,汇万里江河">
+<meta name="twitter:description" content="积千里跬步,汇万里江河">
 
 <link rel="canonical" href="https://mjava.top/page/3/">
 
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title>H&KBlog-积千里蛙步,汇万里江河</title>
+  <title>H&KBlog-积千里跬步,汇万里江河</title>
   
 
 
@@ -187,12 +187,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-isnull-four/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="积千里跬步,汇万里江河">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="H&KBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-isnull-four/" class="post-title-link" itemprop="url">Java中String判断为空的4大方法比较</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-20 18:59:15" itemprop="dateCreated datePublished" datetime="2019-08-20T18:59:15+08:00">2019-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一-四大方法"><a href="#一-四大方法" class="headerlink" title="一.四大方法"></a>一.四大方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">demo1</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       String a=<span class="string">""</span>;</span><br><span class="line">       String a2=<span class="keyword">new</span> String();</span><br><span class="line"></span><br><span class="line">       System.out.println(a==<span class="string">""</span>);</span><br><span class="line">       System.out.println(a2==<span class="string">""</span>);</span><br><span class="line">       System.out.println(<span class="string">"------------------------------"</span>);</span><br><span class="line">       System.out.println(a==<span class="keyword">null</span>);</span><br><span class="line">       System.out.println(a2==<span class="keyword">null</span>);</span><br><span class="line">       System.out.println(<span class="string">"------------------------------"</span>);</span><br><span class="line">       System.out.println(a.length()&lt;=<span class="number">0</span>);</span><br><span class="line">       System.out.println(a2.length()&lt;=<span class="number">0</span>);</span><br><span class="line">       System.out.println(<span class="string">"------------------------------"</span>);</span><br><span class="line">       System.out.println(a.isEmpty());</span><br><span class="line">       System.out.println(a2.isEmpty());</span><br><span class="line">       System.out.println(<span class="string">"------------------------------"</span>);</span><br><span class="line">       </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java/java-isnull-four/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-integer-int/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="积千里跬步,汇万里江河">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="H&KBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-integer-int/" class="post-title-link" itemprop="url">Integer和int区别</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-19 21:51:11" itemprop="dateCreated datePublished" datetime="2019-08-19T21:51:11+08:00">2019-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-14 15:14:19" itemprop="dateModified" datetime="2019-11-14T15:14:19+08:00">2019-11-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-两者本质区别"><a href="#1-两者本质区别" class="headerlink" title="1.两者本质区别"></a>1.两者本质区别</h2><p>  int是Java的基础数据类型之一，而Integer是基于int进行封装的一个对象</p>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://mjava.top/algorithm/algorithm-recursive-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="积千里蛙步,汇万里江河">
+      <meta itemprop="description" content="积千里跬步,汇万里江河">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -275,7 +433,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="积千里蛙步,汇万里江河">
+      <meta itemprop="description" content="积千里跬步,汇万里江河">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -394,14 +552,14 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">H&K</p>
-  <div class="site-description" itemprop="description">积千里蛙步,汇万里江河</div>
+  <div class="site-description" itemprop="description">积千里跬步,汇万里江河</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -414,7 +572,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

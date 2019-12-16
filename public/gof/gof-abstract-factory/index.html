@@ -51,33 +51,26 @@
   };
 </script>
 
-  <meta name="description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
-<meta name="keywords" content="Jenkins">
+  <meta name="description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬 突然开始的正文紧接着上一章的工厂方法模式，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类AllCarFactory，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后AllCarFactory定义了一个生">
+<meta name="keywords" content="设计模式,抽象工厂模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins插件版本太旧的更新方法">
-<meta property="og:url" content="https://mjava.top/jenkins/problem-jenkins-01/index.html">
+<meta property="og:title" content="设计模式系列-抽象工厂模式">
+<meta property="og:url" content="https://mjava.top/gof/gof-abstract-factory/index.html">
 <meta property="og:site_name" content="H&amp;KBlog">
-<meta property="og:description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
+<meta property="og:description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬 突然开始的正文紧接着上一章的工厂方法模式，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类AllCarFactory，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后AllCarFactory定义了一个生">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102617.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108100855.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102907.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101610.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101748.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101807.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101832.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102109.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102152.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102223.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102240.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102254.png">
-<meta property="og:updated_time" content="2019-12-07T10:32:40.434Z">
+<meta property="og:image" content="http://cdn.mjava.top/20191216212929.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/20191216202720.png">
+<meta property="og:image" content="http://cdn.mjava.top/20191216203329.png">
+<meta property="og:image" content="http://cdn.mjava.top/20191216205803.png">
+<meta property="og:image" content="http://cdn.mjava.top/20191216205427.gif">
+<meta property="og:updated_time" content="2019-12-16T13:32:22.120Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jenkins插件版本太旧的更新方法">
-<meta name="twitter:description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
-<meta name="twitter:image" content="http://cdn.mjava.top/blog/20191108102617.png">
+<meta name="twitter:title" content="设计模式系列-抽象工厂模式">
+<meta name="twitter:description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬 突然开始的正文紧接着上一章的工厂方法模式，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类AllCarFactory，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后AllCarFactory定义了一个生">
+<meta name="twitter:image" content="http://cdn.mjava.top/20191216212929.jpg">
 
-<link rel="canonical" href="https://mjava.top/jenkins/problem-jenkins-01/">
+<link rel="canonical" href="https://mjava.top/gof/gof-abstract-factory/">
 
 
 <script id="page-configurations">
@@ -91,7 +84,7 @@
   };
 </script>
 
-  <title>Jenkins插件版本太旧的更新方法 | H&KBlog</title>
+  <title>设计模式系列-抽象工厂模式 | H&KBlog</title>
   
 
 
@@ -201,7 +194,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/problem-jenkins-01/">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-abstract-factory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Jenkins插件版本太旧的更新方法
+          设计模式系列-抽象工厂模式
         </h1>
 
         <div class="post-meta">
@@ -223,24 +216,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-12 17:27:27" itemprop="dateCreated datePublished" datetime="2019-11-12T17:27:27+08:00">2019-11-12</time>
+              <time title="创建时间：2019-12-16 21:17:23 / 修改时间：21:32:22" itemprop="dateCreated datePublished" datetime="2019-12-16T21:17:23+08:00">2019-12-16</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
                   </a>
                 </span>
             </span>
@@ -263,40 +250,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><pre><code>Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：</code></pre><p><img src="http://cdn.mjava.top/blog/20191108102617.png" alt="jenkins插件管理界面"></p><p>Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.</p><a id="more"></a>
+        <p><img src="http://cdn.mjava.top/20191216212929.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="突然开始的正文"><a href="#突然开始的正文" class="headerlink" title="突然开始的正文"></a>突然开始的正文</h2><p>紧接着上一章的<a href="https://mjava.top/gof/gof-factory-method">工厂方法模式</a>，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类<font color="orange">AllCarFactory</font>，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后<font color="orange">AllCarFactory</font>定义了一个生产摩托车的接口，这样这个接口下面的汽车厂就可以生产摩托车了．就在这时他们的生产模式也从<font color="orange">工厂方法模式</font>升级到了<font color="orange">抽象工厂模式</font>；</p><a id="more"></a>
 
-<h2 id="查看本地已安装版本"><a href="#查看本地已安装版本" class="headerlink" title="查看本地已安装版本"></a>查看本地已安装版本</h2><p>可以看到，本地安装的版本和刚才提示的一样，是1.29版本的，刚才提示说太旧了，要更新到1.33版本。</p>
-<p><img src="http://cdn.mjava.top/blog/20191108100855.png" alt="jenkins插件管理界面"></p>
-<h2 id="搜索插件"><a href="#搜索插件" class="headerlink" title="搜索插件"></a>搜索插件</h2><p>当你理所应当的去这个界面准备搜索这个插件并更新时。。。。你傻了，，怎么搜不到？？？WTF</p>
-<p><img src="http://cdn.mjava.top/blog/20191108102907.png" alt="jenkins插件管理界面"></p>
-<p>不要慌，天无绝人之路，这里找不到，可以去另外的地方找。浏览器打开这个网站</p>
-<p><a href="https://plugins.jenkins.io/" rel="noopener external nofollow noreferrer" target="_blank">Jenkins插件下载</a></p>
-<ul>
-<li>进入后在输入框里输入你刚才要下载的插件:</li>
-</ul>
-<p><img src="http://cdn.mjava.top/blog/20191108101610.png" alt="jenkins插件下载"></p>
-<ul>
-<li>选择对应的插件<br><img src="http://cdn.mjava.top/blog/20191108101748.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>然后点击右上角<br><img src="http://cdn.mjava.top/blog/20191108101807.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>下载刚才提示的1.33版本<br><img src="http://cdn.mjava.top/blog/20191108101832.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>下载完成后是一个hpi文件<br><img src="http://cdn.mjava.top/blog/20191108102109.png" alt="jenkins插件下载"></li>
-</ul>
-<h2 id="导入插件"><a href="#导入插件" class="headerlink" title="导入插件"></a>导入插件</h2><ul>
-<li><p>到插件管理界面，找到Upload Plugin<br><img src="http://cdn.mjava.top/blog/20191108102152.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>然后选择刚才下载的插件，点击导入<br><img src="http://cdn.mjava.top/blog/20191108102223.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>可以看到插件正在导入<br><img src="http://cdn.mjava.top/blog/20191108102240.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>导入完成后，重启Jenkins就OK了<br><img src="http://cdn.mjava.top/blog/20191108102254.png" alt="jenkins插件下载"></p>
-</li>
-</ul>
+
+<p>话不多说，看两个模式的类图你就明白了：</p>
+<h3 id="原本的工厂方法模式类图："><a href="#原本的工厂方法模式类图：" class="headerlink" title="原本的工厂方法模式类图："></a>原本的工厂方法模式类图：</h3><p><img src="http://cdn.mjava.top/20191216202720.png" alt="工厂方法模式"></p>
+<h3 id="升级后的抽象工厂模式："><a href="#升级后的抽象工厂模式：" class="headerlink" title="升级后的抽象工厂模式："></a>升级后的抽象工厂模式：</h3><p><img src="http://cdn.mjava.top/20191216203329.png" alt="抽象工厂模式"></p>
+<p>可以看到，抽象工厂只是比工厂方法模式多生产了一个产品，当<font color="orange">抽象工厂模式</font>的产品减到<font color="orange">只有一个</font>的时候，他就又回到了<font color="orange">工厂方法模式</font>；</p>
+<h2 id="好色的朋友买车了"><a href="#好色的朋友买车了" class="headerlink" title="好色的朋友买车了"></a>好色的朋友买车了</h2><p>上次我朋友看见我买车之后，得知是个小姐姐带我区买车的，于是他叫我联系了下那个小姐姐，说他也要买车，点名要叫小姐姐带他去，由于资金有限，他只卖了奔驰和五菱系列的产品，没有买莱斯莱斯的；看看他是怎么买的吧：</p>
+<p><img src="http://cdn.mjava.top/20191216205803.png" alt></p>
+<p>可以看到，由于要在一个工厂买两个东西，他是先找到了工厂，然后再一件一件的从工厂买．我们上次是一个工厂买一件东西，所以是直接去工厂买的；</p>
+<h2 id="措不及防的结束了"><a href="#措不及防的结束了" class="headerlink" title="措不及防的结束了"></a>措不及防的结束了</h2><p><img src="http://cdn.mjava.top/20191216205427.gif" alt></p>
+<p>不是我不想讲，而是抽象工厂就是这样的东西．从上面可以看出，抽象工厂每当增加一个产品时，后面相关的的<font color="orange">品牌工厂</font>也全部要实现他这个产品，这就违背了开闭原则了．所以，在实际设计中，一个<font color="orange">业务场景是稳定的</font>,用抽象工厂是比较好的，因为一次设计,后面就不用改了,这样就不会违反开闭原则了．但是如果一个<font color="orange">业务场景是稳定的</font>是不稳定的，那么就不适合使用这个模式了，因为后期需要多次修改，这就违反了开闭原则，同时也及其难维护，应为你不知道修改了代码，到底会影响哪些功能；</p>
 
     </div>
 
@@ -306,24 +273,22 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+              <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+              <a href="/tags/抽象工厂模式/" rel="tag"># 抽象工厂模式</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/jenkins/build-jenkins-ci-cd/" rel="next" title="Jenkins教程-Docker+GitLab持续部署持续集成">
-                  <i class="fa fa-chevron-left"></i> Jenkins教程-Docker+GitLab持续部署持续集成
+                <a href="/gof/gof-factory-method/" rel="next" title="设计模式系列-工厂模式">
+                  <i class="fa fa-chevron-left"></i> 设计模式系列-工厂模式
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/java/nacos-post-error/" rel="prev" title="Nacos报[NACOS HTTP-POST]">
-                  Nacos报[NACOS HTTP-POST] <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -367,7 +332,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看本地已安装版本"><span class="nav-number">2.</span> <span class="nav-text">查看本地已安装版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索插件"><span class="nav-number">3.</span> <span class="nav-text">搜索插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入插件"><span class="nav-number">4.</span> <span class="nav-text">导入插件</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#突然开始的正文"><span class="nav-number">1.</span> <span class="nav-text">突然开始的正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原本的工厂方法模式类图："><span class="nav-number">1.1.</span> <span class="nav-text">原本的工厂方法模式类图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#升级后的抽象工厂模式："><span class="nav-number">1.2.</span> <span class="nav-text">升级后的抽象工厂模式：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好色的朋友买车了"><span class="nav-number">2.</span> <span class="nav-text">好色的朋友买车了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#措不及防的结束了"><span class="nav-number">3.</span> <span class="nav-text">措不及防的结束了</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
