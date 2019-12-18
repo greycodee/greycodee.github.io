@@ -51,33 +51,26 @@
   };
 </script>
 
-  <meta name="description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
-<meta name="keywords" content="Jenkins">
+  <meta name="description" content="积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 文前发言　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫数组链表结构，就是常说的哈希表，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；数组 数组是我们平时用的最多的数据结构，它的特点是查询数据快，插入数据慢，查询的时间复杂度是O(1),插入的时间复杂度是O(n).">
+<meta name="keywords" content="数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins插件版本太旧的更新方法">
-<meta property="og:url" content="https://mjava.top/jenkins/problem-jenkins-01/index.html">
+<meta property="og:title" content="恍然大悟，数组和链表的区别">
+<meta property="og:url" content="https://mjava.top/algorithm/array-vs-linked/index.html">
 <meta property="og:site_name" content="H&amp;KBlog">
-<meta property="og:description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
+<meta property="og:description" content="积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 文前发言　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫数组链表结构，就是常说的哈希表，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；数组 数组是我们平时用的最多的数据结构，它的特点是查询数据快，插入数据慢，查询的时间复杂度是O(1),插入的时间复杂度是O(n).">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102617.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108100855.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102907.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101610.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101748.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101807.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108101832.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102109.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102152.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102223.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102240.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20191108102254.png">
-<meta property="og:updated_time" content="2019-12-07T10:32:40.434Z">
+<meta property="og:image" content="http://cdn.mjava.top/20191218134901.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/20191218104007.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/20191218113521.png">
+<meta property="og:image" content="http://cdn.mjava.top/20191218114115.gif">
+<meta property="og:image" content="http://cdn.mjava.top/20191218132932.png">
+<meta property="og:updated_time" content="2019-12-18T05:52:24.538Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jenkins插件版本太旧的更新方法">
-<meta name="twitter:description" content="前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.">
-<meta name="twitter:image" content="http://cdn.mjava.top/blog/20191108102617.png">
+<meta name="twitter:title" content="恍然大悟，数组和链表的区别">
+<meta name="twitter:description" content="积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 文前发言　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫数组链表结构，就是常说的哈希表，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；数组 数组是我们平时用的最多的数据结构，它的特点是查询数据快，插入数据慢，查询的时间复杂度是O(1),插入的时间复杂度是O(n).">
+<meta name="twitter:image" content="http://cdn.mjava.top/20191218134901.jpg">
 
-<link rel="canonical" href="https://mjava.top/jenkins/problem-jenkins-01/">
+<link rel="canonical" href="https://mjava.top/algorithm/array-vs-linked/">
 
 
 <script id="page-configurations">
@@ -91,7 +84,7 @@
   };
 </script>
 
-  <title>Jenkins插件版本太旧的更新方法 | H&KBlog</title>
+  <title>恍然大悟，数组和链表的区别 | H&KBlog</title>
   
 
 
@@ -201,7 +194,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/problem-jenkins-01/">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/algorithm/array-vs-linked/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Jenkins插件版本太旧的更新方法
+          恍然大悟，数组和链表的区别
         </h1>
 
         <div class="post-meta">
@@ -223,24 +216,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-12 17:27:27" itemprop="dateCreated datePublished" datetime="2019-11-12T17:27:27+08:00">2019-11-12</time>
+              <time title="创建时间：2019-12-18 13:50:52 / 修改时间：13:52:24" itemprop="dateCreated datePublished" datetime="2019-12-18T13:50:52+08:00">2019-12-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
                   </a>
                 </span>
             </span>
@@ -263,40 +250,56 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><pre><code>Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：</code></pre><p><img src="http://cdn.mjava.top/blog/20191108102617.png" alt="jenkins插件管理界面"></p><p>Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.</p><a id="more"></a>
+        <p><img src="http://cdn.mjava.top/20191218134901.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="文前发言"><a href="#文前发言" class="headerlink" title="文前发言"></a>文前发言</h2><p>　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫<font color="orange">数组链表</font>结构，就是常说的<font color="orange">哈希表</font>，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；</p><p><img src="http://cdn.mjava.top/20191218104007.jpg" alt></p><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
+<p>数组是我们平时用的最多的数据结构，它的特点是<font color="orange">查询数据快，插入数据慢</font>，查询的时间复杂度是<font color="orange">O(1)</font>,插入的时间复杂度是<font color="orange">O(n)</font>.</p>
+</blockquote><a id="more"></a>
 
-<h2 id="查看本地已安装版本"><a href="#查看本地已安装版本" class="headerlink" title="查看本地已安装版本"></a>查看本地已安装版本</h2><p>可以看到，本地安装的版本和刚才提示的一样，是1.29版本的，刚才提示说太旧了，要更新到1.33版本。</p>
-<p><img src="http://cdn.mjava.top/blog/20191108100855.png" alt="jenkins插件管理界面"></p>
-<h2 id="搜索插件"><a href="#搜索插件" class="headerlink" title="搜索插件"></a>搜索插件</h2><p>当你理所应当的去这个界面准备搜索这个插件并更新时。。。。你傻了，，怎么搜不到？？？WTF</p>
-<p><img src="http://cdn.mjava.top/blog/20191108102907.png" alt="jenkins插件管理界面"></p>
-<p>不要慌，天无绝人之路，这里找不到，可以去另外的地方找。浏览器打开这个网站</p>
-<p><a href="https://plugins.jenkins.io/" rel="noopener external nofollow noreferrer" target="_blank">Jenkins插件下载</a></p>
-<ul>
-<li>进入后在输入框里输入你刚才要下载的插件:</li>
-</ul>
-<p><img src="http://cdn.mjava.top/blog/20191108101610.png" alt="jenkins插件下载"></p>
-<ul>
-<li>选择对应的插件<br><img src="http://cdn.mjava.top/blog/20191108101748.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>然后点击右上角<br><img src="http://cdn.mjava.top/blog/20191108101807.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>下载刚才提示的1.33版本<br><img src="http://cdn.mjava.top/blog/20191108101832.png" alt="jenkins插件下载"></li>
-</ul>
-<ul>
-<li>下载完成后是一个hpi文件<br><img src="http://cdn.mjava.top/blog/20191108102109.png" alt="jenkins插件下载"></li>
-</ul>
-<h2 id="导入插件"><a href="#导入插件" class="headerlink" title="导入插件"></a>导入插件</h2><ul>
-<li><p>到插件管理界面，找到Upload Plugin<br><img src="http://cdn.mjava.top/blog/20191108102152.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>然后选择刚才下载的插件，点击导入<br><img src="http://cdn.mjava.top/blog/20191108102223.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>可以看到插件正在导入<br><img src="http://cdn.mjava.top/blog/20191108102240.png" alt="jenkins插件下载"></p>
-</li>
-<li><p>导入完成后，重启Jenkins就OK了<br><img src="http://cdn.mjava.top/blog/20191108102254.png" alt="jenkins插件下载"></p>
-</li>
-</ul>
+
+
+
+<p>牛＊一族去学校读书，学校有四人寝和五人寝，大牛，二牛，三牛，四牛一同住进了四人寝里，每天都五缺一；有一天，他们在游戏里认识了小牛，得知小牛也是他们学校的，于是邀请小牛和他们一起住，可是他们们寝室只能住四个人，这个怎么办呢？于是他们向学校(<font color="orange">系统</font>)申请，要求学校给他们一个新的六人寝(<font color="orange">新的内存空间</font>)，于是学校就给了他们新的六人寝，于是他们全部都搬去了六人寝里，小牛也办了进去，之后每天五黑，好不快活；</p>
+<p><img src="http://cdn.mjava.top/20191218113521.png" alt></p>
+<blockquote>
+<p>之后有其他学生看到牛＊他们的做法，于是也通通向学校申请；最后学校发现了一个问题：就是学生们为了住进新寝室，花费了大量的时间在从旧寝室到新寝室的路上(<font color="orange">插入数据慢</font>)</p>
+</blockquote>
+<p>有的人会说，那一开始就安排大牛，二牛，三牛，四牛住５人寝不就好了吗？这样他们就不用搬了(这就相当于我们初始化数组时，给数组指定了一个大小)；这样的想法是好的，但是如果他们没有没有认识小牛，小牛也不会搬进去，这样他们四个人就一直住着５人寝，就造成了空间资源浪费；</p>
+<p>有一天，老师去找进入新寝室的小牛谈话，一看得知小牛在４号床，一下就找到了小牛（<font color="orange">查询数据快</font>），问他在这个寝室住的习不习惯，小牛心想，每天都五黑，你说我习不习惯！！</p>
+<p><img src="http://cdn.mjava.top/20191218114115.gif" alt></p>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><blockquote>
+<p>链表我们平时用的比较少，它的特点是:<font color="orange">插入数据快，查询数据慢</font>，查询的时间复杂度是：<font color="orange">O(n)</font>，插入的时间复杂度是：<font color="orange">O(1)</font>，它的特点是和数组相反的；</p>
+</blockquote>
+<p>　　经过无数日夜的奋战，牛＊一寝人觉得是时候该出去玩玩了，自从小牛搬过来后，就一直没日没夜的五黑，都快不知道外面的世界长什么样子了；他们一行人准备去游乐园转转．</p>
+<p>　　来到游乐园后，一群人像刚放出来的一样，对一切都充满了新鲜感，到处转悠．就在转悠的时候，细心的大牛发现了地上有一张纸条，打开一看，上面写着：<font color="orange">＂少年，你渴望力量吗？想获得力量就来海盗船找我！＂</font>，大牛赶紧找来其他小伙伴，一同前往；到了海盗船的地方，发现船上写着：<font color="orange">＂力量源自摩天轮，请前往摩天轮＂</font>，于是一群人就又前往摩天轮，在那里，终于过得了神秘力量－－－<font color="orange">毒鸡汤：你的内心有多强大，你的力量就有多强大</font>；小牛他们为了寻找这个力量，可谓费尽九牛二虎之力啊（<font color="orange">查询数据慢</font>）；</p>
+<p><img src="http://cdn.mjava.top/20191218132932.png" alt></p>
+<blockquote>
+<p>可以发现，<font color="orange">每个元素存着下个元素的地址</font>，所以如果要查找其中某个元素，就必须要从头开始，才能找到．这就比较慢了．但是，他们<font color="orange">添加元素很快</font>,元素可以随机出现在游乐园的某个地方，只要在新添加元素的前一个元素指明新元素的地址在哪里就可以了；</p>
+</blockquote>
+<h2 id="发个对比表格吧"><a href="#发个对比表格吧" class="headerlink" title="发个对比表格吧"></a>发个对比表格吧</h2><h3 id="时间复杂度对比表"><a href="#时间复杂度对比表" class="headerlink" title="时间复杂度对比表"></a>时间复杂度对比表</h3><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">数组</th>
+<th>链表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">插入</td>
+<td align="center">O(n) 慢</td>
+<td>O(1) 快</td>
+</tr>
+<tr>
+<td align="center">删除</td>
+<td align="center">O(n) 慢</td>
+<td>O(1) 快</td>
+</tr>
+<tr>
+<td align="center">查询</td>
+<td align="center">O(1) 快</td>
+<td>O(n) 慢</td>
+</tr>
+</tbody></table>
 
     </div>
 
@@ -306,24 +309,21 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+              <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/jenkins/build-jenkins-ci-cd/" rel="next" title="Jenkins教程-Docker+GitLab持续部署持续集成">
-                  <i class="fa fa-chevron-left"></i> Jenkins教程-Docker+GitLab持续部署持续集成
+                <a href="/gof/gof-abstract-factory/" rel="next" title="设计模式系列-抽象工厂模式">
+                  <i class="fa fa-chevron-left"></i> 设计模式系列-抽象工厂模式
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/java/nacos-post-error/" rel="prev" title="Nacos报[NACOS HTTP-POST]">
-                  Nacos报[NACOS HTTP-POST] <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -367,7 +367,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看本地已安装版本"><span class="nav-number">2.</span> <span class="nav-text">查看本地已安装版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索插件"><span class="nav-number">3.</span> <span class="nav-text">搜索插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入插件"><span class="nav-number">4.</span> <span class="nav-text">导入插件</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文前发言"><span class="nav-number">1.</span> <span class="nav-text">文前发言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">2.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链表"><span class="nav-number">3.</span> <span class="nav-text">链表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发个对比表格吧"><span class="nav-number">4.</span> <span class="nav-text">发个对比表格吧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度对比表"><span class="nav-number">4.1.</span> <span class="nav-text">时间复杂度对比表</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
