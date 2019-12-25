@@ -1,4 +1,10 @@
 #!/bin/bash
+echo '====清除老的文件===='
+hexo clean
+echo '====hexo 生成新文件===='
+hexo g
+echo '====hexo 上传到服务器===='
+hexo d
 echo '＝＝＝＝拉取远程＝＝＝＝'
 git pull
 
