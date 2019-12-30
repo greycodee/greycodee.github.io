@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>【图】用图片告诉你Java中的位运算</title>
+      <link href="/java/java-base-wei/"/>
+      <url>/java/java-base-wei/</url>
+      
+        <content type="html"><![CDATA[<p><img src="http://cdn.mjava.top/20191230221924.jpg" alt></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​        虽然位运算在实际开发中并不常用,但是在各种算法中却常常见到它们的身影.因为是直接操作二进制的,所以机器执行起来就快很多,所以尽管实际业务中不常用,但如果你不想只做个码农,这个基础还是要掌握的;</p><p>讲位操作之前,就必须要知道<font color="orange">原码、反码、补码</font></p><blockquote><p>其中正数的<font color="orange">原码=反码=补码</font></p></blockquote><h2 id="原码、反码、补码"><a href="#原码、反码、补码" class="headerlink" title="原码、反码、补码"></a>原码、反码、补码</h2><a id="more"></a><blockquote><p>在机器的内存中,一个负数的表示是<font color="orange">这个负数的绝对值取原码,再取反码,再加一</font>,最后出现的就是这个负数在内存中的表示的二进制数值</p></blockquote><p>比如说-9在内存中的二进制码,这里用8位表示:</p><p><img src="http://cdn.mjava.top/20191230212102.png" alt></p><p>最后<font color="orange">-9在内存中的二进制值为11110111</font></p><blockquote><p>在二进制中,最高位为符号位,<font color="red">0代表正,1代表负</font></p></blockquote><h2 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h2><h3 id="左移和右移"><a href="#左移和右移" class="headerlink" title="左移和右移"></a>左移和右移</h3><p>在<code>Java</code>中的<code>int</code>类型有<font color="orange">4字节</font>,一个字节有<font color="orange">8位</font>,所以这边用32位表示一个数</p><h4 id="负数的左移和右移"><a href="#负数的左移和右移" class="headerlink" title="负数的左移和右移"></a>负数的左移和右移</h4><blockquote><p><font color="orange">这边负数表示是在内存中表示的二进制值</font></p><p>右移时:最高位<font color="orange">补符号位1</font></p><p>左移时:末尾补0</p></blockquote><p><img src="http://cdn.mjava.top/20191230212836.png" alt></p><h4 id="正数的左移和右移"><a href="#正数的左移和右移" class="headerlink" title="正数的左移和右移"></a>正数的左移和右移</h4><blockquote><p>右移时:最高位<font color="orange">补符号位0</font></p><p>左移时:末尾补0</p></blockquote><p><img src="http://cdn.mjava.top/20191230212951.png" alt></p><h3 id="无符号右移"><a href="#无符号右移" class="headerlink" title="无符号右移"></a>无符号右移</h3><blockquote><p>无论是正数还是负数,右移<font color="orange">最高位一律补0</font></p></blockquote><p><img src="http://cdn.mjava.top/20191230213359.png" alt></p><h3 id="amp-位与"><a href="#amp-位与" class="headerlink" title="&amp;(位与)"></a>&amp;(位与)</h3><blockquote><p>当相对应的位都为1时,等于1,否则等于0</p></blockquote><p>为了方便表示,接下来全部都用8位表示一个数</p><p><img src="http://cdn.mjava.top/20191230215214.png" alt></p><h3 id="位或"><a href="#位或" class="headerlink" title="|(位或)"></a>|(位或)</h3><blockquote><p>当相对应的位有一个为1时,等于1,否则等于0</p></blockquote><p><img src="http://cdn.mjava.top/20191230215609.png" alt></p><h3 id="异或"><a href="#异或" class="headerlink" title="^(异或)"></a>^(异或)</h3><blockquote><p>当相对应的位不同时,等于1,相同时等于0</p></blockquote><p><img src="http://cdn.mjava.top/20191230220948.png" alt></p><h3 id="取反"><a href="#取反" class="headerlink" title="~(取反)"></a>~(取反)</h3><blockquote><p>1等于0,0等于1</p></blockquote><p><img src="http://cdn.mjava.top/20191230220449.png" alt></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table><thead><tr><th>含义</th><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td>左移</td><td>&lt;&lt;</td><td>末尾补0</td></tr><tr><td>右移</td><td>&gt;&gt;</td><td>负数:最高位<font color="orange">补符号位1</font>      正数:最高位<font color="orange">补符号位0</font></td></tr><tr><td>无符号右移</td><td>&gt;&gt;&gt;</td><td>无论是正数还是负数,右移<font color="orange">最高位一律补0</font></td></tr><tr><td>&amp;(位与)</td><td>&amp;</td><td>当相对应的位都为1时,等于1,否则等于0</td></tr><tr><td>|(位或)</td><td>|</td><td>当相对应的位有一个为1时,等于1,否则等于0</td></tr><tr><td>^(异或)</td><td>^</td><td>当相对应的位 不同时,等于1  相同时,等于0</td></tr><tr><td>~(取反)</td><td>~</td><td>1等于0,0等于1</td></tr></tbody></table>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>设计模式之建造者模式【用好玩的故事讲清楚设计模式】</title>
       <link href="/gof/gof-builder/"/>
       <url>/gof/gof-builder/</url>
@@ -662,9 +687,9 @@
       
         <tags>
             
-            <tag> Linux </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Linux </tag>
             
         </tags>
       
@@ -795,9 +820,9 @@
       
         <tags>
             
-            <tag> Pit </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Pit </tag>
             
             <tag> Base64 </tag>
             
