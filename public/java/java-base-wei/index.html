@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 3.9.0">
@@ -68,7 +68,7 @@
 <meta property="og:image" content="http://cdn.mjava.top/20191230215609.png">
 <meta property="og:image" content="http://cdn.mjava.top/20191230220948.png">
 <meta property="og:image" content="http://cdn.mjava.top/20191230220449.png">
-<meta property="og:updated_time" content="2019-12-30T14:19:51.407Z">
+<meta property="og:updated_time" content="2019-12-31T07:33:55.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【图】用图片告诉你Java中的位运算">
 <meta name="twitter:description" content="前言​        虽然位运算在实际开发中并不常用,但是在各种算法中却常常见到它们的身影.因为是直接操作二进制的,所以机器执行起来就快很多,所以尽管实际业务中不常用,但如果你不想只做个码农,这个基础还是要掌握的;讲位操作之前,就必须要知道原码、反码、补码 其中正数的原码=反码=补码 原码、反码、补码">
@@ -119,10 +119,10 @@
   </style>
 </noscript>
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -220,10 +220,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-30 22:17:30 / 修改时间：22:19:51" itemprop="dateCreated datePublished" datetime="2019-12-30T22:17:30+08:00">2019-12-30</time>
+              <time title="创建时间：2019-12-30 22:17:30" itemprop="dateCreated datePublished" datetime="2019-12-30T22:17:30+08:00">2019-12-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-31 15:33:55" itemprop="dateModified" datetime="2019-12-31T15:33:55+08:00">2019-12-31</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -346,6 +352,15 @@
 <td>1等于0,0等于1</td>
 </tr>
 </tbody></table>
+<blockquote>
+<p>最后有个小技巧,<font color="orange">向左位移几位就是乘以2的几次方,比如9向左移n位,就是</font></p>
+</blockquote>
+<p>$$<br>9向左移n位=9*2^n<br>$$</p>
+<blockquote>
+<p><font color="orange">向右移几位就是除以2的几次方然后向下取整,比如9向右移动n位,就是</font></p>
+</blockquote>
+<p>$$<br>9向右移n位=⌊9/2^n⌋<br>$$</p>
+<p><font color="red">注:⌊⌋是数学符号向下取整,例如:2.25向下取整是2;   -2.25向下取整是-3; 具体的话可以看看这篇文章<a href="https://www.shuxuele.com/sets/function-floor-ceiling.html" rel="noopener external nofollow noreferrer" target="_blank">向上取整与向下取整函数</a>;该技巧不适用无符号右移</font></p>
 
     </div>
 
@@ -564,6 +579,56 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
 
 <script>
   window.livereOptions = {
@@ -577,7 +642,7 @@
     j.async = true;
     e.parentNode.insertBefore(j, e);
   })(document, 'script');
-</script>
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>
