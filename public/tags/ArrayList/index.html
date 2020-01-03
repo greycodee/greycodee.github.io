@@ -51,25 +51,19 @@
   };
 </script>
 
-  <meta name="description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
-<meta name="keywords" content="Docker,Mysql,Linux,Pit">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Docker迁移根目录导致mysql权限问题">
-<meta property="og:url" content="https://mjava.top/docker/docker-transfer-pit/index.html">
+  <meta name="description" content="积千里跬步,汇万里江河">
+<meta name="keywords" content="Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue">
+<meta property="og:type" content="website">
+<meta property="og:title" content="H&amp;KBlog">
+<meta property="og:url" content="https://mjava.top/tags/ArrayList/index.html">
 <meta property="og:site_name" content="H&amp;KBlog">
-<meta property="og:description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
+<meta property="og:description" content="积千里跬步,汇万里江河">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://cdn.mjava.top/20191220143818.png">
-<meta property="og:image" content="http://cdn.mjava.top/20191220144523.png">
-<meta property="og:image" content="http://cdn.mjava.top/20191220144841.png">
-<meta property="og:image" content="http://cdn.mjava.top/20191220145849.png">
-<meta property="og:updated_time" content="2019-12-20T07:05:47.073Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker迁移根目录导致mysql权限问题">
-<meta name="twitter:description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
-<meta name="twitter:image" content="http://cdn.mjava.top/20191220143818.png">
+<meta name="twitter:title" content="H&amp;KBlog">
+<meta name="twitter:description" content="积千里跬步,汇万里江河">
 
-<link rel="canonical" href="https://mjava.top/docker/docker-transfer-pit/">
+<link rel="canonical" href="https://mjava.top/tags/ArrayList/">
 
 
 <script id="page-configurations">
@@ -77,13 +71,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
+    isPost: false,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Docker迁移根目录导致mysql权限问题 | H&KBlog</title>
+  <title>标签: ArrayList | H&KBlog</title>
   
 
 
@@ -188,130 +182,54 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/docker/docker-transfer-pit/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="积千里跬步,汇万里江河">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="H&KBlog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Docker迁移根目录导致mysql权限问题
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">ArrayList
+          <small>标签</small>
         </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-20 15:04:16 / 修改时间：15:05:47" itemprop="dateCreated datePublished" datetime="2019-12-20T15:04:16+08:00">2019-12-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
-                  </a>
-                </span>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+      </div>
 
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：</p><p>迁移根目录我看的是这个文章：<a href="https://www.cnblogs.com/insist-forever/p/11739207.html" rel="noopener external nofollow noreferrer" target="_blank">docker的存储目录迁移</a>,　不过迁移的时候我没有使用<font color="orange">rsync</font>这个命令，而是使用<font color="orange">cp -R</font>;</p><a id="more"></a>
-
-<p>文件复制过去后，按照教程，重新启动docker服务，可是其中mysql容器跑不起来了，报mysqld: Can’t create/write to file ‘/tmp/ibTCv7Rw’ (Errcode: 13 - Permission denied)</p>
-<p><img src="http://cdn.mjava.top/20191220143818.png" alt></p>
-<p>期间按照网上的方法：说docker容器启动是添加–privileged=true,设置/tmp目录的权限，关闭selinux，这些方法<font color="orange">都没用！！！！！！</font></p>
-<blockquote>
-<p>其中设置/tmp文件权限这个方法，我把里面的/tmp文件挂载出来后，设置了权限，报这个的问题是解决了，可是又出现了新的问题，又报Version: ‘5.7.27’  socket: ‘/var/run/mysqld/mysqld.sock’ </p>
-<p><img src="http://cdn.mjava.top/20191220144523.png" alt></p>
-</blockquote>
-<p>看来还是得从根源上解决问题啊！</p>
-<h2 id="我的解决办法"><a href="#我的解决办法" class="headerlink" title="我的解决办法"></a>我的解决办法</h2><p>​        我想，既然是权限问题，那肯定是复制文件的时候权限丢失了，于是查了下cp命令保持权限的命令（cp -p）:</p>
-<p><img src="http://cdn.mjava.top/20191220144841.png" alt></p>
-<p>于是我又重新关闭的docker服务，然后删除了所有复制到home文件的目录，重新用<font color="orange">cp -p -R /var/lib/docker /home/docker/lib/</font>来重新复制了文件；</p>
-<p>复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．<img src="http://cdn.mjava.top/20191220145849.png" alt></p>
-
+    <div class="collection-year">
+      <h1 class="collection-header">2020</h1>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Docker/" rel="tag"># Docker</a>
-              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/Pit/" rel="tag"># Pit</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2020-01-03T19:13:31+08:00"
+              content="2020-01-03">
+          01-03
+        </time>
+      </div>
 
-        
+      <h2 class="post-title">
+          <a class="post-title-link" href="/java/java-arraylist-source-1/" itemprop="url">
+            <span itemprop="name">【源码解析】扒开ArrayList的外衣</span>
+          </a>
+      </h2>
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-                <a href="/gof/gof-taemplate-method/" rel="next" title="设计模式系列-模板方法模式">
-                  <i class="fa fa-chevron-left"></i> 设计模式系列-模板方法模式
-                </a>
-            </div>
-
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-                <a href="/mysql/mysql-update-driver-connector-8/" rel="prev" title="更新驱动到mysql-connector-java-8遇到的一些问题">
-                  更新驱动到mysql-connector-java-8遇到的一些问题 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-      </footer>
-    
+    </header>
   </article>
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>
           
-    
-  <div class="comments" id="comments">
-    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
-  </div>
-  
 
         </div>
           
@@ -336,7 +254,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我的解决办法"><span class="nav-number">2.</span> <span class="nav-text">我的解决办法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -532,25 +449,12 @@
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
-</script>
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
     
 
   
 
-<script>
-  window.livereOptions = {
-    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
-  };
-  (function(d, s) {
-    var j, e = d.getElementsByTagName(s)[0];
-    if (typeof LivereTower === 'function') { return; }
-    j = d.createElement(s);
-    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-    j.async = true;
-    e.parentNode.insertBefore(j, e);
-  })(document, 'script');
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>

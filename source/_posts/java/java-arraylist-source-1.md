@@ -10,7 +10,11 @@ summary:
 keywords:
 description:
 tags:
+- Java
+- ArrayList
+- 源码解析
 categories:
+- Java
 ---
 
 > 积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。
