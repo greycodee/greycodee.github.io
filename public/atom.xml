@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjava.top/"/>
-  <updated>2020-01-08T06:09:18.883Z</updated>
+  <updated>2020-01-08T16:41:11.129Z</updated>
   <id>https://mjava.top/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>testss</title>
+    <link href="https://mjava.top/testss/"/>
+    <id>https://mjava.top/testss/</id>
+    <published>2020-01-08T16:41:11.000Z</published>
+    <updated>2020-01-08T16:41:11.129Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>【源码解析】你真的了解ArrayDeque嘛？</title>
@@ -511,57 +526,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&quot;http://cdn.mjava.top/blog/20191108102617.png&quot; alt=&quot;jenkins插件管理界面&quot;&gt;&lt;/p&gt;&lt;p&gt;Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Jenkins" scheme="https://mjava.top/categories/Jenkins/"/>
-    
-    
-      <category term="Jenkins" scheme="https://mjava.top/tags/Jenkins/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jenkins教程-Docker+GitLab持续部署持续集成</title>
-    <link href="https://mjava.top/jenkins/build-jenkins-ci-cd/"/>
-    <id>https://mjava.top/jenkins/build-jenkins-ci-cd/</id>
-    <published>2019-11-12T09:27:02.000Z</published>
-    <updated>2019-12-07T10:32:40.434Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul><li><p><a href="https://mjava.top/jenkins/build-jenkins-docker/">Jenkins教程-搭建(Docker版)</a></p></li><li><p><a href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a></p></li><li><p><a href="https://mjava.top/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a></p></li></ul><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><table><thead><tr><th></th><th>地址</th><th>系统</th><th>安装的软件</th></tr></thead><tbody><tr><td>主机１</td><td>10.25.0.72</td><td>Centos 7</td><td>Docker　,　Jenkins(Docker版)</td></tr><tr><td>主机２</td><td>10.25.0.50</td><td>Cnetos 7</td><td>Docker</td></tr></tbody></table><a id="more"></a><h2 id="Jenkins所需添加插件"><a href="#Jenkins所需添加插件" class="headerlink" title="Jenkins所需添加插件"></a>Jenkins所需添加插件</h2><ul><li><p><a href="https://plugins.jenkins.io/git-parameter" rel="noopener" target="_blank">Git Parameter</a></p></li><li><p><a href="https://plugins.jenkins.io/gitlab-plugin" rel="noopener" target="_blank">GitLab</a></p></li><li><p><a href="https://plugins.jenkins.io/ssh" rel="noopener" target="_blank">SSH</a></p></li></ul><h2 id="创建ssh登录凭据"><a href="#创建ssh登录凭据" class="headerlink" title="创建ssh登录凭据"></a>创建ssh登录凭据</h2><p><img src="http://cdn.mjava.top/blog/20191112111043.png" alt="Jenkins界面"><br><img src="http://cdn.mjava.top/blog/20191112111058.png" alt="Jenkins界面"><br><img src="http://cdn.mjava.top/blog/20191112111115.png" alt="Jenkins界面"><br><img src="http://cdn.mjava.top/blog/20191112111130.png" alt="Jenkins界面"></p><blockquote><p>这边选择Username with password,用账户密码来设置；然后在Username和Password输入框中分别输入10.25.0.50服务器的账号和密码。点击OK保存；</p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112111529.png" alt="Jenkins界面"><br><img src="http://cdn.mjava.top/blog/20191112111806.png" alt="Jenkins界面"><br><img src="http://cdn.mjava.top/blog/20191112160316.png" alt="Jenkins界面"></p><h2 id="添加SSH配置"><a href="#添加SSH配置" class="headerlink" title="添加SSH配置"></a>添加SSH配置</h2><p><img src="http://cdn.mjava.top/blog/20191112160521.png" alt="Jenkins界面"></p><blockquote><p>找到SSH remote hosts </p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112160541.png" alt="Jenkins界面"></p><blockquote><p>设置你远程机器的ip和端口，然后选择刚配置好的凭证，点击save保存</p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112160920.png" alt="Jenkins界面"></p><h2 id="配置Job"><a href="#配置Job" class="headerlink" title="配置Job"></a>配置Job</h2><blockquote><p>进入上篇文章创建好的Job,在此基础上进行改造</p></blockquote><h3 id="配置Git-Parameter-来获取gitlab的Tag数据"><a href="#配置Git-Parameter-来获取gitlab的Tag数据" class="headerlink" title="配置Git Parameter,来获取gitlab的Tag数据"></a>配置Git Parameter,来获取gitlab的Tag数据</h3><p><img src="http://cdn.mjava.top/blog/20191112161424.png" alt="Jenkins界面"></p><h3 id="配置触发器"><a href="#配置触发器" class="headerlink" title="配置触发器"></a>配置触发器</h3><blockquote><p>点击最下面的Generate,生成秘钥。然后记下URL:<a href="http://172.16.54.131:8080/project/JenkinsTest" rel="noopener" target="_blank">http://172.16.54.131:8080/project/JenkinsTest</a> 和生成的秘钥：60327d68d10f1f7621696edd42719d1c</p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112161808.png" alt="Jenkins界面"></p><h3 id="添加构建完成后的动作"><a href="#添加构建完成后的动作" class="headerlink" title="添加构建完成后的动作"></a>添加构建完成后的动作</h3><p><img src="http://cdn.mjava.top/blog/20191112161842.png" alt="Jenkins界面"></p><h3 id="添加Execute-shell-和Execute-shell-script-on-remote-host-using-ssh"><a href="#添加Execute-shell-和Execute-shell-script-on-remote-host-using-ssh" class="headerlink" title="添加Execute shell 和Execute shell script on remote host using ssh"></a>添加Execute shell 和Execute shell script on remote host using ssh</h3><ul><li>Execute shell ： 执行Jenkins所在服务器的脚本</li><li>Execute shell script on remote host using ssh：登录远程服务器执行脚本</li></ul><p><img src="http://cdn.mjava.top/blog/20191112161940.png" alt="Jenkins界面"></p><h3 id="编写你要执行的脚本"><a href="#编写你要执行的脚本" class="headerlink" title="编写你要执行的脚本"></a>编写你要执行的脚本</h3><blockquote><p>由于是自定义的，内容我就不粘贴出来了.编写好后点击保存</p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112164613.png" alt="Jenkins界面"></p><h2 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h2><h3 id="手动构建"><a href="#手动构建" class="headerlink" title="手动构建"></a>手动构建</h3><p><img src="http://cdn.mjava.top/blog/20191112164653.png" alt="Jenkins界面"></p><h4 id="选择你要构建的tag标签，点击Build开始构建并自动部署"><a href="#选择你要构建的tag标签，点击Build开始构建并自动部署" class="headerlink" title="选择你要构建的tag标签，点击Build开始构建并自动部署"></a>选择你要构建的tag标签，点击Build开始构建并自动部署</h4><p><img src="http://cdn.mjava.top/blog/20191112164746.png" alt="Jenkins界面"></p><h3 id="自动构建"><a href="#自动构建" class="headerlink" title="自动构建"></a>自动构建</h3><blockquote><p>自动构建是当你push或打tag上传代码的时候，Jenkins就会自动构建部署</p></blockquote><h4 id="自动构建流程"><a href="#自动构建流程" class="headerlink" title="自动构建流程"></a>自动构建流程</h4><p><img src="http://cdn.mjava.top/blog/201911121717.png" alt="Jenkins界面"></p><p>####　配置GitLab代码仓库</p><blockquote><p>点击你你项目右边Settings的Integrations,然后在URL和Secret Tonken中填写刚保存的URL和秘钥，选择Tag push events,然后点击保存</p></blockquote><p><img src="http://cdn.mjava.top/blog/20191112165036.png" alt="Jenkins界面"></p><p>　</p><h4 id="Git打Tag标签"><a href="#Git打Tag标签" class="headerlink" title="Git打Tag标签"></a>Git打Tag标签</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag -a 1.0 -m '1.0'  //打一个1.0的tag</span><br><span class="line">git push origin 1.0 //上传1.0标签到远程仓库</span><br></pre></td></tr></table></figure><p>上传完tag后此时Jenkins已经开始自动构建并部署项目了；</p><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>弄自动部署时，Jenkins和GitLab要都能互相访问的到，不然就会出错；</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;目录&quot;&gt;&lt;a href=&quot;#目录&quot; class=&quot;headerlink&quot; title=&quot;目录&quot;&gt;&lt;/a&gt;目录&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://mjava.top/jenkins/build-jenkins-docker/&quot;&gt;Jenkins教程-搭建(Docker版)&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://mjava.top/jenkins/build-jenkins-mavne/&quot;&gt;Jenkins教程-创建Maven项目&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://mjava.top/jenkins/build-jenkins-ci-cd/&quot;&gt;Jenkins教程-Docker+GitLab持续部署持续集成&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;&lt;h2 id=&quot;环境&quot;&gt;&lt;a href=&quot;#环境&quot; class=&quot;headerlink&quot; title=&quot;环境&quot;&gt;&lt;/a&gt;环境&lt;/h2&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;地址&lt;/th&gt;
-&lt;th&gt;系统&lt;/th&gt;
-&lt;th&gt;安装的软件&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;主机１&lt;/td&gt;
-&lt;td&gt;10.25.0.72&lt;/td&gt;
-&lt;td&gt;Centos 7&lt;/td&gt;
-&lt;td&gt;Docker　,　Jenkins(Docker版)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;主机２&lt;/td&gt;
-&lt;td&gt;10.25.0.50&lt;/td&gt;
-&lt;td&gt;Cnetos 7&lt;/td&gt;
-&lt;td&gt;Docker&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
     
     </summary>
     
