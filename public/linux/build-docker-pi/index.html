@@ -250,16 +250,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>  和平常x86_64架构的电脑安装docker不同，树莓派是ARM架构的，所以安装步骤比较繁琐一点。</p><h2 id="使用APT源安装docker"><a href="#使用APT源安装docker" class="headerlink" title="使用APT源安装docker"></a>使用APT源安装docker</h2><p>  更新apt软件源及安装必备组件。为了确认所下载软件包的合法性，还需要添加软件源的 GPG 密钥。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span>sudo apt-get update</span><br><span class="line"><span class="meta">$</span>sudo apt-get install \</span><br><span class="line">	 apt-transport-https \</span><br><span class="line">     ca-certificates \</span><br><span class="line">     curl \</span><br><span class="line">     gnupg2 \</span><br><span class="line">     lsb-release \</span><br><span class="line">     software-properties-common</span><br><span class="line"><span class="meta">$</span>curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/raspbian/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure><a id="more"></a>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>  和平常x86_64架构的电脑安装docker不同，树莓派是ARM架构的，所以安装步骤比较繁琐一点。</p><h2 id="使用APT源安装docker"><a href="#使用APT源安装docker" class="headerlink" title="使用APT源安装docker"></a>使用APT源安装docker</h2><p>  更新apt软件源及安装必备组件。为了确认所下载软件包的合法性，还需要添加软件源的 GPG 密钥。</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">sudo apt-get update</span></span><br><span class="line"><span class="meta">$</span><span class="bash">sudo apt-get install \</span></span><br><span class="line">	 apt-transport-https \</span><br><span class="line">     ca-certificates \</span><br><span class="line">     curl \</span><br><span class="line">     gnupg2 \</span><br><span class="line">     lsb-release \</span><br><span class="line">     software-properties-common</span><br><span class="line"><span class="meta">$</span><span class="bash">curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/raspbian/gpg | sudo apt-key add -</span></span><br></pre></td></tr></table></figure><a id="more"></a>
 
 
 
 <h2 id="添加docker-ce-软件源"><a href="#添加docker-ce-软件源" class="headerlink" title="添加docker ce 软件源"></a>添加docker ce 软件源</h2><ul>
 <li><p>首先执行以下一行命令，然后记一下输出的结果</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> echo $(lsb_release -cs)</span><br><span class="line">stretch</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> $(lsb_release -cs)</span></span><br><span class="line">stretch</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在/etc/apt/sources.list.d目录下新建文件docker.list</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> sudo vi /etc/apt/sources.list.d/docker.list</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo vi /etc/apt/sources.list.d/docker.list</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在文件里添加下面这行</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">deb [arch=armhf] https://download.docker.com/linux/raspbian $(lsb_release -cs) stable</span><br></pre></td></tr></table></figure>
@@ -271,9 +271,9 @@
 </li>
 </ul>
 <h2 id="安装docker-ce"><a href="#安装docker-ce" class="headerlink" title="安装docker ce"></a>安装docker ce</h2><p>  依次执行以下两行命令，即可完成安装</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt-get update</span><br><span class="line"><span class="meta">$</span> sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get update</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get install docker-ce</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> service docker start           启动</span><br><span class="line"><span class="meta">$</span> service docker stop            停止</span><br><span class="line"><span class="meta">$</span> service docker status          状态</span><br><span class="line"><span class="meta">$</span> service docker restart         重启</span><br></pre></td></tr></table></figure>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> service docker start           启动</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service docker stop            停止</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service docker status          状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service docker restart         重启</span></span><br></pre></td></tr></table></figure>
     </div>
 
     
