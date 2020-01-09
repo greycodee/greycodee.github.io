@@ -67,7 +67,7 @@
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104183636.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104183853.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104183939.png">
-<meta property="og:image" content="http://cdn.mjava.top/blog/20200104184410.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200109160648.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104175255.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104175907.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104224556.jpg">
@@ -86,7 +86,7 @@
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104220851.jpg">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104223708.png">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200104224213.png">
-<meta property="og:updated_time" content="2020-01-04T16:35:00.162Z">
+<meta property="og:updated_time" content="2020-01-09T08:18:24.464Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【源码解析】想了解LinkedList？看这篇文章就对了">
 <meta name="twitter:description" content="LinkedList由于实现了Deque这个接口，所以可以当栈和队列使用。不过一般要用栈或队列的时候推荐使用ArrayDeque,所以这里就不讲LinkedList的栈和队列功能了🌚。还是和上篇ArrayList一样，讲些常用的方法...">
@@ -238,10 +238,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-01-05 00:21:43 / 修改时间：00:35:00" itemprop="dateCreated datePublished" datetime="2020-01-05T00:21:43+08:00">2020-01-05</time>
+              <time title="创建时间：2020-01-05 00:21:43" itemprop="dateCreated datePublished" datetime="2020-01-05T00:21:43+08:00">2020-01-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-09 16:18:24" itemprop="dateModified" datetime="2020-01-09T16:18:24+08:00">2020-01-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -328,7 +334,7 @@
 <ul style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px; padding-left: 32px; list-style-type: disc;">
 <li style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px; margin-bottom: 0.5em;"><strong style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; font-weight: bold; color: rgb(233, 105, 0);">node(int index)</strong>查找Node</li>
 </ul>
-<figure style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;"><img src="http://cdn.mjava.top/blog/20200104184410.png" alt title style="font-size: inherit; color: inherit; line-height: inherit; padding: 0px; display: block; margin: 0px auto; max-width: 100%;"><figcaption style="line-height: inherit; margin: 0px; padding: 0px; margin-top: 10px; text-align: center; color: rgb(153, 153, 153); font-size: 0.7em;"></figcaption></figure>
+<figure style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;"><img src="http://cdn.mjava.top/blog/20200109160648.png" alt title style="font-size: inherit; color: inherit; line-height: inherit; padding: 0px; display: block; margin: 0px auto; max-width: 100%;"><figcaption style="line-height: inherit; margin: 0px; padding: 0px; margin-top: 10px; text-align: center; color: rgb(153, 153, 153); font-size: 0.7em;"></figcaption></figure>
 <h2 id="hadd" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; border-bottom: 2px solid rgb(233, 90, 96); font-size: 1.3em;"><span style="font-size: inherit; line-height: inherit; margin: 0px; display: inline-block; font-weight: normal; background: rgb(233, 90, 96); color: rgb(255, 255, 255); padding: 3px 10px 1px; border-top-right-radius: 3px; border-top-left-radius: 3px; margin-right: 3px;">add方法</span><span style="display: inline-block; vertical-align: bottom; border-bottom: 36px solid rgb(239, 235, 233); border-right: 20px solid transparent;"> </span></h2>
 <h3 id="haddee" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; font-size: 1.3em;"><span style="font-size: inherit; line-height: inherit; margin: 0px; display: inline-block; font-weight: normal; background: rgb(150, 100, 50); color: rgb(255, 255, 255); padding: 3px 10px 1px; border-top-right-radius: 3px; border-top-left-radius: 3px; margin-right: 3px;">add(E e)</span></h3>
 <h4 id="h-12" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; font-size: 1.2em;"><span style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;">代码实现</span></h4>
@@ -415,7 +421,7 @@
 </ul>
 <figure style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;"><img src="http://cdn.mjava.top/blog/20200104220851.jpg" alt title style="font-size: inherit; color: inherit; line-height: inherit; padding: 0px; display: block; margin: 0px auto; max-width: 100%;"><figcaption style="line-height: inherit; margin: 0px; padding: 0px; margin-top: 10px; text-align: center; color: rgb(153, 153, 153); font-size: 0.7em;"></figcaption></figure>
 <h3 id="hremoveobjecto" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; font-size: 1.3em;"><span style="font-size: inherit; line-height: inherit; margin: 0px; display: inline-block; font-weight: normal; background: rgb(150, 100, 50); color: rgb(255, 255, 255); padding: 3px 10px 1px; border-top-right-radius: 3px; border-top-left-radius: 3px; margin-right: 3px;">remove(Object o)</span></h3>
-<p style="font-size: inherit; color: inherit; line-height: inherit; padding: 0px; margin: 1.7em 0px;">这个删除就比较<code style="font-size: inherit; line-height: inherit; overflow-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0px 2px; color: rgb(248, 35, 117); background: rgb(248, 248, 248);">慢</code>了，<strong style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; font-weight: bold; color: rgb(233, 105, 0);">它内部没有用二分查找算法</strong>，而是从头开始一一对比，时间复杂度为<code style="font-size: inherit; line-height: inherit; overflow-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0px 2px; color: rgb(248, 35, 117); background: rgb(248, 248, 248);">O(n)</code>，这个删除也是<strong style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; font-weight: bold; color: rgb(233, 105, 0);">只删除最早添加的数据</strong></p>
+<p style="font-size: inherit; color: inherit; line-height: inherit; padding: 0px; margin: 1.7em 0px;">这个删除就比较<code style="font-size: inherit; line-height: inherit; overflow-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0px 2px; color: rgb(248, 35, 117); background: rgb(248, 248, 248);">慢</code>了，它是从头开始一一对比，时间复杂度为<code style="font-size: inherit; line-height: inherit; overflow-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0px 2px; color: rgb(248, 35, 117); background: rgb(248, 248, 248);">O(n)</code>，这个删除也是<strong style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; font-weight: bold; color: rgb(233, 105, 0);">只删除最早添加的数据</strong></p>
 <h4 id="h-23" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; font-size: 1.2em;"><span style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;">代码实现</span></h4>
 <pre style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px; background: url('./school-book.png') rgb(246, 246, 174); border-top: 2px solid rgb(210, 232, 185); border-bottom: 1px solid rgb(210, 232, 185);"><code class="java language-java hljs" style="overflow-wrap: break-word; margin: 0px 2px; background: rgb(248, 248, 248); font-weight: normal; word-spacing: 0px; letter-spacing: 0px; font-family: Consolas, Inconsolata, Courier, monospace; border-radius: 0px; overflow-x: auto; padding: 15px 0.5em 0.5em 30px; font-size: 11px; line-height: 16px; color: rgb(62, 89, 21); white-space: pre !important; word-wrap: normal !important; word-break: normal !important; overflow: auto !important; display: -webkit-box !important;">List&lt;String&gt;&nbsp;list=<span class="hljs-keyword" style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; color: rgb(0, 85, 153); font-weight: bold; word-wrap: inherit !important; word-break: inherit !important;">new</span>&nbsp;LinkedList&lt;&gt;();<br>list.add(<span class="hljs-string" style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; color: rgb(44, 0, 159); word-wrap: inherit !important; word-break: inherit !important;">"hui"</span>);<br>list.remove(<span class="hljs-string" style="font-size: inherit; line-height: inherit; margin: 0px; padding: 0px; color: rgb(44, 0, 159); word-wrap: inherit !important; word-break: inherit !important;">"hui"</span>);<br></code></pre>
 <h4 id="h-24" style="color: inherit; line-height: inherit; padding: 0px; margin: 1.6em 0px; font-weight: bold; font-size: 1.2em;"><span style="font-size: inherit; color: inherit; line-height: inherit; margin: 0px; padding: 0px;">源码解析</span></h4>
