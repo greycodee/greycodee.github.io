@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mjava.top/algorithm/algorithm-avltree-01/</loc>
+    
+    <lastmod>2020-02-01T08:35:56.830Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mjava.top/recommend/recommend-tool-1/</loc>
     
     <lastmod>2020-01-16T01:32:59.820Z</lastmod>
@@ -128,21 +135,14 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
+    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/docker/docker-mysql/</loc>
+    <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -163,7 +163,7 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
+    <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -177,14 +177,7 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
+    <loc>https://mjava.top/java/java-equals/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -198,7 +191,21 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/java/java-equals/</loc>
+    <loc>https://mjava.top/docker/docker-mysql/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -268,13 +275,6 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/404.html</loc>
-    
-    <lastmod>2019-08-11T15:40:56.161Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://mjava.top/about/index.html</loc>
     
     <lastmod>2019-08-11T15:40:56.161Z</lastmod>
@@ -283,6 +283,13 @@
   
   <url>
     <loc>https://mjava.top/friends/index.html</loc>
+    
+    <lastmod>2019-08-11T15:40:56.161Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/404.html</loc>
     
     <lastmod>2019-08-11T15:40:56.161Z</lastmod>
     
