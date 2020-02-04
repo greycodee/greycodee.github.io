@@ -52,7 +52,7 @@
 </script>
 
   <meta name="description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
-<meta name="keywords" content="Docker,Mysql,Linux,Pit">
+<meta name="keywords" content="Mysql,Pit,Docker,Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker迁移根目录导致mysql权限问题">
 <meta property="og:url" content="https://mjava.top/docker/docker-transfer-pit/index.html">
@@ -112,9 +112,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -265,10 +265,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Docker/" rel="tag"># Docker</a>
               <a href="/tags/Mysql/" rel="tag"># Mysql</a>
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/Pit/" rel="tag"># Pit</a>
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
           </div>
 
         

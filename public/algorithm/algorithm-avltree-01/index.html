@@ -51,23 +51,23 @@
   };
 </script>
 
-  <meta name="description" content="积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。平衡二叉树基本特点 左右子树深度差不能大于1 左边子树永远比根节点小 右边子树永远比根节点大">
-<meta name="keywords" content="数据结构,AVL,平衡二叉树,二叉树">
+  <meta name="description" content="【数据结构】手写平衡二叉树（AVL） 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。">
+<meta name="keywords" content="AVL,数据结构,平衡二叉树,二叉树">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【数据结构】手写平衡二叉树（AVL）">
 <meta property="og:url" content="https://mjava.top/algorithm/algorithm-avltree-01/index.html">
 <meta property="og:site_name" content="H&amp;KBlog">
-<meta property="og:description" content="积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。平衡二叉树基本特点 左右子树深度差不能大于1 左边子树永远比根节点小 右边子树永远比根节点大">
+<meta property="og:description" content="【数据结构】手写平衡二叉树（AVL） 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200201165139.jpg">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200201153234.jpg">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200201153301.jpg">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200201153329.jpg">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200201153403.jpg">
-<meta property="og:updated_time" content="2020-02-01T08:52:24.461Z">
+<meta property="og:updated_time" content="2020-02-04T03:24:07.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【数据结构】手写平衡二叉树（AVL）">
-<meta name="twitter:description" content="积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。平衡二叉树基本特点 左右子树深度差不能大于1 左边子树永远比根节点小 右边子树永远比根节点大">
+<meta name="twitter:description" content="【数据结构】手写平衡二叉树（AVL） 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬 本文源代码：手写AVL树 什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为O(logN)。">
 <meta name="twitter:image" content="http://cdn.mjava.top/blog/20200201165139.jpg">
 
 <link rel="canonical" href="https://mjava.top/algorithm/algorithm-avltree-01/">
@@ -113,9 +113,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -216,10 +216,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-02-01 15:56:00 / 修改时间：16:52:24" itemprop="dateCreated datePublished" datetime="2020-02-01T15:56:00+08:00">2020-02-01</time>
+              <time title="创建时间：2020-02-01 15:56:00" itemprop="dateCreated datePublished" datetime="2020-02-01T15:56:00+08:00">2020-02-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-04 11:24:07" itemprop="dateModified" datetime="2020-02-04T11:24:07+08:00">2020-02-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -243,17 +249,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="http://cdn.mjava.top/blog/20200201165139.jpg" alt></p><blockquote>
+        <h1 id="【数据结构】手写平衡二叉树（AVL）"><a href="#【数据结构】手写平衡二叉树（AVL）" class="headerlink" title="【数据结构】手写平衡二叉树（AVL）"></a>【数据结构】手写平衡二叉树（AVL）</h1><p><img src="http://cdn.mjava.top/blog/20200201165139.jpg" alt></p><blockquote>
 <p>积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬</p>
 <p>本文源代码：<a href="https://github.com/z573419235/studyDemo/blob/master/BaseJava/src/dataStructure/AVLTree.java" rel="noopener external nofollow noreferrer" target="_blank">手写AVL树</a></p>
-</blockquote><h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a href="https://baike.baidu.com/item/平衡二叉树/10421057" rel="noopener external nofollow noreferrer" target="_blank">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p><h3 id="平衡二叉树基本特点"><a href="#平衡二叉树基本特点" class="headerlink" title="平衡二叉树基本特点"></a>平衡二叉树基本特点</h3><ul>
+</blockquote><h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a href="https://baike.baidu.com/item/平衡二叉树/10421057" rel="noopener external nofollow noreferrer" target="_blank">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p><a id="more"></a>
+
+
+<h3 id="平衡二叉树基本特点"><a href="#平衡二叉树基本特点" class="headerlink" title="平衡二叉树基本特点"></a>平衡二叉树基本特点</h3><ul>
 <li>左右子树深度差不能大于1</li>
 <li>左边子树永远比根节点小</li>
 <li>右边子树永远比根节点大</li>
-</ul><a id="more"></a>
-
-
-
+</ul>
 <h3 id="平衡二叉树基本结构及操作"><a href="#平衡二叉树基本结构及操作" class="headerlink" title="平衡二叉树基本结构及操作"></a>平衡二叉树基本结构及操作</h3><ul>
 <li>左左结构——右旋</li>
 </ul>
@@ -279,20 +285,6 @@
 <p>实际内部是调用另一个<code>insert</code>方法：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(Node root,<span class="keyword">int</span> data)</span></span>&#123;</span><br><span class="line">    <span class="comment">//插入的数据比根小</span></span><br><span class="line">    <span class="keyword">if</span> (data&lt;root.data)&#123;</span><br><span class="line">        <span class="keyword">if</span> (root.left==<span class="keyword">null</span>)&#123;</span><br><span class="line">            root.left=<span class="keyword">new</span> Node(data);</span><br><span class="line">            root.left.parent=root;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.insert(root.left,data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//插入的数据比根大</span></span><br><span class="line">    <span class="keyword">if</span> (data&gt;root.data)&#123;</span><br><span class="line">        <span class="keyword">if</span> (root.right==<span class="keyword">null</span>) &#123;</span><br><span class="line">            root.right=<span class="keyword">new</span> Node(data);</span><br><span class="line">            root.right.parent=root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.insert(root.right,data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    root.balance=<span class="keyword">this</span>.getBalance(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.balance&gt;<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="comment">//判断左子的平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (root.left.balance&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">this</span>.leftTurn(root.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.rightTurn(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.balance&lt;-<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="comment">//判断右子的平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (root.right.balance&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">this</span>.rightTurn(root.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.leftTurn(root);</span><br><span class="line">    &#125;</span><br><span class="line">    root.depth=<span class="keyword">this</span>.getDepth(root);</span><br><span class="line">    root.balance=<span class="keyword">this</span>.getBalance(root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h3><blockquote>
-<p>左旋的操作如下</p>
-<ul>
-<li>我的父变右子的父</li>
-<li>右子变成我的父</li>
-<li>我变成右子的左子</li>
-<li>右子的左子变成我的右子</li>
-<li>(当右子的左子存在时)我变成右子的左子的父</li>
-<li>计算左右节点的深度</li>
-<li>计算深度差</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rightTurn</span><span class="params">(@NotNull Node node)</span></span>&#123;</span><br><span class="line">    Node parent=node.parent;</span><br><span class="line">    Node leftSon=node.left;</span><br><span class="line">    Node leftSon_rightSon=leftSon.right;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果父不为空，判断我是在父的左节点还是右节点</span></span><br><span class="line">    <span class="keyword">if</span> (parent!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.left)&#123;</span><br><span class="line">            <span class="comment">//我在父的左节点上，把我的左子变成父的左子</span></span><br><span class="line">            parent.left=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.right)&#123;</span><br><span class="line">            <span class="comment">//我在父的右节点上，把我的左子变成父的右子</span></span><br><span class="line">            parent.right=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    leftSon.parent=parent;</span><br><span class="line">    node.parent=leftSon;</span><br><span class="line">    leftSon.right=node;</span><br><span class="line">    node.left=leftSon_rightSon;</span><br><span class="line">    <span class="comment">//如果左子的右子确实存在的</span></span><br><span class="line">    <span class="keyword">if</span> (leftSon_rightSon!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="comment">//我变成左子的右子的父</span></span><br><span class="line">        leftSon_rightSon.parent=node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//重新计算深度和平衡因子</span></span><br><span class="line">    node.depth=<span class="keyword">this</span>.getDepth(node);</span><br><span class="line">    node.balance=<span class="keyword">this</span>.getBalance(node);</span><br><span class="line">    leftSon.depth=<span class="keyword">this</span>.getDepth(leftSon);</span><br><span class="line">    leftSon.balance=<span class="keyword">this</span>.getBalance(leftSon);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="右旋"><a href="#右旋" class="headerlink" title="右旋"></a>右旋</h3><blockquote>
 <p>右旋的操作如下</p>
 <ul>
@@ -301,6 +293,20 @@
 <li>我变成左子的右子</li>
 <li>左子的右子变成我的左子</li>
 <li>(当左子的右子存在时)我变成左子的右子的父</li>
+<li>计算左右节点的深度</li>
+<li>计算深度差</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rightTurn</span><span class="params">(@NotNull Node node)</span></span>&#123;</span><br><span class="line">    Node parent=node.parent;</span><br><span class="line">    Node leftSon=node.left;</span><br><span class="line">    Node leftSon_rightSon=leftSon.right;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果父不为空，判断我是在父的左节点还是右节点</span></span><br><span class="line">    <span class="keyword">if</span> (parent!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.left)&#123;</span><br><span class="line">            <span class="comment">//我在父的左节点上，把我的左子变成父的左子</span></span><br><span class="line">            parent.left=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.right)&#123;</span><br><span class="line">            <span class="comment">//我在父的右节点上，把我的左子变成父的右子</span></span><br><span class="line">            parent.right=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    leftSon.parent=parent;</span><br><span class="line">    node.parent=leftSon;</span><br><span class="line">    leftSon.right=node;</span><br><span class="line">    node.left=leftSon_rightSon;</span><br><span class="line">    <span class="comment">//如果左子的右子确实存在的</span></span><br><span class="line">    <span class="keyword">if</span> (leftSon_rightSon!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="comment">//我变成左子的右子的父</span></span><br><span class="line">        leftSon_rightSon.parent=node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//重新计算深度和平衡因子</span></span><br><span class="line">    node.depth=<span class="keyword">this</span>.getDepth(node);</span><br><span class="line">    node.balance=<span class="keyword">this</span>.getBalance(node);</span><br><span class="line">    leftSon.depth=<span class="keyword">this</span>.getDepth(leftSon);</span><br><span class="line">    leftSon.balance=<span class="keyword">this</span>.getBalance(leftSon);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h3><blockquote>
+<p>左旋的操作如下</p>
+<ul>
+<li>我的父变右子的父</li>
+<li>右子变成我的父</li>
+<li>我变成右子的左子</li>
+<li>右子的左子变成我的右子</li>
+<li>(当右子的左子存在时)我变成右子的左子的父</li>
 <li>计算左右节点的深度</li>
 <li>计算深度差</li>
 </ul>
@@ -327,8 +333,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
               <a href="/tags/AVL/" rel="tag"># AVL</a>
+              <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
               <a href="/tags/平衡二叉树/" rel="tag"># 平衡二叉树</a>
               <a href="/tags/二叉树/" rel="tag"># 二叉树</a>
           </div>
@@ -388,7 +394,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是平衡二叉树？"><span class="nav-number">1.</span> <span class="nav-text">什么是平衡二叉树？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡二叉树基本特点"><span class="nav-number">1.1.</span> <span class="nav-text">平衡二叉树基本特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡二叉树基本结构及操作"><span class="nav-number">1.2.</span> <span class="nav-text">平衡二叉树基本结构及操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">2.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入数据"><span class="nav-number">2.1.</span> <span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#左旋"><span class="nav-number">2.2.</span> <span class="nav-text">左旋</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#右旋"><span class="nav-number">2.3.</span> <span class="nav-text">右旋</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算深度"><span class="nav-number">2.4.</span> <span class="nav-text">计算深度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算平衡因子"><span class="nav-number">2.5.</span> <span class="nav-text">计算平衡因子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附言"><span class="nav-number">3.</span> <span class="nav-text">附言</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#【数据结构】手写平衡二叉树（AVL）"><span class="nav-number">1.</span> <span class="nav-text">【数据结构】手写平衡二叉树（AVL）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是平衡二叉树？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是平衡二叉树？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡二叉树基本特点"><span class="nav-number">1.1.1.</span> <span class="nav-text">平衡二叉树基本特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡二叉树基本结构及操作"><span class="nav-number">1.1.2.</span> <span class="nav-text">平衡二叉树基本结构及操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">1.2.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入数据"><span class="nav-number">1.2.1.</span> <span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#右旋"><span class="nav-number">1.2.2.</span> <span class="nav-text">右旋</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#左旋"><span class="nav-number">1.2.3.</span> <span class="nav-text">左旋</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算深度"><span class="nav-number">1.2.4.</span> <span class="nav-text">计算深度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算平衡因子"><span class="nav-number">1.2.5.</span> <span class="nav-text">计算平衡因子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附言"><span class="nav-number">1.3.</span> <span class="nav-text">附言</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

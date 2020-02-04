@@ -106,9 +106,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -210,10 +210,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-02-01 15:56:00 / 修改时间：16:52:24" itemprop="dateCreated datePublished" datetime="2020-02-01T15:56:00+08:00">2020-02-01</time>
+              <time title="创建时间：2020-02-01 15:56:00" itemprop="dateCreated datePublished" datetime="2020-02-01T15:56:00+08:00">2020-02-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-04 11:24:07" itemprop="dateModified" datetime="2020-02-04T11:24:07+08:00">2020-02-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -237,14 +243,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="http://cdn.mjava.top/blog/20200201165139.jpg" alt></p><blockquote>
+          <h1 id="【数据结构】手写平衡二叉树（AVL）"><a href="#【数据结构】手写平衡二叉树（AVL）" class="headerlink" title="【数据结构】手写平衡二叉树（AVL）"></a>【数据结构】手写平衡二叉树（AVL）</h1><p><img src="http://cdn.mjava.top/blog/20200201165139.jpg" alt></p><blockquote>
 <p>积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬</p>
 <p>本文源代码：<a href="https://github.com/z573419235/studyDemo/blob/master/BaseJava/src/dataStructure/AVLTree.java" rel="noopener external nofollow noreferrer" target="_blank">手写AVL树</a></p>
-</blockquote><h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a href="https://baike.baidu.com/item/平衡二叉树/10421057" rel="noopener external nofollow noreferrer" target="_blank">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p><h3 id="平衡二叉树基本特点"><a href="#平衡二叉树基本特点" class="headerlink" title="平衡二叉树基本特点"></a>平衡二叉树基本特点</h3><ul>
-<li>左右子树深度差不能大于1</li>
-<li>左边子树永远比根节点小</li>
-<li>右边子树永远比根节点大</li>
-</ul>
+</blockquote><h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a href="https://baike.baidu.com/item/平衡二叉树/10421057" rel="noopener external nofollow noreferrer" target="_blank">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/algorithm/algorithm-avltree-01/#more" rel="contents">
