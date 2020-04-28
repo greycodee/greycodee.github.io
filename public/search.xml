@@ -271,13 +271,13 @@
       
         <tags>
             
-            <tag> Mysql </tag>
-            
-            <tag> Pit </tag>
-            
             <tag> Docker </tag>
             
+            <tag> Mysql </tag>
+            
             <tag> Linux </tag>
+            
+            <tag> Pit </tag>
             
         </tags>
       
@@ -774,9 +774,9 @@
       
         <tags>
             
-            <tag> Mysql </tag>
-            
             <tag> Docker </tag>
+            
+            <tag> Mysql </tag>
             
             <tag> Linux </tag>
             

@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
   <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
-  <link rel="alternate" href="/atom.xml" title="H&KBlog" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -52,11 +52,11 @@
 </script>
 
   <meta name="description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
-<meta name="keywords" content="Mysql,Pit,Docker,Linux">
+<meta name="keywords" content="Docker,Mysql,Linux,Pit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker迁移根目录导致mysql权限问题">
 <meta property="og:url" content="https://mjava.top/docker/docker-transfer-pit/index.html">
-<meta property="og:site_name" content="H&amp;KBlog">
+<meta property="og:site_name" content="灰色Code">
 <meta property="og:description" content="问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://cdn.mjava.top/20191220143818.png">
@@ -83,7 +83,7 @@
   };
 </script>
 
-  <title>Docker迁移根目录导致mysql权限问题 | H&KBlog</title>
+  <title>Docker迁移根目录导致mysql权限问题 | 灰色Code</title>
   
 
 
@@ -112,9 +112,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -127,7 +127,7 @@
     <div>
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">H&KBlog</span>
+        <span class="site-title">灰色Code</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -202,7 +202,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="H&KBlog">
+      <meta itemprop="name" content="灰色Code">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -265,10 +265,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
-              <a href="/tags/Pit/" rel="tag"># Pit</a>
               <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
               <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Pit/" rel="tag"># Pit</a>
           </div>
 
         
