@@ -51,19 +51,22 @@
   };
 </script>
 
-  <meta name="description" content="积千里跬步,汇万里江河">
-<meta name="keywords" content="Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue">
-<meta property="og:type" content="website">
-<meta property="og:title" content="灰色Code">
-<meta property="og:url" content="https://mjava.top/tags/Mysql/index.html">
+  <meta name="description" content="1.问题描述由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &apos;\xF0\x9F\x98\x98&apos; for column &apos;us">
+<meta name="keywords" content="Pit,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="插入emoji到mysql时提示了一个表里不存在的字段的错误">
+<meta property="og:url" content="https://mjava.top/mysql/mysql-utf8mb4-error/index.html">
 <meta property="og:site_name" content="灰色Code">
-<meta property="og:description" content="积千里跬步,汇万里江河">
+<meta property="og:description" content="1.问题描述由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &apos;\xF0\x9F\x98\x98&apos; for column &apos;us">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200429171012.png">
+<meta property="og:updated_time" content="2020-04-29T09:18:36.500Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="灰色Code">
-<meta name="twitter:description" content="积千里跬步,汇万里江河">
+<meta name="twitter:title" content="插入emoji到mysql时提示了一个表里不存在的字段的错误">
+<meta name="twitter:description" content="1.问题描述由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &apos;\xF0\x9F\x98\x98&apos; for column &apos;us">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/20200429171012.png">
 
-<link rel="canonical" href="https://mjava.top/tags/Mysql/">
+<link rel="canonical" href="https://mjava.top/mysql/mysql-utf8mb4-error/">
 
 
 <script id="page-configurations">
@@ -71,13 +74,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>标签: Mysql | 灰色Code</title>
+  <title>插入emoji到mysql时提示了一个表里不存在的字段的错误 | 灰色Code</title>
   
 
 
@@ -182,74 +185,112 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">Mysql
-          <small>标签</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/mysql/mysql-utf8mb4-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="积千里跬步,汇万里江河">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          插入emoji到mysql时提示了一个表里不存在的字段的错误
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-29 17:16:27 / 修改时间：17:18:36" itemprop="dateCreated datePublished" datetime="2020-04-29T17:16:27+08:00">2020-04-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
-    </div>
+        <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h2><p>由于公司前端有需求，需要在<code>tiny_user_info</code>表的<code>nickname</code>这个字段里存入emoji表情，于是我熟练地将这个字段修改为<code>utf8mb4</code>，改好后测试插入一条带emoji数据。于是报了这个错误：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: '\xF0\x9F\x98\x98' for column 'user_name' at row 14</span><br></pre></td></tr></table></figure><a id="more"></a>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-12-20T15:04:16+08:00"
-              content="2019-12-20">
-          12-20
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/docker/docker-transfer-pit/" itemprop="url">
-            <span itemprop="name">Docker迁移根目录导致mysql权限问题</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-09-03T15:58:46+08:00"
-              content="2019-09-03">
-          09-03
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/docker/docker-mysql/" itemprop="url">
-            <span itemprop="name">Docker下安装mysql并设置用户权限</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
+<p>当时我就傻了，我这个表里也没有<code>user_name</code>这个字段啊，怎么会报这个字段错误,我明明修改的是<code>nickname</code>这个字段啊。于是google和百度搜了一圈，无解。</p>
+<h2 id="２-解决方案"><a href="#２-解决方案" class="headerlink" title="２.解决方案"></a>２.解决方案</h2><p>试了好几种方法，删字段，重新建。删表，重新建。都不行。。。。。静下心来，于是打算从mysql服务器入手。进入到mysql对应库的文件夹，发现<code>tiny_user_info</code>这个表有三个文件</p>
+<p><img src="http://cdn.mjava.top/blog/20200429171012.png" alt></p>
+<p>和常见的多了一个<code>TRG</code>文件。这是一个触发器文件，打开一看，发现了<code>user_name</code>字段。。。。。。</p>
+<p>原来是同事在这个表里加了个触发器，当<code>tiny_user_info</code>里新增数据时，会触发新增到另一张表里，<code>nickname</code>的值同时会插入到另一张表的<code>user_name</code>字段，而他那张表的字段没有设置<code>utf8mb4编码</code>,所以导致插入失败。于是叫同事把他那张表设置一下<code>utf8mb4</code>编码后，就可以正常插入了。</p>
 
     </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pit/" rel="tag"># Pit</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/algorithm/algorithm-avltree-01/" rel="next" title="【数据结构】手写平衡二叉树（AVL）">
+                  <i class="fa fa-chevron-left"></i> 【数据结构】手写平衡二叉树（AVL）
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
 
         </div>
           
@@ -274,6 +315,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题描述"><span class="nav-number">1.</span> <span class="nav-text">1.问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#２-解决方案"><span class="nav-number">2.</span> <span class="nav-text">２.解决方案</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -453,12 +495,25 @@
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script>
 
     
 
   
 
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>

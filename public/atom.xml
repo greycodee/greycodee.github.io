@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjava.top/"/>
-  <updated>2020-02-04T03:24:07.080Z</updated>
+  <updated>2020-04-29T09:18:36.500Z</updated>
   <id>https://mjava.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>插入emoji到mysql时提示了一个表里不存在的字段的错误</title>
+    <link href="https://mjava.top/mysql/mysql-utf8mb4-error/"/>
+    <id>https://mjava.top/mysql/mysql-utf8mb4-error/</id>
+    <published>2020-04-29T09:16:27.000Z</published>
+    <updated>2020-04-29T09:18:36.500Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h2><p>由于公司前端有需求，需要在<code>tiny_user_info</code>表的<code>nickname</code>这个字段里存入emoji表情，于是我熟练地将这个字段修改为<code>utf8mb4</code>，改好后测试插入一条带emoji数据。于是报了这个错误：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: '\xF0\x9F\x98\x98' for column 'user_name' at row 14</span><br></pre></td></tr></table></figure><a id="more"></a><p>当时我就傻了，我这个表里也没有<code>user_name</code>这个字段啊，怎么会报这个字段错误,我明明修改的是<code>nickname</code>这个字段啊。于是google和百度搜了一圈，无解。</p><h2 id="２-解决方案"><a href="#２-解决方案" class="headerlink" title="２.解决方案"></a>２.解决方案</h2><p>试了好几种方法，删字段，重新建。删表，重新建。都不行。。。。。静下心来，于是打算从mysql服务器入手。进入到mysql对应库的文件夹，发现<code>tiny_user_info</code>这个表有三个文件</p><p><img src="http://cdn.mjava.top/blog/20200429171012.png" alt></p><p>和常见的多了一个<code>TRG</code>文件。这是一个触发器文件，打开一看，发现了<code>user_name</code>字段。。。。。。</p><p>原来是同事在这个表里加了个触发器，当<code>tiny_user_info</code>里新增数据时，会触发新增到另一张表里，<code>nickname</code>的值同时会插入到另一张表的<code>user_name</code>字段，而他那张表的字段没有设置<code>utf8mb4编码</code>,所以导致插入失败。于是叫同事把他那张表设置一下<code>utf8mb4</code>编码后，就可以正常插入了。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1-问题描述&quot;&gt;&lt;a href=&quot;#1-问题描述&quot; class=&quot;headerlink&quot; title=&quot;1.问题描述&quot;&gt;&lt;/a&gt;1.问题描述&lt;/h2&gt;&lt;p&gt;由于公司前端有需求，需要在&lt;code&gt;tiny_user_info&lt;/code&gt;表的&lt;code&gt;nickname&lt;/code&gt;这个字段里存入emoji表情，于是我熟练地将这个字段修改为&lt;code&gt;utf8mb4&lt;/code&gt;，改好后测试插入一条带emoji数据。于是报了这个错误：&lt;/p&gt;&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &#39;\xF0\x9F\x98\x98&#39; for column &#39;user_name&#39; at row 14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="MySQL" scheme="https://mjava.top/categories/MySQL/"/>
+    
+    
+      <category term="Pit" scheme="https://mjava.top/tags/Pit/"/>
+    
+      <category term="MySQL" scheme="https://mjava.top/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>【数据结构】手写平衡二叉树（AVL）</title>
@@ -38,9 +63,9 @@
       <category term="Algorithm" scheme="https://mjava.top/categories/Algorithm/"/>
     
     
-      <category term="AVL" scheme="https://mjava.top/tags/AVL/"/>
-    
       <category term="数据结构" scheme="https://mjava.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+      <category term="AVL" scheme="https://mjava.top/tags/AVL/"/>
     
       <category term="平衡二叉树" scheme="https://mjava.top/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
     
@@ -283,13 +308,13 @@
       <category term="Docker" scheme="https://mjava.top/categories/Docker/"/>
     
     
-      <category term="Docker" scheme="https://mjava.top/tags/Docker/"/>
-    
       <category term="Mysql" scheme="https://mjava.top/tags/Mysql/"/>
     
-      <category term="Linux" scheme="https://mjava.top/tags/Linux/"/>
-    
       <category term="Pit" scheme="https://mjava.top/tags/Pit/"/>
+    
+      <category term="Docker" scheme="https://mjava.top/tags/Docker/"/>
+    
+      <category term="Linux" scheme="https://mjava.top/tags/Linux/"/>
     
   </entry>
   
@@ -530,29 +555,6 @@
     
     
       <category term="SpringBoot" scheme="https://mjava.top/tags/SpringBoot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nacos报[NACOS HTTP-POST]</title>
-    <link href="https://mjava.top/java/nacos-post-error/"/>
-    <id>https://mjava.top/java/nacos-post-error/</id>
-    <published>2019-11-14T15:50:58.000Z</published>
-    <updated>2019-11-14T15:53:43.558Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>　由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。</p><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>　查阅资料后说是连接超过了最大重试次数。Nacos有个maxRetry这个配置参数，默认是3;可是和SpringCloud整合后在application文件中找不到这个参数，只好另寻方法；</p><a id="more"></a><p>　由于项目都是Docker容器化的，先前出现过连接不到Nacos的问题,于是就查看了各个Docker容器的IP。</p><h3 id="修正Nacos的地址"><a href="#修正Nacos的地址" class="headerlink" title="修正Nacos的地址"></a>修正Nacos的地址</h3><p>　查阅后发现，是因为同事吧服务器重启了一遍，导致Docker服务也重启了，然后Docker容器里的IP全部都变了。因为同一台服务器上我们各个容器间的访问是通过Docker容器内部IP的，也就是172.16.x.x这个IP段。所以导致访问不到报错。</p><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="meta">spring.cloud.nacos.config.server-addr</span>=<span class="string">172.16.X.X     //更改到最新nacos的地址</span></span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;　由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。&lt;/p&gt;&lt;h2 id=&quot;解决方法&quot;&gt;&lt;a href=&quot;#解决方法&quot; class=&quot;headerlink&quot; title=&quot;解决方法&quot;&gt;&lt;/a&gt;解决方法&lt;/h2&gt;&lt;p&gt;　查阅资料后说是连接超过了最大重试次数。Nacos有个maxRetry这个配置参数，默认是3;可是和SpringCloud整合后在application文件中找不到这个参数，只好另寻方法；&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://mjava.top/categories/Java/"/>
-    
-    
-      <category term="Nacos" scheme="https://mjava.top/tags/Nacos/"/>
     
   </entry>
   
