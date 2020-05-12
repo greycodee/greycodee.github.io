@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjava.top/"/>
-  <updated>2020-05-07T07:29:32.971Z</updated>
+  <updated>2020-05-12T07:04:08.543Z</updated>
   <id>https://mjava.top/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>OAuth2.0与JWT</title>
+    <link href="https://mjava.top/archive/web-security/oauth-and-jwt/"/>
+    <id>https://mjava.top/archive/web-security/oauth-and-jwt/</id>
+    <published>2020-05-12T06:59:43.000Z</published>
+    <updated>2020-05-12T07:04:08.543Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="OAuth2-0"><a href="#OAuth2-0" class="headerlink" title="OAuth2.0"></a>OAuth2.0</h2><p>OAuth2.0是一个授权协议，它允许软件应用代表资源拥有者去访问资源拥有者的资源。应用向资源拥有者请求<code>令牌</code>，并用这个令牌来访问资源拥有者的资源。</p><h3 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h3><ul><li>客户端：相当于访问受保护资源的软件</li><li>授权服务器：授予客户端令牌的服务</li><li>资源拥有者：受保护的资源拥有者，有权决定将不将令牌授权给客户端</li><li>受保护的资源：除资源拥有者外，要访问此资源必须要有授权服务器颁发的有效的令牌</li></ul><a id="more"></a><h3 id="授权类型"><a href="#授权类型" class="headerlink" title="授权类型"></a>授权类型</h3><h4 id="授权码许可类型"><a href="#授权码许可类型" class="headerlink" title="授权码许可类型"></a>授权码许可类型<img src="http://cdn.mjava.top/blog/20200512090246.jpg" alt="授权码许可类型"></h4><hr><h4 id="隐式许可类型"><a href="#隐式许可类型" class="headerlink" title="隐式许可类型"></a>隐式许可类型<img src="http://cdn.mjava.top/blog/20200512135621.jpg" alt="隐式许可类型"></h4><hr><h4 id="客户端凭证许可类型"><a href="#客户端凭证许可类型" class="headerlink" title="客户端凭证许可类型"></a>客户端凭证许可类型<img src="http://cdn.mjava.top/blog/20200512135605.jpg" alt="客户端凭证许可类型"></h4><hr><h4 id="资源拥有者凭证许可类型-账号密码模式"><a href="#资源拥有者凭证许可类型-账号密码模式" class="headerlink" title="资源拥有者凭证许可类型(账号密码模式)"></a>资源拥有者凭证许可类型(账号密码模式)<img src="http://cdn.mjava.top/blog/20200512135635.jpg" alt="资源拥有者凭证许可类型(账号密码模式)"></h4><hr><h4 id="断言许可类型"><a href="#断言许可类型" class="headerlink" title="断言许可类型"></a>断言许可类型<img src="http://cdn.mjava.top/blog/20200512135531.jpg" alt="断言许可类型"></h4><h2 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h2><p>JWT全称：JSON Web Token，是一种令牌格式。其格式类似为<code>xxxxx.yyyyy.zzzzz</code>,分为三部分，每个部分都用<code>Base64</code>进行编码，之间用<code>.</code>分隔。</p><p>第一部分：为Header部分，标头通常由两部分组成：令牌的类型（即JWT）和所使用的签名算法，例如HMAC SHA256或RSA。</p><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>第二部分：令牌的第二部分是有效负载，其中包含声明。 声明是有关实体（通常是用户）和其他数据的声明。 共有三种类型的声明：注册的，公共的和私有的三种声明。当然里面可以存放任何有效的字段信息（私有声明）。但是为了避免不同实现之间不兼容，可以准守JWT官方提供的声明字段。</p><ul><li>注册声明：JWT官方提供的声明，参考资料:<a href="https://tools.ietf.org/html/rfc7519#section-4.1" rel="noopener" target="_blank">https://tools.ietf.org/html/rfc7519#section-4.1</a></li><li>公共声明：用户发邮件给JWT官方进行注册的声明字段，参考资料：<a href="https://tools.ietf.org/html/rfc7519#section-4.2" rel="noopener" target="_blank">https://tools.ietf.org/html/rfc7519#section-4.2</a></li><li>私有声明：完全用户自定义，参考资料<a href="https://tools.ietf.org/html/rfc7519#section-4.3" rel="noopener" target="_blank">https://tools.ietf.org/html/rfc7519#section-4.3</a></li></ul><p>第三部分：为令牌签名部分，使用这个字段后，资源服务器只会接受签名正确的令牌。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;OAuth2-0&quot;&gt;&lt;a href=&quot;#OAuth2-0&quot; class=&quot;headerlink&quot; title=&quot;OAuth2.0&quot;&gt;&lt;/a&gt;OAuth2.0&lt;/h2&gt;&lt;p&gt;OAuth2.0是一个授权协议，它允许软件应用代表资源拥有者去访问资源拥有者的资源。应用向资源拥有者请求&lt;code&gt;令牌&lt;/code&gt;，并用这个令牌来访问资源拥有者的资源。&lt;/p&gt;&lt;h3 id=&quot;角色&quot;&gt;&lt;a href=&quot;#角色&quot; class=&quot;headerlink&quot; title=&quot;角色&quot;&gt;&lt;/a&gt;角色&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;客户端：相当于访问受保护资源的软件&lt;/li&gt;
+&lt;li&gt;授权服务器：授予客户端令牌的服务&lt;/li&gt;
+&lt;li&gt;资源拥有者：受保护的资源拥有者，有权决定将不将令牌授权给客户端&lt;/li&gt;
+&lt;li&gt;受保护的资源：除资源拥有者外，要访问此资源必须要有授权服务器颁发的有效的令牌&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="Web-Security" scheme="https://mjava.top/categories/Web-Security/"/>
+    
+    
+      <category term="OAuth2.0" scheme="https://mjava.top/tags/OAuth2-0/"/>
+    
+      <category term="JWT" scheme="https://mjava.top/tags/JWT/"/>
+    
+  </entry>
   
   <entry>
     <title>fastDFS安装使用教程</title>
@@ -333,13 +363,13 @@
       <category term="Docker" scheme="https://mjava.top/categories/Docker/"/>
     
     
-      <category term="Mysql" scheme="https://mjava.top/tags/Mysql/"/>
-    
-      <category term="Pit" scheme="https://mjava.top/tags/Pit/"/>
-    
       <category term="Docker" scheme="https://mjava.top/tags/Docker/"/>
     
+      <category term="Mysql" scheme="https://mjava.top/tags/Mysql/"/>
+    
       <category term="Linux" scheme="https://mjava.top/tags/Linux/"/>
+    
+      <category term="Pit" scheme="https://mjava.top/tags/Pit/"/>
     
   </entry>
   
@@ -524,29 +554,6 @@
       
         &lt;p&gt;&lt;img src=&quot;http://cdn.mjava.top/blog/java_8_stream.png&quot; alt=&quot;Stream&quot;&gt;&lt;/p&gt;
       
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://mjava.top/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://mjava.top/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java数组的几种初始化方式</title>
-    <link href="https://mjava.top/java/java-array-init/"/>
-    <id>https://mjava.top/java/java-array-init/</id>
-    <published>2019-12-09T02:22:12.000Z</published>
-    <updated>2019-12-09T02:44:25.415Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h2><h3 id="初始化容量"><a href="#初始化容量" class="headerlink" title="初始化容量"></a>初始化容量</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 定义容量为5,初始值为0的int一维数组</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span> array[]=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line"><span class="keyword">int</span>[] array2=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br></pre></td></tr></table></figure><h3 id="初始化值"><a href="#初始化值" class="headerlink" title="初始化值"></a>初始化值</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 初始化一维容量为5的一维数组的值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span>[] array10=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> aray12[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br></pre></td></tr></table></figure><a id="more"></a><h2 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h2><blockquote><p>二维数组初始化时必须要声明行数,列数可随意 </p></blockquote><h3 id="初始化容量-1"><a href="#初始化容量-1" class="headerlink" title="初始化容量"></a>初始化容量</h3><ul><li>声明了列数的</li></ul><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 初始化一个5行5列的二维数组</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span>[][] array3=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][<span class="number">5</span>];</span><br><span class="line"><span class="keyword">int</span> []array4[]=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][<span class="number">5</span>];</span><br><span class="line"><span class="keyword">int</span> array5[][]=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][<span class="number">5</span>];</span><br></pre></td></tr></table></figure><ul><li>未声明列数的</li></ul><blockquote><p>此种方法初始化后如果要赋值的话要new一个数组,如果按照常规的方法赋值然后取值会报空指针异常</p></blockquote><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 初始化一个5行空列的二维数组</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span>[][] array6=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][];</span><br><span class="line"><span class="keyword">int</span> []arra7[]=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][];</span><br><span class="line"><span class="keyword">int</span> array8[][]=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][];</span><br></pre></td></tr></table></figure> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 赋值方法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span>[][] array6=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>][];</span><br><span class="line">array6[<span class="number">0</span>]=<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">System.out.println(array6[<span class="number">0</span>][<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出:1</span></span><br></pre></td></tr></table></figure><h4 id="初始化值-1"><a href="#初始化值-1" class="headerlink" title="初始化值"></a>初始化值</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 初始化并赋值一个2行3列的二维数组</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">int</span>[][] array13=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">int</span> []array14[]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br><span class="line"><span class="keyword">int</span> array15[][]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;</span><br></pre></td></tr></table></figure><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​    其他像什么三维数组,多维数组初始化的方式都差不多,可以自己在IDE工具中试一下;</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;一维数组&quot;&gt;&lt;a href=&quot;#一维数组&quot; class=&quot;headerlink&quot; title=&quot;一维数组&quot;&gt;&lt;/a&gt;一维数组&lt;/h2&gt;&lt;h3 id=&quot;初始化容量&quot;&gt;&lt;a href=&quot;#初始化容量&quot; class=&quot;headerlink&quot; title=&quot;初始化容量&quot;&gt;&lt;/a&gt;初始化容量&lt;/h3&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;* 定义容量为5,初始值为0的int一维数组&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;*/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; array[]=&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;[&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;[] array2=&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;[&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;h3 id=&quot;初始化值&quot;&gt;&lt;a href=&quot;#初始化值&quot; class=&quot;headerlink&quot; title=&quot;初始化值&quot;&gt;&lt;/a&gt;初始化值&lt;/h3&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;/**&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;* 初始化一维容量为5的一维数组的值&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;*/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;[] array10=&amp;#123;&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; aray12[]=&amp;#123;&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;,&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
