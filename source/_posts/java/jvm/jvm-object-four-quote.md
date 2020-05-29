@@ -1,5 +1,5 @@
 ---
-title: JAva四种引用方法使用和对比
+title: JAVA四种引用方法使用和对比
 top: false
 cover: false
 toc: true
