@@ -52,17 +52,17 @@
 </script>
 
   <meta name="description" content="强引用（Strongly Reference） 无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象。 回收时机:强引用关系不存在时 Object obj=new Object();软引用（Soft Reference） 软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收">
-<meta name="keywords" content="JVM">
+<meta name="keywords" content="JVM,JAVA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM四中引用方法使用和对比">
+<meta property="og:title" content="JAva四种引用方法使用和对比">
 <meta property="og:url" content="https://mjava.top/java/jvm/jvm-object-four-quote/index.html">
 <meta property="og:site_name" content="灰色Code">
 <meta property="og:description" content="强引用（Strongly Reference） 无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象。 回收时机:强引用关系不存在时 Object obj=new Object();软引用（Soft Reference） 软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://cdn.mjava.top/blog/20200526225718">
-<meta property="og:updated_time" content="2020-05-29T02:30:48.006Z">
+<meta property="og:updated_time" content="2020-05-29T02:36:28.476Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVM四中引用方法使用和对比">
+<meta name="twitter:title" content="JAva四种引用方法使用和对比">
 <meta name="twitter:description" content="强引用（Strongly Reference） 无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象。 回收时机:强引用关系不存在时 Object obj=new Object();软引用（Soft Reference） 软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收">
 <meta name="twitter:image" content="http://cdn.mjava.top/blog/20200526225718">
 
@@ -80,7 +80,7 @@
   };
 </script>
 
-  <title>JVM四中引用方法使用和对比 | 灰色Code</title>
+  <title>JAva四种引用方法使用和对比 | 灰色Code</title>
   
 
 
@@ -203,7 +203,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          JVM四中引用方法使用和对比
+          JAva四种引用方法使用和对比
         </h1>
 
         <div class="post-meta">
@@ -214,7 +214,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-29 10:22:07 / 修改时间：10:30:48" itemprop="dateCreated datePublished" datetime="2020-05-29T10:22:07+08:00">2020-05-29</time>
+              <time title="创建时间：2020-05-29 10:22:07 / 修改时间：10:36:28" itemprop="dateCreated datePublished" datetime="2020-05-29T10:22:07+08:00">2020-05-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,6 +224,12 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/JVM/" itemprop="url" rel="index">
                     <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
                   </a>
                 </span>
             </span>
@@ -274,6 +280,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/JVM/" rel="tag"># JVM</a>
+              <a href="/tags/JAVA/" rel="tag"># JAVA</a>
           </div>
 
         
@@ -357,13 +364,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

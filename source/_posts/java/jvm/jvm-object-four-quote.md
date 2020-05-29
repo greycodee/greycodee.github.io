@@ -1,5 +1,5 @@
 ---
-title: JVM四中引用方法使用和对比
+title: JAva四种引用方法使用和对比
 top: false
 cover: false
 toc: true
@@ -11,8 +11,10 @@ keywords:
 description:
 tags:
 - JVM
+- JAVA
 categories:
 - JVM
+- JAVA
 ---
 
 

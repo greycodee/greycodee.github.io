@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mjava.top/java/jvm/jvm-gc-alg/</loc>
+    <loc>https://mjava.top/java/jvm/jvm-object-four-quote/</loc>
     <lastmod>2020-05-29</lastmod>
   </url>  <url>
-    <loc>https://mjava.top/java/jvm/jvm-object-four-quote/</loc>
+    <loc>https://mjava.top/java/jvm/jvm-gc-alg/</loc>
     <lastmod>2020-05-29</lastmod>
   </url>  <url>
     <loc>https://mjava.top/java/jvm/jvm-object-is-alive/</loc>
@@ -106,7 +106,7 @@
     <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
-    <loc>https://mjava.top/java/java-isnull-four/</loc>
+    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
@@ -115,7 +115,7 @@
     <loc>https://mjava.top/algorithm/algorithm-recursive-01/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
-    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
+    <loc>https://mjava.top/java/java-isnull-four/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/docker/docker-mysql/</loc>

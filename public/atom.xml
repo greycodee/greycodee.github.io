@@ -43,11 +43,11 @@
   </entry>
   
   <entry>
-    <title>JVM四中引用方法使用和对比</title>
+    <title>JAva四种引用方法使用和对比</title>
     <link href="https://mjava.top/java/jvm/jvm-object-four-quote/"/>
     <id>https://mjava.top/java/jvm/jvm-object-four-quote/</id>
     <published>2020-05-29T02:22:07.000Z</published>
-    <updated>2020-05-29T02:30:48.006Z</updated>
+    <updated>2020-05-29T02:36:28.476Z</updated>
     
     <content type="html"><![CDATA[<p><img src="http://cdn.mjava.top/blog/20200526225718" alt></p><h2 id="强引用（Strongly-Reference）"><a href="#强引用（Strongly-Reference）" class="headerlink" title="强引用（Strongly Reference）"></a>强引用（Strongly Reference）</h2><blockquote><p>无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象。</p><p><font color="red">回收时机:强引用关系不存在时</font></p></blockquote><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object obj=<span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure><h2 id="软引用（Soft-Reference）"><a href="#软引用（Soft-Reference）" class="headerlink" title="软引用（Soft Reference）"></a>软引用（Soft Reference）</h2><blockquote><p>软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存，才会抛出内存溢出异常。</p><p><font color="red">回收时机:发送内存溢出异常前</font></p></blockquote><a id="more"></a><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//软引用</span></span><br><span class="line"></span><br><span class="line">SoftReference&lt;Object&gt; srf = <span class="keyword">new</span> SoftReference&lt;Object&gt;(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line">Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">SoftReference&lt;Object&gt; srf = <span class="keyword">new</span> SoftReference&lt;Object&gt;(obj);</span><br><span class="line">obj=<span class="keyword">null</span>;  <span class="comment">//这种方法一定要设置obj为null,否则这个对象除了软引用可达外,还有原来强引用也可达</span></span><br></pre></td></tr></table></figure><h3 id="弱引用（Weak-Reference）"><a href="#弱引用（Weak-Reference）" class="headerlink" title="弱引用（Weak Reference）"></a>弱引用（Weak Reference）</h3><blockquote><p>弱引用也是用来描述那些非必须对象，但是它的强度比软引用更弱一些，被弱引用关联的对象<strong>只能生存到下一次垃圾收集发生为止</strong>。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</p><p><font color="red">回收时机:下一次垃圾回收时</font></p></blockquote><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//弱引用</span></span><br><span class="line"></span><br><span class="line">WeakReference&lt;Object&gt; wrf = <span class="keyword">new</span> WeakReference&lt;Object&gt;(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line">Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">WeakReference&lt;Object&gt; wrf = <span class="keyword">new</span> WeakReference&lt;Object&gt;(<span class="keyword">new</span> Object());</span><br><span class="line">obj=<span class="keyword">null</span>;</span><br></pre></td></tr></table></figure><h3 id="虚引用（Phantom-Reference）"><a href="#虚引用（Phantom-Reference）" class="headerlink" title="虚引用（Phantom Reference）"></a>虚引用（Phantom Reference）</h3><blockquote><p>虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。</p><p><font color="red">回收时机:随时</font></p></blockquote><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//虚引用</span></span><br><span class="line">PhantomReference&lt;Object&gt; prf = <span class="keyword">new</span> PhantomReference&lt;Object&gt;(<span class="keyword">new</span> Object(), <span class="keyword">new</span> ReferenceQueue&lt;&gt;());</span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line">Object obj=<span class="keyword">new</span> Object();</span><br><span class="line">PhantomReference&lt;Object&gt; prf = <span class="keyword">new</span> PhantomReference&lt;Object&gt;(obj, <span class="keyword">new</span> ReferenceQueue&lt;&gt;());</span><br><span class="line">obj=<span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -66,8 +66,12 @@
     
       <category term="JVM" scheme="https://mjava.top/categories/JVM/"/>
     
+      <category term="JAVA" scheme="https://mjava.top/categories/JVM/JAVA/"/>
+    
     
       <category term="JVM" scheme="https://mjava.top/tags/JVM/"/>
+    
+      <category term="JAVA" scheme="https://mjava.top/tags/JAVA/"/>
     
   </entry>
   

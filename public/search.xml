@@ -29,7 +29,7 @@
     
     
     <entry>
-      <title>JVM四中引用方法使用和对比</title>
+      <title>JAva四种引用方法使用和对比</title>
       <link href="/java/jvm/jvm-object-four-quote/"/>
       <url>/java/jvm/jvm-object-four-quote/</url>
       
@@ -40,12 +40,16 @@
           
           <category> JVM </category>
           
+          <category> JAVA </category>
+          
       </categories>
       
       
         <tags>
             
             <tag> JVM </tag>
+            
+            <tag> JAVA </tag>
             
         </tags>
       
