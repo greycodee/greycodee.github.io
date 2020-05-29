@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="简介垃圾收集算法可以划分为“引用计数式垃圾收集”（Reference Counting GC）和“追踪式垃圾收集”（Tracing GC）两大类，这两类也常被称作“直接垃圾收集”和“间接垃圾收集”。标记-清除算法 标记过程就是对象是否属于垃圾的判定过程(采用可达分析算法GC Roots) 算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象，也">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM4种垃圾收集算法">
+<meta property="og:url" content="https://mjava.top/java/jvm/jvm-gc-alg/index.html">
+<meta property="og:site_name" content="灰色Code">
+<meta property="og:description" content="简介垃圾收集算法可以划分为“引用计数式垃圾收集”（Reference Counting GC）和“追踪式垃圾收集”（Tracing GC）两大类，这两类也常被称作“直接垃圾收集”和“间接垃圾收集”。标记-清除算法 标记过程就是对象是否属于垃圾的判定过程(采用可达分析算法GC Roots) 算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象，也">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200529100358.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200528203926.jpeg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200529100420.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200528203952.jpeg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200529100506.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200528204014.jpeg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200529101100.png">
+<meta property="og:updated_time" content="2020-05-29T02:34:07.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM4种垃圾收集算法">
+<meta name="twitter:description" content="简介垃圾收集算法可以划分为“引用计数式垃圾收集”（Reference Counting GC）和“追踪式垃圾收集”（Tracing GC）两大类，这两类也常被称作“直接垃圾收集”和“间接垃圾收集”。标记-清除算法 标记过程就是对象是否属于垃圾的判定过程(采用可达分析算法GC Roots) 算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象，也">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/20200529100358.png">
+
+<link rel="canonical" href="https://mjava.top/java/jvm/jvm-gc-alg/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>JVM4种垃圾收集算法 | 灰色Code</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">灰色Code</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/jvm/jvm-gc-alg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM4种垃圾收集算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-29 10:31:30 / 修改时间：10:34:07" itemprop="dateCreated datePublished" datetime="2020-05-29T10:31:30+08:00">2020-05-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>垃圾收集算法可以划分为“引用计数式垃圾收集”（Reference Counting GC）和“追踪式垃圾收集”（Tracing GC）两大类，这两类也常被称作“直接垃圾收集”和“间接垃圾收集”。</p><h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><ul>
+<li><strong>标记过程</strong>就是对象是否属于垃圾的判定过程(<strong>采用可达分析算法GC Roots</strong>)</li>
+<li>算法分为<strong>“标记”</strong>和<strong>“清除”</strong>两个阶段：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象，<strong>也可以反过来</strong>，标记存活的对象，统一回收所有未被标记的对象。</li>
+</ul><a id="more"></a>
+
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>执行效率不稳定，如果Java堆中包含大量对象，而且<strong>其中大部分是需要被回收的</strong>，这时必须进行大量标记和清除的动作，导致标记和清除两个过程的<strong>执行效率都随对象数量增长而降低</strong>；</li>
+<li>第二个是内存空间的碎片化问题，标记、清除之后会<strong>产生大量不连续的内存碎片</strong>，空间碎片太多可能会导致当以后在程序运行过程中需要分配较大对象时<strong>无法找到足够的连续内存</strong>而不得不<strong>提前触发另一次垃圾收集动作</strong>。</li>
+<li><img src="http://cdn.mjava.top/blog/20200529100358.png" alt></li>
+</ul>
+<p><img src="http://cdn.mjava.top/blog/20200528203926.jpeg" alt="标记清除算法"></p>
+<h2 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h2><ul>
+<li><p><strong>标记过程</strong>就是对象是否属于垃圾的判定过程(<strong>采用可达分析算法GC Roots</strong>)</p>
+</li>
+<li><p>它将可用内存按容量划分为<strong>大小相等的两块</strong>，每次只使用其中的一块。</p>
+</li>
+<li><p>当这一块的内存用完了，就将还<strong>存活着的对象复制到另外一块上面</strong>，然后再把<strong>已使用过的内存空间一次清理掉</strong>。</p>
+</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>如果内存中<strong>多数对象都是存活的</strong>，这种算法将会<strong>产生大量的内存间复制的开销</strong></li>
+<li>代价是将可用内存缩小为了<strong>原来的一半</strong>,空间浪费未免太多了一点.</li>
+<li><img src="http://cdn.mjava.top/blog/20200529100420.jpg" alt></li>
+</ul>
+<p><img src="http://cdn.mjava.top/blog/20200528203952.jpeg" alt="标记复制算法"></p>
+<h2 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h2><ul>
+<li><strong>标记过程</strong>就是对象是否属于垃圾的判定过程(<strong>采用可达分析算法GC Roots</strong>)</li>
+<li>在<strong>标记-清除</strong>的算法基础上改进,后续步骤不是直接对可回收对象进行清理，而是让<strong>所有存活的对象都向内存空间一端移动</strong>，然后直接<strong>清理掉边界以外的内存</strong>，</li>
+</ul>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在有大量存活对象的老年代区域,<strong>移动存活对象</strong>并<strong>更新所有引用</strong>这些对象的地方将会是一种<strong>极为负重</strong>的操作,而且这种对象移动操作<strong>必须全程暂停用户应用程序</strong>才能进行,比<strong>标记-清除</strong>算法停顿时间长.</li>
+<li><img src="http://cdn.mjava.top/blog/20200529100506.jpg" alt></li>
+</ul>
+<p><img src="http://cdn.mjava.top/blog/20200528204014.jpeg" alt="标记整理算法"></p>
+<h2 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h2><p>现代商用虚拟机基于以上算法的优缺点,根据<strong>分代收集理论</strong>,在不同的区域采用了不同的收集算法.</p>
+<blockquote>
+<p><font color="red">老年代:新生代=2:1</font></p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/20200529101100.png" alt></p>
+<h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><blockquote>
+<p>堆大小默认比例:<font color="red">Eden:S0:S1=8:1:1</font></p>
+<p>采用标记-复制算法</p>
+</blockquote>
+<p>新生代分为<strong>Eden区</strong>和<strong>Survior区</strong>,而Survior区又分为<strong>From Survior区(S0)</strong>和<strong>To Survior区(S1)</strong>.此区域采用标记-复制算法.每次Minor GC/Young GC时,会把<strong>Eden区</strong>存活的对象复制到<strong>S0区</strong>,然后清空Eden区,当S0区满时,Eden区和S0区存活的对象会复制到<strong>S1区</strong>,然后S0和S0进行交换,永远保持S1为空状态,当新生代的对象经过一定次数的Minor GC还未被回收时,就会把这个对象移到老年代.</p>
+<h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><blockquote>
+<p>采用标记-整理法或标记-清理法</p>
+</blockquote>
+<p>当老年代Old区域满时,会触发<strong>Full GC</strong>,同时回收新生代和老生代的所有区域.回收后诺内存还是不足时,会引发<strong>OOM异常</strong>;</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/java/jvm/jvm-object-four-quote/" rel="next" title="JVM四中引用方法使用和对比">
+                  <i class="fa fa-chevron-left"></i> JVM四中引用方法使用和对比
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">2.</span> <span class="nav-text">标记-清除算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">2.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-复制算法"><span class="nav-number">3.</span> <span class="nav-text">标记-复制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-1"><span class="nav-number">3.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">4.</span> <span class="nav-text">标记-整理算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-2"><span class="nav-number">4.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分代收集算法"><span class="nav-number">5.</span> <span class="nav-text">分代收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新生代"><span class="nav-number">5.1.</span> <span class="nav-text">新生代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#老年代"><span class="nav-number">5.2.</span> <span class="nav-text">老年代</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="H&K"
+      src="http://cdn.mjava.top/blog/20200203213619.jpg">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">浅水是喧哗的，深水是沉默的</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GreyCode9" title="GitHub → https://github.com/GreyCode9" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  
+  <div class="powered-by"><a href="http://www.beian.miit.gov.cn" rel="noopener external nofollow noreferrer" target="_blank">赣ICP备17003482号 </a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    
+    灰色Code
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
