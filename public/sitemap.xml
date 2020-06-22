@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mjava.top/java/thread/create-thread-3/</loc>
+    
+    <lastmod>2020-06-22T08:30:17.581Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/tool/git-tool-command/</loc>
+    
+    <lastmod>2020-06-22T08:28:15.899Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/spring/apring-aop-ann/</loc>
+    
+    <lastmod>2020-06-22T08:25:48.845Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mjava.top/java/jvm/jvm-object-four-quote/</loc>
     
     <lastmod>2020-05-29T02:37:29.280Z</lastmod>
@@ -205,56 +226,7 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/java/java-equals/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-docker/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/java/java-isnull-four/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -268,7 +240,35 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
+    <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/java/java-equals/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/java/java-isnull-four/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -276,6 +276,27 @@
   
   <url>
     <loc>https://mjava.top/docker/docker-mysql/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/build-jenkins-docker/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -345,6 +366,13 @@
   </url>
   
   <url>
+    <loc>https://mjava.top/404.html</loc>
+    
+    <lastmod>2019-08-11T15:40:56.161Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mjava.top/about/index.html</loc>
     
     <lastmod>2019-08-11T15:40:56.161Z</lastmod>
@@ -353,13 +381,6 @@
   
   <url>
     <loc>https://mjava.top/friends/index.html</loc>
-    
-    <lastmod>2019-08-11T15:40:56.161Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/404.html</loc>
     
     <lastmod>2019-08-11T15:40:56.161Z</lastmod>
     
