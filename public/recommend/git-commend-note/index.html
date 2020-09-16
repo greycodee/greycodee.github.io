@@ -51,19 +51,23 @@
   };
 </script>
 
-  <meta name="description" content="浅水是喧哗的，深水是沉默的">
-<meta name="keywords" content="Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue">
-<meta property="og:type" content="website">
-<meta property="og:title" content="灰色Code">
-<meta property="og:url" content="https://mjava.top/categories/Web-Security/index.html">
+  <meta name="description" content="Git简介Git 是用于 Linux内核开发的版本控制工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使源代码的发布和交流极其方便。 Git 的速度很快，这对于诸如 Linux">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git常用命令">
+<meta property="og:url" content="https://mjava.top/recommend/git-commend-note/index.html">
 <meta property="og:site_name" content="灰色Code">
-<meta property="og:description" content="浅水是喧哗的，深水是沉默的">
+<meta property="og:description" content="Git简介Git 是用于 Linux内核开发的版本控制工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使源代码的发布和交流极其方便。 Git 的速度很快，这对于诸如 Linux">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200605001853.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200605002904.jpg">
+<meta property="og:updated_time" content="2020-09-16T07:17:23.786Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="灰色Code">
-<meta name="twitter:description" content="浅水是喧哗的，深水是沉默的">
+<meta name="twitter:title" content="Git常用命令">
+<meta name="twitter:description" content="Git简介Git 是用于 Linux内核开发的版本控制工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使源代码的发布和交流极其方便。 Git 的速度很快，这对于诸如 Linux">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/20200605001853.png">
 
-<link rel="canonical" href="https://mjava.top/categories/Web-Security/">
+<link rel="canonical" href="https://mjava.top/recommend/git-commend-note/">
 
 
 <script id="page-configurations">
@@ -71,13 +75,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>分类: Web-Security | 灰色Code</title>
+  <title>Git常用命令 | 灰色Code</title>
   
 
 
@@ -106,9 +110,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -182,54 +186,125 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">Web-Security
-          <small>分类</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/recommend/git-commend-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git常用命令
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-16 15:16:56 / 修改时间：15:17:23" itemprop="dateCreated datePublished" datetime="2020-09-16T15:16:56+08:00">2020-09-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
+        <h2 id="Git简介"><a href="#Git简介" class="headerlink" title="Git简介"></a>Git简介</h2><p>Git 是用于 Linux<a href="https://baike.baidu.com/item/内核" rel="noopener external nofollow noreferrer" target="_blank">内核</a>开发的<a href="https://baike.baidu.com/item/版本控制" rel="noopener external nofollow noreferrer" target="_blank">版本控制</a>工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使<a href="https://baike.baidu.com/item/源代码" rel="noopener external nofollow noreferrer" target="_blank">源代码</a>的发布和交流极其方便。 Git 的速度很快，这对于诸如 Linux kernel 这样的大项目来说自然很重要。 Git 最为出色的是它的合并跟踪（merge tracing）能力。</p><a id="more"></a>
+<p>git对于很多人来说,真的是又爱又恨,用的好可以提示开发效率;用不好,解决各种冲突就要累的你半死</p>
+<h2 id="git结构"><a href="#git结构" class="headerlink" title="git结构"></a>git结构</h2><blockquote>
+<p>网上有 我就不画了</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/20200605001853.png" alt="git结构图"></p>
+<ul>
+<li><p>workspace    相当于就是我们的本地电脑上的文件</p>
+</li>
+<li><p>Index    缓存区</p>
+</li>
+<li><p>Repository    本地仓库</p>
+</li>
+<li><p>Remote    远程仓库(github/gitlab/gitee)</p>
+</li>
+</ul>
+<h2 id="git命令"><a href="#git命令" class="headerlink" title="git命令"></a>git命令</h2><p>git官方提供的命令多达几百个,可是我们日常却用不到这么多</p>
+<p>所以我就整理了一下日常使用的命令</p>
+<p>现在关注微信公招:<code>灰色Code</code></p>
+<p>回复关键字:<code>git</code></p>
+<p>就可以获取思维导图高清图片及导图源地址</p>
+<p><img src="http://cdn.mjava.top/blog/20200605002904.jpg" alt></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-12T14:59:43+08:00"
-              content="2020-05-12">
-          05-12
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
 
-      <h2 class="post-title">
-          <a class="post-title-link" href="/archive/web-security/oauth-and-jwt/" itemprop="url">
-            <span itemprop="name">OAuth2.0与JWT</span>
-          </a>
-      </h2>
+        
 
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/spring/fegin-resttemplate-addheard/" rel="next" title="Fegin和RestTemplate添加全局请求头">
+                  <i class="fa fa-chevron-left"></i> Fegin和RestTemplate添加全局请求头
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
   </article>
+  
+  
+  
 
-    </div>
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
 
         </div>
           
@@ -254,6 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git简介"><span class="nav-number">1.</span> <span class="nav-text">Git简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git结构"><span class="nav-number">2.</span> <span class="nav-text">git结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git命令"><span class="nav-number">3.</span> <span class="nav-text">git命令</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -269,20 +345,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -433,12 +509,25 @@
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script>
 
     
 
   
 
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>

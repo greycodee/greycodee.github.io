@@ -106,9 +106,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -187,6 +187,707 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/mysql/mysql-update-driver-connector-8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql/mysql-update-driver-connector-8/" class="post-title-link" itemprop="url">更新驱动到mysql-connector-java-8遇到的一些问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-25 17:07:12 / 修改时间：17:08:44" itemprop="dateCreated datePublished" datetime="2019-12-25T17:07:12+08:00">2019-12-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="更新驱动到mysql-connector-java-8遇到的一些问题"><a href="#更新驱动到mysql-connector-java-8遇到的一些问题" class="headerlink" title="更新驱动到mysql-connector-java-8遇到的一些问题"></a>更新驱动到mysql-connector-java-8遇到的一些问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="POM"><a href="#POM" class="headerlink" title="POM"></a>POM</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;8.0.16&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql/mysql-update-driver-connector-8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/docker/docker-transfer-pit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/docker/docker-transfer-pit/" class="post-title-link" itemprop="url">Docker迁移根目录导致mysql权限问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-20 15:04:16 / 修改时间：15:05:47" itemprop="dateCreated datePublished" datetime="2019-12-20T15:04:16+08:00">2019-12-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：</p><p>迁移根目录我看的是这个文章：<a href="https://www.cnblogs.com/insist-forever/p/11739207.html" rel="noopener external nofollow noreferrer" target="_blank">docker的存储目录迁移</a>,　不过迁移的时候我没有使用<font color="orange">rsync</font>这个命令，而是使用<font color="orange">cp -R</font>;</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/docker/docker-transfer-pit/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-taemplate-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/gof/gof-taemplate-method/" class="post-title-link" itemprop="url">设计模式系列-模板方法模式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-20 00:04:28 / 修改时间：09:38:54" itemprop="dateCreated datePublished" datetime="2019-12-20T00:04:28+08:00">2019-12-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/20191220000613.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="文前常规发言"><a href="#文前常规发言" class="headerlink" title="文前常规发言"></a>文前常规发言</h2><p>　　模板方法的设计<font color="orange">符合迪米特法则</font>，也就是最少知道原则，他通过对一些重复方法的封装，减少类之间的耦合，让调用者也更省心，原来要调两三个方法才能实现的功能，现在调一个就可以了；就像我们伟大的祖国，现在也在推行这种模式呢．以前区办一些证明什么的，要跑三四个地方，还要保证这三四个地方都正常帮你办理，如果其中一个地方没办理，那么整个流程就都作废了．现在好了，提倡最多跑一次，只要去一个地方办<font color="orange">一次</font>手续就可以了，你只要知道这个地方能办好就行，其他的就不用烦心了；</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/gof/gof-taemplate-method/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/algorithm/array-vs-linked/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/algorithm/array-vs-linked/" class="post-title-link" itemprop="url">恍然大悟，数组和链表的区别</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-18 13:50:52 / 修改时间：13:52:24" itemprop="dateCreated datePublished" datetime="2019-12-18T13:50:52+08:00">2019-12-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/20191218134901.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="文前发言"><a href="#文前发言" class="headerlink" title="文前发言"></a>文前发言</h2><p>　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫<font color="orange">数组链表</font>结构，就是常说的<font color="orange">哈希表</font>，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；</p><p><img src="http://cdn.mjava.top/20191218104007.jpg" alt></p><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
+<p>数组是我们平时用的最多的数据结构，它的特点是<font color="orange">查询数据快，插入数据慢</font>，查询的时间复杂度是<font color="orange">O(1)</font>,插入的时间复杂度是<font color="orange">O(n)</font>.</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/algorithm/array-vs-linked/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-abstract-factory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/gof/gof-abstract-factory/" class="post-title-link" itemprop="url">设计模式系列-抽象工厂模式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-16 21:17:23 / 修改时间：21:32:22" itemprop="dateCreated datePublished" datetime="2019-12-16T21:17:23+08:00">2019-12-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/20191216212929.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="突然开始的正文"><a href="#突然开始的正文" class="headerlink" title="突然开始的正文"></a>突然开始的正文</h2><p>紧接着上一章的<a href="https://mjava.top/gof/gof-factory-method">工厂方法模式</a>，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类<font color="orange">AllCarFactory</font>，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后<font color="orange">AllCarFactory</font>定义了一个生产摩托车的接口，这样这个接口下面的汽车厂就可以生产摩托车了．就在这时他们的生产模式也从<font color="orange">工厂方法模式</font>升级到了<font color="orange">抽象工厂模式</font>；</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/gof/gof-abstract-factory/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-factory-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/gof/gof-factory-method/" class="post-title-link" itemprop="url">设计模式系列-工厂模式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-15 17:25:00 / 修改时间：18:23:28" itemprop="dateCreated datePublished" datetime="2019-12-15T17:25:00+08:00">2019-12-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/gof-factory-method.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
+</blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂模式有一下三种</p><ul>
+<li>简单工厂模式</li>
+<li>工厂方法模式</li>
+<li>抽象工厂模式</li>
+</ul><p>其中简单工厂模式不在23中模式之中，更多的是一种编程习惯，而我们平常所说的工厂模式一般指的是工厂方法模式，抽象工厂在实际的业务开发中也用的比较少，因为它有时候违背了开闭原则．由于篇幅有限，抽象工厂本文就不讲了，以后单独讲；</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/gof/gof-factory-method/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-oop-7-all/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/gof/gof-oop-7-all/" class="post-title-link" itemprop="url">OOP程序七大原则</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-15 10:45:04 / 修改时间：10:46:17" itemprop="dateCreated datePublished" datetime="2019-12-15T10:45:04+08:00">2019-12-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/autumn-4656877_1920.png" alt></p><h2 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h2><p>开闭原则相当于所有原则的祖先，主张对修改关闭，对拓展开放．</p><h2 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h2><p><font color="orange">当两个类有继承关系时，子类不能修改父类的方法和变量.  </font>里氏替换中的<font color="orange">替换</font>指的是：当有父类出现的地方，这个父类可以<font color="orange">替换</font>成子类，而且对程序没有影响，这就遵循了里氏替换原则；当替换成子类时对程序有影响，说明子类修改了父类的方法，就没有遵循里氏替换原则了；</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/gof/gof-oop-7-all/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-sonarqube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/jenkins/build-jenkins-sonarqube/" class="post-title-link" itemprop="url">Jenkins教程-集成SonarQube</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-13 15:38:02 / 修改时间：16:43:15" itemprop="dateCreated datePublished" datetime="2019-12-13T15:38:02+08:00">2019-12-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
+                    <span itemprop="name">Jenkins</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是SonarQube"><a href="#什么是SonarQube" class="headerlink" title="什么是SonarQube?"></a>什么是SonarQube?</h2><p>看看维基百科的说明：<br><img src="http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ" alt></p><h3 id="SonarQube与CI-CD架构图"><a href="#SonarQube与CI-CD架构图" class="headerlink" title="SonarQube与CI/CD架构图"></a>SonarQube与CI/CD架构图</h3><p><img src="http://cdn.mjava.top/FpResgoc3tny2jvGqaqudPwCwstj" alt="SonarQube与CI/CD架构图"></p><h2 id="Docker运行SonarQube"><a href="#Docker运行SonarQube" class="headerlink" title="Docker运行SonarQube"></a>Docker运行SonarQube</h2><p>简单了解之后，开始安装SonarQube.这里用Docker安装</p><blockquote>
+<p>注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/jenkins/build-jenkins-sonarqube/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-8-stream-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-8-stream-method/" class="post-title-link" itemprop="url">Java8 Stream方法大全</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-10 09:53:34 / 修改时间：09:56:45" itemprop="dateCreated datePublished" datetime="2019-12-10T09:53:34+08:00">2019-12-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/blog/java_8_stream.png" alt="Stream"></p>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-array-init/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -260,822 +961,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/spring/spring-boot-resttemplate-example/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/spring/spring-boot-resttemplate-example/" class="post-title-link" itemprop="url">RestTemplate简单使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-20 17:32:18" itemprop="dateCreated datePublished" datetime="2019-11-20T17:32:18+08:00">2019-11-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​    本文只讲常用的<strong>GET</strong> 和<strong>POST</strong>请求,其他类型的请求(如<strong>PUT</strong>，<strong>PATCH</strong>)请求方式都差不多，有兴趣的可以查看RestTemplate源码。</p><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><blockquote>
-<p>GET官方给了<strong>getForEntity</strong>和<strong>getForObject</strong>两种种方法，每个方法又有三个重载方法</p>
-</blockquote><h3 id="官方源码接口"><a href="#官方源码接口" class="headerlink" title="官方源码接口"></a>官方源码接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">&lt;T&gt; <span class="function">T <span class="title">getForObject</span><span class="params">(String url, Class&lt;T&gt; responseType, Object... uriVariables)</span> <span class="keyword">throws</span> RestClientException</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">&lt;T&gt; <span class="function">T <span class="title">getForObject</span><span class="params">(String url, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</span> <span class="keyword">throws</span> RestClientException</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">&lt;T&gt; <span class="function">T <span class="title">getForObject</span><span class="params">(URI url, Class&lt;T&gt; responseType)</span> <span class="keyword">throws</span> RestClientException</span>;</span><br><span class="line"></span><br><span class="line">&lt;T&gt; <span class="function">ResponseEntity&lt;T&gt; <span class="title">getForEntity</span><span class="params">(String url, Class&lt;T&gt; responseType, Object... uriVariables)</span></span></span><br><span class="line"><span class="function">		<span class="keyword">throws</span> RestClientException</span>;</span><br><span class="line"></span><br><span class="line">&lt;T&gt; <span class="function">ResponseEntity&lt;T&gt; <span class="title">getForEntity</span><span class="params">(String url, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</span></span></span><br><span class="line"><span class="function">		<span class="keyword">throws</span> RestClientException</span>;</span><br><span class="line"></span><br><span class="line">&lt;T&gt; <span class="function">ResponseEntity&lt;T&gt; <span class="title">getForEntity</span><span class="params">(URI url, Class&lt;T&gt; responseType)</span> <span class="keyword">throws</span> RestClientException</span>;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/spring/spring-boot-resttemplate-example/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/nacos-post-error/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/java/nacos-post-error/" class="post-title-link" itemprop="url">Nacos报[NACOS HTTP-POST]</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-14 23:50:58 / 修改时间：23:53:43" itemprop="dateCreated datePublished" datetime="2019-11-14T23:50:58+08:00">2019-11-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>　由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。</p><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>　查阅资料后说是连接超过了最大重试次数。Nacos有个maxRetry这个配置参数，默认是3;可是和SpringCloud整合后在application文件中找不到这个参数，只好另寻方法；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java/nacos-post-error/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/problem-jenkins-01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/problem-jenkins-01/" class="post-title-link" itemprop="url">Jenkins插件版本太旧的更新方法</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-12 17:27:27" itemprop="dateCreated datePublished" datetime="2019-11-12T17:27:27+08:00">2019-11-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><pre><code>Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：</code></pre><p><img src="http://cdn.mjava.top/blog/20191108102617.png" alt="jenkins插件管理界面"></p><p>Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/problem-jenkins-01/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-ci-cd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/build-jenkins-ci-cd/" class="post-title-link" itemprop="url">Jenkins教程-Docker+GitLab持续部署持续集成</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-12 17:27:02" itemprop="dateCreated datePublished" datetime="2019-11-12T17:27:02+08:00">2019-11-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-docker/">Jenkins教程-搭建(Docker版)</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a></p>
-</li>
-</ul><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><table>
-<thead>
-<tr>
-<th></th>
-<th>地址</th>
-<th>系统</th>
-<th>安装的软件</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>主机１</td>
-<td>10.25.0.72</td>
-<td>Centos 7</td>
-<td>Docker　,　Jenkins(Docker版)</td>
-</tr>
-<tr>
-<td>主机２</td>
-<td>10.25.0.50</td>
-<td>Cnetos 7</td>
-<td>Docker</td>
-</tr>
-</tbody></table>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/build-jenkins-ci-cd/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-mavne/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/build-jenkins-mavne/" class="post-title-link" itemprop="url">Jenkins教程-创建Maven项目</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-12 17:26:19" itemprop="dateCreated datePublished" datetime="2019-11-12T17:26:19+08:00">2019-11-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-docker/">Jenkins教程-搭建(Docker版)</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a></p>
-</li>
-</ul><h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>本教程是和gitlab集成,所以要有gitlab仓库。注意：如果后期要弄自动部署的话,你Jenkins的地址gitlab必须能访问到。不然gitlab监听到事件就通知不了Jenkins了；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/build-jenkins-mavne/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/problem-jenkins-02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/problem-jenkins-02/" class="post-title-link" itemprop="url">Jenkins初始化界面插件安装失败解决方法</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-07 17:19:52" itemprop="dateCreated datePublished" datetime="2019-11-07T17:19:52+08:00">2019-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在初始化安装界面可能由于网络问题会出现插件下载失败，就像下面这个界面</p><p><img src="http://cdn.mjava.top/blog/jenkins_error_2_20191107155729.png" alt="Jenkins插件安装失败"></p><p>别着急，直接点击继续，先完成初始化步骤。</p><h2 id="设置源"><a href="#设置源" class="headerlink" title="设置源"></a>设置源</h2><ul>
-<li>插件下载失败，一般都是网络的原因，只要更换到国内的软件源就可以了，点击Manage Jenkins<br><img src="http://cdn.mjava.top/blog/20191107162947.png" alt="Jenkins"></li>
-</ul><ul>
-<li>点击Correct<br><img src="http://cdn.mjava.top/blog/20191107163016.png" alt="Jenkins"></li>
-</ul><ul>
-<li>点击Advanced<br><img src="http://cdn.mjava.top/blog/20191107163040.png" alt="Jenkins"></li>
-</ul><ul>
-<li>下拉找到Update Site<br><img src="http://cdn.mjava.top/blog/20191107163100.png" alt="Jenkins"></li>
-</ul><ul>
-<li>然后把输入框的内容换成</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/problem-jenkins-02/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/build-jenkins-docker/" class="post-title-link" itemprop="url">Jenkins教程-搭建(Docker版)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-07 17:19:34" itemprop="dateCreated datePublished" datetime="2019-11-07T17:19:34+08:00">2019-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-docker/">Jenkins教程-搭建(Docker版)</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a></p>
-</li>
-<li><p><a href="https://mjava.top/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a></p>
-</li>
-</ul><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li><p>主机：172.16.54.131</p>
-</li>
-<li><p>系统：Cnetos 7</p>
-</li>
-</ul><h2 id="安装Docker-CE"><a href="#安装Docker-CE" class="headerlink" title="安装Docker-CE"></a>安装Docker-CE</h2><h3 id="检查Docker"><a href="#检查Docker" class="headerlink" title="检查Docker"></a>检查Docker</h3><p>首先检查本机是否安装Docker，如果安装了直接跳过安装Docker步骤</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/build-jenkins-docker/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-singleton/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/gof/gof-singleton/" class="post-title-link" itemprop="url">设计模式系例-单例模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-22 21:16:37" itemprop="dateCreated datePublished" datetime="2019-10-22T21:16:37+08:00">2019-10-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 18:25:01" itemprop="dateModified" datetime="2019-12-15T18:25:01+08:00">2019-12-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GOF/" itemprop="url" rel="index">
-                    <span itemprop="name">GOF</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/gof-singleton.jpg" alt></p><blockquote>
-<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 </p>
-</blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>网上说单例模式是所有模式中最简单的一种模式，巧的是我也这么认为。不过越简单的东西，往往坑就隐藏的越深，这边文章我会把我知道的几个坑所出来。</p><h2 id="一-什么是单例模式"><a href="#一-什么是单例模式" class="headerlink" title="一.什么是单例模式"></a>一.什么是单例模式</h2><p>​    就如同他的名字一样，’单例’-就是只有一个实例。也就是说一个类在全局中最多只有一个实例存在，不能在多了，在多就不叫单例模式了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/gof/gof-singleton/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/rocketmq/rocketmq-cluster-build/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/rocketmq/rocketmq-cluster-build/" class="post-title-link" itemprop="url">RocketMQ集群搭建</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-09 20:55:36" itemprop="dateCreated datePublished" datetime="2019-10-09T20:55:36+08:00">2019-10-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-07 18:32:40" itemprop="dateModified" datetime="2019-12-07T18:32:40+08:00">2019-12-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/RocketMq/" itemprop="url" rel="index">
-                    <span itemprop="name">RocketMq</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>  本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;</p><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>JDK1.8</li>
-<li>Centos7</li>
-</ul><h2 id="主机-两台"><a href="#主机-两台" class="headerlink" title="主机-两台"></a>主机-两台</h2><ul>
-<li>centos7_1 :172.16.54.130</li>
-<li>centos7_2 :172.16.54.128</li>
-</ul><h2 id="软件资源"><a href="#软件资源" class="headerlink" title="软件资源"></a>软件资源</h2><ul>
-<li>JDK1.8 :<a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" rel="noopener external nofollow noreferrer" target="_blank">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a></li>
-<li>RocketMQ4.5.2 :<a href="http://mirrors.tuna.tsinghua.edu.cn/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip" rel="noopener external nofollow noreferrer" target="_blank">http://mirrors.tuna.tsinghua.edu.cn/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip</a></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/rocketmq/rocketmq-cluster-build/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1121,20 +1011,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

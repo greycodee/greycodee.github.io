@@ -13,7 +13,7 @@ tags:
 - OAuth2.0
 - JWT
 categories:
-- Web-Security
+- WebSecurity
 ---
 
 

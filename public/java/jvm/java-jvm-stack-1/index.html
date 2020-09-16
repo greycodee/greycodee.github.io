@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在JVM中，每个线程都包含n个栈帧，每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。栈帧的生命周期随着方法的创建而创建，随着方法的结束而销毁，无论方法是正常完成还是异常完成（抛出了在方法内未被捕获的异常）都算方法的结束。在某条线程执行过程中的某个时间点上，只有目前正在执行的那个方法的栈帧是活动的。这个栈帧称为当前栈帧，这个栈帧对应的方法称为当前方法，定义这个方法">
+<meta name="keywords" content="Java,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM运行时栈帧">
+<meta property="og:url" content="https://mjava.top/java/jvm/java-jvm-stack-1/index.html">
+<meta property="og:site_name" content="灰色Code">
+<meta property="og:description" content="在JVM中，每个线程都包含n个栈帧，每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。栈帧的生命周期随着方法的创建而创建，随着方法的结束而销毁，无论方法是正常完成还是异常完成（抛出了在方法内未被捕获的异常）都算方法的结束。在某条线程执行过程中的某个时间点上，只有目前正在执行的那个方法的栈帧是活动的。这个栈帧称为当前栈帧，这个栈帧对应的方法称为当前方法，定义这个方法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200731162235.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200730225516.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200730235131.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200731105247.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200731110742.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200731164803.png">
+<meta property="og:updated_time" content="2020-09-16T07:06:47.327Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM运行时栈帧">
+<meta name="twitter:description" content="在JVM中，每个线程都包含n个栈帧，每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。栈帧的生命周期随着方法的创建而创建，随着方法的结束而销毁，无论方法是正常完成还是异常完成（抛出了在方法内未被捕获的异常）都算方法的结束。在某条线程执行过程中的某个时间点上，只有目前正在执行的那个方法的栈帧是活动的。这个栈帧称为当前栈帧，这个栈帧对应的方法称为当前方法，定义这个方法">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/20200731162235.jpg">
+
+<link rel="canonical" href="https://mjava.top/java/jvm/java-jvm-stack-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>JVM运行时栈帧 | 灰色Code</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">灰色Code</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/jvm/java-jvm-stack-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM运行时栈帧
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-16 15:06:15 / 修改时间：15:06:47" itemprop="dateCreated datePublished" datetime="2020-09-16T15:06:15+08:00">2020-09-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在JVM中，每个线程都包含n个栈帧，每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p><p>栈帧的生命周期<strong>随着方法的创建而创建，随着方法的结束而销毁，无论方法是正常完成还是异常完成（抛出了在方法内未被捕获的异常）都算方法的结束。</strong></p><p>在某条线程执行过程中的某个时间点上，只有目前正在执行的那个方法的栈帧是活动的。这个栈帧称为<strong>当前栈帧</strong>，这个栈帧对应的方法称为<strong>当前方法</strong>，定义这个方法的类称为<strong>当前类</strong>。<strong>对局部变量表和操作数栈的各种操作，通常都指的是对当前栈帧的局部变量表和操作数栈所进行的操作。</strong></p><a id="more"></a>
+
+
+<blockquote>
+<p><strong>注意:</strong>栈帧是线程本地私有的数据，不可能在一个栈帧 之中引用另外一个线程的栈帧</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/20200731162235.jpg" alt></p>
+<h2 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h2><p><code>局部变量表（Local Variables Table）</code>是一组<strong>变量值</strong>的存储空间，用于存放<strong>方法参数</strong>和<strong>方法内部定义的局部变量</strong>。</p>
+<h3 id="存储方法"><a href="#存储方法" class="headerlink" title="存储方法"></a>存储方法</h3><p>局部变量表的容量以<code>变量槽（Variable Slot）</code>为最小单位，一般在虚拟机中，一个Slot占用<strong>32位</strong>存储空间(这不是固定的，虚拟机可以自行改变每个槽占用空间的大小,但一般都是32位)。</p>
+<p>Java虚拟机通过<strong>索引定位</strong>的方式使用局部变量表，索引值的范围是从<code>0</code>开始至局部变量表最大的变量槽数量。如果访问的是32位数据类型的变量，索引N就代表了使用第N个变量槽，如果访问的是64位数据类型的变量，则说明会同时使用第N和N+1两个变量槽。</p>
+<h4 id="eg"><a href="#eg" class="headerlink" title="eg:"></a>eg:</h4><p>在Java中，<code>long</code>在内存占64位，所以局部变量表<strong>用2个slot来存储</strong></p>
+<p><img src="http://cdn.mjava.top/blog/20200730225516.png" alt></p>
+<p>对于两个相邻的共同存放一个64位数据的两个变量槽，虚拟机<strong>不允许采用任何方式单独访问其中的某一个</strong>，《Java虚拟机规范》中明确要求了如果遇到进行这种操作的字节码序列，虚拟机就应该在类加载的校验阶段中抛出异常。</p>
+<h3 id="long和double的非原子性协定"><a href="#long和double的非原子性协定" class="headerlink" title="long和double的非原子性协定"></a>long和double的非原子性协定</h3><blockquote>
+<p>在Java内存模型中，对于64位的数据类型（long和double），在模型中特别定义了一条宽松的规定：<strong>允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为两次32位的操作来进行</strong>，即允许虚拟机实现自行选择是否要保证64位数据类型的load、store、read和write这四个操作的原子性，这就是所谓的<strong>“long和double的非原子性协定”（Non-Atomic Treatment of doubleand long Variables）</strong>。</p>
+</blockquote>
+<p>虽然有这个协定，<strong>但是</strong>，由于<code>局部变量表(Local Variable Table)</code>是建立在线程堆栈中的，属于<strong>线程私有的数据</strong>，无论读写两个连续的变量槽是否为原子操作，都<strong>不会引起数据竞争和线程安全问题</strong>。</p>
+<h3 id="初始值问题"><a href="#初始值问题" class="headerlink" title="初始值问题"></a>初始值问题</h3><p>我们已经知道<strong>类的字段变量</strong>有两次赋初始值的过程，一次在<strong>准备阶段</strong>，赋予系统初始值；另外一次在<strong>初始化阶段</strong>，赋予程序员定义的初始值。</p>
+<p>但<strong>局部变量就不一样</strong>了，如果一个局部变量定义了但<strong>没有赋初始值</strong>，那它是<strong>完全不能使用</strong>的。所以不要认为Java中任何情况下都存在诸如整型变量默认为0、布尔型变量默认为false等这样的默认值规则。</p>
+<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这个方法会报：</span></span><br><span class="line"><span class="comment">// Error:(12, 28) java: variable y might not have been initialized</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JVMTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> y;</span><br><span class="line">        <span class="keyword">int</span> z=<span class="number">3</span>;</span><br><span class="line">        System.out.println(y+z);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个会正常输出 3； 因为int的初始值为0</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JVMTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> y;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> z=<span class="number">3</span>;</span><br><span class="line">        System.out.println(y+z);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h2><p><code>操作数栈（Operand Stack）</code>也常被称为<code>操作栈</code>，它是一个后入先出（Last In First Out，LIFO）栈。同局部变量表一样，操作数栈的最大深度也在编译的时候被写入到Code属性的<code>max_stacks</code>数据项之中。操作数栈的每一个元素都可以是包括long和double在内的任意Java数据类型。32位数据类型所占的栈容量为1，64位数据类型所占的栈容量为2。Javac编译器的数据流分析工作保证了在方法执行的任何时候，操作数栈的深度都不会超过在<code>max_stacks</code>数据项中设定的最大值。</p>
+<h3 id="eg-1"><a href="#eg-1" class="headerlink" title="eg:"></a>eg:</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JVMTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> y=<span class="number">9223372036854775800L</span>;</span><br><span class="line">        <span class="keyword">int</span> z=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">long</span> x=y+z;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们用<code>javap -verbose JVMTest</code>来查看他的<code>class</code>文件的字节码指令</p>
+<p><img src="http://cdn.mjava.top/blog/20200730235131.png" alt></p>
+<p><strong>在操作栈中的流程大致为：</strong></p>
+<p><img src="http://cdn.mjava.top/blog/20200731105247.jpg" alt></p>
+<h2 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h2><p>每个栈帧都包含一个指向当前方法所在类型的<code>运行时常量池</code>的引用，持有这个引用是为了支持<code>方法调用</code>过程中的<code>动态连接（Dynamic Linking）</code>。在<code>Class</code>文件里，一个方法若要调用其他方法，或者访问成员变量，则需要通过<code>符号引用(symolic reference)</code>来表示，<code>动态链接</code>的作用就是将这些以<code>符号引用</code>所表示的方法转换为实际方法的直接引用。</p>
+<h3 id="什么是符号引用？"><a href="#什么是符号引用？" class="headerlink" title="什么是符号引用？"></a>什么是符号引用？</h3><p><img src="http://cdn.mjava.top/blog/20200731110742.png" alt></p>
+<p>通过查看字节码，上面的<code>#7</code>，<code>#8</code>，<code>#9</code>等等都是符号引用，他在class文件里只是个符号，就像你定义一个变量名称一样，变量名只是和<code>字符符号</code>，并不是真正的指向内存的地址指针。这些符号都指向<code>运行时常量池</code>的引用。</p>
+<h2 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h2><p>Java在调用方法时，只有两种返回方法，一种是<code>正常返回</code>，一种是<code>异常返回</code>。</p>
+<h3 id="正常返回"><a href="#正常返回" class="headerlink" title="正常返回"></a>正常返回</h3><p>正常返回指的就是在执行方法时，中间并没有异常抛出，或者已正确处理抛出的异常，这时就称当前<code>方法正常调用完成</code>，如果有返回值，就会给他调用者返回一个值，如果没有返回值(<code>void</code>)就正常返回。</p>
+<p>这种场景下，当前栈帧承担着恢复调用者状态的责任，<strong>包括恢复调用者的局部变量表和操作数栈，以及正确递增程序计数器，以跳过刚才执行的调用方法指令等。</strong>调用者的代码在被调用方法的返回值压入调用者栈帧的操作数栈后，会正常执行。</p>
+<h3 id="异常返回"><a href="#异常返回" class="headerlink" title="异常返回"></a>异常返回</h3><p>在调用一些方法时，一些异常没有被正确捕获，就会导致方法终止，此时称<code>方法异常调用完成</code>，那一定不会有方法返回值返回给其调用者。</p>
+<p>无论采用何种退出方式，在方法退出之后，都<strong>必须返回到最初方法被调用时的位置</strong>，程序才能继续执行，方法返回时可能需要在栈帧中保存一些信息，用来帮助恢复它的上层主调方法的执行状态。</p>
+<p>怎么理解这个<strong>必须返回到最初方法被调用时的位置</strong>呢？</p>
+<p>eg:</p>
+<p><img src="http://cdn.mjava.top/blog/20200731164803.png" alt></p>
+<p>上面异常是在<code>13行</code>发生的，但是它并没有停在<code>13行</code>，而是回到了最初调用它<code>第10行</code>的位置。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/java/jvm/java-class-load-2/" rel="next" title="JVM类加载过程">
+                  <i class="fa fa-chevron-left"></i> JVM类加载过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/java/java-base-data-pack/" rel="prev" title="Java包装类缓存机制">
+                  Java包装类缓存机制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#局部变量表"><span class="nav-number">1.</span> <span class="nav-text">局部变量表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储方法"><span class="nav-number">1.1.</span> <span class="nav-text">存储方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#eg"><span class="nav-number">1.1.1.</span> <span class="nav-text">eg:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long和double的非原子性协定"><span class="nav-number">1.2.</span> <span class="nav-text">long和double的非原子性协定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始值问题"><span class="nav-number">1.3.</span> <span class="nav-text">初始值问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#eg："><span class="nav-number">1.3.1.</span> <span class="nav-text">eg：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作数栈"><span class="nav-number">2.</span> <span class="nav-text">操作数栈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eg-1"><span class="nav-number">2.1.</span> <span class="nav-text">eg:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态链接"><span class="nav-number">3.</span> <span class="nav-text">动态链接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是符号引用？"><span class="nav-number">3.1.</span> <span class="nav-text">什么是符号引用？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法返回地址"><span class="nav-number">4.</span> <span class="nav-text">方法返回地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正常返回"><span class="nav-number">4.1.</span> <span class="nav-text">正常返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常返回"><span class="nav-number">4.2.</span> <span class="nav-text">异常返回</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="H&K"
+      src="http://cdn.mjava.top/blog/20200203213619.jpg">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">浅水是喧哗的，深水是沉默的</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GreyCode9" title="GitHub → https://github.com/GreyCode9" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  
+  <div class="powered-by"><a href="http://www.beian.miit.gov.cn" rel="noopener external nofollow noreferrer" target="_blank">赣ICP备17003482号 </a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    
+    灰色Code
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -106,9 +106,9 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
@@ -183,6 +183,734 @@
             
 
   <div class="posts-expand">
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/linux/linux-fastdfs-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/linux/linux-fastdfs-install/" class="post-title-link" itemprop="url">fastDFS安装使用教程</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-07 13:34:10 / 修改时间：15:29:32" itemprop="dateCreated datePublished" datetime="2020-05-07T13:34:10+08:00">2020-05-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="FastDFS简介"><a href="#FastDFS简介" class="headerlink" title="FastDFS简介"></a>FastDFS简介</h2><p>FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &lt; file_size &lt;500MB）为载体的在线服务。</p><p>FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/linux/linux-fastdfs-install/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/mysql/mysql-utf8mb4-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql/mysql-utf8mb4-error/" class="post-title-link" itemprop="url">插入emoji到mysql时提示了一个表里不存在的字段的错误</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-29 17:16:27 / 修改时间：17:18:36" itemprop="dateCreated datePublished" datetime="2020-04-29T17:16:27+08:00">2020-04-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h2><p>由于公司前端有需求，需要在<code>tiny_user_info</code>表的<code>nickname</code>这个字段里存入emoji表情，于是我熟练地将这个字段修改为<code>utf8mb4</code>，改好后测试插入一条带emoji数据。于是报了这个错误：</p><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: '\xF0\x9F\x98\x98' for column 'user_name' at row 14</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql/mysql-utf8mb4-error/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/algorithm/algorithm-avltree-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/algorithm/algorithm-avltree-01/" class="post-title-link" itemprop="url">【数据结构】手写平衡二叉树（AVL）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-01 15:56:00" itemprop="dateCreated datePublished" datetime="2020-02-01T15:56:00+08:00">2020-02-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-04 11:24:07" itemprop="dateModified" datetime="2020-02-04T11:24:07+08:00">2020-02-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="【数据结构】手写平衡二叉树（AVL）"><a href="#【数据结构】手写平衡二叉树（AVL）" class="headerlink" title="【数据结构】手写平衡二叉树（AVL）"></a>【数据结构】手写平衡二叉树（AVL）</h1><p><img src="http://cdn.mjava.top/blog/20200201165139.jpg" alt></p><blockquote>
+<p>积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬</p>
+<p>本文源代码：<a href="https://github.com/z573419235/studyDemo/blob/master/BaseJava/src/dataStructure/AVLTree.java" rel="noopener external nofollow noreferrer" target="_blank">手写AVL树</a></p>
+</blockquote><h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a href="https://baike.baidu.com/item/平衡二叉树/10421057" rel="noopener external nofollow noreferrer" target="_blank">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/algorithm/algorithm-avltree-01/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/recommend/recommend-tool-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/recommend/recommend-tool-1/" class="post-title-link" itemprop="url">【转】免费可商用，最值得收藏的10个插画素材网站</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-16 09:24:52 / 修改时间：09:32:59" itemprop="dateCreated datePublished" datetime="2020-01-16T09:24:52+08:00">2020-01-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Recommend/" itemprop="url" rel="index">
+                    <span itemprop="name">Recommend</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          现在插画风格的界面越来越多，网上提供的免费插图也越来越丰富。这些插图优点是表达的内容更丰富，包括：人物、商业、运动、自然、工作、幽默等等。也更适合产品类的宣传网站或者落地页。另外，矢量图的不失真在不同尺寸的显示效果上更胜一筹。花时间整理了当前全网那些优秀的10个免费插图网站，给做产品的人们节省点查找的时间，建议收藏以备后用。这些站点的素材都是免费下载可用的，而且可以免费商用。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/recommend/recommend-tool-1/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-arraydeque-source-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-arraydeque-source-1/" class="post-title-link" itemprop="url">【源码解析】你真的了解ArrayDeque嘛？</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-08 14:00:51" itemprop="dateCreated datePublished" datetime="2020-01-08T14:00:51+08:00">2020-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-09 16:14:16" itemprop="dateModified" datetime="2020-01-09T16:14:16+08:00">2020-01-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          LinkedList和ArrayDeque都是通过实现了Deque这个接口来获得队列和栈的功能。而Deque这个接口通过继承Queue这个接口来取得队列功能，然后在这个基础进行扩展，实现了双端队列，由此可以获得栈的功能。为了空间能得到充分利用，ArrayDeque使用了循环队列；还有LinkedList可以插入null值，而ArrayDeque是不能插入null的。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java/java-arraydeque-source-1/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-linkedlist-source-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-linkedlist-source-1/" class="post-title-link" itemprop="url">【源码解析】想了解LinkedList？看这篇文章就对了</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-05 00:21:43" itemprop="dateCreated datePublished" datetime="2020-01-05T00:21:43+08:00">2020-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-09 16:18:24" itemprop="dateModified" datetime="2020-01-09T16:18:24+08:00">2020-01-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          LinkedList由于实现了Deque这个接口，所以可以当栈和队列使用。不过一般要用栈或队列的时候推荐使用ArrayDeque,所以这里就不讲LinkedList的栈和队列功能了🌚。还是和上篇ArrayList一样，讲些常用的方法...
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java/java-linkedlist-source-1/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-arraylist-source-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-arraylist-source-1/" class="post-title-link" itemprop="url">【源码解析】扒开ArrayList的外衣</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-03 19:13:31 / 修改时间：19:24:15" itemprop="dateCreated datePublished" datetime="2020-01-03T19:13:31+08:00">2020-01-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。</p>
+</blockquote><h2 id="本文内容"><a href="#本文内容" class="headerlink" title="本文内容"></a>本文内容</h2><p>当然ArrayList里的方法不止这些，本文主要讲一些常用的方法</p><p><img src="http://cdn.mjava.top/blog/20200103101050.png" alt></p><h2 id="方法变量"><a href="#方法变量" class="headerlink" title="方法变量"></a>方法变量</h2><p><code>Arraylist</code>里的方法变量主要有以下几个</p><p><img src="http://cdn.mjava.top/blog/Selection_005.png" alt></p><h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><h3 id="有参构造"><a href="#有参构造" class="headerlink" title="有参构造"></a>有参构造</h3><h4 id="传入数组的大小"><a href="#传入数组的大小" class="headerlink" title="传入数组的大小"></a>传入数组的大小</h4><h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java/java-arraylist-source-1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-base-wei/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/java/java-base-wei/" class="post-title-link" itemprop="url">【图】用图片告诉你Java中的位运算</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-30 22:17:30" itemprop="dateCreated datePublished" datetime="2019-12-30T22:17:30+08:00">2019-12-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-31 15:33:55" itemprop="dateModified" datetime="2019-12-31T15:33:55+08:00">2019-12-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/20191230221924.jpg" alt></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​        虽然位运算在实际开发中并不常用,但是在各种算法中却常常见到它们的身影.因为是直接操作二进制的,所以机器执行起来就快很多,所以尽管实际业务中不常用,但如果你不想只做个码农,这个基础还是要掌握的;</p><p>讲位操作之前,就必须要知道<font color="orange">原码、反码、补码</font></p><blockquote>
+<p>其中正数的<font color="orange">原码=反码=补码</font></p>
+</blockquote><h2 id="原码、反码、补码"><a href="#原码、反码、补码" class="headerlink" title="原码、反码、补码"></a>原码、反码、补码</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java/java-base-wei/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-builder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/gof/gof-builder/" class="post-title-link" itemprop="url">设计模式之建造者模式【用好玩的故事讲清楚设计模式】</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-27 06:50:31 / 修改时间：06:52:41" itemprop="dateCreated datePublished" datetime="2019-12-27T06:50:31+08:00">2019-12-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://cdn.mjava.top/20191226220204.jpg" alt></p><blockquote>
+<p>积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬</p>
+<p>所有源代码都在这:<a href="https://github.com/z573419235/GofDemo" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/z573419235/GofDemo</a></p>
+<p>各位大佬记得点个星星哦</p>
+</blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>建造者模式用于实例化一个比较复杂的实体类,<font color="orange">当你实例化一个类时,它的构造参数比较多时,就可以用建造者模式来简化实例化过程</font>;前几篇工厂模式的文章我们说道买车,那只是简单的区工厂买车,我们不关系工厂是怎么造出来的.可是实际工厂造一辆车需要有方向盘、发动机、车架、轮胎等部件,而且不同品牌的车的部件都是不同的,<font color="orange">部件虽然不同,但是造车的方式基本都是差不多的步骤</font>,这时候就可以用建造者模式来造一辆车了;</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/gof/gof-builder/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
         
   
   
@@ -270,712 +998,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/mysql/mysql-update-driver-connector-8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/mysql/mysql-update-driver-connector-8/" class="post-title-link" itemprop="url">更新驱动到mysql-connector-java-8遇到的一些问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-25 17:07:12 / 修改时间：17:08:44" itemprop="dateCreated datePublished" datetime="2019-12-25T17:07:12+08:00">2019-12-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="更新驱动到mysql-connector-java-8遇到的一些问题"><a href="#更新驱动到mysql-connector-java-8遇到的一些问题" class="headerlink" title="更新驱动到mysql-connector-java-8遇到的一些问题"></a>更新驱动到mysql-connector-java-8遇到的一些问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="POM"><a href="#POM" class="headerlink" title="POM"></a>POM</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;8.0.16&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/mysql/mysql-update-driver-connector-8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/docker/docker-transfer-pit/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/docker/docker-transfer-pit/" class="post-title-link" itemprop="url">Docker迁移根目录导致mysql权限问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-20 15:04:16 / 修改时间：15:05:47" itemprop="dateCreated datePublished" datetime="2019-12-20T15:04:16+08:00">2019-12-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：</p><p>迁移根目录我看的是这个文章：<a href="https://www.cnblogs.com/insist-forever/p/11739207.html" rel="noopener external nofollow noreferrer" target="_blank">docker的存储目录迁移</a>,　不过迁移的时候我没有使用<font color="orange">rsync</font>这个命令，而是使用<font color="orange">cp -R</font>;</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/docker/docker-transfer-pit/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-taemplate-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/gof/gof-taemplate-method/" class="post-title-link" itemprop="url">设计模式系列-模板方法模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-20 00:04:28 / 修改时间：09:38:54" itemprop="dateCreated datePublished" datetime="2019-12-20T00:04:28+08:00">2019-12-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GOF/" itemprop="url" rel="index">
-                    <span itemprop="name">GOF</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/20191220000613.jpg" alt></p><blockquote>
-<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
-</blockquote><h2 id="文前常规发言"><a href="#文前常规发言" class="headerlink" title="文前常规发言"></a>文前常规发言</h2><p>　　模板方法的设计<font color="orange">符合迪米特法则</font>，也就是最少知道原则，他通过对一些重复方法的封装，减少类之间的耦合，让调用者也更省心，原来要调两三个方法才能实现的功能，现在调一个就可以了；就像我们伟大的祖国，现在也在推行这种模式呢．以前区办一些证明什么的，要跑三四个地方，还要保证这三四个地方都正常帮你办理，如果其中一个地方没办理，那么整个流程就都作废了．现在好了，提倡最多跑一次，只要去一个地方办<font color="orange">一次</font>手续就可以了，你只要知道这个地方能办好就行，其他的就不用烦心了；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/gof/gof-taemplate-method/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/algorithm/array-vs-linked/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/algorithm/array-vs-linked/" class="post-title-link" itemprop="url">恍然大悟，数组和链表的区别</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-18 13:50:52 / 修改时间：13:52:24" itemprop="dateCreated datePublished" datetime="2019-12-18T13:50:52+08:00">2019-12-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/20191218134901.jpg" alt></p><blockquote>
-<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
-</blockquote><h2 id="文前发言"><a href="#文前发言" class="headerlink" title="文前发言"></a>文前发言</h2><p>　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫<font color="orange">数组链表</font>结构，就是常说的<font color="orange">哈希表</font>，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；</p><p><img src="http://cdn.mjava.top/20191218104007.jpg" alt></p><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
-<p>数组是我们平时用的最多的数据结构，它的特点是<font color="orange">查询数据快，插入数据慢</font>，查询的时间复杂度是<font color="orange">O(1)</font>,插入的时间复杂度是<font color="orange">O(n)</font>.</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/algorithm/array-vs-linked/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-abstract-factory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/gof/gof-abstract-factory/" class="post-title-link" itemprop="url">设计模式系列-抽象工厂模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-16 21:17:23 / 修改时间：21:32:22" itemprop="dateCreated datePublished" datetime="2019-12-16T21:17:23+08:00">2019-12-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GOF/" itemprop="url" rel="index">
-                    <span itemprop="name">GOF</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/20191216212929.jpg" alt></p><blockquote>
-<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬</p>
-</blockquote><h2 id="突然开始的正文"><a href="#突然开始的正文" class="headerlink" title="突然开始的正文"></a>突然开始的正文</h2><p>紧接着上一章的<a href="https://mjava.top/gof/gof-factory-method">工厂方法模式</a>，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类<font color="orange">AllCarFactory</font>，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后<font color="orange">AllCarFactory</font>定义了一个生产摩托车的接口，这样这个接口下面的汽车厂就可以生产摩托车了．就在这时他们的生产模式也从<font color="orange">工厂方法模式</font>升级到了<font color="orange">抽象工厂模式</font>；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/gof/gof-abstract-factory/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-factory-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/gof/gof-factory-method/" class="post-title-link" itemprop="url">设计模式系列-工厂模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-15 17:25:00 / 修改时间：18:23:28" itemprop="dateCreated datePublished" datetime="2019-12-15T17:25:00+08:00">2019-12-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GOF/" itemprop="url" rel="index">
-                    <span itemprop="name">GOF</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/gof-factory-method.jpg" alt></p><blockquote>
-<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
-</blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂模式有一下三种</p><ul>
-<li>简单工厂模式</li>
-<li>工厂方法模式</li>
-<li>抽象工厂模式</li>
-</ul><p>其中简单工厂模式不在23中模式之中，更多的是一种编程习惯，而我们平常所说的工厂模式一般指的是工厂方法模式，抽象工厂在实际的业务开发中也用的比较少，因为它有时候违背了开闭原则．由于篇幅有限，抽象工厂本文就不讲了，以后单独讲；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/gof/gof-factory-method/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-oop-7-all/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/gof/gof-oop-7-all/" class="post-title-link" itemprop="url">OOP程序七大原则</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-15 10:45:04 / 修改时间：10:46:17" itemprop="dateCreated datePublished" datetime="2019-12-15T10:45:04+08:00">2019-12-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/GOF/" itemprop="url" rel="index">
-                    <span itemprop="name">GOF</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/autumn-4656877_1920.png" alt></p><h2 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h2><p>开闭原则相当于所有原则的祖先，主张对修改关闭，对拓展开放．</p><h2 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h2><p><font color="orange">当两个类有继承关系时，子类不能修改父类的方法和变量.  </font>里氏替换中的<font color="orange">替换</font>指的是：当有父类出现的地方，这个父类可以<font color="orange">替换</font>成子类，而且对程序没有影响，这就遵循了里氏替换原则；当替换成子类时对程序有影响，说明子类修改了父类的方法，就没有遵循里氏替换原则了；</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/gof/gof-oop-7-all/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-sonarqube/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/jenkins/build-jenkins-sonarqube/" class="post-title-link" itemprop="url">Jenkins教程-集成SonarQube</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-13 15:38:02 / 修改时间：16:43:15" itemprop="dateCreated datePublished" datetime="2019-12-13T15:38:02+08:00">2019-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
-                    <span itemprop="name">Jenkins</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="什么是SonarQube"><a href="#什么是SonarQube" class="headerlink" title="什么是SonarQube?"></a>什么是SonarQube?</h2><p>看看维基百科的说明：<br><img src="http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ" alt></p><h3 id="SonarQube与CI-CD架构图"><a href="#SonarQube与CI-CD架构图" class="headerlink" title="SonarQube与CI/CD架构图"></a>SonarQube与CI/CD架构图</h3><p><img src="http://cdn.mjava.top/FpResgoc3tny2jvGqaqudPwCwstj" alt="SonarQube与CI/CD架构图"></p><h2 id="Docker运行SonarQube"><a href="#Docker运行SonarQube" class="headerlink" title="Docker运行SonarQube"></a>Docker运行SonarQube</h2><p>简单了解之后，开始安装SonarQube.这里用Docker安装</p><blockquote>
-<p>注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jenkins/build-jenkins-sonarqube/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-8-stream-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
-      <meta itemprop="name" content="H&K">
-      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="灰色Code">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/java/java-8-stream-method/" class="post-title-link" itemprop="url">Java8 Stream方法大全</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-10 09:53:34 / 修改时间：09:56:45" itemprop="dateCreated datePublished" datetime="2019-12-10T09:53:34+08:00">2019-12-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://cdn.mjava.top/blog/java_8_stream.png" alt="Stream"></p>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1021,20 +1048,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
