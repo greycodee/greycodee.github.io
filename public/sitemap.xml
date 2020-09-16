@@ -240,27 +240,6 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/java/java-equals/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/java/java-isnull-four/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
-    
-    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
@@ -269,6 +248,13 @@
   
   <url>
     <loc>https://mjava.top/jenkins/build-jenkins-docker/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -289,7 +275,14 @@
   </url>
   
   <url>
-    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
+    <loc>https://mjava.top/java/java-isnull-four/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/java/java-equals/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     
@@ -297,6 +290,13 @@
   
   <url>
     <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
+    
+    <lastmod>2019-12-07T10:32:40.434Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
     
     <lastmod>2019-12-07T10:32:40.434Z</lastmod>
     

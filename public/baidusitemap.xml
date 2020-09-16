@@ -103,19 +103,13 @@
     <loc>https://mjava.top/docker/docker-mysql/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
-    <loc>https://mjava.top/java/java-equals/</loc>
-    <lastmod>2019-12-07</lastmod>
-  </url>  <url>
-    <loc>https://mjava.top/java/java-isnull-four/</loc>
-    <lastmod>2019-12-07</lastmod>
-  </url>  <url>
-    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
-    <lastmod>2019-12-07</lastmod>
-  </url>  <url>
     <loc>https://mjava.top/jenkins/build-jenkins-ci-cd/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/jenkins/build-jenkins-docker/</loc>
+    <lastmod>2019-12-07</lastmod>
+  </url>  <url>
+    <loc>https://mjava.top/jenkins/build-jenkins-mavne/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/jenkins/problem-jenkins-01/</loc>
@@ -124,10 +118,16 @@
     <loc>https://mjava.top/jenkins/problem-jenkins-02/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
-    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
+    <loc>https://mjava.top/java/java-isnull-four/</loc>
+    <lastmod>2019-12-07</lastmod>
+  </url>  <url>
+    <loc>https://mjava.top/java/java-equals/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/spring/spring-boot-resttemplate-example/</loc>
+    <lastmod>2019-12-07</lastmod>
+  </url>  <url>
+    <loc>https://mjava.top/rocketmq/rocketmq-cluster-build/</loc>
     <lastmod>2019-12-07</lastmod>
   </url>  <url>
     <loc>https://mjava.top/java/nacos-post-error/</loc>
