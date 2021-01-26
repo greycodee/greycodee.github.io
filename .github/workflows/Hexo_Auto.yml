@@ -38,6 +38,7 @@ jobs:
     - name: Deploy
       run: |
         rm -rf .deploy_git
-        git clone https://github.com/theme-next/hexo-theme-next themes/next
+        git submodule init themes/next
+        git submodule update
         hexo clean  
         hexo g -d
