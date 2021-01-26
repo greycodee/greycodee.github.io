@@ -29,6 +29,8 @@ jobs:
         echo https://${{ secrets.GIT_NAME }}:${{ secrets.TOKEN }}@github.com >> ~/.git-credentials
         cat ~/.git-credentials
         git config --global credential.helper store
+        git config --global user.email "zhengminghui99@gmail.com"
+        git config --global user.name "greycode9"
     - name: Install Hexo
       run: |
         npm install hexo-cli -g
