@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mjava.top/"/>
-  <updated>2021-01-26T09:49:03.574Z</updated>
+  <updated>2021-01-26T10:40:38.327Z</updated>
   <id>https://mjava.top/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>test111</title>
+    <link href="https://mjava.top/test111/"/>
+    <id>https://mjava.top/test111/</id>
+    <published>2021-01-26T10:40:38.000Z</published>
+    <updated>2021-01-26T10:40:38.327Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>测试文章</title>
+    <link href="https://mjava.top/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
+    <id>https://mjava.top/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</id>
+    <published>2021-01-26T10:35:37.000Z</published>
+    <updated>2021-01-26T10:35:37.100Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>使用GitHub Actions编译树莓派内核</title>
@@ -511,63 +541,6 @@
     
     
       <category term="JVM" scheme="https://mjava.top/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于SpringCloud搭建Spring-security-oauth认证服务器</title>
-    <link href="https://mjava.top/archive/web-security/spring-security-oauth-server-demo/"/>
-    <id>https://mjava.top/archive/web-security/spring-security-oauth-server-demo/</id>
-    <published>2020-05-19T12:25:06.000Z</published>
-    <updated>2021-01-26T09:49:03.570Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><p>这里搭建一个用OAuth2.0密码模式认证的服务器，token存入redis，client存入Mysql；</p><p>所以事先要准备好：</p><ul><li>Redis</li><li>Mysql</li></ul><p>并且Mysql执行<a href="https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql" rel="noopener" target="_blank">Spring-security-oauth初始化Sql</a>这个SQL，初始化Spring-security-oauth所需要的表。然后执行</p><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 插入client_id和client_secret都为sunline的客户端</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> </span><br><span class="line">oauth_client_details (client_id, client_secret, authorized_grant_types , autoapprove)</span><br><span class="line"><span class="keyword">values</span> </span><br><span class="line">(<span class="string">"sunline"</span>,<span class="string">"&#123;bcrypt&#125;$2a$10$G1CFd535SiyOtvi6ckbZWexQy.hW5x/I/fLBPiW/E4UmctCfKYbgG"</span>,<span class="string">"password"</span>,<span class="string">"true"</span>);</span><br></pre></td></tr></table></figure><blockquote><p>client_secret为<code>new BCryptPasswordEncoder().encode(&quot;sunline&quot;)</code>方法加密后，然后在加上<code>{bcrypt}</code></p></blockquote><h2 id="开始搭建"><a href="#开始搭建" class="headerlink" title="开始搭建"></a>开始搭建</h2><h3 id="导入pom依赖"><a href="#导入pom依赖" class="headerlink" title="导入pom依赖"></a>导入pom依赖</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--security-oauth--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-oauth2&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">    </span><br><span class="line">&lt;!--redis--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">    </span><br><span class="line">&lt;!--mysql--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;8.0.17&lt;/version&gt;</span><br><span class="line">    &lt;scope&gt;compile&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure><h3 id="配置application-properties"><a href="#配置application-properties" class="headerlink" title="配置application.properties"></a>配置application.properties</h3><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment">#datasource</span></span><br><span class="line"><span class="meta">spring.datasource.url</span>=<span class="string">jdbc:mysql://localhost:3307/grey_code?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;serverTimezone=Asia/Shanghai</span></span><br><span class="line"><span class="meta">spring.datasource.username</span>=<span class="string">zmh</span></span><br><span class="line"><span class="meta">spring.datasource.password</span>=<span class="string">zmh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#redis</span></span><br><span class="line"><span class="meta">spring.redis.host</span>=<span class="string">127.0.0.1</span></span><br><span class="line"><span class="meta">spring.redis.port</span>=<span class="string">6379</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">9991</span></span><br><span class="line"><span class="meta">server.servlet.context-path</span>=<span class="string">/oauthServer</span></span><br></pre></td></tr></table></figure><h3 id="创建用户详情服务类"><a href="#创建用户详情服务类" class="headerlink" title="创建用户详情服务类"></a>创建用户详情服务类</h3><p><img src="http://cdn.mjava.top/blog/20200519194059.png" alt></p><h4 id="创建权限控制类"><a href="#创建权限控制类" class="headerlink" title="创建权限控制类"></a>创建权限控制类</h4><p><img src="http://cdn.mjava.top/blog/20200519194128.png" alt></p><h3 id="创建认证授权类"><a href="#创建认证授权类" class="headerlink" title="创建认证授权类"></a>创建认证授权类</h3><p><img src="http://cdn.mjava.top/blog/20200519194207.png" alt></p><h2 id="获取令牌"><a href="#获取令牌" class="headerlink" title="获取令牌"></a>获取令牌</h2><p>访问:<code>/oauth/token</code>就可以获取到令牌</p><p><img src="http://cdn.mjava.top/blog/20200519194446.png" alt></p><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"accessToken"</span>: <span class="string">"e28f9a99-e60d-4693-b6c3-73e06a1d14f5ZMH10086"</span>,</span><br><span class="line">    <span class="attr">"expiration"</span>: <span class="string">"2020-05-19T21:11:39.883+0000"</span>,</span><br><span class="line">    <span class="attr">"scope"</span>: [</span><br><span class="line">        <span class="string">"all"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"tokenType"</span>: <span class="string">"bearer"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h3><p>带上获取到的令牌</p><p><img src="http://cdn.mjava.top/blog/20200519194803.png" alt></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;准备阶段&quot;&gt;&lt;a href=&quot;#准备阶段&quot; class=&quot;headerlink&quot; title=&quot;准备阶段&quot;&gt;&lt;/a&gt;准备阶段&lt;/h2&gt;&lt;p&gt;这里搭建一个用OAuth2.0密码模式认证的服务器，token存入redis，client存入Mysql；&lt;/p&gt;
-&lt;p&gt;所
-      
-    
-    </summary>
-    
-    
-      <category term="WebSecurity" scheme="https://mjava.top/categories/WebSecurity/"/>
-    
-    
-      <category term="OAuth" scheme="https://mjava.top/tags/OAuth/"/>
-    
-      <category term="spring-security" scheme="https://mjava.top/tags/spring-security/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSO单点登录和CAS框架</title>
-    <link href="https://mjava.top/archive/web-security/sso-and-cas/"/>
-    <id>https://mjava.top/archive/web-security/sso-and-cas/</id>
-    <published>2020-05-14T11:27:14.000Z</published>
-    <updated>2021-01-26T09:49:03.570Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="SSO单点登录"><a href="#SSO单点登录" class="headerlink" title="SSO单点登录"></a>SSO单点登录</h2><p><strong>单点登录</strong>（英语：Single sign-on，缩写为 SSO），又译为<strong>单一签入</strong>，一种对于许多相互关连，但是又是各自独立的软件系统，提供<a href="https://zh.wikipedia.org/wiki/存取控制" rel="noopener" target="_blank">访问控制</a>的属性。当拥有这项属性时，当用户<a href="https://zh.wikipedia.org/wiki/登入" rel="noopener" target="_blank">登录</a>时，就可以获取所有系统的访问权限，不用对每个单一系统都逐一登录。这项功能通常是以<a href="https://zh.wikipedia.org/wiki/轻型目录访问协议" rel="noopener" target="_blank">轻型目录访问协议</a>（LDAP）来实现，在服务器上会将用户信息存储到LDAP数据库中。相同的，<strong>单一退出</strong>（single sign-off）就是指，只需要单一的退出动作，就可以结束对于多个系统的访问权限。</p><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>使用单点登录的好处包括：</p><ul><li>降低访问第三方网站的风险（不存储用户密码，或在外部管理）。</li><li>减少因不同的用户名和密码组合而带来的<a href="https://zh.wikipedia.org/w/index.php?title=密碼疲勞&action=edit&redlink=1" rel="noopener" target="_blank">密码疲劳</a>。</li><li>减少为相同的身份重新输入密码所花费的时间。</li><li>因减少与密码相关的调用IT<a href="https://zh.wikipedia.org/wiki/服务台" rel="noopener" target="_blank">服务台</a>的次数而降低IT成本。<a href="https://zh.wikipedia.org/wiki/單一登入#cite_note-1" rel="noopener" target="_blank">[1]</a></li></ul><p>SSO为所有其它应用程序和系统，以集中的<a href="https://zh.wikipedia.org/w/index.php?title=验证服务器&action=edit&redlink=1" rel="noopener" target="_blank">验证服务器</a>提供身份验证，并结合技术以确保用户不必频繁输入密码。</p><h2 id="CAS框架"><a href="#CAS框架" class="headerlink" title="CAS框架"></a>CAS框架</h2><p>CAS 协议基于在<strong>客户端</strong>Web浏览器、Web<strong>应用</strong>和<strong>CAS服务器</strong>之间的票据验证。当客户端访问访问应用程序，请求身份验证时，应用程序重定向到CAS。CAS验证客户端是否被授权，通常通过在数据库对用户名和密码进行检查。如果身份验证成功，CAS一次性在客户端以Cookie形式发放TGT票据，在其有效期CAS将一直信任用户，同时将客户端自动返回到应用程序，并向应用传递身份验证票（Service ticket）。然后，应用程序通过安全连接连接CAS，并提供自己的服务标识和验证票。之后CAS给出了关于特定用户是否已成功通过身份验证的应用程序授信信息。</p><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><ul><li><p>CAS是由<a href="https://zh.wikipedia.org/wiki/耶鲁大学" rel="noopener" target="_blank">耶鲁大学</a><a href="https://zh.wikipedia.org/wiki/集中式认证服务#cite_note-1" rel="noopener" target="_blank">[1]</a>的Shawn Bayern创始的，后来由耶鲁大学的Drew Mazurek维护。CAS1.0实现了单点登录。 CAS2.0引入了多级代理认证（Multi-tier proxy authentication）。CAS其他几个版本已经有了新的功能。</p></li><li><p>2004年12月，CAS成为<a href="https://zh.wikipedia.org/w/index.php?title=Jasig&action=edit&redlink=1" rel="noopener" target="_blank">Jasig</a><a href="https://zh.wikipedia.org/wiki/集中式认证服务#cite_note-2" rel="noopener" target="_blank">[2]</a>的一个项目，2008年该组织负责CAS的维护和发展。CAS原名“耶鲁大学CAS”，此后被称为“Jasig CAS”。</p></li><li><p>2005年5月，CAS协议版本2发布，引入代理和服务验证。</p></li><li><p>2006年12月，<a href="https://zh.wikipedia.org/w/index.php?title=安德鲁·W·梅隆基金会&action=edit&redlink=1" rel="noopener" target="_blank">安德鲁·W·梅隆基金会</a>授予耶鲁大学第一届梅隆技术协作奖，颁发50000美元的奖金对耶鲁大学开发CAS进行奖励。<a href="https://zh.wikipedia.org/wiki/集中式认证服务#cite_note-3" rel="noopener" target="_blank">[3]</a>颁奖之时，CAS在“数以百计的大学校园”中使用。</p></li><li><p>2012年12月，JASIG与Sakai基金合并，CAS改名为Apereo CAS。</p></li><li><p>2016年11月，基于Spring Boot的CAS软件版本5发布。</p></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;SSO单点登录&quot;&gt;&lt;a href=&quot;#SSO单点登录&quot; class=&quot;headerlink&quot; title=&quot;SSO单点登录&quot;&gt;&lt;/a&gt;SSO单点登录&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;单点登录&lt;/strong&gt;（英语：Single sign-on，缩写为 SSO），又
-      
-    
-    </summary>
-    
-    
-      <category term="WebSecurity" scheme="https://mjava.top/categories/WebSecurity/"/>
-    
-    
-      <category term="SSO" scheme="https://mjava.top/tags/SSO/"/>
-    
-      <category term="CAS框架" scheme="https://mjava.top/tags/CAS%E6%A1%86%E6%9E%B6/"/>
     
   </entry>
   
