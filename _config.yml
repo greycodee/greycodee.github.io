@@ -1,21 +1,22 @@
-# Hexo Configuration
-## Docs: https://hexo.io/docs/configuration.html
-## Source: https://github.com/hexojs/hexo/
+# Hexo Configuration11
+# Docs: https://hexo.io/docs/configuration.html
+# Source: https://github.com/hexojs/hexo/
 
 # Site
-title: HKBlog 
+title: 灰色Code 
 subtitle: 
-description: 
-keywords: 技术,心得,总结
-author: HK
+description: 浅水是喧哗的，深水是沉默的 
+keywords: Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue
+author: H&K
 language: zh-CN
 timezone:
 
 # URL
-## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'1
 url: https://mjava.top
 root: /
-permalink: :year/:month/:day/:title/
+#permalink: :year/:month/:day/:title/
+permalink: :title/
 permalink_defaults:
 
 # Directory
@@ -35,17 +36,17 @@ titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
-post_asset_folder: true 
+post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: false 
-  line_number: true
+  enable: true 
+  line_number: false
   auto_detect: false
   tab_replace:
 #自动根据文章路径分类
 auto_category:
-  enable: true
+  enable: false
   depth: 
 prism_plugin:
   mode: 'preprocess'    # realtime/preprocess
@@ -82,21 +83,21 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-matery 
+theme: next 
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: sftp
-  host: **** 
-  user: ****
-  pass: **** 
-  remotePath: /var/www/html/blog
-  port: 22
-  agent: $SSH_AUTH_SOCK
-  #type: git
-  #repository: git@github.com:z573419235/hk.github.io.git
-  #branch: master
+        #type: sftp
+ #host: mjava.top 
+ #user: root
+ #pass: huihui997. 
+ #remotePath: /opt/nginx/html
+ #port: 22
+ #agent: $SSH_AUTH_SOCK
+ type: git
+ repository: git@github.com:GreyCode9/hk.github.io.git
+ branch: master
 
 #search
 search:
@@ -107,3 +108,10 @@ sitemap:
   path: sitemap.xml
 baidusitemap:
   path: baidusitemap.xml
+
+# math:
+#   engine: 'mathjax' # or 'katex'
+#   mathjax:
+#     src: custom_mathjax_source
+#     config:
+#       # MathJax config
