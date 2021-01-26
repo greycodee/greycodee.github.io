@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬 所有源代码都在这:https://github.com/z573419235/GofDemo 各位大佬记得点个星星哦 前言​        前几天生病了,每天头昏脑胀的,诶,生病的时候才知道身体健康的重要性,以后还是要加强锻炼,身体是革命的本钱;">
+<meta name="keywords" content="设计模式,原型模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个故事一个模式-原型模式">
+<meta property="og:url" content="https://mjava.top/gof/gof-prototype/index.html">
+<meta property="og:site_name" content="灰色Code">
+<meta property="og:description" content="积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬 所有源代码都在这:https://github.com/z573419235/GofDemo 各位大佬记得点个星星哦 前言​        前几天生病了,每天头昏脑胀的,诶,生病的时候才知道身体健康的重要性,以后还是要加强锻炼,身体是革命的本钱;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/20191226084321.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/20191225222050.gif">
+<meta property="og:image" content="http://cdn.mjava.top/20191225222314.gif">
+<meta property="og:image" content="http://cdn.mjava.top/20191225220944.png">
+<meta property="og:image" content="http://cdn.mjava.top/20191225222402.gif">
+<meta property="og:updated_time" content="2019-12-26T00:44:14.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个故事一个模式-原型模式">
+<meta name="twitter:description" content="积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬 所有源代码都在这:https://github.com/z573419235/GofDemo 各位大佬记得点个星星哦 前言​        前几天生病了,每天头昏脑胀的,诶,生病的时候才知道身体健康的重要性,以后还是要加强锻炼,身体是革命的本钱;">
+<meta name="twitter:image" content="http://cdn.mjava.top/20191226084321.jpg">
+
+<link rel="canonical" href="https://mjava.top/gof/gof-prototype/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>一个故事一个模式-原型模式 | 灰色Code</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">灰色Code</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/gof/gof-prototype/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一个故事一个模式-原型模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-25 23:34:48" itemprop="dateCreated datePublished" datetime="2019-12-25T23:34:48+08:00">2019-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-26 08:44:14" itemprop="dateModified" datetime="2019-12-26T08:44:14+08:00">2019-12-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GOF/" itemprop="url" rel="index">
+                    <span itemprop="name">GOF</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://cdn.mjava.top/20191226084321.jpg" alt></p><blockquote>
+<p>积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬</p>
+<p>所有源代码都在这:<a href="https://github.com/z573419235/GofDemo" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/z573419235/GofDemo</a></p>
+<p>各位大佬记得点个星星哦</p>
+</blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​        前几天生病了,每天头昏脑胀的,诶,生病的时候才知道身体健康的重要性,以后还是要加强锻炼,身体是革命的本钱;</p><a id="more"></a>
+
+
+<p>​        隔了差不多有五六天没写日志了,罪过罪过;好了,今天要说的是原型模式,原型模式在<code>Java</code>中核心秘密就是<code>clone</code>这个方法,通过重新<code>Object</code>中的<code>clone</code>方法.来达到原型模式;而要重新<code>clone</code>方法就必须要实现<code>Cloneable</code>这个接口,不实现这个接口的话就会报<code>java.lang.CloneNotSupportedException</code>异常;</p>
+<h2 id="我是鸣人"><a href="#我是鸣人" class="headerlink" title="我是鸣人"></a>我是鸣人</h2><p>​        鸣人最喜欢的就是吃拉面,就算是上课的时候也是心心念念的想着一乐大叔的拉面</p>
+<p><img src="http://cdn.mjava.top/20191225222050.gif" alt></p>
+<p>先来看看鸣人的原型实体类:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zheng</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 我是鸣人实体类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Naruto</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 姓名</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">private</span> String name=<span class="string">"鸣人"</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 年龄</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age=<span class="number">13</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 任务</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">private</span> String task;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *爱好</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;String&gt; hobby=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造方法</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Naruto</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.hobby.add(<span class="string">"吃拉面"</span>);</span><br><span class="line">        <span class="keyword">this</span>.hobby.add(<span class="string">"泡温泉"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写Object类的clone方法</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Naruto <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Naruto naruto=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            naruto=(Naruto)<span class="keyword">super</span>.clone();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> naruto;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Naruto&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age='"</span> + age + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", task='"</span> + task + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", hobby="</span> + hobby +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>为了代码整洁,我安装了lombok插件,所以不用写get/set方法,直接加个<code>@Data</code>注解就可以了;</p>
+</blockquote>
+<p>一天,鸣人上着伊鲁卡老师的课,可是心里还是念念不忘一乐大叔的拉面,想着前几天刚学了影分身之术,想着用分身术逃出去吃拉面.于是他就有变了一个分身留着这上课,自己却跑去吃拉面了;</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 原型模式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zheng</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//我是鸣人本人</span></span><br><span class="line">        Naruto naruto=<span class="keyword">new</span> Naruto();</span><br><span class="line">        <span class="comment">//我是影分身</span></span><br><span class="line">        Naruto narutoYin=naruto.clone();</span><br><span class="line"></span><br><span class="line">        narutoYin.setTask(<span class="string">"上课"</span>);</span><br><span class="line">        naruto.setTask(<span class="string">"吃拉面"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"鸣人本人:"</span>+naruto.toString());</span><br><span class="line">        System.out.println(<span class="string">"影分身:"</span>+narutoYin.toString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//控制台输出</span></span><br><span class="line">鸣人本人:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'吃拉面'</span>, hobby=[吃拉面, 泡温泉]&#125;</span><br><span class="line">影分身:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'上课'</span>, hobby=[吃拉面, 泡温泉]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到,鸣人本人的任务是去<font color="orange">吃拉面</font>,他的影分身的任务是留着教室<font color="orange">上课</font>;当然鸣人可以通过他本人创建无数个影分身,同时执行多个任务;这就是<font color="orange">原型模式</font>;</p>
+<p><img src="http://cdn.mjava.top/20191225222314.gif" alt></p>
+<h2 id="浅拷贝和深拷贝"><a href="#浅拷贝和深拷贝" class="headerlink" title="浅拷贝和深拷贝"></a>浅拷贝和深拷贝</h2><p>原型模式就是通过一个原型clone出多个和原型一样的类,但是拷贝也分<font color="orange">浅拷贝</font>和<font color="orange">深拷贝</font>;</p>
+<h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><blockquote>
+<p>浅拷贝有多浅,浅到就相当于没有给你拷贝,他就是让你<font color="orange">和原型共用一个空间,没有给你分配新的内存</font>;</p>
+</blockquote>
+<p>比如上面的鸣人本人有爱好,但是隐分身一般是没有爱好的,所以创建隐分身要吧爱好给清除调:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 原型模式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zheng</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//我是鸣人本人</span></span><br><span class="line">        Naruto naruto=<span class="keyword">new</span> Naruto();</span><br><span class="line">        <span class="comment">//我是影分身</span></span><br><span class="line">        Naruto narutoYin=naruto.clone();</span><br><span class="line"></span><br><span class="line">        narutoYin.setTask(<span class="string">"上课"</span>);</span><br><span class="line">        <span class="comment">//影分身不配有爱好</span></span><br><span class="line">        narutoYin.getHobby().clear();</span><br><span class="line">        naruto.setTask(<span class="string">"吃拉面"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"鸣人本人:"</span>+naruto.toString());</span><br><span class="line">        System.out.println(<span class="string">"影分身:"</span>+narutoYin.toString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//控制台输出</span></span><br><span class="line">鸣人本人:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'吃拉面'</span>, hobby=[]&#125;</span><br><span class="line">影分身:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'上课'</span>, hobby=[]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>WTF,竟然把本人的爱好也清除调了,那还去吃啥拉面啊,算了算了,安安心心上课吧,诶;叫你上影分身课是时候不认真,失败了吧!!!</p>
+<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><blockquote>
+<p>深拷贝就是在<code>clone</code>方法里除了克隆类之外,还要克隆引用对象,这样才会重新给引用对象<font color="orange">分配新的内存空间</font></p>
+</blockquote>
+<p>进过上次的教训,鸣人苦练影分身之术,终于学得核心所在,看看他新的影分身技能吧:</p>
+<p><img src="http://cdn.mjava.top/20191225220944.png" alt></p>
+<p>在变一个看看:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 原型模式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zheng</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//我是鸣人本人</span></span><br><span class="line">        Naruto naruto=<span class="keyword">new</span> Naruto();</span><br><span class="line">        <span class="comment">//我是影分身</span></span><br><span class="line">        Naruto narutoYin=naruto.clone();</span><br><span class="line"></span><br><span class="line">        narutoYin.setTask(<span class="string">"上课"</span>);</span><br><span class="line">        <span class="comment">//影分身不配有爱好</span></span><br><span class="line">        narutoYin.getHobby().clear();</span><br><span class="line">        naruto.setTask(<span class="string">"吃拉面"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"鸣人本人:"</span>+naruto.toString());</span><br><span class="line">        System.out.println(<span class="string">"影分身:"</span>+narutoYin.toString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//控制台输出</span></span><br><span class="line">鸣人本人:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'吃拉面'</span>, hobby=[吃拉面, 泡温泉]&#125;</span><br><span class="line">影分身:Naruto&#123;name=<span class="string">'鸣人'</span>, age=<span class="string">'13'</span>, task=<span class="string">'上课'</span>, hobby=[]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>哈哈,成功了,这下可以安安心心的区吃拉面了吧;</p>
+<p><img src="http://cdn.mjava.top/20191225222402.gif" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        引用设计模式之禅的一句话:内部的数组和引用对象才不拷贝，其他的原始类型比如<code>int</code>、<code>long</code>、<code>char</code>等都会被拷贝，但是对于<code>String</code>类型，<code>Java</code>就希望你把它认为是基本类型，它是没有clone方法的，处理机制也比较特殊，通过字符串池（stringpool）在需要的时候才在内存中创建新的字符串，在使用的时候就把<code>String</code>当做基本类使用即可。注意:<font color="orange">使用clone方法，在类的成员变量上就不要增加final关键字,否则当你重新设置这个成员变量的值时是不能设置的,因为final的不可变的,只能引用原来的值</font></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+              <a href="/tags/原型模式/" rel="tag"># 原型模式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/mysql/mysql-update-driver-connector-8/" rel="next" title="更新驱动到mysql-connector-java-8遇到的一些问题">
+                  <i class="fa fa-chevron-left"></i> 更新驱动到mysql-connector-java-8遇到的一些问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/gof/gof-builder/" rel="prev" title="设计模式之建造者模式【用好玩的故事讲清楚设计模式】">
+                  设计模式之建造者模式【用好玩的故事讲清楚设计模式】 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我是鸣人"><span class="nav-number">2.</span> <span class="nav-text">我是鸣人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浅拷贝和深拷贝"><span class="nav-number">3.</span> <span class="nav-text">浅拷贝和深拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝"><span class="nav-number">3.1.</span> <span class="nav-text">浅拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">3.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="H&K"
+      src="http://cdn.mjava.top/blog/20200203213619.jpg">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">浅水是喧哗的，深水是沉默的</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GreyCode9" title="GitHub → https://github.com/GreyCode9" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  
+  <div class="powered-by"><a href="http://www.beian.miit.gov.cn" rel="noopener external nofollow noreferrer" target="_blank">赣ICP备17003482号 </a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    
+    灰色Code
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

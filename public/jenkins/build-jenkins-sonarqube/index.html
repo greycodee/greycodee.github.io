@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="什么是SonarQube?看看维基百科的说明：SonarQube与CI/CD架构图Docker运行SonarQube简单了解之后，开始安装SonarQube.这里用Docker安装 注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL">
+<meta name="keywords" content="Docker,Jenkins,SonarQube">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins教程-集成SonarQube">
+<meta property="og:url" content="https://mjava.top/jenkins/build-jenkins-sonarqube/index.html">
+<meta property="og:site_name" content="灰色Code">
+<meta property="og:description" content="什么是SonarQube?看看维基百科的说明：SonarQube与CI/CD架构图Docker运行SonarQube简单了解之后，开始安装SonarQube.这里用Docker安装 注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ">
+<meta property="og:image" content="http://cdn.mjava.top/FpResgoc3tny2jvGqaqudPwCwstj">
+<meta property="og:image" content="http://cdn.mjava.top/Fs08WpcVDcL3n32MxoCNPDMtu1r5">
+<meta property="og:image" content="http://cdn.mjava.top/FpFSYEgJfsJIwgNMA6tHHZtdAtpV">
+<meta property="og:image" content="http://cdn.mjava.top/FhTOSglZYOrP5poo_mmR3SGoobsD">
+<meta property="og:image" content="http://cdn.mjava.top/FrKo5EjJ9-78uYbDjBpiuVkeu-_5">
+<meta property="og:image" content="http://cdn.mjava.top/FpevTpJePMDg9-HSoQoSOCNORHL8">
+<meta property="og:image" content="http://cdn.mjava.top/Fpgv2yqskGjp37mfoxHC6MGtIAPt">
+<meta property="og:image" content="http://cdn.mjava.top/FsSrQCDF5O9x4sufLZkFRz40toHI">
+<meta property="og:image" content="http://cdn.mjava.top/FrM7HmTx_APStJMI0OHlMQO6WL3W">
+<meta property="og:image" content="http://cdn.mjava.top/FgZ021lPaTWzgOPsG7veK1cn7lIB">
+<meta property="og:image" content="http://cdn.mjava.top/FiFA65-xUZCh62Y5HfIgxQzvMx7D">
+<meta property="og:image" content="http://cdn.mjava.top/FnTRL4pSwrKk5Xwbzobo89VKHf5m">
+<meta property="og:image" content="http://cdn.mjava.top/FgbCXvUiteJ9iGCCYC6qbInX0VSX">
+<meta property="og:image" content="http://cdn.mjava.top/FoijfnBHiJAZ7lA7YqmdQb-bEqUF">
+<meta property="og:image" content="http://cdn.mjava.top/FhXgRD7rBp5RBc2D6uBmH5mIBNKJ">
+<meta property="og:image" content="http://cdn.mjava.top/FkPydWtLuuliKAq1hc8Ex45nnTlu">
+<meta property="og:updated_time" content="2019-12-13T08:43:15.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins教程-集成SonarQube">
+<meta name="twitter:description" content="什么是SonarQube?看看维基百科的说明：SonarQube与CI/CD架构图Docker运行SonarQube简单了解之后，开始安装SonarQube.这里用Docker安装 注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL">
+<meta name="twitter:image" content="http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ">
+
+<link rel="canonical" href="https://mjava.top/jenkins/build-jenkins-sonarqube/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Jenkins教程-集成SonarQube | 灰色Code</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">灰色Code</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/jenkins/build-jenkins-sonarqube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jenkins教程-集成SonarQube
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-13 15:38:02 / 修改时间：16:43:15" itemprop="dateCreated datePublished" datetime="2019-12-13T15:38:02+08:00">2019-12-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Jenkins/" itemprop="url" rel="index">
+                    <span itemprop="name">Jenkins</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是SonarQube"><a href="#什么是SonarQube" class="headerlink" title="什么是SonarQube?"></a>什么是SonarQube?</h2><p>看看维基百科的说明：<br><img src="http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ" alt></p><h3 id="SonarQube与CI-CD架构图"><a href="#SonarQube与CI-CD架构图" class="headerlink" title="SonarQube与CI/CD架构图"></a>SonarQube与CI/CD架构图</h3><p><img src="http://cdn.mjava.top/FpResgoc3tny2jvGqaqudPwCwstj" alt="SonarQube与CI/CD架构图"></p><h2 id="Docker运行SonarQube"><a href="#Docker运行SonarQube" class="headerlink" title="Docker运行SonarQube"></a>Docker运行SonarQube</h2><p>简单了解之后，开始安装SonarQube.这里用Docker安装</p><blockquote>
+<p>注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL</p>
+</blockquote><a id="more"></a>
+
+
+
+<ul>
+<li>SonarQube 6.7.7</li>
+<li>Docker-CE 19.03.1</li>
+<li>Mysql 5.7</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>直接运行这个docker命令来安装，网上其他的教程有什么挂载文件什么的，我试了都会安装失败，原因还是因为权限原因，因为SonarQube不是以root用户运行的，导致没权限读写挂载出来的文件夹．</p>
+<blockquote>
+<p>注意：创建容器前一定要先保证你连的容器有对应的数据库</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d --name sonarqube -p 9099:9000 -p 9092:9092 --link=dev_mysql:mysql -e SONARQUBE_JDBC_USERNAME=app -e SONARQUBE_JDBC_PASSWORD=app -e SONARQUBE_JDBC_URL="jdbc:mysql://mysql:3306/sonar?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance&amp;useSSL=false" --restart=always sonarqube:6.7.7-community</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>–link=dev_mysql:mysql     这个命令我链接到了我的mysql容器，dev_mysql是容器的名字，mysql是在SonarQube容器里的别名，所以链接数据库时直接用mysql这个别名就可了．</p>
+</li>
+<li><p>SONARQUBE_JDBC_USERNAME ：数据库的账户</p>
+</li>
+<li><p>SONARQUBE_JDBC_PASSWORD ：数据库密码</p>
+</li>
+</ul>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><p>安装好后直接访问<font color="orange">9099</font>端口，登录的账户和密码默认都是<font color="orange">admin</font>．首页就是这个样子的．</p>
+<p><img src="http://cdn.mjava.top/Fs08WpcVDcL3n32MxoCNPDMtu1r5" alt></p>
+<h2 id="Jenkins集成SonarQube"><a href="#Jenkins集成SonarQube" class="headerlink" title="Jenkins集成SonarQube"></a>Jenkins集成SonarQube</h2><p>Jenkins和SonarQube都是运行在Docker容器里的</p>
+<h3 id="下载和安装插件"><a href="#下载和安装插件" class="headerlink" title="下载和安装插件"></a>下载和安装插件</h3><p>直接下载最新版的，然后导入，导入的方法可以看<a href="https://mjava.top/jenkins/problem-jenkins-01/">插件导入方法</a></p>
+<ul>
+<li>插件下载地址：<a href="https://updates.jenkins.io/download/plugins/sonar/" rel="noopener external nofollow noreferrer" target="_blank">https://updates.jenkins.io/download/plugins/sonar/</a></li>
+</ul>
+<h3 id="SonarQube生成Token"><a href="#SonarQube生成Token" class="headerlink" title="SonarQube生成Token"></a>SonarQube生成Token</h3><p>进入SonarQube管理界面</p>
+<p>Administration-&gt;Security-&gt;Users</p>
+<p><img src="http://cdn.mjava.top/FpFSYEgJfsJIwgNMA6tHHZtdAtpV" alt></p>
+<p>然后随便输入一个名字，点击生成，记下Token</p>
+<p><img src="http://cdn.mjava.top/FhTOSglZYOrP5poo_mmR3SGoobsD" alt></p>
+<h3 id="添加全局凭证"><a href="#添加全局凭证" class="headerlink" title="添加全局凭证"></a>添加全局凭证</h3><p>类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token</p>
+<p><img src="http://cdn.mjava.top/FrKo5EjJ9-78uYbDjBpiuVkeu-_5" alt></p>
+<h3 id="设置SonarQube-servers"><a href="#设置SonarQube-servers" class="headerlink" title="设置SonarQube servers"></a>设置SonarQube servers</h3><p>进入　系统管理-&gt;系统设置-&gt;SonarQube servers　　　　<font color="orange">设置好后点保存</font></p>
+<blockquote>
+<p>因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/FpevTpJePMDg9-HSoQoSOCNORHL8" alt></p>
+<h3 id="安装SonarQube-Scanner"><a href="#安装SonarQube-Scanner" class="headerlink" title="安装SonarQube Scanner"></a>安装SonarQube Scanner</h3><h4 id="下载压缩包"><a href="#下载压缩包" class="headerlink" title="下载压缩包"></a>下载压缩包</h4><ul>
+<li>下载SonarQube Scanner压缩包：<a href="https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip" rel="noopener external nofollow noreferrer" target="_blank">SonarQube Scanner</a></li>
+</ul>
+<h4 id="解压到Jenkins挂载出来的目录里"><a href="#解压到Jenkins挂载出来的目录里" class="headerlink" title="解压到Jenkins挂载出来的目录里"></a>解压到Jenkins挂载出来的目录里</h4><p>只有解压到挂载出来的Jenkins的目录里，Docker容器安装的Jenkins才能读取到,<font color="orange"><strong>我这里是宿主机的/opt/jenkins挂载到了Jenkins容器里的/var/jenkins_home目录上，所以我只要解压到宿主机的/opt/jenkins目录中就可以了</strong></font></p>
+<h4 id="Jenkins配置全局工具"><a href="#Jenkins配置全局工具" class="headerlink" title="Jenkins配置全局工具"></a>Jenkins配置全局工具</h4><p>进入　系统管理-&gt;全局工具配置-&gt;SonarQube Scanner     找到模块后点击<font color="orange">新增SonarQube Scanner</font></p>
+<p><font color="orange">SONAR_RUNNER_HOME填你Jenkins这个Docker容器里的路径</font></p>
+<p><img src="http://cdn.mjava.top/Fpgv2yqskGjp37mfoxHC6MGtIAPt" alt></p>
+<h2 id="构建一个Maven项目"><a href="#构建一个Maven项目" class="headerlink" title="构建一个Maven项目"></a>构建一个Maven项目</h2><p>网上很多教程说要勾上这个选项：</p>
+<p><img src="http://cdn.mjava.top/FsSrQCDF5O9x4sufLZkFRz40toHI" alt><br>其实这个是可选的，下面有一句话：<font color="orange">These variables are useful when configuring a SonarQube analysis using standard build steps such as Maven, Gradle, Ant, and command line scripts.This feature is not needed if you’re using “SonarQube Scanner” or “SonarScanner for MSBuild” build steps.</font></p>
+<p>翻译过来就是：<img src="http://cdn.mjava.top/FrM7HmTx_APStJMI0OHlMQO6WL3W" alt><br>因为我们这里用的就是<font color="orange">SonarQube Scanner</font>,所以这个我们是可以不用勾上的，但是勾上也没影响；</p>
+<h3 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h3><ul>
+<li>具体怎么构建项目可以看：<a href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a>,这里就不多介绍了</li>
+</ul>
+<h4 id="添加Execute-SonarQube-Scanner"><a href="#添加Execute-SonarQube-Scanner" class="headerlink" title="添加Execute SonarQube Scanner"></a>添加Execute SonarQube Scanner</h4><p>在原来构建的基础上加上<font color="orange">Execute SonarQube Scanner</font>，就可以了</p>
+<p><img src="http://cdn.mjava.top/FgZ021lPaTWzgOPsG7veK1cn7lIB" alt></p>
+<p>在<font color="orange">Analysis properties</font>里填上构建的参数</p>
+<p><img src="http://cdn.mjava.top/FiFA65-xUZCh62Y5HfIgxQzvMx7D" alt></p>
+<blockquote>
+<p>唯一的项目标识符（必填）<br>sonar.projectKey =tiny-config1</p>
+<p>项目元数据（以前是必需的，自SonarQube 6.1起是可选的）<br>sonar.projectName =tiny-config1<br>sonar.projectVersion = 1.0</p>
+<p>源目录的路径（必需）<br>sonar.sources = srcDir1，srcDir2</p>
+<p>测试源目录的路径（可选）<br>sonar.tests = testDir1，testDir2</p>
+<p>Java项目编译类的路径（可选）<br>sonar.java.binaries = bin</p>
+<p>逗号分隔的库路径列表（可选）<br>sonar.java.libraries = path / to / library.jar，path / to / classes / dir</p>
+<p>附加参数<br>sonar.my.property =value</p>
+</blockquote>
+<p>保存后就可以正常构建了．</p>
+<h4 id="错误解决（没有错误可跳过这段）"><a href="#错误解决（没有错误可跳过这段）" class="headerlink" title="错误解决（没有错误可跳过这段）"></a>错误解决（没有错误可跳过这段）</h4><p>如果在构建项目的时候,Jenkins控制台如果报一下错误，这是因为SonarQube的Java版本太低造成的<br><img src="http://cdn.mjava.top/FnTRL4pSwrKk5Xwbzobo89VKHf5m" alt></p>
+<h5 id="升级SonarQube的Java版本"><a href="#升级SonarQube的Java版本" class="headerlink" title="升级SonarQube的Java版本"></a>升级SonarQube的Java版本</h5><p>进入SonarQube的管理台： Administration-&gt;Marketplace-&gt;SonarJava</p>
+<blockquote>
+<p>如果你版本没升级，右边会有个update按钮，点击就可以升级了，升级完后重启SonarQube;这边因为我已经升级过了，所以没有这个按钮</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/FgbCXvUiteJ9iGCCYC6qbInX0VSX" alt></p>
+<h3 id="构建完成后"><a href="#构建完成后" class="headerlink" title="构建完成后"></a>构建完成后</h3><p>Jenkins控制台显示SUCCESS就表示构建成功了</p>
+<p><img src="http://cdn.mjava.top/FoijfnBHiJAZ7lA7YqmdQb-bEqUF" alt></p>
+<p>这时候就可以点击构建项目的SonarQube直接跳转到SonarQube控制台了</p>
+<p><img src="http://cdn.mjava.top/FhXgRD7rBp5RBc2D6uBmH5mIBNKJ" alt></p>
+<p>这里就可以看到结果了</p>
+<p><img src="http://cdn.mjava.top/FkPydWtLuuliKAq1hc8Ex45nnTlu" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里就可以根据SonarQube的提示区改BUG了．这BUG有点多＝＿＝！.</p>
+<p>在搭建过程中，最主要的就是那个SonarQube Scanner这个的安装了，因为Jenkins都是Docker化的，所以他可以选择自动安装，但是我这边选择自动安装却没用，所以就自己下载了SonarQube Scnner的包挂载到Jenkins容器里区，然后直接指定SonarQube Scnner的目录就可以了；</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+              <a href="/tags/SonarQube/" rel="tag"># SonarQube</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/java/java-8-stream-method/" rel="next" title="Java8 Stream方法大全">
+                  <i class="fa fa-chevron-left"></i> Java8 Stream方法大全
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/gof/gof-oop-7-all/" rel="prev" title="OOP程序七大原则">
+                  OOP程序七大原则 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SonarQube"><span class="nav-number">1.</span> <span class="nav-text">什么是SonarQube?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SonarQube与CI-CD架构图"><span class="nav-number">1.1.</span> <span class="nav-text">SonarQube与CI/CD架构图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker运行SonarQube"><span class="nav-number">2.</span> <span class="nav-text">Docker运行SonarQube</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问"><span class="nav-number">2.2.</span> <span class="nav-text">访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins集成SonarQube"><span class="nav-number">3.</span> <span class="nav-text">Jenkins集成SonarQube</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载和安装插件"><span class="nav-number">3.1.</span> <span class="nav-text">下载和安装插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SonarQube生成Token"><span class="nav-number">3.2.</span> <span class="nav-text">SonarQube生成Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加全局凭证"><span class="nav-number">3.3.</span> <span class="nav-text">添加全局凭证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置SonarQube-servers"><span class="nav-number">3.4.</span> <span class="nav-text">设置SonarQube servers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装SonarQube-Scanner"><span class="nav-number">3.5.</span> <span class="nav-text">安装SonarQube Scanner</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载压缩包"><span class="nav-number">3.5.1.</span> <span class="nav-text">下载压缩包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解压到Jenkins挂载出来的目录里"><span class="nav-number">3.5.2.</span> <span class="nav-text">解压到Jenkins挂载出来的目录里</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Jenkins配置全局工具"><span class="nav-number">3.5.3.</span> <span class="nav-text">Jenkins配置全局工具</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建一个Maven项目"><span class="nav-number">4.</span> <span class="nav-text">构建一个Maven项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开始构建"><span class="nav-number">4.1.</span> <span class="nav-text">开始构建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加Execute-SonarQube-Scanner"><span class="nav-number">4.1.1.</span> <span class="nav-text">添加Execute SonarQube Scanner</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误解决（没有错误可跳过这段）"><span class="nav-number">4.1.2.</span> <span class="nav-text">错误解决（没有错误可跳过这段）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#升级SonarQube的Java版本"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">升级SonarQube的Java版本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建完成后"><span class="nav-number">4.2.</span> <span class="nav-text">构建完成后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="H&K"
+      src="http://cdn.mjava.top/blog/20200203213619.jpg">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">浅水是喧哗的，深水是沉默的</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GreyCode9" title="GitHub → https://github.com/GreyCode9" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  
+  <div class="powered-by"><a href="http://www.beian.miit.gov.cn" rel="noopener external nofollow noreferrer" target="_blank">赣ICP备17003482号 </a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    
+    灰色Code
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

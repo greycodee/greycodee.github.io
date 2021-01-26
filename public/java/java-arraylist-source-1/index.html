@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo_180_180_82.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo_32_32_14-6.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo_16_16_7-3.png">
+  <link rel="mask-icon" href="/images/logo_512_512_233-5.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="灰色Code" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":"ture","show_result":"ture","style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":"ture","color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。 本文内容当然ArrayList里的方法不止这些，本文主要讲一些常用的方法方法变量Arraylist里的方法变量主要有以下几个构造方法有参构造传入数组的大小代码实现List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(5);">
+<meta name="keywords" content="Java,ArrayList,源码解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【源码解析】扒开ArrayList的外衣">
+<meta property="og:url" content="https://mjava.top/java/java-arraylist-source-1/index.html">
+<meta property="og:site_name" content="灰色Code">
+<meta property="og:description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。 本文内容当然ArrayList里的方法不止这些，本文主要讲一些常用的方法方法变量Arraylist里的方法变量主要有以下几个构造方法有参构造传入数组的大小代码实现List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(5);">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200103101050.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_005.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_004.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_006.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/20200103112943.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_007.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_009.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_010.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_011.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_012.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_013.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_014.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_015.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_016.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_017.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_018.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Selection_019.png">
+<meta property="og:updated_time" content="2020-01-03T11:24:15.667Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【源码解析】扒开ArrayList的外衣">
+<meta name="twitter:description" content="积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。 本文内容当然ArrayList里的方法不止这些，本文主要讲一些常用的方法方法变量Arraylist里的方法变量主要有以下几个构造方法有参构造传入数组的大小代码实现List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(5);">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/20200103101050.png">
+
+<link rel="canonical" href="https://mjava.top/java/java-arraylist-source-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>【源码解析】扒开ArrayList的外衣 | 灰色Code</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">灰色Code</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mjava.top/java/java-arraylist-source-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://cdn.mjava.top/blog/20200203213619.jpg">
+      <meta itemprop="name" content="H&K">
+      <meta itemprop="description" content="浅水是喧哗的，深水是沉默的">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="灰色Code">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【源码解析】扒开ArrayList的外衣
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-03 19:13:31 / 修改时间：19:24:15" itemprop="dateCreated datePublished" datetime="2020-01-03T19:13:31+08:00">2020-01-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。</p>
+</blockquote><h2 id="本文内容"><a href="#本文内容" class="headerlink" title="本文内容"></a>本文内容</h2><p>当然ArrayList里的方法不止这些，本文主要讲一些常用的方法</p><p><img src="http://cdn.mjava.top/blog/20200103101050.png" alt></p><h2 id="方法变量"><a href="#方法变量" class="headerlink" title="方法变量"></a>方法变量</h2><p><code>Arraylist</code>里的方法变量主要有以下几个</p><p><img src="http://cdn.mjava.top/blog/Selection_005.png" alt></p><h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><h3 id="有参构造"><a href="#有参构造" class="headerlink" title="有参构造"></a>有参构造</h3><h4 id="传入数组的大小"><a href="#传入数组的大小" class="headerlink" title="传入数组的大小"></a>传入数组的大小</h4><h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">5</span>);</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+
+
+
+
+<h5 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h5><p><img src="http://cdn.mjava.top/blog/Selection_004.png" alt></p>
+<h4 id="传入一个list对象"><a href="#传入一个list对象" class="headerlink" title="传入一个list对象"></a>传入一个list对象</h4><p>其实这个就相当于把传入的list对象里的数据<font color="orange">复制</font>到新的ArrayList对象</p>
+<h5 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(<span class="string">"z"</span>,<span class="string">"m"</span>,<span class="string">"h"</span>));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里用来<code>Arrays</code>工具类里的<code>asList</code>方法，它的源码里是直接返回一个List，有兴趣的可以去看看，这里就不介绍了</p>
+</blockquote>
+<h5 id="源码解析-1"><a href="#源码解析-1" class="headerlink" title="源码解析"></a>源码解析</h5><p><img src="http://cdn.mjava.top/blog/Selection_006.png" alt></p>
+<h3 id="无参构造"><a href="#无参构造" class="headerlink" title="无参构造"></a>无参构造</h3><p>这个比较简单，直接赋值一个空数组</p>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-2"><a href="#源码解析-2" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/20200103112943.png" alt></p>
+<h2 id="add方法"><a href="#add方法" class="headerlink" title="add方法"></a>add方法</h2><p>add一般常用的有两个方法，一个就是<code>add(E e)</code>在尾部添加数据，一个就是<code>add(int index,E element)</code>在指定位置插入元素</p>
+<h3 id="add-E-e"><a href="#add-E-e" class="headerlink" title="add(E e)"></a>add(E e)</h3><p>这个是<code>Arrayist</code>的主要方法，平时用的也是最多的方法之一，所以源码比较复杂，比较长</p>
+<h4 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"灰灰HK"</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-3"><a href="#源码解析-3" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/Selection_007.png" alt></p>
+<ul>
+<li><font color="orange">ensureCapacityInternal(int minCapacity)</font>确保数组容量充足</li>
+</ul>
+<p><img src="http://cdn.mjava.top/blog/Selection_009.png" alt></p>
+<ul>
+<li><font color="orange">calculateCapacity(Object[] elementData, int minCapacity)</font></li>
+</ul>
+<p><img src="http://cdn.mjava.top/blog/Selection_010.png" alt></p>
+<ul>
+<li>再回到<font color="orange">ensureExplicitCapacity(int minCapacity)</font>这个方法，这个方法先<code>修改次数加1</code>，然后判断<code>size+1</code>是不是比当前的数组容量大，如果比当前的数组容量大，则进行扩容操作，扩大容量为原数组的<code>1.5倍</code></li>
+</ul>
+<blockquote>
+<p>比如第二次调用add方法，此时<code>size+1=2</code>, <code>elementData.length=10</code>,为什么等于10呢？因为第一次默认把数组容量从0扩大到了10,这时<code>size+1</code>比<code>elementData.length</code>小，就不会进行扩容操作</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/Selection_011.png" alt></p>
+<ul>
+<li><font color="orange">grow(int minCapacity)</font>扩容</li>
+</ul>
+<blockquote>
+<p>这里调用<code>Arrays.copyOf()</code>方法进行复制操作，当进一步深入这个方法时，发现是由<code>System.arraycopy()</code>这个方法实现复制功能的，这个方法由<code>native</code>关键字修饰，表示不是由<code>Java</code>语言实现的，一般是c/cpp实现</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/Selection_012.png" alt></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>到这里，add的方法流程就走完了，其核心步骤：</p>
+<ul>
+<li><p>每次添加元素时判断数组容量是否充足</p>
+</li>
+<li><p><font color="orange">第一次</font>添加元素，把数组容量扩容到10</p>
+</li>
+<li><p>扩容时，除第一次，以后的每次扩容为<font color="orange">原大小的1.5倍</font></p>
+</li>
+<li><p>扩容后调用<code>System.arraycopy()</code>方法把原数组的元素复制到扩容后的新数组</p>
+</li>
+</ul>
+<h3 id="add-int-index-E-element"><a href="#add-int-index-E-element" class="headerlink" title="add(int index, E element)"></a>add(int index, E element)</h3><p>该方法为在指定位置插入元素，该位置及后面所有元素后移</p>
+<h4 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.add(<span class="number">0</span>,<span class="string">"灰灰"</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-4"><a href="#源码解析-4" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/Selection_013.png" alt></p>
+<blockquote>
+<p>可以看到，这边又用到了<code>System.arraycopy()</code>这个方法</p>
+</blockquote>
+<ul>
+<li><font color="orange">rangeCheckForAdd(int index)</font>判断是否越界</li>
+</ul>
+<blockquote>
+<p>这里他是和<code>size</code>对比，而不是和数组的<code>length</code>对比，我个人认为这样第一节省了空间，第二方便后面移动的操作</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/Selection_014.png" alt></p>
+<ul>
+<li><font color="orange">System.arraycopy()</font>拷贝数组</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">arraycopy</span><span class="params">(Object src,  <span class="keyword">int</span>  srcPos,</span></span></span><br><span class="line"><span class="function"><span class="params">                             		Object dest, <span class="keyword">int</span> destPos,</span></span></span><br><span class="line"><span class="function"><span class="params">                                    <span class="keyword">int</span> length)</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>src    原数组对象</li>
+<li>srcPos    原数组起始位置</li>
+<li>dest    目标数组</li>
+<li>destPos    目标数组起始位置</li>
+<li>length    复制多少个数据</li>
+</ul>
+</blockquote>
+<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>插入方法其主要步骤如下:</p>
+<ul>
+<li>检查插入的位置是否越界</li>
+<li>检查数组容量是否充足，不充足进行扩容相关操作</li>
+<li>调用<code>System.arraycopy()</code>进行<code>index</code>及后面的元素后移</li>
+</ul>
+<h2 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h2><h3 id="get-int-index"><a href="#get-int-index" class="headerlink" title="get(int index)"></a>get(int index)</h3><h4 id="代码实现-5"><a href="#代码实现-5" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.get(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-5"><a href="#源码解析-5" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/Selection_015.png" alt></p>
+<ul>
+<li><font color="orange">rangeCheck(int index)</font>判断是否越界</li>
+</ul>
+<blockquote>
+<p>get个add方法判断越界的方法是不一样的，这边是<code>index&gt;=size</code>,多了个<code>等于</code>，为什么要多个等于呢？因为数组是从0开始的，而size<font color="orange">相当于</font>是开始的从1开始的</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rangeCheck</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &gt;= size)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><font color="orange">elementData(int index)</font>直接返回对应下标的数组元素</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">E <span class="title">elementData</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (E) elementData[index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h4><p>get方法比较简单，主要步骤为：</p>
+<ul>
+<li>检查是否越界</li>
+<li>返回对应元素</li>
+</ul>
+<h2 id="set方法"><a href="#set方法" class="headerlink" title="set方法"></a>set方法</h2><h3 id="set-int-index-E-element"><a href="#set-int-index-E-element" class="headerlink" title="set(int index, E element)"></a>set(int index, E element)</h3><h4 id="代码实现-6"><a href="#代码实现-6" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.set(<span class="number">0</span>,<span class="string">"灰灰"</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-6"><a href="#源码解析-6" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/Selection_016.png" alt></p>
+<h2 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a>remove方法</h2><h3 id="remove-int-index"><a href="#remove-int-index" class="headerlink" title="remove(int index)"></a>remove(int index)</h3><h4 id="代码实现-7"><a href="#代码实现-7" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.remove(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-7"><a href="#源码解析-7" class="headerlink" title="源码解析"></a>源码解析</h4><blockquote>
+<p>当删除的元素为最后一个元素时，<code>numMoved</code>就小于0了，就不会进行移动元素的操作</p>
+</blockquote>
+<p><img src="http://cdn.mjava.top/blog/Selection_017.png" alt></p>
+<h3 id="remove-Object-o"><a href="#remove-Object-o" class="headerlink" title="remove(Object o)"></a>remove(Object o)</h3><blockquote>
+<p>这个方法在实际中用的比较少，因为<code>AraryList</code>是可以保存重复的元素，所以删除是<font color="orange">删除最早添加的元素</font></p>
+</blockquote>
+<h4 id="代码实现-8"><a href="#代码实现-8" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.remove(<span class="string">"hk"</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-8"><a href="#源码解析-8" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="http://cdn.mjava.top/blog/Selection_018.png" alt></p>
+<ul>
+<li><font color="orange">fastRemove(int index)</font>删除元素</li>
+</ul>
+<blockquote>
+<p>这个方法和remove(int index)内部的操作类似，不过这边不保存被删除的元素</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fastRemove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</span><br><span class="line">        System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                         numMoved);</span><br><span class="line">    elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="clear方法"><a href="#clear方法" class="headerlink" title="clear方法"></a>clear方法</h2><h3 id="clear"><a href="#clear" class="headerlink" title="clear()"></a>clear()</h3><h4 id="代码实现-9"><a href="#代码实现-9" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"hk"</span>);</span><br><span class="line">list.clear();</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p><img src="http://cdn.mjava.top/blog/Selection_019.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>ArrayList</code>底层扩容或者移动数组元素时都调用了<code>System.arraycopy()</code>来进行相关操作，平时进行我们进行数组复制或移动的时候也可以调用这个方法了，这个性能比循环复制性能高多了，特别是在大量数据的时候。</p>
+<p>文章好几次出现了<code>modCount++</code>这个操作，这个<code>modCount</code>主要用户内部类的迭代器</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/ArrayList/" rel="tag"># ArrayList</a>
+              <a href="/tags/源码解析/" rel="tag"># 源码解析</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/java/java-base-wei/" rel="next" title="【图】用图片告诉你Java中的位运算">
+                  <i class="fa fa-chevron-left"></i> 【图】用图片告诉你Java中的位运算
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/java/java-linkedlist-source-1/" rel="prev" title="【源码解析】想了解LinkedList？看这篇文章就对了">
+                  【源码解析】想了解LinkedList？看这篇文章就对了 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzY0My8yNDE0MQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本文内容"><span class="nav-number">1.</span> <span class="nav-text">本文内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法变量"><span class="nav-number">2.</span> <span class="nav-text">方法变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法"><span class="nav-number">3.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#有参构造"><span class="nav-number">3.1.</span> <span class="nav-text">有参构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#传入数组的大小"><span class="nav-number">3.1.1.</span> <span class="nav-text">传入数组的大小</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#代码实现"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#源码解析"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#传入一个list对象"><span class="nav-number">3.1.2.</span> <span class="nav-text">传入一个list对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#源码解析-1"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无参构造"><span class="nav-number">3.2.</span> <span class="nav-text">无参构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-2"><span class="nav-number">3.2.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add方法"><span class="nav-number">4.</span> <span class="nav-text">add方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#add-E-e"><span class="nav-number">4.1.</span> <span class="nav-text">add(E e)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-3"><span class="nav-number">4.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-3"><span class="nav-number">4.1.2.</span> <span class="nav-text">源码解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">4.1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-int-index-E-element"><span class="nav-number">4.2.</span> <span class="nav-text">add(int index, E element)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-4"><span class="nav-number">4.2.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-4"><span class="nav-number">4.2.2.</span> <span class="nav-text">源码解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get方法"><span class="nav-number">5.</span> <span class="nav-text">get方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-int-index"><span class="nav-number">5.1.</span> <span class="nav-text">get(int index)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-5"><span class="nav-number">5.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-5"><span class="nav-number">5.1.2.</span> <span class="nav-text">源码解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结-2"><span class="nav-number">5.1.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set方法"><span class="nav-number">6.</span> <span class="nav-text">set方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#set-int-index-E-element"><span class="nav-number">6.1.</span> <span class="nav-text">set(int index, E element)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-6"><span class="nav-number">6.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-6"><span class="nav-number">6.1.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#remove方法"><span class="nav-number">7.</span> <span class="nav-text">remove方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#remove-int-index"><span class="nav-number">7.1.</span> <span class="nav-text">remove(int index)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-7"><span class="nav-number">7.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-7"><span class="nav-number">7.1.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remove-Object-o"><span class="nav-number">7.2.</span> <span class="nav-text">remove(Object o)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-8"><span class="nav-number">7.2.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码解析-8"><span class="nav-number">7.2.2.</span> <span class="nav-text">源码解析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clear方法"><span class="nav-number">8.</span> <span class="nav-text">clear方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clear"><span class="nav-number">8.1.</span> <span class="nav-text">clear()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-9"><span class="nav-number">8.1.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码分析"><span class="nav-number">8.1.2.</span> <span class="nav-text">源码分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="H&K"
+      src="http://cdn.mjava.top/blog/20200203213619.jpg">
+  <p class="site-author-name" itemprop="name">H&K</p>
+  <div class="site-description" itemprop="description">浅水是喧哗的，深水是沉默的</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GreyCode9" title="GitHub → https://github.com/GreyCode9" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhengminghui99@gmail.com" title="E-Mail → mailto:zhengminghui99@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">H&K</span>
+</div>
+
+
+  
+  <div class="powered-by"><a href="http://www.beian.miit.gov.cn" rel="noopener external nofollow noreferrer" target="_blank">赣ICP备17003482号 </a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+    
+    灰色Code
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278207736&web_id=1278207736"></script>
+  </div>
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
