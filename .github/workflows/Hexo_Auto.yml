@@ -29,4 +29,5 @@ jobs:
         npm install hexo-deployer-git -g
     - name: Deploy
       run: |
+        hexo clean  
         hexo g -d
