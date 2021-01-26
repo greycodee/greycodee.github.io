@@ -1,0 +1,20 @@
+name: Hexo Auto Deploy
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Auto Deploy
+      env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      uses: Solybum/hexo-deploy@1.1
+      
