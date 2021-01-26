@@ -96,7 +96,7 @@ deploy:
  #port: 22
  #agent: $SSH_AUTH_SOCK
  type: git
- repository: git@github.com:GreyCode9/hk.github.io.git
+ repository: https://github.com/GreyCode9/greycode9.github.io.git 
  branch: master
 
 #search

@@ -23,6 +23,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Config Git
+      run: |
+        touch ~/.git-credentials
+        echo https://${{ secrets.GIT_NAME }}:${{ secrets.TOKEN }}@github.com >> ~/.git-credentials
+        cat ~/.git-credentials
+        git config --global credential.helper store
     - name: Install Hexo
       run: |
         npm install hexo-cli -g
