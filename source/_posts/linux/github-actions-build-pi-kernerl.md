@@ -24,7 +24,9 @@ categories:
 
 1. 点击Github右上角头像 -> Settings -> Developer settings -> Personal access tokens -> Generate new token
 
-2. 或者直接点这个链接进入： https://github.com/settings/tokens
+<!-- more -->
+
+1. 或者直接点这个链接进入： https://github.com/settings/tokens
 
    ![20210126150521](http://cdn.mjava.top/20210126150521.png)
 

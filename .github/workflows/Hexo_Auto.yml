@@ -40,5 +40,6 @@ jobs:
         rm -rf .deploy_git
         git submodule init themes/next
         git submodule update
+        cp themesConfig/_config.yml themes/next/
         hexo clean  
         hexo g -d
