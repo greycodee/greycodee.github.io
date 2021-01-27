@@ -35,6 +35,8 @@ jobs:
       run: |
         npm install hexo-cli -g
         npm install hexo-deployer-git -g
+        npm install hexo-generator-sitemap -g
+        npm install hexo-generator-baidu-sitemap -g
     - name: Deploy
       run: |
         rm -rf .deploy_git
