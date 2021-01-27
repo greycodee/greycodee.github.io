@@ -3,17 +3,17 @@
 # Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 灰色Code 
+title: 灰色World 
 subtitle: 
 description: 浅水是喧哗的，深水是沉默的 
 keywords: Java,Linux,Spring,Jenkins,Docker,RocketMQ,Vue
-author: H&K
+author: 灰灰
 language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'1
-url: https://mjava.top
+url: http://mjava.top
 root: /
 #permalink: :year/:month/:day/:title/
 permalink: :title/
