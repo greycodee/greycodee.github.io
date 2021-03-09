@@ -12,7 +12,7 @@ description:
 tags:
 - 多线程
 categories:
-- JAVA
+- Java
 ---
 
 
