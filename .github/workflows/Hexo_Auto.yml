@@ -30,19 +30,21 @@ jobs:
         cat ~/.git-credentials
         git config --global credential.helper store
         git config --global user.email "zhengminghui99@gmail.com"
-        git config --global user.name "greycode9"
+        git config --global user.name "greycodee"
     - name: Install Hexo
       run: |
         npm install hexo-cli -g
         npm install hexo-deployer-git -g
+        npm install hexo-wordcount -g
+        npm install hexo-generator-json-content -g
+        npm install hexo-generator-feed -g
         npm install hexo-generator-sitemap -g
         npm install hexo-generator-baidu-sitemap -g
         npm install hexo-math -g
     - name: Deploy
       run: |
         rm -rf .deploy_git
-        git submodule init themes/next
+        git submodule init themes/pure
         git submodule update
-        cp themesConfig/_config.yml themes/next/
         hexo clean  
         hexo g -d
