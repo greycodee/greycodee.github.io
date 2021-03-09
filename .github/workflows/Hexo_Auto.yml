@@ -40,6 +40,9 @@ jobs:
         npm install hexo-generator-feed -g
         npm install hexo-generator-sitemap -g
         npm install hexo-generator-baidu-sitemap -g
+        npm install hexo-baidu-url-submit -g
+        npm install hexo-translate-title -g
+        npm install hexo-neat -g
         npm install hexo-math -g
     - name: Deploy
       run: |
