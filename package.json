@@ -24,7 +24,7 @@
     "hexo-inject": "^1.0.0",
     "hexo-math": "^3.0.4",
     "hexo-neat": "^1.0.9",
-    "hexo-prism-plugin": "^2.3.0",
+    "hexo-prism-plugin": "^1.23.0",
     "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-marked": "^1.0.1",
     "hexo-renderer-stylus": "^0.3.3",
