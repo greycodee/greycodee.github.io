@@ -8,7 +8,7 @@ tags:
   - RocketMQ
   - Linux
 categories:
-  - RocketMq
+  - RocketMQ
 date: 2019-10-09 20:55:36
 password:
 summary:
@@ -55,7 +55,7 @@ summary:
 
 ### 编写配置文件
 
-  这一步很重要，集群的搭建关键在于配置文件的编写，首先看看RocketMq配置文件的解析:
+  这一步很重要，集群的搭建关键在于配置文件的编写，首先看看RocketMQ配置文件的解析:
 
 ```properties
 #所属集群名字 
