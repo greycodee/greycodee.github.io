@@ -58,7 +58,7 @@ categories:
 
 在Thread源码中,一共提供了`9种`构造方法.
 
-![](http://cdn.mjava.top/blog/20200602151437.png)
+![图片](http://cdn.mjava.top/blog/20200602151437.png)
 
 从这些构造方法中,大致可以分为`有Runnable构造参数`的,和`无Runnable构造参数`两大类,无Runnable构造参数的就需要去继承`Thread`来重写`run()`方法<font color=grey>(注:`Thread`也实现了Runnable接口)</font>,有Runnable构造参数的,就实现Runnable接口的run方法,然后通过构造参数,把实现Runnable接口的实例传入Thread.
 

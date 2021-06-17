@@ -54,7 +54,7 @@ MDC.setContextMap(map);
 
 通过阅读`MDC`的源码可以发现，它其实是调用了`MDCAdapter`的接口来实现的
 
-![](http://cdn.mjava.top/blog/20200729200214.png)
+![图片](http://cdn.mjava.top/blog/20200729200214.png)
 
 
 
@@ -62,13 +62,13 @@ MDC.setContextMap(map);
 
 `MDCAdapter`接口有三个实现类，而`MDC`是调用了`LogbackMDCAdapter`里的方法(在MDC里有一个静态代码块，实例化了这个对象)
 
-![](http://cdn.mjava.top/blog/20200729201118.png)
+![图片](http://cdn.mjava.top/blog/20200729201118.png)
 
 ### LogbackMDCAdapter
 
 **而**`LogbackMDCAdapter`主要是用`ThreadLocal`在线程上下文中维护一个`HashMap`来实现的
 
-![](http://cdn.mjava.top/blog/20200729201650.png)
+![图片](http://cdn.mjava.top/blog/20200729201650.png)
 
 ## 总结
 

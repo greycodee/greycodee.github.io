@@ -15,7 +15,7 @@ categories:
 - Java
 ---
 
-![](http://cdn.mjava.top/20191230221924.jpg)
+![图片](http://cdn.mjava.top/20191230221924.jpg)
 
 ## 前言
 
@@ -31,7 +31,7 @@ categories:
 
 比如说-9在内存中的二进制码,这里用8位表示:
 
-![](http://cdn.mjava.top/20191230212102.png)
+![图片](http://cdn.mjava.top/20191230212102.png)
 
 最后<font color=orange>-9在内存中的二进制值为11110111</font>
 
@@ -51,7 +51,7 @@ categories:
 >
 > 左移时:末尾补0
 
-![](http://cdn.mjava.top/20191230212836.png)
+![图片](http://cdn.mjava.top/20191230212836.png)
 
 #### 正数的左移和右移
 
@@ -59,13 +59,13 @@ categories:
 >
 > 左移时:末尾补0
 
-![](http://cdn.mjava.top/20191230212951.png)
+![图片](http://cdn.mjava.top/20191230212951.png)
 
 ### 无符号右移
 
 >无论是正数还是负数,右移<font color=orange>最高位一律补0</font>
 
-![](http://cdn.mjava.top/20191230213359.png)
+![图片](http://cdn.mjava.top/20191230213359.png)
 
 ### &(位与)
 
@@ -73,25 +73,25 @@ categories:
 
 为了方便表示,接下来全部都用8位表示一个数
 
-![](http://cdn.mjava.top/20191230215214.png)
+![图片](http://cdn.mjava.top/20191230215214.png)
 
 ### |(位或)
 
 > 当相对应的位有一个为1时,等于1,否则等于0
 
-![](http://cdn.mjava.top/20191230215609.png)
+![图片](http://cdn.mjava.top/20191230215609.png)
 
 ### ^(异或)
 
 > 当相对应的位不同时,等于1,相同时等于0
 
-![](http://cdn.mjava.top/20191230220948.png)
+![图片](http://cdn.mjava.top/20191230220948.png)
 
 ### ~(取反)
 
 > 1等于0,0等于1
 
-![](http://cdn.mjava.top/20191230220449.png)
+![图片](http://cdn.mjava.top/20191230220449.png)
 
 ## 总结
 

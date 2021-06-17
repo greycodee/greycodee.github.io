@@ -21,7 +21,7 @@ categories:
 
 # 【数据结构】手写平衡二叉树（AVL）
 
-![](http://cdn.mjava.top/blog/20200201165139.jpg)
+![图片](http://cdn.mjava.top/blog/20200201165139.jpg)
 
 > 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬
 >

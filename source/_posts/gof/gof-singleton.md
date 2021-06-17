@@ -16,7 +16,7 @@ summary:
 
    
 
-![](http://cdn.mjava.top/gof-singleton.jpg)
+![图片](http://cdn.mjava.top/gof-singleton.jpg)
 
 > 积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 
 

@@ -22,7 +22,7 @@ categories:
 
 首先，我们来看看下面的代码的输出的结果，可以先试着想一下
 
-![](http://cdn.mjava.top/blog/20200725004926.png)
+![图片](http://cdn.mjava.top/blog/20200725004926.png)
 
 
 
@@ -38,7 +38,7 @@ Code
 
 了解类加载前，首先熟悉一下类的生命周期
 
-![](http://cdn.mjava.top/blog/20200725003859.png)
+![图片](http://cdn.mjava.top/blog/20200725003859.png)
 
 这里注意几个点：
 
@@ -53,7 +53,7 @@ Code
 
 - `实例化`：是指创建一个对象的过程。这个过程中会在堆中开辟内存，将一些非静态的方法，变量存放在里面。在程序执行的过程中，可以创建多个对象，既多次实例化。每次实例化都会开辟一块新的内存。
 
-  ![](http://cdn.mjava.top/blog/20200725183421.png)
+  ![图片](http://cdn.mjava.top/blog/20200725183421.png)
 
 
 
@@ -63,7 +63,7 @@ Code
 
 - 遇到`new`、`getstatic`、`putstatic`或`invokestatic`这四条字节码指令时，如果类型没有进行过初始化，则需要先触发其初始化阶段。那到底什么时候能够生成这些指令呢？其实看下字节码就都明白了
 
-  ![](http://cdn.mjava.top/blog/20200725172134.png)
+  ![图片](http://cdn.mjava.top/blog/20200725172134.png)
 
 - 使用`java.lang.reflect`包的方法对类型进行`反射调用`的时候，如果类型没有进行过初始化，则需要先触发其初始化。
 - 当初始化类的时候，如果发现其`父类`还没有进行过初始化，则需要先触发其父类的初始化。
@@ -87,7 +87,7 @@ Code
 
 直接上图
 
-![](http://cdn.mjava.top/blog/20200725184328.png)
+![图片](http://cdn.mjava.top/blog/20200725184328.png)
 
 以上代码执行后并不会输出`灰色`两个字，因为创建对象数组时并没有去初始化`Test1`这个类，而是用`anewarray`字节码指令去初始化了另外一个类，它是一个由虚拟机自动生成的、直接继承于java.lang.Object的子类。
 
@@ -99,7 +99,7 @@ Code
 
 - 被`final`修饰的静态字段
 
-![](http://cdn.mjava.top/blog/20200725194122.png)
+![图片](http://cdn.mjava.top/blog/20200725194122.png)
 
 此时运行该代码时，只会输出`灰色Code`字样，`Test1`并没有触发初始化阶段。这是因为在`编译阶段`通过`常量传播优化`，已经将此常量的值`灰色Code`直接存储在`ClassLoadTest`类的常量池中，所以当`ClassLoadTest`类调用`Test1`里的`value`时，都变成了对自身常量池的调用，和`Test1`类没有任何关系。
 
@@ -107,6 +107,6 @@ Code
 
 - 没有`final`修饰的静态字段
 
-  ![](http://cdn.mjava.top/blog/20200725194514.png)
+  ![图片](http://cdn.mjava.top/blog/20200725194514.png)
 
 没有使用`final`修饰的静态变量，字节码出现了`getstatic`，所以触发`Test1`的初始化阶段，此时运行结果将会输出`灰色`和`灰色Code`

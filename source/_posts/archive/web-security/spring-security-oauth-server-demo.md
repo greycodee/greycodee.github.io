@@ -94,21 +94,21 @@ server.servlet.context-path=/oauthServer
 
 ### 创建用户详情服务类
 
-![](http://cdn.mjava.top/blog/20200519194059.png)
+![图片](http://cdn.mjava.top/blog/20200519194059.png)
 
 #### 创建权限控制类
 
-![](http://cdn.mjava.top/blog/20200519194128.png)
+![图片](http://cdn.mjava.top/blog/20200519194128.png)
 
 ### 创建认证授权类
 
-![](http://cdn.mjava.top/blog/20200519194207.png)
+![图片](http://cdn.mjava.top/blog/20200519194207.png)
 
 ## 获取令牌
 
 访问:`/oauth/token`就可以获取到令牌
 
-![](http://cdn.mjava.top/blog/20200519194446.png)
+![图片](http://cdn.mjava.top/blog/20200519194446.png)
 
 ```json
 {
@@ -127,4 +127,4 @@ server.servlet.context-path=/oauthServer
 
 带上获取到的令牌
 
-![](http://cdn.mjava.top/blog/20200519194803.png)
+![图片](http://cdn.mjava.top/blog/20200519194803.png)
