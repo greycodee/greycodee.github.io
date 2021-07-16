@@ -1,5 +1,10 @@
 # links
 Golang学习笔记:
   link: http://blog.mjava.top/golang-wiki/
-  avatar: https://cdn.jsdelivr.net/gh/greycodee/golang-wiki@main/images/go.png
+  avatar: //cdn.jsdelivr.net/gh/greycodee/golang-wiki/images/go.png
   desc: 学习Go中记的一些笔记
+
+设计模式:
+  link: http://blog.mjava.top/design-patterns-wiki/
+  avatar: //cdn.jsdelivr.net/gh/greycodee/design-patterns-wiki/images/gof.png
+  desc: 设计模式学习笔记
