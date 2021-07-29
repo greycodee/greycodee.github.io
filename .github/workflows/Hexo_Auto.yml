@@ -33,6 +33,7 @@ jobs:
         git config --global user.name "greycodee"
     - name: Install Hexo
       run: |
+        npm install
         npm install hexo-cli -g
         npm install hexo-deployer-git -g
         npm install hexo-wordcount -g
