@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>小白学前端之TypeScript使用Vuex 4.0 | 打工纪实</title>
+  <meta name="description" content="简介官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。 简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。 Vuex 分为 5 个部分：  State：是数据源，存放数据 Getters：可以取得 State 的数据，然后自定义组装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小白学前端之TypeScript使用Vuex 4.0">
+<meta property="og:url" content="http://blog.mjava.top/vue/2CA7C67D02E74713A030F09651A5F164/index.html">
+<meta property="og:site_name" content="打工纪实">
+<meta property="og:description" content="简介官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。 简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。 Vuex 分为 5 个部分：  State：是数据源，存放数据 Getters：可以取得 State 的数据，然后自定义组装">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-29T16:45:15.000Z">
+<meta property="article:modified_time" content="2021-08-20T08:40:20.004Z">
+<meta property="article:author" content="ooooooh灰灰">
+<meta property="article:tag" content="Vuex">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.mjava.top/vue/2CA7C67D02E74713A030F09651A5F164/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/css/style.css">
+
+  
+    <link href="https://cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://blog.mjava.top" target="_blank">
+          <img class="img-circle img-rotate" src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/images/logo3.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">oooooo灰灰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">潜水是喧哗的，深水是沉默的</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-wikis">
+          <a href="/wikis">
+            
+            <i class="icon icon-book-shelf"></i>
+            
+            <span class="menu-title">wiki</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/greycodee" rel="external nofollow noreferrer" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/8d1Tgi4tDvhEY5o" rel="external nofollow noreferrer" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>记录打工生活!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dubbo/">Dubbo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Essay/">Essay</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GOF/">GOF</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Jenkins/">Jenkins</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Quarkus/">Quarkus</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommend/">Recommend</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RocketMQ/">RocketMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vert-x/">Vert.x</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebSecurity/">WebSecurity</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ZooKeeper/">ZooKeeper</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AVL/" rel="tag">AVL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArrayDeque/" rel="tag">ArrayDeque</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArrayList/" rel="tag">ArrayList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aviator/" rel="tag">Aviator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Base64/" rel="tag">Base64</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS%E6%A1%86%E6%9E%B6/" rel="tag">CAS框架</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDNS/" rel="tag">DDNS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Darabonba/" rel="tag">Darabonba</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Disruptor/" rel="tag">Disruptor</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbbo/" rel="tag">Dubbbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo/" rel="tag">Dubbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fegin/" rel="tag">Fegin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GOF/" rel="tag">GOF</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gateway/" rel="tag">Gateway</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-Actions/" rel="tag">Github Actions</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/" rel="tag">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graal-VM/" rel="tag">Graal VM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP%E5%8D%8F%E8%AE%AE/" rel="tag">HTTP协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">32</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json-Schema/" rel="tag">Json-Schema</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jvm/" rel="tag">Jvm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDC/" rel="tag">MDC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nacos/" rel="tag">Nacos</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nio/" rel="tag">Nio</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OAuth/" rel="tag">OAuth</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OAuth2-0/" rel="tag">OAuth2.0</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OOP/" rel="tag">OOP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pit/" rel="tag">Pit</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quarkus/" rel="tag">Quarkus</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RaspberryPi/" rel="tag">RaspberryPi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recursive/" rel="tag">Recursive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Resttemplate/" rel="tag">Resttemplate</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSO/" rel="tag">SSO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SaaS/" rel="tag">SaaS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Singleton/" rel="tag">Singleton</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SonarQube/" rel="tag">SonarQube</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-AOP/" rel="tag">Spring AOP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Cloud-Gateway/" rel="tag">Spring Cloud Gateway</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Time/" rel="tag">Time</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UML/" rel="tag">UML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vert-x/" rel="tag">Vert.x</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuex/" rel="tag">Vuex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastDFS/" rel="tag">fastDFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitalk/" rel="tag">gitalk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/smtp/" rel="tag">smtp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring-security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/telnet/" rel="tag">telnet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="tag">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81/" rel="tag">参数验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" rel="tag">工厂方法模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">平衡二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">建造者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%92%E5%8F%91%E6%83%85%E6%84%9F/" rel="tag">抒发情感</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="tag">抽象工厂模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A8%E8%8D%90/" rel="tag">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" rel="tag">模板方法模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">源码解析</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8E/" rel="tag">表达式引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%92%89%E9%92%89%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="tag">钉钉机器人</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E8%B0%88/" rel="tag">闲谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E7%BE%A4/" rel="tag">集群</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AVL/" style="font-size: 13px;">AVL</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/ArrayDeque/" style="font-size: 13px;">ArrayDeque</a> <a href="/tags/ArrayList/" style="font-size: 13px;">ArrayList</a> <a href="/tags/Aviator/" style="font-size: 13px;">Aviator</a> <a href="/tags/Base64/" style="font-size: 13px;">Base64</a> <a href="/tags/CAS%E6%A1%86%E6%9E%B6/" style="font-size: 13px;">CAS框架</a> <a href="/tags/DDNS/" style="font-size: 13px;">DDNS</a> <a href="/tags/Darabonba/" style="font-size: 13px;">Darabonba</a> <a href="/tags/Disruptor/" style="font-size: 13.67px;">Disruptor</a> <a href="/tags/Docker/" style="font-size: 13.44px;">Docker</a> <a href="/tags/Dubbbo/" style="font-size: 13px;">Dubbbo</a> <a href="/tags/Dubbo/" style="font-size: 13px;">Dubbo</a> <a href="/tags/Fegin/" style="font-size: 13px;">Fegin</a> <a href="/tags/GOF/" style="font-size: 13.11px;">GOF</a> <a href="/tags/Gateway/" style="font-size: 13px;">Gateway</a> <a href="/tags/Git/" style="font-size: 13.11px;">Git</a> <a href="/tags/Github-Actions/" style="font-size: 13px;">Github Actions</a> <a href="/tags/Go/" style="font-size: 13.11px;">Go</a> <a href="/tags/Graal-VM/" style="font-size: 13px;">Graal VM</a> <a href="/tags/HTTP%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">HTTP协议</a> <a href="/tags/JVM/" style="font-size: 13.78px;">JVM</a> <a href="/tags/JWT/" style="font-size: 13px;">JWT</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Jenkins/" style="font-size: 13.56px;">Jenkins</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Json-Schema/" style="font-size: 13px;">Json-Schema</a> <a href="/tags/Jvm/" style="font-size: 13px;">Jvm</a> <a href="/tags/LinkedList/" style="font-size: 13px;">LinkedList</a> <a href="/tags/Linux/" style="font-size: 13.89px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/MDC/" style="font-size: 13px;">MDC</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/MySQL/" style="font-size: 13.11px;">MySQL</a> <a href="/tags/Mysql/" style="font-size: 13.11px;">Mysql</a> <a href="/tags/Nacos/" style="font-size: 13.11px;">Nacos</a> <a href="/tags/Nio/" style="font-size: 13.33px;">Nio</a> <a href="/tags/OAuth/" style="font-size: 13px;">OAuth</a> <a href="/tags/OAuth2-0/" style="font-size: 13px;">OAuth2.0</a> <a href="/tags/OOP/" style="font-size: 13px;">OOP</a> <a href="/tags/Pit/" style="font-size: 13.44px;">Pit</a> <a href="/tags/Quarkus/" style="font-size: 13.22px;">Quarkus</a> <a href="/tags/RaspberryPi/" style="font-size: 13px;">RaspberryPi</a> <a href="/tags/Recursive/" style="font-size: 13px;">Recursive</a> <a href="/tags/Resttemplate/" style="font-size: 13px;">Resttemplate</a> <a href="/tags/RocketMQ/" style="font-size: 13px;">RocketMQ</a> <a href="/tags/SEO/" style="font-size: 13px;">SEO</a> <a href="/tags/SSO/" style="font-size: 13px;">SSO</a> <a href="/tags/SaaS/" style="font-size: 13px;">SaaS</a> <a href="/tags/Shell/" style="font-size: 13px;">Shell</a> <a href="/tags/Singleton/" style="font-size: 13px;">Singleton</a> <a href="/tags/SonarQube/" style="font-size: 13px;">SonarQube</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/Spring-AOP/" style="font-size: 13px;">Spring AOP</a> <a href="/tags/Spring-Cloud-Gateway/" style="font-size: 13px;">Spring Cloud Gateway</a> <a href="/tags/SpringBoot/" style="font-size: 13px;">SpringBoot</a> <a href="/tags/SpringCloud/" style="font-size: 13px;">SpringCloud</a> <a href="/tags/Time/" style="font-size: 13px;">Time</a> <a href="/tags/TypeScript/" style="font-size: 13px;">TypeScript</a> <a href="/tags/UI/" style="font-size: 13px;">UI</a> <a href="/tags/UML/" style="font-size: 13px;">UML</a> <a href="/tags/Vert-x/" style="font-size: 13px;">Vert.x</a> <a href="/tags/Vue/" style="font-size: 13.11px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 13px;">Vuex</a> <a href="/tags/ZooKeeper/" style="font-size: 13.11px;">ZooKeeper</a> <a href="/tags/fastDFS/" style="font-size: 13px;">fastDFS</a> <a href="/tags/gitalk/" style="font-size: 13px;">gitalk</a> <a href="/tags/smtp/" style="font-size: 13px;">smtp</a> <a href="/tags/spring-security/" style="font-size: 13px;">spring-security</a> <a href="/tags/telnet/" style="font-size: 13px;">telnet</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">二叉树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 13.11px;">分布式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">参数验证</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">工厂方法模式</a> <a href="/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">平衡二叉树</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">建造者模式</a> <a href="/tags/%E6%8A%92%E5%8F%91%E6%83%85%E6%84%9F/" style="font-size: 13px;">抒发情感</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">抽象工厂模式</a> <a href="/tags/%E6%8E%A8%E8%8D%90/" style="font-size: 13px;">推荐</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.11px;">数据结构</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">模板方法模式</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">源码分析</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" style="font-size: 13.11px;">源码解析</a> <a href="/tags/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8E/" style="font-size: 13px;">表达式引擎</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.44px;">设计模式</a> <a href="/tags/%E9%92%89%E9%92%89%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13px;">钉钉机器人</a> <a href="/tags/%E9%97%B2%E8%B0%88/" style="font-size: 13px;">闲谈</a> <a href="/tags/%E9%9B%86%E7%BE%A4/" style="font-size: 13px;">集群</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Tool/">Tool</a>
+              </p>
+              <p class="item-title">
+                <a href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/" class="title">用 Json-Schema 来验证你的请求参数</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-19T16:40:05.000Z" itemprop="datePublished">2021-08-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java/">Java</a>
+              </p>
+              <p class="item-title">
+                <a href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/" class="title">AviatorScript轻量级高性能脚本语言</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-17T16:10:53.000Z" itemprop="datePublished">2021-08-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ZooKeeper/">ZooKeeper</a>
+              </p>
+              <p class="item-title">
+                <a href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/" class="title">ZooKeeper单机伪集群搭建</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-11T15:59:52.000Z" itemprop="datePublished">2021-08-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ZooKeeper/">ZooKeeper</a>
+              </p>
+              <p class="item-title">
+                <a href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/" class="title">ZooKeeper客户端详解及可视化客户端</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-09T14:54:39.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Vue/">Vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/vue/2CA7C67D02E74713A030F09651A5F164/" class="title">小白学前端之TypeScript使用Vuex 4.0</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-07-29T16:45:15.000Z" itemprop="datePublished">2021-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TypeScript-%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">TypeScript 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#State"><span class="toc-number">3.</span> <span class="toc-text">State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE"><span class="toc-number">3.1.</span> <span class="toc-text">组合式 API 访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%A6toRefs-%E8%AE%BF%E9%97%AE%E6%89%80%E6%9C%89%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.</span> <span class="toc-text">…toRefs() 访问所有字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reactive-%E8%81%9A%E5%90%88%E5%8D%95%E4%B8%AA%E5%AD%97%E6%AE%B5"><span class="toc-number">3.3.</span> <span class="toc-text">reactive 聚合单个字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#computed-%E8%AE%BF%E9%97%AE%E5%8D%95%E4%B8%AA%E5%AD%97%E6%AE%B5"><span class="toc-number">3.4.</span> <span class="toc-text">computed 访问单个字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getters"><span class="toc-number">4.</span> <span class="toc-text">Getters</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-1"><span class="toc-number">4.1.</span> <span class="toc-text">组合式 API 访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mutations"><span class="toc-number">5.</span> <span class="toc-text">Mutations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-2"><span class="toc-number">5.1.</span> <span class="toc-text">组合式 API 访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%A6mapMutations"><span class="toc-number">5.2.</span> <span class="toc-text">…mapMutations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Action"><span class="toc-number">6.</span> <span class="toc-text">Action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-3"><span class="toc-number">6.1.</span> <span class="toc-text">组合式 API 访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%A6mapActions"><span class="toc-number">6.2.</span> <span class="toc-text">…mapActions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">7.</span> <span class="toc-text">最后</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-vue/2CA7C67D02E74713A030F09651A5F164" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      小白学前端之TypeScript使用Vuex 4.0
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/vue/2CA7C67D02E74713A030F09651A5F164/" class="article-date">
+	  <time datetime="2021-07-29T16:45:15.000Z" itemprop="datePublished">2021-07-29</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Vue/">Vue</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/TypeScript/" rel="tag">TypeScript</a>, <a class="article-tag-link-link" href="/tags/Vue/" rel="tag">Vue</a>, <a class="article-tag-link-link" href="/tags/Vuex/" rel="tag">Vuex</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/vue/2CA7C67D02E74713A030F09651A5F164/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的<strong>状态管理模式</strong>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。</p>
+<p>简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。</p>
+<p>Vuex 分为 5 个部分：</p>
+<ul>
+<li>State：是数据源，存放数据</li>
+<li>Getters：可以取得 State 的数据，然后自定义组装返回新的数据</li>
+<li>Mutations：可以改变 State 的数据，建议方法执行是同步的</li>
+<li>Actions：可以异步执行 Mutations 里的方法</li>
+<li>Modules：每个 Module 都有各自的 State、Getters、Mutations、Actions</li>
+</ul>
+<p>这 5 个部分相辅相成。</p>
+<h2 id="TypeScript-使用"><a href="#TypeScript-使用" class="headerlink" title="TypeScript 使用"></a>TypeScript 使用</h2><p>在 vue 项目根目录执行命令来进行 vuex 模块的安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install vuex@next --save</span><br></pre></td></tr></table></figure>
+
+<p>安装好后我们新建文件 <code>/src/store/store.ts</code> ,然后在里面定义 <code>InjectionKey</code> 和 <code>Store</code></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; InjectionKey &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore, useStore <span class="keyword">as</span> baseUseStore, Store &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义 State 数据类型的接口</span></span><br><span class="line"><span class="keyword">interface</span> IState&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类型传递</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> key: InjectionKey&lt;Store&lt;IState&gt;&gt; = <span class="built_in">Symbol</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用于组合式API setup() 里，省的每次都传入 key </span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">useStore</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> baseUseStore(key)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>main.ts</code> 文件里使用上面定义的 vuex</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; store,key &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line">createApp(App)</span><br><span class="line">.use(store,key)</span><br><span class="line">.mount(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>State 是存储数据源的地方，所以我们可以在这里存储我们的数据，比如我这边定义一个 <code>name</code> 字段，需要在接口 <code>IState</code> 添加定义数据类型</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> IState&#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>createStore</code> 里添加数据</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>数据我们已经定义好了，接下来就是要在页面访问这个数据了，下面提供了两种方式来访问 vuex 里的数据</p>
+<h3 id="组合式-API-访问"><a href="#组合式-API-访问" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>在组合式 API 中，我们可以直接导入刚才在 <code>/src/store/store.ts</code>  里定义的 <code>useStore()</code> 方法来访问 vuex 里的数据</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="comment">// 访问 state 里的 name 数据</span></span><br><span class="line">    <span class="built_in">console</span>.log(store.state.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行代码的话就会在控制台打印 <strong>ooooooh灰灰</strong></p>
+<h3 id="…toRefs-访问所有字段"><a href="#…toRefs-访问所有字段" class="headerlink" title="…toRefs() 访问所有字段"></a>…toRefs() 访问所有字段</h3><p>如果要在页面访问的话，可以利用 <code>...toRefs()</code> 来直接展开 store.state 里的<strong>所有字段</strong>，然后在页面直接访问 vuex 的 state 里的字段</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// App.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; name &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, toRefs&#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    </span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">    </span><br><span class="line">      return &#123;</span><br><span class="line">        // 展开 state 所有的字段</span><br><span class="line">        ...toRefs(store.state)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="reactive-聚合单个字段"><a href="#reactive-聚合单个字段" class="headerlink" title="reactive 聚合单个字段"></a>reactive 聚合单个字段</h3><p>如果你想<strong>单个数据导入</strong>的话，可以直接和页面数据一起放在 <code>reactive</code></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent, reactive, toRefs&#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line">  <span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">let</span> store = useStore()</span><br><span class="line">    	<span class="comment">// 把 vuex 的 state 的数据放进 reactive 里</span></span><br><span class="line">      <span class="keyword">let</span> params = reactive(&#123;</span><br><span class="line">        <span class="attr">name</span>: store.state.name</span><br><span class="line">      &#125;)</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...toRefs(params),</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="computed-访问单个字段"><a href="#computed-访问单个字段" class="headerlink" title="computed 访问单个字段"></a>computed 访问单个字段</h3><p>也可以使用 <code>computed</code> 模块来访问数据，要先导入 vue 里的 <code>computed</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// App.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; name &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, computed&#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    </span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">      </span><br><span class="line">      return &#123;</span><br><span class="line">        name: computed(()=&gt;store.state.name)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Getters"><a href="#Getters" class="headerlink" title="Getters"></a>Getters</h2><p>getters 里的方法在 <code>vuex/types/index.d.ts</code> 中是这样定义的</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> Getter&lt;S, R&gt; = <span class="function">(<span class="params">state: S, getters: <span class="built_in">any</span>, rootState: R, rootGetters: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>他有 4 个参数，分别是 state、getters、rootState、rootGetters</strong></p>
+<p>其中，<strong>state</strong> 可以取得同级中 state 里的数据，<strong>getters</strong> 可以取得同级中 getters 其他的方法返回的数据</p>
+<p>而 <strong>rootState</strong> 和 <strong>rootGetters</strong> 是在当当前 <strong>Getters</strong> 处于 <strong>module</strong> 中时，可以取得根部的 state 和 gatters 里的数据</p>
+<p>比如我们可以将 state 里的变量封装成一句话然后返回：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">getters</span>:&#123;</span><br><span class="line">        newName(state):<span class="built_in">string</span>&#123;</span><br><span class="line">          	<span class="comment">// 通过 state 访问 name 字段</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;大家好！我是：&#x27;</span>+state.name</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>当我们要访问其他 getter 时，我们可以这样：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">        <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">getters</span>:&#123;</span><br><span class="line">        hello(state,getters):<span class="built_in">string</span>&#123;</span><br><span class="line">          	<span class="comment">// 通过 getters 访问其他 getter</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;大家好！我是：&#x27;</span>+state.name+<span class="string">&#x27;,&#x27;</span>+getters.ageInfo</span><br><span class="line">        &#125;,</span><br><span class="line">        ageInfo(state):<span class="built_in">string</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;年龄：&#x27;</span>+state.age</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-1"><a href="#组合式-API-访问-1" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>我们可以在组合式 API 里像访问 state 的里数据一样访问 gatters 里的方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="comment">// 访问 getters 里的 hello 方法</span></span><br><span class="line">    <span class="built_in">console</span>.log(store.getters.hello)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>此外，getters 也可以使用 <code>...toRefs()</code>、<code>computed</code> 这些方法来访问：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; hello &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, computed, toRefs &#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">      return &#123;</span><br><span class="line">        // 通过 computed 访问 getters 里的 hello </span><br><span class="line">        hello: computed(()=&gt;store.getters.hello),</span><br><span class="line">        </span><br><span class="line">        // 通过 ...toRefs() 访问</span><br><span class="line">        // ...toRefs(store.getters),</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Mutations"><a href="#Mutations" class="headerlink" title="Mutations"></a>Mutations</h2><p>如果你要改变 state 里的数据时，就要用到 Mutations 了，它可以提供改变 state 里数据的方法，它在 <code>vuex/types/index.d.ts</code> 中是这样定义的：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> Mutation&lt;S&gt; = <span class="function">(<span class="params">state: S, payload?: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其中 state 可以拿到 state 里的数据，payload 是自定义传入的参数，后面有个问号，代表这是可选项</p>
+<p>所以当我们要改变 state 的字段的值时，我们可以在 store.ts 中这样写代码 ：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">changeName</span>(<span class="params">state</span>)</span>&#123;</span><br><span class="line">            <span class="comment">// 改变 state 中 name 的值</span></span><br><span class="line">            state.name = <span class="string">&#x27;greycode&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>如果要自定义传入参数的话，就可以这样写：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">changeName</span>(<span class="params">state,newName:<span class="built_in">string</span></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// 传入自定义字段并设置</span></span><br><span class="line">            state.name = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-2"><a href="#组合式-API-访问-2" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>在组合式 API 中，我们可以用 <code>commit</code> 来提交执行这个方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="keyword">let</span> change = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 提交执行 mutations 中 changeName 方法</span></span><br><span class="line">      <span class="comment">// store.commit(&#x27;changeName&#x27;)</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 提交执行 mutations 中 changeName 方法,并传入自定义参数</span></span><br><span class="line">      store.commit(<span class="string">&#x27;changeName&#x27;</span>,<span class="string">&#x27;自定义的&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      change</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="…mapMutations"><a href="#…mapMutations" class="headerlink" title="…mapMutations"></a>…mapMutations</h3><p>我们可以直接在组合式 API 中使用 <code>...mapMutations</code> 来获得 mutations 中的方法，然后直接在页面中调用这个方法</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; mapMutations &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="comment">// 使用 ...mapMutations 来获得 mutations 中的方法</span></span><br><span class="line">      ...mapMutations([<span class="string">&#x27;changeName&#x27;</span>])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后直接在页面中使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;changeName&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 也可以传入函数自定义参数 --&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;changeName(’自定义名字‘)&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h2><p>当要异步改变 state 中的数据时，就要用到 Action 了，但是它不是直接改变 state 中的数据，而是通过异步执行 mutations 中的方法来间接改变 state 中的数据的 </p>
+<p>它在 <code>vuex/types/index.d.ts</code> 中是这样定义的：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> Action&lt;S, R&gt; = ActionHandler&lt;S, R&gt; | ActionObject&lt;S, R&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>它支持两种类型的数据，一个是 ActionHandler&lt;S, R&gt; ，另一个是 ActionObject&lt;S, R&gt;。其中 ActionObject 一般用于 Module 中的命名空间，它们的定义如下：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> ActionHandler&lt;S, R&gt; = <span class="function">(<span class="params"><span class="built_in">this</span>: Store&lt;R&gt;, injectee: ActionContext&lt;S, R&gt;, payload?: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> ActionObject&lt;S, R&gt; &#123;</span><br><span class="line">  root?: <span class="built_in">boolean</span>;</span><br><span class="line">  handler: ActionHandler&lt;S, R&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里只讲下 ActionHandler ，另外一个等到 Module 模块中再讲。</p>
+<p>在 ActionHandler  中，它有 3 个参数，分别是 this、injectee、payload，其中 this 代表的是整个 Store 对象，injectee 是当前 Action 所在的上下文，payload 是可以自定义的传入参数</p>
+<p>所以我们可以这样使用它：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;IState&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">changeName</span>(<span class="params">state</span>)</span>&#123;</span><br><span class="line">            state.name = <span class="string">&#x27;异步改名&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">actions</span>:&#123;</span><br><span class="line">        <span class="function"><span class="title">asyncChange</span>(<span class="params">ctx</span>)</span>&#123;</span><br><span class="line">          <span class="comment">// 两秒后更改名字</span></span><br><span class="line">          <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span>&#123;</span><br><span class="line">            ctx.commit(<span class="string">&#x27;changeName&#x27;</span>)</span><br><span class="line">          &#125;,<span class="number">2000</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-3"><a href="#组合式-API-访问-3" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>定义好 actions 后，我们可以在组合式 API 中用 <code>dispatch</code> 来分发 action：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="keyword">let</span> syncChange = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 执行 actions 中的 asyncChange 方法</span></span><br><span class="line">      store.dispatch(<span class="string">&#x27;asyncChange&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      syncChange</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="…mapActions"><a href="#…mapActions" class="headerlink" title="…mapActions"></a>…mapActions</h3><p>也可以用 <code>...mapActions</code> 来直接获得 actions 中的方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; mapActions &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> defineComponent(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> store = useStore()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      ...mapActions([<span class="string">&#x27;asyncChange&#x27;</span>])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>页面使用的话和 mutation 差不多，直接访问 actions 中的方法名就可以了：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;asyncChange&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>除此之外还有一个 Module 模块，不过一般小项目用不到而且内容也比较多，下次再学吧。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.mjava.top/vue/2CA7C67D02E74713A030F09651A5F164/" title="小白学前端之TypeScript使用Vuex 4.0" target="_blank" rel="external">http://blog.mjava.top/vue/2CA7C67D02E74713A030F09651A5F164/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://blog.mjava.top" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/images/logo3.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://blog.mjava.top" target="_blank"><span class="text-dark">oooooo灰灰</span><small class="ml-1x">潜水是喧哗的，深水是沉默的</small></a></h3>
+        <div>专业打工人</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/" title="ZooKeeper客户端详解及可视化客户端"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/tool/9ACF61395A77470CA029D24AEC2CA42F/" title="利用腾讯位置API进行的阿里云DDNS工具"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">
+        <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/greycodee" rel="external nofollow noreferrer" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/8d1Tgi4tDvhEY5o" rel="external nofollow noreferrer" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 ooooooh灰灰
+        
+        <div>
+            <a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn">赣ICP备17003482号</a>
+            <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278207736'%3E%3C/span%3E%3Cscript src='http://v1.cnzz.com/z_stat.php%3Fid%3D1278207736%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </div>
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" rel="external nofollow noreferrer" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" rel="external nofollow noreferrer" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/plugin.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: 'https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/insight.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>

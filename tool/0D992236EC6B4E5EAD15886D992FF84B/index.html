@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>用Darabonba一键生成7种语言的代码 | 打工纪实</title>
+  <meta name="description" content="0x1 介绍最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。  0x2 安装我们按照官方的步骤来安装它，因为是用 Nodejs 写的，所以可以用 npm 来安装它 su">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Darabonba一键生成7种语言的代码">
+<meta property="og:url" content="http://blog.mjava.top/tool/0D992236EC6B4E5EAD15886D992FF84B/index.html">
+<meta property="og:site_name" content="打工纪实">
+<meta property="og:description" content="0x1 介绍最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。  0x2 安装我们按照官方的步骤来安装它，因为是用 Nodejs 写的，所以可以用 npm 来安装它 su">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cdn.mjava.top/blog/1PH6HFimage-20210605175031562.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/kS9v8bimage-20210604161124444.png">
+<meta property="og:image" content="http://cdn.mjava.top/blog/drcDzN%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.jpg">
+<meta property="og:image" content="http://cdn.mjava.top/blog/Cxudyeimage-20210605170948596.png">
+<meta property="article:published_time" content="2021-06-05T18:08:19.000Z">
+<meta property="article:modified_time" content="2021-08-20T08:40:20.004Z">
+<meta property="article:author" content="ooooooh灰灰">
+<meta property="article:tag" content="Darabonba">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.mjava.top/blog/1PH6HFimage-20210605175031562.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.mjava.top/tool/0D992236EC6B4E5EAD15886D992FF84B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/css/style.css">
+
+  
+    <link href="https://cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="http://blog.mjava.top" target="_blank">
+          <img class="img-circle img-rotate" src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/images/logo3.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">oooooo灰灰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">潜水是喧哗的，深水是沉默的</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-wikis">
+          <a href="/wikis">
+            
+            <i class="icon icon-book-shelf"></i>
+            
+            <span class="menu-title">wiki</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/greycodee" rel="external nofollow noreferrer" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/8d1Tgi4tDvhEY5o" rel="external nofollow noreferrer" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>记录打工生活!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Dubbo/">Dubbo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Essay/">Essay</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GOF/">GOF</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Jenkins/">Jenkins</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Protocol/">Protocol</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Quarkus/">Quarkus</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommend/">Recommend</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RocketMQ/">RocketMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vert-x/">Vert.x</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WebSecurity/">WebSecurity</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ZooKeeper/">ZooKeeper</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AVL/" rel="tag">AVL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArrayDeque/" rel="tag">ArrayDeque</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArrayList/" rel="tag">ArrayList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Aviator/" rel="tag">Aviator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Base64/" rel="tag">Base64</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS%E6%A1%86%E6%9E%B6/" rel="tag">CAS框架</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDNS/" rel="tag">DDNS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Darabonba/" rel="tag">Darabonba</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Disruptor/" rel="tag">Disruptor</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbbo/" rel="tag">Dubbbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dubbo/" rel="tag">Dubbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fegin/" rel="tag">Fegin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GOF/" rel="tag">GOF</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gateway/" rel="tag">Gateway</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-Actions/" rel="tag">Github Actions</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/" rel="tag">Go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graal-VM/" rel="tag">Graal VM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP%E5%8D%8F%E8%AE%AE/" rel="tag">HTTP协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">32</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json-Schema/" rel="tag">Json-Schema</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jvm/" rel="tag">Jvm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDC/" rel="tag">MDC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nacos/" rel="tag">Nacos</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nio/" rel="tag">Nio</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OAuth/" rel="tag">OAuth</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OAuth2-0/" rel="tag">OAuth2.0</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OOP/" rel="tag">OOP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pit/" rel="tag">Pit</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quarkus/" rel="tag">Quarkus</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RaspberryPi/" rel="tag">RaspberryPi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recursive/" rel="tag">Recursive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Resttemplate/" rel="tag">Resttemplate</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSO/" rel="tag">SSO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SaaS/" rel="tag">SaaS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Singleton/" rel="tag">Singleton</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SonarQube/" rel="tag">SonarQube</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-AOP/" rel="tag">Spring AOP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Cloud-Gateway/" rel="tag">Spring Cloud Gateway</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/" rel="tag">SpringCloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Time/" rel="tag">Time</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UML/" rel="tag">UML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vert-x/" rel="tag">Vert.x</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuex/" rel="tag">Vuex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZooKeeper/" rel="tag">ZooKeeper</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastDFS/" rel="tag">fastDFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitalk/" rel="tag">gitalk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/smtp/" rel="tag">smtp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring-security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/telnet/" rel="tag">telnet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="tag">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81/" rel="tag">参数验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" rel="tag">工厂方法模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">平衡二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">建造者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%92%E5%8F%91%E6%83%85%E6%84%9F/" rel="tag">抒发情感</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="tag">抽象工厂模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A8%E8%8D%90/" rel="tag">推荐</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" rel="tag">模板方法模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">源码解析</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8E/" rel="tag">表达式引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%92%89%E9%92%89%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="tag">钉钉机器人</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%B2%E8%B0%88/" rel="tag">闲谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E7%BE%A4/" rel="tag">集群</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AVL/" style="font-size: 13px;">AVL</a> <a href="/tags/Algorithm/" style="font-size: 13px;">Algorithm</a> <a href="/tags/ArrayDeque/" style="font-size: 13px;">ArrayDeque</a> <a href="/tags/ArrayList/" style="font-size: 13px;">ArrayList</a> <a href="/tags/Aviator/" style="font-size: 13px;">Aviator</a> <a href="/tags/Base64/" style="font-size: 13px;">Base64</a> <a href="/tags/CAS%E6%A1%86%E6%9E%B6/" style="font-size: 13px;">CAS框架</a> <a href="/tags/DDNS/" style="font-size: 13px;">DDNS</a> <a href="/tags/Darabonba/" style="font-size: 13px;">Darabonba</a> <a href="/tags/Disruptor/" style="font-size: 13.67px;">Disruptor</a> <a href="/tags/Docker/" style="font-size: 13.44px;">Docker</a> <a href="/tags/Dubbbo/" style="font-size: 13px;">Dubbbo</a> <a href="/tags/Dubbo/" style="font-size: 13px;">Dubbo</a> <a href="/tags/Fegin/" style="font-size: 13px;">Fegin</a> <a href="/tags/GOF/" style="font-size: 13.11px;">GOF</a> <a href="/tags/Gateway/" style="font-size: 13px;">Gateway</a> <a href="/tags/Git/" style="font-size: 13.11px;">Git</a> <a href="/tags/Github-Actions/" style="font-size: 13px;">Github Actions</a> <a href="/tags/Go/" style="font-size: 13.11px;">Go</a> <a href="/tags/Graal-VM/" style="font-size: 13px;">Graal VM</a> <a href="/tags/HTTP%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">HTTP协议</a> <a href="/tags/JVM/" style="font-size: 13.78px;">JVM</a> <a href="/tags/JWT/" style="font-size: 13px;">JWT</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Jenkins/" style="font-size: 13.56px;">Jenkins</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Json-Schema/" style="font-size: 13px;">Json-Schema</a> <a href="/tags/Jvm/" style="font-size: 13px;">Jvm</a> <a href="/tags/LinkedList/" style="font-size: 13px;">LinkedList</a> <a href="/tags/Linux/" style="font-size: 13.89px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/MDC/" style="font-size: 13px;">MDC</a> <a href="/tags/Maven/" style="font-size: 13px;">Maven</a> <a href="/tags/MySQL/" style="font-size: 13.11px;">MySQL</a> <a href="/tags/Mysql/" style="font-size: 13.11px;">Mysql</a> <a href="/tags/Nacos/" style="font-size: 13.11px;">Nacos</a> <a href="/tags/Nio/" style="font-size: 13.33px;">Nio</a> <a href="/tags/OAuth/" style="font-size: 13px;">OAuth</a> <a href="/tags/OAuth2-0/" style="font-size: 13px;">OAuth2.0</a> <a href="/tags/OOP/" style="font-size: 13px;">OOP</a> <a href="/tags/Pit/" style="font-size: 13.44px;">Pit</a> <a href="/tags/Quarkus/" style="font-size: 13.22px;">Quarkus</a> <a href="/tags/RaspberryPi/" style="font-size: 13px;">RaspberryPi</a> <a href="/tags/Recursive/" style="font-size: 13px;">Recursive</a> <a href="/tags/Resttemplate/" style="font-size: 13px;">Resttemplate</a> <a href="/tags/RocketMQ/" style="font-size: 13px;">RocketMQ</a> <a href="/tags/SEO/" style="font-size: 13px;">SEO</a> <a href="/tags/SSO/" style="font-size: 13px;">SSO</a> <a href="/tags/SaaS/" style="font-size: 13px;">SaaS</a> <a href="/tags/Shell/" style="font-size: 13px;">Shell</a> <a href="/tags/Singleton/" style="font-size: 13px;">Singleton</a> <a href="/tags/SonarQube/" style="font-size: 13px;">SonarQube</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/Spring-AOP/" style="font-size: 13px;">Spring AOP</a> <a href="/tags/Spring-Cloud-Gateway/" style="font-size: 13px;">Spring Cloud Gateway</a> <a href="/tags/SpringBoot/" style="font-size: 13px;">SpringBoot</a> <a href="/tags/SpringCloud/" style="font-size: 13px;">SpringCloud</a> <a href="/tags/Time/" style="font-size: 13px;">Time</a> <a href="/tags/TypeScript/" style="font-size: 13px;">TypeScript</a> <a href="/tags/UI/" style="font-size: 13px;">UI</a> <a href="/tags/UML/" style="font-size: 13px;">UML</a> <a href="/tags/Vert-x/" style="font-size: 13px;">Vert.x</a> <a href="/tags/Vue/" style="font-size: 13.11px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 13px;">Vuex</a> <a href="/tags/ZooKeeper/" style="font-size: 13.11px;">ZooKeeper</a> <a href="/tags/fastDFS/" style="font-size: 13px;">fastDFS</a> <a href="/tags/gitalk/" style="font-size: 13px;">gitalk</a> <a href="/tags/smtp/" style="font-size: 13px;">smtp</a> <a href="/tags/spring-security/" style="font-size: 13px;">spring-security</a> <a href="/tags/telnet/" style="font-size: 13px;">telnet</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">二叉树</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 13.11px;">分布式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">参数验证</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">工厂方法模式</a> <a href="/tags/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">平衡二叉树</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">建造者模式</a> <a href="/tags/%E6%8A%92%E5%8F%91%E6%83%85%E6%84%9F/" style="font-size: 13px;">抒发情感</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">抽象工厂模式</a> <a href="/tags/%E6%8E%A8%E8%8D%90/" style="font-size: 13px;">推荐</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 13.11px;">数据结构</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">模板方法模式</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 13px;">注解</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">源码分析</a> <a href="/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" style="font-size: 13.11px;">源码解析</a> <a href="/tags/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8E/" style="font-size: 13px;">表达式引擎</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.44px;">设计模式</a> <a href="/tags/%E9%92%89%E9%92%89%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 13px;">钉钉机器人</a> <a href="/tags/%E9%97%B2%E8%B0%88/" style="font-size: 13px;">闲谈</a> <a href="/tags/%E9%9B%86%E7%BE%A4/" style="font-size: 13px;">集群</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Tool/">Tool</a>
+              </p>
+              <p class="item-title">
+                <a href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/" class="title">用 Json-Schema 来验证你的请求参数</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-19T16:40:05.000Z" itemprop="datePublished">2021-08-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java/">Java</a>
+              </p>
+              <p class="item-title">
+                <a href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/" class="title">AviatorScript轻量级高性能脚本语言</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-17T16:10:53.000Z" itemprop="datePublished">2021-08-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ZooKeeper/">ZooKeeper</a>
+              </p>
+              <p class="item-title">
+                <a href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/" class="title">ZooKeeper单机伪集群搭建</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-11T15:59:52.000Z" itemprop="datePublished">2021-08-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/ZooKeeper/">ZooKeeper</a>
+              </p>
+              <p class="item-title">
+                <a href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/" class="title">ZooKeeper客户端详解及可视化客户端</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-09T14:54:39.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Vue/">Vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/vue/2CA7C67D02E74713A030F09651A5F164/" class="title">小白学前端之TypeScript使用Vuex 4.0</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-07-29T16:45:15.000Z" itemprop="datePublished">2021-07-29</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x1-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">0x1 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x2-%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">0x2 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x3-%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">0x3 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99-Darabonba-DSL-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">编写 Darabonba DSL 表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97"><span class="toc-number">3.2.</span> <span class="toc-text">安装自定义模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Darafile"><span class="toc-number">3.3.</span> <span class="toc-text">配置 Darafile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81"><span class="toc-number">3.4.</span> <span class="toc-text">生成代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97"><span class="toc-number">4.</span> <span class="toc-text">0x3 自定义模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%A8%A1%E7%89%88"><span class="toc-number">4.1.</span> <span class="toc-text">配置模版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99-Java-%E6%A8%A1%E5%9D%97"><span class="toc-number">4.2.</span> <span class="toc-text">编写 Java 模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Maven-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">4.2.1.</span> <span class="toc-text">Maven 命令执行出现问题解决办法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99-Go-%E6%A8%A1%E5%9D%97"><span class="toc-number">4.3.</span> <span class="toc-text">编写 Go 模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0-Darabonba-%E4%BB%93%E5%BA%93"><span class="toc-number">4.4.</span> <span class="toc-text">上传 Darabonba 仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%A8%A1%E5%9D%97"><span class="toc-number">4.5.</span> <span class="toc-text">使用自定义的模块</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-tool/0D992236EC6B4E5EAD15886D992FF84B" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      用Darabonba一键生成7种语言的代码
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/tool/0D992236EC6B4E5EAD15886D992FF84B/" class="article-date">
+	  <time datetime="2021-06-05T18:08:19.000Z" itemprop="datePublished">2021-06-05</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Tool/">Tool</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Darabonba/" rel="tag">Darabonba</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/tool/0D992236EC6B4E5EAD15886D992FF84B/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><img src="http://cdn.mjava.top/blog/1PH6HFimage-20210605175031562.png" alt="图片"></p>
+<h2 id="0x1-介绍"><a href="#0x1-介绍" class="headerlink" title="0x1 介绍"></a>0x1 介绍</h2><p>最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。</p>
+<p><img src="http://cdn.mjava.top/blog/kS9v8bimage-20210604161124444.png" alt="image-20210604161124444"></p>
+<h2 id="0x2-安装"><a href="#0x2-安装" class="headerlink" title="0x2 安装"></a>0x2 安装</h2><p>我们按照官方的步骤来安装它，因为是用 Nodejs 写的，所以可以用 npm 来安装它</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo npm install -g @darabonba/cli</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后可以在终端输入 <code>dara</code> ，如果输出版本号就是说明安装成功了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara</span><br><span class="line"></span><br><span class="line">The CLI for Darabonba 1.1.8</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x3-使用"><a href="#0x3-使用" class="headerlink" title="0x3 使用"></a>0x3 使用</h2><p>安装完成后就可以使用了，首先创建一个文件夹来存放这个项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir demo &amp;&amp; cd demo</span><br></pre></td></tr></table></figure>
+
+<p>然后用 <code>dara</code> 命令来进行初始化模块，然后依次输入包名等信息。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara init</span><br><span class="line">package scope: demo</span><br><span class="line">package name: demo</span><br><span class="line">package version: 1.0.0</span><br><span class="line">main entry: ./demo.dara</span><br></pre></td></tr></table></figure>
+
+<p>初始化完成后，我们就可以在 <code>demo.dara</code> 文件里进行 Darabonba DSL 表达式的编写里</p>
+<p>比如我们编写一个经典的输出 hello world！</p>
+<h3 id="编写-Darabonba-DSL-表达式"><a href="#编写-Darabonba-DSL-表达式" class="headerlink" title="编写 Darabonba DSL 表达式"></a>编写 Darabonba DSL 表达式</h3><p>在 <code>demo.dara</code> 文件里写入如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Console;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">init</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        Console.log(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装自定义模块"><a href="#安装自定义模块" class="headerlink" title="安装自定义模块"></a>安装自定义模块</h3><p>因为上面我们用到了 <code>Console</code> 模块，所以我们在当前文件路径下执行如下命令，进行模块的安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara install</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行后将显示下面这些信息</span></span><br><span class="line">fetching from remote repository</span><br><span class="line"></span><br><span class="line">1 libraries installed. (0 local, 1 remote)</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令后，当前文件夹下就会出现一个 <strong>libraries</strong> 文件夹</p>
+<h3 id="配置-Darafile"><a href="#配置-Darafile" class="headerlink" title="配置 Darafile"></a>配置 Darafile</h3><p><code>Darafile</code> 是 <code>Darabonba</code> 的模块管理文件，类似 <code>Java</code> 中的 <code>pom.xml</code> 或者 <code>Node.js</code> 中的 <code>package.json</code>，这里我们要生成 <code>Go</code> 和 <code>Java</code> 的代码，所以只要做如下配置就可以了。具体的可以查看<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/aliyun/darabonba/blob/master/doc/darafile.md">官方的详细介绍</a>。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scope&quot;</span>: <span class="string">&quot;demo&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;demo&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;main&quot;</span>: <span class="string">&quot;./demo.dara&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;libraries&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;Console&quot;</span>: <span class="string">&quot;darabonba:Console:*&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  <span class="attr">&quot;java&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;package&quot;</span>: <span class="string">&quot;top.mjava.demo&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;className&quot;</span>:<span class="string">&quot;TestDemo&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>libraries</code> 里配置我们刚才所使用的 <code>Console</code> 依赖模块，在 <code>java</code> 对象字段里配置了包名和类文件名。</p>
+<h3 id="生成代码"><a href="#生成代码" class="headerlink" title="生成代码"></a>生成代码</h3><p>官方暂时只支持 TypeScript、C#、Java、 Go、PHP、Python3、Python2、CPP 的代码生成，后续的话还会支持 Swift、Dart、Ruby、Lua、Kotlin。</p>
+<p>我们这边只生成一下 Java 和 Go 代码，所以执行下面的命令就可以了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成 Java 代码</span></span><br><span class="line">dara codegen java ./java-demo</span><br><span class="line"><span class="meta">#</span><span class="bash"> 生成 Go 代码</span></span><br><span class="line">dara codegen go ./go-demo</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令后，当前文件夹就会出现 <strong>java-demo</strong> 和 <strong>go-demo</strong> 两个文件夹了。然后就可以进入文件夹看到相应生成的代码了</p>
+<p><strong>Java</strong>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> top.mjava.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.aliyun.tea.*;</span><br><span class="line"><span class="keyword">import</span> com.aliyun.teaconsole.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestDemo</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        com.aliyun.teaconsole.Client.log(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Go</strong>:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> client</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  console  <span class="string">&quot;github.com/alibabacloud-go/tea-console/client&quot;</span></span><br><span class="line">  <span class="string">&quot;github.com/alibabacloud-go/tea/tea&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Client <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewClient</span><span class="params">()</span><span class="params">(*Client, error)</span></span> &#123;</span><br><span class="line">  client := <span class="built_in">new</span>(Client)</span><br><span class="line">  err := client.Init()</span><br><span class="line">  <span class="keyword">return</span> client, err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(client *Client)</span><span class="title">Init</span><span class="params">()</span><span class="params">(_err error)</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x3-自定义模块"><a href="#0x3-自定义模块" class="headerlink" title="0x3 自定义模块"></a>0x3 自定义模块</h2><p>上面所用到的 <code>Console</code> 就是通过自定义模块打包上传到了 Darabonba 的<a target="_blank" rel="noopener external nofollow noreferrer" href="https://darabonba.api.aliyun.com/module">模块仓库</a>，然后我们可以直接通过 <code>libraries</code> 来使用它。</p>
+<p>所以我们可以自定义自己的模块上传到 Darabonba 模块仓库，接下来我们自定义一个获取 <strong>UUID</strong> 的模块，让它支持 Java 和 Go 语言来生成使用。</p>
+<p><img src="http://cdn.mjava.top/blog/drcDzN%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.jpg" alt="未命名文件"></p>
+<p>从上面的流程图可以知道，模块是由各个语言自己编写代码，然后通过 Darabonba 聚合后上传到模块仓库，然后使用者从仓库安装模块，并且下载对应语言的依赖包。</p>
+<p>我们这边要编写 Java 和 Go 语言获取 UUID 的代码，然后通过 Darabonba 打包上传到模块仓库。</p>
+<h3 id="配置模版"><a href="#配置模版" class="headerlink" title="配置模版"></a>配置模版</h3><p>编写模块我们也是用 Darabonba 先生成各个语言的模版代码，然后再编写相应的具体实现。</p>
+<p>初始化</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara init</span><br><span class="line">package scope: greycode</span><br><span class="line">package name: UUID</span><br><span class="line">package version: 1.0.0</span><br><span class="line">main entry: ./main.dara</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我们先配置好 <strong>Darafile</strong>:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scope&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;UUID&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;main&quot;</span>: <span class="string">&quot;./main.dara&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;java&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;package&quot;</span>: <span class="string">&quot;top.mjava.uuid&quot;</span>,</span><br><span class="line">		<span class="attr">&quot;packageInfo&quot;</span>: &#123;</span><br><span class="line">			<span class="attr">&quot;description&quot;</span>: <span class="string">&quot;UUID generated for Darabonba moudle&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;url&quot;</span>: <span class="string">&quot;https://github.com/greycodee/tea-uuid&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerId&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerName&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerEmail&quot;</span>: <span class="string">&quot;zhengminghui99@gmail.com&quot;</span></span><br><span class="line">		&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <strong>main.dara</strong> 里编写一个静态方法：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return <span class="variable">uuid</span></span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">uuid</span>(<span class="params"></span>): <span class="title">string</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写-Java-模块"><a href="#编写-Java-模块" class="headerlink" title="编写 Java 模块"></a>编写 Java 模块</h3><p>按上面的步骤配置好后就可以生成 Java 代码了，在当前目录下执行下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara codegen java ./java</span><br></pre></td></tr></table></figure>
+
+<p>然后进入 <strong>java 文件夹</strong>，找到 <strong>Client.java</strong>，在 <code>uuid()</code> 方法里添加 UUID 生成的代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> top.mjava.uuid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.aliyun.tea.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">uuid</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">      	<span class="comment">// 添加这行代码</span></span><br><span class="line">        <span class="keyword">return</span> UUID.randomUUID().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编写好代码后，还需要配置 pom.xml 文件，然后把 Java 代码打包发布到 maven 仓库上。</strong></p>
+<p>配置好 pom.xml 文件到下面这几个配置</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.mjava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tea-uuid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>tea-uuid<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>还有把 pom.xml 里的仓库配置换成我们自己的，我这边也是用阿里云的 maven 参考。你们可以自己去阿里云 maven 注册自己的账号。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="deletion">-  &lt;distributionManagement&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;snapshotRepository&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;id&gt;sonatype-nexus-snapshots&lt;/id&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots&lt;/url&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;/snapshotRepository&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;repository&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;id&gt;sonatype-nexus-staging&lt;/id&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;url&gt;https://oss.sonatype.org/service/local/staging/deploy/maven2/&lt;/url&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;/repository&gt;</span></span><br><span class="line"><span class="deletion">-  &lt;/distributionManagement&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+ &lt;distributionManagement&gt;</span></span><br><span class="line"><span class="addition">+    &lt;repository&gt;</span></span><br><span class="line"><span class="addition">+        &lt;id&gt;rdc-releases_my&lt;/id&gt;</span></span><br><span class="line"><span class="addition">+        &lt;url&gt;https://repo.rdc.aliyun.com/repository/102997-release-dTwmzu/&lt;/url&gt;</span></span><br><span class="line"><span class="addition">+    &lt;/repository&gt;</span></span><br><span class="line"><span class="addition">+    &lt;snapshotRepository&gt;</span></span><br><span class="line"><span class="addition">+        &lt;id&gt;rdc-snapshots_my&lt;/id&gt;</span></span><br><span class="line"><span class="addition">+        &lt;url&gt;https://repo.rdc.aliyun.com/repository/102997-snapshot-d0gx8B/&lt;/url&gt;</span></span><br><span class="line"><span class="addition">+    &lt;/snapshotRepository&gt;</span></span><br><span class="line"><span class="addition">+ &lt;/distributionManagement&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置好后就可以执行下面的命令将代码打包推送到远程 maven 仓库了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn clean source:jar javadoc:jar package deploy -Dmaven.test.skip=true -Dgpg.skip</span><br></pre></td></tr></table></figure>
+
+<p>看到下面的信息就说明部署成功了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[INFO] 阿里云Maven中央仓库为阿里云云效提供的公共代理仓库，云效也提供了免费、可靠的Maven私有仓库Packages，欢迎您体验使用。https://www.aliyun.com/product/yunxiao/packages?channel=pd_maven_download</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  5.538 s</span><br><span class="line">[INFO] Finished at: 2021-06-05T16:00:28+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h4 id="Maven-命令执行出现问题解决办法"><a href="#Maven-命令执行出现问题解决办法" class="headerlink" title="Maven 命令执行出现问题解决办法"></a>Maven 命令执行出现问题解决办法</h4><ul>
+<li><p>如果执行 maven 命令进行部署时，出现下面的错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal org.apache.maven.plugins:maven-gpg-plugin:1.6:sign (sign-artifacts) on project tea-uuid: Unable to execute gpg command: Error while executing process. Cannot run program &quot;gpg&quot;: error=2, No such file or directory -&gt; [Help 1]</span><br></pre></td></tr></table></figure>
+
+<p>可以通过添加 <code>-Dgpg.skip</code> 解决</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn clean source:jar javadoc:jar package deploy -Dmaven.test.skip=true -Dgpg.skip</span><br></pre></td></tr></table></figure></li>
+<li><p>如果出现下面的的错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal org.sonatype.plugins:nexus-staging-maven-plugin:1.6.3:deploy (injected-nexus-deploy) on project tea-uuid: Execution injected-nexus-deploy of goal org.sonatype.plugins:nexus-staging-maven-plugin:1.6.3:deploy failed: Server credentials with ID &quot;sonatype-nexus-staging&quot; not found! -</span><br></pre></td></tr></table></figure>
+
+<p>可以删除 pom.xml 文件里的 <code>sonatype-nexus-staging</code> 配置</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="deletion">- &lt;plugin&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;groupId&gt;org.sonatype.plugins&lt;/groupId&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;artifactId&gt;nexus-staging-maven-plugin&lt;/artifactId&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;version&gt;1.6.3&lt;/version&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;extensions&gt;true&lt;/extensions&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;configuration&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;serverId&gt;sonatype-nexus-staging&lt;/serverId&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;nexusUrl&gt;https://oss.sonatype.org/&lt;/nexusUrl&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;autoReleaseAfterClose&gt;true&lt;/autoReleaseAfterClose&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;/configuration&gt;</span></span><br><span class="line"><span class="deletion">- &lt;/plugin&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="编写-Go-模块"><a href="#编写-Go-模块" class="headerlink" title="编写 Go 模块"></a>编写 Go 模块</h3><p>老规矩，首先先生成 Go 的代码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara codegen go ./go</span><br></pre></td></tr></table></figure>
+
+<p>然后编辑 <code>client.go</code> 文件，改为如下代码</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @return uuid</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">package</span> client</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;github.com/google/uuid&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Uuid</span> <span class="params">()</span> <span class="params">(_result <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">  <span class="comment">// V4 基于随机数</span></span><br><span class="line">  u4 := uuid.New()</span><br><span class="line">  <span class="keyword">return</span> u4.String()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后 <code>go.mod </code> 文件里的 module 改为我们的上传 Go 代码的仓库地址</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">module github.com/greycodee/tea-uuid-<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
+
+<p>然后推送到 GitHub 并打上一个 Tag 作为这个 Go 库的版本号，这边我设置版本号为 <code>v1.0.0</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag v1.0.0</span><br><span class="line">git push origin v1.0.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="上传-Darabonba-仓库"><a href="#上传-Darabonba-仓库" class="headerlink" title="上传 Darabonba 仓库"></a>上传 Darabonba 仓库</h3><p>编写好相应模块的代码并打包上传到对应的原创仓库后，就可以配置 <strong>Darafile</strong> 文件了</p>
+<p>在 Darafile 添加 releases 信息</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scope&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;UUID&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;main&quot;</span>: <span class="string">&quot;./main.dara&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;releases&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;go&quot;</span>: <span class="string">&quot;github.com/greycodee/tea-uuid-go/client:v1.0.0&quot;</span>,</span><br><span class="line">		<span class="attr">&quot;java&quot;</span>: <span class="string">&quot;top.mjava:tea-uuid:1.0&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;java&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;package&quot;</span>: <span class="string">&quot;top.mjava.uuid&quot;</span>,</span><br><span class="line">		<span class="attr">&quot;packageInfo&quot;</span>: &#123;</span><br><span class="line">			<span class="attr">&quot;description&quot;</span>: <span class="string">&quot;UUID generated for Darabonba moudle&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;url&quot;</span>: <span class="string">&quot;https://github.com/greycodee/tea-uuid&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerId&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerName&quot;</span>: <span class="string">&quot;greycode&quot;</span>,</span><br><span class="line">			<span class="attr">&quot;developerEmail&quot;</span>: <span class="string">&quot;zhengminghui99@gmail.com&quot;</span></span><br><span class="line">		&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后去 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://darabonba.api.aliyun.com/admin/maintainer">Darabonba 模块仓库</a>里注册一个账号，然后点击<code>个人中心-&gt;Scope-&gt;添加scope</code>，添加一个 scope ，<strong>保持和 Darafile 文件里的 scope 一致。</strong></p>
+<p>注册完成后在项目目录下执行 <code>dara login</code> 命令，输入刚才注册的账号密码，进行登陆。</p>
+<p>执行 <code>dara pack</code> 进行打包</p>
+<p>再执行 <code>dara publish</code> 进行发布</p>
+<p>发布完成后就可在  Darabonba 模块仓库里看到刚才发布的包了</p>
+<p><img src="http://cdn.mjava.top/blog/Cxudyeimage-20210605170948596.png" alt="image-20210605170948596"></p>
+<blockquote>
+<p>Darabonba UUID 模块代码地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/tea-uuid">https://github.com/greycodee/tea-uuid</a></p>
+<p>Go 模块代码地址： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/tea-uuid-go">https://github.com/greycodee/tea-uuid-go</a></p>
+</blockquote>
+<h3 id="使用自定义的模块"><a href="#使用自定义的模块" class="headerlink" title="使用自定义的模块"></a>使用自定义的模块</h3><p>上传 Darabonba 模块仓库后，我们就可以向刚开始使用 Console 模块那样来使用 UUID 模块了</p>
+<p>Darafile 添加 libraries</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;libraries&quot;</span>: &#123;</span><br><span class="line">  <span class="attr">&quot;UUID&quot;</span>: <span class="string">&quot;greycode:UUID:*&quot;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>dara</code> 代码里使用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Console;</span><br><span class="line"><span class="keyword">import</span> UUID;</span><br><span class="line"><span class="function"><span class="title">init</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">	Console.log(UUID.uuid());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.mjava.top/tool/0D992236EC6B4E5EAD15886D992FF84B/" title="用Darabonba一键生成7种语言的代码" target="_blank" rel="external">http://blog.mjava.top/tool/0D992236EC6B4E5EAD15886D992FF84B/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="http://blog.mjava.top" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/images/logo3.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="http://blog.mjava.top" target="_blank"><span class="text-dark">oooooo灰灰</span><small class="ml-1x">潜水是喧哗的，深水是沉默的</small></a></h3>
+        <div>专业打工人</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/linux/9AFC3EFAEC15479BB5FBC6F670594A94/" title="后端服务器时间不一致问题解决手册"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/protocol/0143CD7666CD44389FE6F565E10EEE1A/" title="什么是HTTP协议？"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">
+        <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/greycodee" rel="external nofollow noreferrer" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/8d1Tgi4tDvhEY5o" rel="external nofollow noreferrer" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 ooooooh灰灰
+        
+        <div>
+            <a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn">赣ICP备17003482号</a>
+            <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278207736'%3E%3C/span%3E%3Cscript src='http://v1.cnzz.com/z_stat.php%3Fid%3D1278207736%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </div>
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" rel="external nofollow noreferrer" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" rel="external nofollow noreferrer" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/plugin.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: 'https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/greycodee/greycodee.github.io/js/insight.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
