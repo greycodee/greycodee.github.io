@@ -13,8 +13,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'1
-url: http://blog.mjava.top
-root: /
+url: https://greycodee.github.io/blog/
+root: /blog
 #permalink: :year/:month/:day/:title/
 permalink: :title/
 permalink_defaults:
