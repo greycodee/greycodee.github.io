@@ -3,4 +3,4 @@
 	url = https://github.com/greycodee/hexo-theme-pure.git
 [submodule "themes/vexo"]
 	path = themes/vexo
-	url = git@github.com:greycodee/hexo-theme-vexo.git
+	url = git@github.com:greycodee/hexo-theme-vexo.git 
