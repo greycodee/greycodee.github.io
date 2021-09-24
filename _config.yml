@@ -14,7 +14,7 @@ timezone:
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'1
 url: https://greycodee.github.io/blog/
-root: /blog
+root: /
 #permalink: :year/:month/:day/:title/
 permalink: :title/
 permalink_defaults:
@@ -97,7 +97,7 @@ deploy:
  #port: 22
  #agent: $SSH_AUTH_SOCK
  type: git
- repository: https://github.com/GreyCode9/greycode9.github.io.git 
+ repository: https://github.com/greycodee/greycodee.github.io.git 
  branch: master
 
 #search
