@@ -29,7 +29,7 @@ categories:
 
 ### 使用
 
-[](http://xhh.dengzii.com/blog/20200729000830.png)
+![](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200729000830.png)
 
 ```java
 interface TestInterface{
@@ -89,7 +89,7 @@ class ProxyHandle implements InvocationHandler{
 
 ### 使用
 
-[](http://xhh.dengzii.com/blog/20200729001250.png)
+![](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200729001250.png)
 
 ```java
 interface InterTest{

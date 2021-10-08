@@ -30,7 +30,7 @@ categories:
 
 试了好几种方法，删字段，重新建。删表，重新建。都不行。。。。。静下心来，于是打算从mysql服务器入手。进入到mysql对应库的文件夹，发现`tiny_user_info`这个表有三个文件
 
-![图片](https://i.imgur.com/OY1KhKo.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/OY1KhKo.png)
 
 和常见的多了一个`TRG`文件。这是一个触发器文件，打开一看，发现了`user_name`字段。。。。。。
 

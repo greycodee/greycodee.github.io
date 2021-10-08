@@ -37,7 +37,7 @@ sudo docker pull mysql:5.7			//拉取镜像到本地
 
 注：上面mysql:5.7指的是拉取5.7版本的mysql，如果不加直接写mysql的话默认是拉取mysql的最新版本。
 
-![拉取镜像](https://i.imgur.com/oFZqBjP.png)
+![拉取镜像](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/oFZqBjP.png)
 
 如果显示上面这样，说明已经拉取好了。
 
@@ -47,7 +47,7 @@ sudo docker pull mysql:5.7			//拉取镜像到本地
 sudo docker images		//查看本地镜像
 ```
 
-![查看本地镜像](https://i.imgur.com/mkAm9SV.png)
+![查看本地镜像](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/mkAm9SV-20211008161729338.png)
 
 
 
@@ -64,7 +64,7 @@ sudo docker run -d -p 3306:3306 --name mysql5.7 -e MYSQL_ROOT_PASSWORD=root mysq
 * --name    自定义容器名字，方便记忆，不设置的话会随机生产
 * -e        容器环境变量
 
-![创建容器](https://i.imgur.com/sd6nZMU.png)
+![创建容器](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/sd6nZMU.png)
 
 创建好的话会显示一串随机生产的id
 
@@ -76,7 +76,7 @@ sudo docker ps -a
 
 * -a        显示所有创建好的容器，如果不加只显示正在运行的容器
 
-![查看容器](https://i.imgur.com/Gr8w9zg.png)
+![查看容器](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Gr8w9zg.png)
 
 ## Mysql
 
@@ -89,7 +89,7 @@ sudo docker exec -it mysql5.7 bash
 * -i        打开STDIN，用于控制台交互
 * -t        分配tty设备，该可以支持终端登录
 
-![进入容器](https://i.imgur.com/UWZaGF2.png)
+![进入容器](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/UWZaGF2.png)
 
 ### 登录mysql
 
@@ -141,7 +141,7 @@ exit
 
 ### 客户端连接测试
 
-![进入容器](https://i.imgur.com/kvMGl3Z.png)
+![进入容器](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/kvMGl3Z.png)
 
 成功！
 

@@ -17,7 +17,7 @@ categories:
 
 # JVM运行时数据区域
 
-![Java虚拟机运行时数据区](http://xhh.dengzii.com/blog/20200526000623.jpeg)
+![Java虚拟机运行时数据区](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200526000623.jpeg)
 
 ### 程序计数器
 

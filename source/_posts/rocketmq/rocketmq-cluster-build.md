@@ -294,4 +294,4 @@ rocketmq.config.namesrvAddr=172.16.54.128:9876;172.16.54.130:9876
 
 浏览器访问：
 
-![可视化Console界面](http://xhh.dengzii.com/blog/rocketmq_console.png)
+![可视化Console界面](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/rocketmq_console.png)

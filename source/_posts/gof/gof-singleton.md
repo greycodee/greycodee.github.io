@@ -16,7 +16,7 @@ summary:
 
    
 
-![图片](http://xhh.dengzii.com/gof-singleton.jpg)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/gof-singleton.jpg)
 
 > 积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬 
 

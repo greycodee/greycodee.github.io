@@ -28,9 +28,9 @@ categories:
 
 1. 或者直接点这个链接进入： https://github.com/settings/tokens
 
-   ![20210126150521](http://xhh.dengzii.com/20210126150521.png)
+   ![20210126150521](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126150521.png)
 
-![20210126150712](http://xhh.dengzii.com/20210126150712.png)
+![20210126150712](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126150712.png)
 
 <font color=red>创建后保存这个秘钥(秘钥只显示一次)</font>
 
@@ -42,7 +42,7 @@ categories:
 
 **然后填入刚才生成的秘钥**
 
-![20210126151157](http://xhh.dengzii.com/20210126151157.png)
+![20210126151157](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126151157.png)
 
 
 
@@ -133,13 +133,13 @@ git push origin v1.0
 
 推送完成后，就可以看到Actions正在构建了
 
-![20210126152258](http://xhh.dengzii.com/20210126152258.png)
+![20210126152258](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152258.png)
 
 构建完成后，就可以在`Release`下载构建好的内核文件了
 
-![20210126152413](http://xhh.dengzii.com/20210126152413.png)
+![20210126152413](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152413.png)
 
-![20210126152413](http://xhh.dengzii.com/20210126152428.png)
+![20210126152413](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152428.png)
 
 ## 资料索引
 

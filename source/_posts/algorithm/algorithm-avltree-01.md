@@ -21,7 +21,7 @@ categories:
 
 # 【数据结构】手写平衡二叉树（AVL）
 
-![图片](https://i.imgur.com/5wIcYig.jpg)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/DdjSj9k-20211008161234805.jpg)
 
 > 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬
 >
@@ -41,19 +41,19 @@ categories:
 
 - 左左结构——右旋
 
-![左左结构](https://i.imgur.com/FHk4xan.jpg)
+![左左结构](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/7Jtj6ns.jpg)
 
 - 右右结构——左旋
 
-![右右结构](https://i.imgur.com/p47YbC8.jpg)
+![右右结构](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/oJoN5kJ-20211008170036933.jpg)
 
 - 左右结构——左子先左旋，然后整体右旋
 
-![左右结构](https://i.imgur.com/Ev2DtLt.jpg)
+![左右结构](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/mH97Bzf.jpg)
 
 - 右左结构——右子先右旋，然后整体左旋
 
-![右左结构](https://i.imgur.com/vFcE6tK.jpg)
+![右左结构](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/6ZSA7aq.jpg)
 
 ## 代码实现
 

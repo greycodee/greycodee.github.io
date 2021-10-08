@@ -94,21 +94,21 @@ server.servlet.context-path=/oauthServer
 
 ### 创建用户详情服务类
 
-![图片](https://i.imgur.com/PBwaTcT.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/PBwaTcT.png)
 
 #### 创建权限控制类
 
-![图片](https://i.imgur.com/U0y9Di5.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/U0y9Di5.png)
 
 ### 创建认证授权类
 
-![图片](https://i.imgur.com/lVXiu5n.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/lVXiu5n.png)
 
 ## 获取令牌
 
 访问:`/oauth/token`就可以获取到令牌
 
-![图片](https://i.imgur.com/4ieRNLw.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/4ieRNLw.png)
 
 ```json
 {
@@ -127,4 +127,4 @@ server.servlet.context-path=/oauthServer
 
 带上获取到的令牌
 
-![图片](https://i.imgur.com/W57xN9e.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/W57xN9e.png)

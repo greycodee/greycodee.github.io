@@ -16,7 +16,7 @@ categories:
 - GOF
 ---
 
-![图片](http://xhh.dengzii.com/20191220000613.jpg)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191220000613-20211008162150348.jpg)
 
 > 积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
 
@@ -26,13 +26,13 @@ categories:
 
 　　模板方法的设计<font color=orange>符合迪米特法则</font>，也就是最少知道原则，他通过对一些重复方法的封装，减少类之间的耦合，让调用者也更省心，原来要调两三个方法才能实现的功能，现在调一个就可以了；就像我们伟大的祖国，现在也在推行这种模式呢．以前区办一些证明什么的，要跑三四个地方，还要保证这三四个地方都正常帮你办理，如果其中一个地方没办理，那么整个流程就都作废了．现在好了，提倡最多跑一次，只要去一个地方办<font color=orange>一次</font>手续就可以了，你只要知道这个地方能办好就行，其他的就不用烦心了；
 
-![图片](http://xhh.dengzii.com/20191219215431.gif)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219215431.gif)
 
 ## 阿狗卖电脑
 
 　　阿狗是一个三十五岁没了头发的年轻小伙，当问及为什么没了头发，阿狗摸摸头，眼里充满了悔恨的泪水；要不是小时候没听大人的话，长大了也不至于做程序员啊－－－阿狗唉声叹气的说道．听到这里，我仿佛已经知道了答案．当我问他为什么现在改行卖电脑了，他说外面的世界很大，想趁年轻，多闯闯（<font color=orange>实则是被公司裁员，被迫来卖电脑了</font>）；
 
-![图片](http://xhh.dengzii.com/20191219220453.gif)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219220453-20211008162142649.gif)
 
 看看他的电脑店里都有什么
 
@@ -78,19 +78,19 @@ abstract class AGouShop {
 
 看看阿猫：
 
-![图片](http://xhh.dengzii.com/20191219222853.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219222853.png)
 
 
 
 在看看大牛的：
 
-![图片](http://xhh.dengzii.com/20191219222925.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219222925.png)
 
 
 
 再看看他们怎么组装的吧：
 
-![图片](http://xhh.dengzii.com/20191219223122.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219223122.png)
 
 ## 有想法的阿狗
 
@@ -150,11 +150,11 @@ abstract class AGouShop {
 
 上次的阿猫又来买电脑了：
 
-![图片](http://xhh.dengzii.com/20191219232821.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219232821-20211008162122034.png)
 
 看看结果：
 
-![图片](http://xhh.dengzii.com/20191219232931.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219232931.png)
 
 
 
@@ -233,13 +233,13 @@ abstract class AGouShop {
 
 阿猫默认要显卡：
 
-![图片](http://xhh.dengzii.com/20191219234521.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234521-20211008162055559.png)
 
-大牛不要显卡：![图片](http://xhh.dengzii.com/20191219234630.png)
+大牛不要显卡：![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234630.png)
 
 看看他们的电脑吧：
 
-![图片](http://xhh.dengzii.com/20191219234803.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234803.png)
 
 
 

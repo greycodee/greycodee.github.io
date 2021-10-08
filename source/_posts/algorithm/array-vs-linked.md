@@ -17,7 +17,7 @@ categories:
 
 
 
-![图片](https://i.imgur.com/hlwzTv8.jpg)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/hlwzTv8.jpg)
 
 > 积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
 
@@ -25,7 +25,7 @@ categories:
 
 　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫<font color=orange>数组链表</font>结构，就是常说的<font color=orange>哈希表</font>，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；
 
-![图片](https://i.imgur.com/WgIKkpg.jpg)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/WgIKkpg.jpg)
 
 ## 数组
 
@@ -35,7 +35,7 @@ categories:
 
 牛＊一族去学校读书，学校有四人寝和五人寝，大牛，二牛，三牛，四牛一同住进了四人寝里，每天都五缺一；有一天，他们在游戏里认识了小牛，得知小牛也是他们学校的，于是邀请小牛和他们一起住，可是他们们寝室只能住四个人，这个怎么办呢？于是他们向学校(<font color=orange>系统</font>)申请，要求学校给他们一个新的六人寝(<font color=orange>新的内存空间</font>)，于是学校就给了他们新的六人寝，于是他们全部都搬去了六人寝里，小牛也办了进去，之后每天五黑，好不快活；
 
-![图片](https://i.imgur.com/HZUC84m.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/HZUC84m.png)
 
 > 之后有其他学生看到牛＊他们的做法，于是也通通向学校申请；最后学校发现了一个问题：就是学生们为了住进新寝室，花费了大量的时间在从旧寝室到新寝室的路上(<font color=orange>插入数据慢</font>)
 
@@ -47,7 +47,7 @@ categories:
 
 有一天，老师去找进入新寝室的小牛谈话，一看得知小牛在４号床，一下就找到了小牛（<font color=orange>查询数据快</font>），问他在这个寝室住的习不习惯，小牛心想，每天都五黑，你说我习不习惯！！
 
-![图片](https://i.imgur.com/WxdNOVF.gif)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/WxdNOVF.gif)
 
 ## 链表
 
@@ -59,7 +59,7 @@ categories:
 
 　　来到游乐园后，一群人像刚放出来的一样，对一切都充满了新鲜感，到处转悠．就在转悠的时候，细心的大牛发现了地上有一张纸条，打开一看，上面写着：<font color=orange>＂少年，你渴望力量吗？想获得力量就来海盗船找我！＂</font>，大牛赶紧找来其他小伙伴，一同前往；到了海盗船的地方，发现船上写着：<font color=orange>＂力量源自摩天轮，请前往摩天轮＂</font>，于是一群人就又前往摩天轮，在那里，终于过得了神秘力量－－－<font color=orange>毒鸡汤：你的内心有多强大，你的力量就有多强大</font>；小牛他们为了寻找这个力量，可谓费尽九牛二虎之力啊（<font color=orange>查询数据慢</font>）；
 
-![图片](https://i.imgur.com/Hwi1Car.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Hwi1Car.png)
 
 > 可以发现，<font color=orange>每个元素存着下个元素的地址</font>，所以如果要查找其中某个元素，就必须要从头开始，才能找到．这就比较慢了．但是，他们<font color=orange>添加元素很快</font>,元素可以随机出现在游乐园的某个地方，只要在新添加元素的前一个元素指明新元素的地址在哪里就可以了；
 

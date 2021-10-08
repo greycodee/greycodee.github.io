@@ -96,6 +96,6 @@ try {
 }
 ```
 ## 6.成功获取
-![控制台返回](https://i.imgur.com/vLZi5z5.png)
+![控制台返回](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/vLZi5z5.png)
 
 >demo源码地址：https://github.com/z573419235/studyDemo

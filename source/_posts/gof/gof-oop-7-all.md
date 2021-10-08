@@ -18,7 +18,7 @@ categories:
 
 
 
-![图片](http://xhh.dengzii.com/autumn-4656877_1920.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/autumn-4656877_1920.png)
 
 
 
@@ -36,7 +36,7 @@ categories:
 
 依赖倒置原则是对开闭原则的一个实现，也是主张对拓展开放，对修改关闭．它的核心思想是<font color=orange>面对接口编程，不要面对具体实现编程</font>．
 
-![来自C语言中文网](http://xhh.dengzii.com/3-1Q113131610L7.gif)
+![来自C语言中文网](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/3-1Q113131610L7.gif)
 
 这是一个遵守依赖倒置原则的UML图，原来的话当客户购买商品时,shopping这个方法要传入相应的网店进去，当要更改店铺时，就要修改Cusromer这个类里的shopping方法，而现在，只要定义一个Shop接口，所有的店铺都实现这个接口的方法，顾客类的shopping方法只要传入Shop这个接口类就可以了．然后具体实现的时候，要到哪里买，就传入哪一个网店就可以了，而不用修改Cusromer这个类的方法；
 

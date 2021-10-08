@@ -26,7 +26,7 @@ categories:
 
 文件复制过去后，按照教程，重新启动docker服务，可是其中mysql容器跑不起来了，报mysqld: Can't create/write to file '/tmp/ibTCv7Rw' (Errcode: 13 - Permission denied)
 
-![图片](https://i.imgur.com/XISBI0c.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/XISBI0c.png)
 
 
 
@@ -34,7 +34,7 @@ categories:
 
 > 其中设置/tmp文件权限这个方法，我把里面的/tmp文件挂载出来后，设置了权限，报这个的问题是解决了，可是又出现了新的问题，又报Version: '5.7.27'  socket: '/var/run/mysqld/mysqld.sock' 
 >
-> ![图片](https://i.imgur.com/RJyF24d.png)
+> ![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/RJyF24d.png)
 
 看来还是得从根源上解决问题啊！
 
@@ -42,8 +42,8 @@ categories:
 
         我想，既然是权限问题，那肯定是复制文件的时候权限丢失了，于是查了下cp命令保持权限的命令（cp -p）:
 
-![图片](https://i.imgur.com/KUPG0XE.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/KUPG0XE.png)
 
 于是我又重新关闭的docker服务，然后删除了所有复制到home文件的目录，重新用<font color=orange>cp -p -R /var/lib/docker /home/docker/lib/</font>来重新复制了文件；
 
-复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．![图片](https://i.imgur.com/F3ssmVN.png)
+复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/F3ssmVN.png)

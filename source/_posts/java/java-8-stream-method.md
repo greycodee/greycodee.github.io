@@ -15,4 +15,4 @@ categories:
 - Java
 ---
 
-![Stream](http://xhh.dengzii.com/blog/java_8_stream.png)
+![Stream](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/java_8_stream.png)

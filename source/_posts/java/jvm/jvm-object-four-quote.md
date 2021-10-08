@@ -18,7 +18,7 @@ categories:
 
 
 
-![图片](http://xhh.dengzii.com/blog/20200526225718)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200526225718.jpg)
 
 ## 强引用（Strongly Reference）
 

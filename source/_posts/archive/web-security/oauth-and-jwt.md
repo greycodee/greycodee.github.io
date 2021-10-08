@@ -37,23 +37,23 @@ OAuth2.0是一个授权协议，它允许软件应用代表资源拥有者去访
 
 
 
-#### 授权码许可类型![授权码许可类型](https://i.imgur.com/kz7JqTx.png)
+#### 授权码许可类型![授权码许可类型](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/kz7JqTx.png)
 
 ---
 
-#### 隐式许可类型![隐式许可类型](https://i.imgur.com/fHnS4Ea.png)
+#### 隐式许可类型![隐式许可类型](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/fHnS4Ea.png)
 
 ---
 
-#### 客户端凭证许可类型![客户端凭证许可类型](https://i.imgur.com/4AHqDCn.png)
+#### 客户端凭证许可类型![客户端凭证许可类型](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/4AHqDCn.png)
 
 ---
 
-#### 资源拥有者凭证许可类型(账号密码模式)![资源拥有者凭证许可类型(账号密码模式)](https://i.imgur.com/kfl2IOk.png)
+#### 资源拥有者凭证许可类型(账号密码模式)![资源拥有者凭证许可类型(账号密码模式)](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/kfl2IOk.png)
 
 ---
 
-#### 断言许可类型![断言许可类型](https://i.imgur.com/MSP1YWU.png)
+#### 断言许可类型![断言许可类型](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/MSP1YWU.png)
 
 
 

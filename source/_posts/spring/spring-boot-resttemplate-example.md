@@ -19,7 +19,7 @@ categories:
 
 ## 前言
 
-​	本文只讲常用的**GET** 和**POST**请求,其他类型的请求(如**PUT**，**PATCH**)请求方式都差不多，有兴趣的可以查看RestTemplate源码。
+	本文只讲常用的**GET** 和**POST**请求,其他类型的请求(如**PUT**，**PATCH**)请求方式都差不多，有兴趣的可以查看RestTemplate源码。
 
 ## GET
 
@@ -305,13 +305,13 @@ public class UriTest {
 
 #### 结果
 
-![代码运行结果](http://xhh.dengzii.com/blog/20191120165138.png)
+![代码运行结果](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191120165138-20211008164958814-20211008165045748.png)
 
 
 
 #### 服务端日志
 
-![服务端日志](http://xhh.dengzii.com/blog/20191120165302.png)
+![服务端日志](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191120165302-20211008165107947.png)
 
 ### 小结
 

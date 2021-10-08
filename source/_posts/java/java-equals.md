@@ -15,7 +15,7 @@ summary:
 在平常工作和学习中，我们一般用==和equals来比较两个对象或数据是否相等。但是什么时候用equals，什么时候用==一直都不怎么清楚，今天整理了下；
 
 ## 首先看看Java的栈空间和堆空间的地址引用
-![Java栈空间和堆空间](http://xhh.dengzii.com/blog/javaand1.png)
+![Java栈空间和堆空间](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/javaand1.png)
 
 ##  ==的说明
   在Java中，==对比的是两个对象在空间里的地址是否一致,比如上图的s2==s3返回的是false，s5==s6返回的是为true。话不多说，上代码。
@@ -36,7 +36,7 @@ public class demo2 {
 }
 ```
 结果：
-![控制台输出](http://xhh.dengzii.com/blog/javaand2.png)
+![控制台输出](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/javaand2.png)
 
 >这是因为==比的是在空间里的地址，s2和s3在堆里面是两个不同的对象，所以地址也不同，自然返回就是false。s5和s6是Java的基础数据类型，指向的是常量池里同一个引用，所以地址也相同，返回的就是true。
 

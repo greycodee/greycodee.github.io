@@ -23,7 +23,7 @@ categories:
 
 首先,来看一道常见的面试题,下面代码运行后会输出什么?
 
-![图片](http://xhh.dengzii.com/blog/20200603110911.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200603110911.png)
 
 上面代码运行后,最终会输出`false`和`true`;为什么会这样呢?
 
@@ -81,7 +81,7 @@ private static class IntegerCache {
 
 从源码中可以看到,`Integer`的缓存范围是`-128~127`,所以过程大致如下:
 
-![图片](http://xhh.dengzii.com/blog/20200603114246.png)
+![图片](https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200603114246.png)
 
 按照上面这个方法,只要在数据在缓存池范围内的,都会引用缓存在堆内的地址,所有上面的`i3==i4`会输出为`true`;而不在缓存范围内的,就会在堆中开放新的空间来存放对象,所以地址不同,用`==`比较返回也不同;
 
