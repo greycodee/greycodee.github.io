@@ -31,5 +31,5 @@ Allow: /
 User-agent: *
 Disallow: /
 
-Sitemap: http://blog.mjava.top/sitemap.xml
-Sitemap: http://blog.mjava.top/baidusitemap.xml
+Sitemap: https://greycode.top/sitemap.xml
+Sitemap: https://greycode.top/baidusitemap.xml
