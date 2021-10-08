@@ -16,7 +16,7 @@ categories:
 - GOF
 ---
 
-![图片](http://xhh.dengzii.com/gof-factory-method.jpg)
+![图片](/Users/zheng/coding/study/greycodee.github.io/source/images/gof-factory-method/gof-factory-method-20211008153952229.jpg)
 
 
 > 积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
@@ -83,7 +83,7 @@ Benz　myCar=new Benz();
 
 如果是这样的话，就相当于自己亲手造了一辆奔驰车出来，因为是你自己<font color=orange>new</font>出来的嘛！！！！！
 
-![图片](http://xhh.dengzii.com/20191215162632.gif)
+![图片](/Users/zheng/coding/study/greycodee.github.io/source/images/gof-factory-method/20191215162632-20211008153952135.gif)
 
 这种事情当然是交给工厂去做嘛，叫工厂去<font color=orange>new</font>就可以了，我只要交钱给工厂就可以了．诶，有钱真好！
 
@@ -134,13 +134,13 @@ public class CostumerMain {
 
 这样子，买车就结束了，果然钱可以解决一切，哈哈，开个玩笑～
 
-![图片](http://xhh.dengzii.com/20191215163319.jpg)
+![图片](/Users/zheng/coding/study/greycodee.github.io/source/images/gof-factory-method/20191215163319-20211008153952143.jpg)
 
 ## 工厂方法模式
 
 上次买了两辆车之后，白天开着大奔去街上撩妹，晚上开着五菱神车去秋名山飙车，从此走向了人生巅峰．可是好景不长，大奔开着开着就漏油了，五菱神车终于也翻车了．
 
-![图片](http://xhh.dengzii.com/20191215163907.gif)
+![图片](/Users/zheng/coding/study/greycodee.github.io/source/images/gof-factory-method/20191215163907-20211008153952183.gif)
 
 找到了上次买车的工厂，准备换个低调点的劳斯莱斯．可是那家工厂竟然告诉我说他们那边还没有造过劳斯莱斯，需要改造一下工厂，然后才能生产劳斯莱斯，叫我等他们改造好之后再来买．听他们这麽说后，我心想，我这分分钟几百万上下的人，时间就是金钱．我可等不了．
 
@@ -269,7 +269,7 @@ public class BenzFactory implements AllCarFactory {
 
 看完之后，感觉还可以，于是分别到三个工厂买了三辆车，然后高高兴兴的回家了：
 
-![图片](http://xhh.dengzii.com/20191215170620.jpg)
+![图片](/Users/zheng/coding/study/greycodee.github.io/source/images/gof-factory-method/20191215170620-20211008153952135.jpg)
 
 看看我买车的过程：
 
