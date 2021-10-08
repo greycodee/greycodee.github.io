@@ -79,7 +79,7 @@ Json-Schema 是一个用来验证、描述 Json 数据的一个标准，它可�
 
 ## 使用 Json-Schema 验证 Json 数据
 
-![image-20210820162428822](http://cdn.mjava.top/blog/hlpzY6image-20210820162428822.png)
+![image-20210820162428822](http://xhh.dengzii.com/blog/hlpzY6image-20210820162428822.png)
 
 Json-Schema 支持多种语言的验证器，一般都是第三方实现的，这里我们使用 Java 验证器来验证一个 Json 数据，Java 验证器这里选用了 [everit-org/json-schema](https://github.com/everit-org/json-schema) 验证器来使用，不过它最高支持到**草案7**，像最新的**草案2020-12**它是不支持的。
 

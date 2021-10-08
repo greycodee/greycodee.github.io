@@ -19,7 +19,7 @@ categories:
 
 Quarkus 可以从多个地方获取项目的配置，它读取配置优先级入下图，在下面的优先级中，一旦读取到某个配置，就不会再继续读取后面配置中的这个配置了。
 
-![config-sources](http://cdn.mjava.top/blog/0cvlsyconfig-sources.png)
+![config-sources](https://i.imgur.com/XRTAgG7.png)
 
 ## 0x1 System Properties
 

@@ -18,7 +18,7 @@ categories:
 
 
 
-![图片](http://cdn.mjava.top/blog/20200526225718)
+![图片](http://xhh.dengzii.com/blog/20200526225718)
 
 ## 强引用（Strongly Reference）
 

@@ -29,7 +29,7 @@ git对于很多人来说,真的是又爱又恨,用的好可以提示开发效率
 
 > 网上有 我就不画了
 
-![git结构图](http://cdn.mjava.top/blog/20200605001853.png)
+![git结构图](http://xhh.dengzii.com/blog/20200605001853.png)
 
 
 
@@ -53,4 +53,4 @@ git官方提供的命令多达几百个,可是我们日常却用不到这么多
 
 就可以获取思维导图高清图片及导图源地址
 
-![图片](http://cdn.mjava.top/blog/20200605002904.jpg)
+![图片](http://xhh.dengzii.com/blog/20200605002904.jpg)

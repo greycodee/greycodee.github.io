@@ -72,7 +72,7 @@ public static boolean isJSONArray(Object json){
 
 ```
 ## 4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的
-[示例json](http://cdn.mjava.top/blog/demojson.txt)
+[示例json](http://xhh.dengzii.com/blog/demojson.txt)
 
 ## 5.调用方法
 ```java
@@ -96,6 +96,6 @@ try {
 }
 ```
 ## 6.成功获取
-![控制台返回](http://cdn.mjava.top/blog/json2.png)
+![控制台返回](https://i.imgur.com/vLZi5z5.png)
 
 >demo源码地址：https://github.com/z573419235/studyDemo

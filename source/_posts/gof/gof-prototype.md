@@ -17,7 +17,7 @@ categories:
 ---
 
 
-![图片](http://cdn.mjava.top/20191226084321.jpg)
+![图片](http://xhh.dengzii.com/20191226084321.jpg)
 
 > 积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬
 >
@@ -39,7 +39,7 @@ categories:
 
 ​        鸣人最喜欢的就是吃拉面,就算是上课的时候也是心心念念的想着一乐大叔的拉面
 
-![图片](http://cdn.mjava.top/20191225222050.gif)
+![图片](http://xhh.dengzii.com/20191225222050.gif)
 
 先来看看鸣人的原型实体类:
 
@@ -135,7 +135,7 @@ public class Main {
 
 可以看到,鸣人本人的任务是去<font color=orange>吃拉面</font>,他的影分身的任务是留着教室<font color=orange>上课</font>;当然鸣人可以通过他本人创建无数个影分身,同时执行多个任务;这就是<font color=orange>原型模式</font>;
 
-![图片](http://cdn.mjava.top/20191225222314.gif)
+![图片](http://xhh.dengzii.com/20191225222314.gif)
 
 ## 浅拷贝和深拷贝
 
@@ -182,7 +182,7 @@ WTF,竟然把本人的爱好也清除调了,那还去吃啥拉面啊,算了算�
 
 进过上次的教训,鸣人苦练影分身之术,终于学得核心所在,看看他新的影分身技能吧:
 
-![图片](http://cdn.mjava.top/20191225220944.png)
+![图片](http://xhh.dengzii.com/20191225220944.png)
 
 在变一个看看:
 
@@ -215,7 +215,7 @@ public class Main {
 
 哈哈,成功了,这下可以安安心心的区吃拉面了吧;
 
-![图片](http://cdn.mjava.top/20191225222402.gif)
+![图片](http://xhh.dengzii.com/20191225222402.gif)
 
 ## 总结
 

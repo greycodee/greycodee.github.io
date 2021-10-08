@@ -26,7 +26,7 @@ categories:
 
 > **注意:**栈帧是线程本地私有的数据，不可能在一个栈帧 之中引用另外一个线程的栈帧
 
-![图片](http://cdn.mjava.top/blog/20200731162235.jpg)
+![图片](http://xhh.dengzii.com/blog/20200731162235.jpg)
 
 
 
@@ -46,7 +46,7 @@ Java虚拟机通过**索引定位**的方式使用局部变量表，索引值的
 
 在Java中，`long`在内存占64位，所以局部变量表**用2个slot来存储**
 
-![图片](http://cdn.mjava.top/blog/20200730225516.png)
+![图片](http://xhh.dengzii.com/blog/20200730225516.png)
 
 
 
@@ -110,11 +110,11 @@ public class JVMTest {
 
 我们用`javap -verbose JVMTest`来查看他的`class`文件的字节码指令
 
-![图片](http://cdn.mjava.top/blog/20200730235131.png)
+![图片](http://xhh.dengzii.com/blog/20200730235131.png)
 
 **在操作栈中的流程大致为：**
 
-![图片](http://cdn.mjava.top/blog/20200731105247.jpg)
+![图片](http://xhh.dengzii.com/blog/20200731105247.jpg)
 
 ## 动态链接
 
@@ -122,7 +122,7 @@ public class JVMTest {
 
 ### 什么是符号引用？
 
-![图片](http://cdn.mjava.top/blog/20200731110742.png)
+![图片](http://xhh.dengzii.com/blog/20200731110742.png)
 
 通过查看字节码，上面的`#7`，`#8`，`#9`等等都是符号引用，他在class文件里只是个符号，就像你定义一个变量名称一样，变量名只是和`字符符号`，并不是真正的指向内存的地址指针。这些符号都指向`运行时常量池`的引用。
 
@@ -146,6 +146,6 @@ Java在调用方法时，只有两种返回方法，一种是`正常返回`，�
 
 eg:
 
-![图片](http://cdn.mjava.top/blog/20200731164803.png)
+![图片](http://xhh.dengzii.com/blog/20200731164803.png)
 
 上面异常是在`13行`发生的，但是它并没有停在`13行`，而是回到了最初调用它`第10行`的位置。

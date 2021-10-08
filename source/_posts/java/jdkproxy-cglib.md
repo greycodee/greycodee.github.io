@@ -29,7 +29,7 @@ categories:
 
 ### 使用
 
-[](http://cdn.mjava.top/blog/20200729000830.png)
+[](http://xhh.dengzii.com/blog/20200729000830.png)
 
 ```java
 interface TestInterface{
@@ -89,7 +89,7 @@ class ProxyHandle implements InvocationHandler{
 
 ### 使用
 
-[](http://cdn.mjava.top/blog/20200729001250.png)
+[](http://xhh.dengzii.com/blog/20200729001250.png)
 
 ```java
 interface InterTest{

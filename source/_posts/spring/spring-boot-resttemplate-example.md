@@ -305,13 +305,13 @@ public class UriTest {
 
 #### 结果
 
-![代码运行结果](http://cdn.mjava.top/blog/20191120165138.png)
+![代码运行结果](http://xhh.dengzii.com/blog/20191120165138.png)
 
 
 
 #### 服务端日志
 
-![服务端日志](http://cdn.mjava.top/blog/20191120165302.png)
+![服务端日志](http://xhh.dengzii.com/blog/20191120165302.png)
 
 ### 小结
 

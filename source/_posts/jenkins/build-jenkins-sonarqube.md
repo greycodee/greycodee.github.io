@@ -22,10 +22,10 @@ categories:
 ## 什么是SonarQube?
 
 看看维基百科的说明：
-![图片](http://cdn.mjava.top/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ)
+![图片](http://xhh.dengzii.com/Fi9bL7TAwFmCYPt3Cz_d0TIwm9rQ)
 
 ### SonarQube与CI/CD架构图
-![SonarQube与CI/CD架构图](http://cdn.mjava.top/FpResgoc3tny2jvGqaqudPwCwstj)
+![SonarQube与CI/CD架构图](http://xhh.dengzii.com/FpResgoc3tny2jvGqaqudPwCwstj)
 
 ## Docker运行SonarQube
 
@@ -59,7 +59,7 @@ docker run -d --name sonarqube -p 9099:9000 -p 9092:9092 --link=dev_mysql:mysql 
 
 安装好后直接访问<font color=orange>9099</font>端口，登录的账户和密码默认都是<font color=orange>admin</font>．首页就是这个样子的．
 
-![图片](http://cdn.mjava.top/Fs08WpcVDcL3n32MxoCNPDMtu1r5)
+![图片](http://xhh.dengzii.com/Fs08WpcVDcL3n32MxoCNPDMtu1r5)
 
 
 ## Jenkins集成SonarQube
@@ -80,13 +80,13 @@ Jenkins和SonarQube都是运行在Docker容器里的
 
 Administration->Security->Users
 
-![图片](http://cdn.mjava.top/FpFSYEgJfsJIwgNMA6tHHZtdAtpV)
+![图片](http://xhh.dengzii.com/FpFSYEgJfsJIwgNMA6tHHZtdAtpV)
 
 
 
 然后随便输入一个名字，点击生成，记下Token
 
-![图片](http://cdn.mjava.top/FhTOSglZYOrP5poo_mmR3SGoobsD)
+![图片](http://xhh.dengzii.com/FhTOSglZYOrP5poo_mmR3SGoobsD)
 
 
 
@@ -94,7 +94,7 @@ Administration->Security->Users
 
 类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token
 
-![图片](http://cdn.mjava.top/FrKo5EjJ9-78uYbDjBpiuVkeu-_5)
+![图片](http://xhh.dengzii.com/FrKo5EjJ9-78uYbDjBpiuVkeu-_5)
 
 ### 设置SonarQube servers
 
@@ -102,7 +102,7 @@ Administration->Security->Users
 
 > 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口
 
-![图片](http://cdn.mjava.top/FpevTpJePMDg9-HSoQoSOCNORHL8)
+![图片](http://xhh.dengzii.com/FpevTpJePMDg9-HSoQoSOCNORHL8)
 
 
 
@@ -122,7 +122,7 @@ Administration->Security->Users
 
 <font color=orange>SONAR_RUNNER_HOME填你Jenkins这个Docker容器里的路径</font>
 
-![图片](http://cdn.mjava.top/Fpgv2yqskGjp37mfoxHC6MGtIAPt)
+![图片](http://xhh.dengzii.com/Fpgv2yqskGjp37mfoxHC6MGtIAPt)
 
 
 
@@ -130,10 +130,10 @@ Administration->Security->Users
 
 网上很多教程说要勾上这个选项：
 
-![图片](http://cdn.mjava.top/FsSrQCDF5O9x4sufLZkFRz40toHI)
+![图片](http://xhh.dengzii.com/FsSrQCDF5O9x4sufLZkFRz40toHI)
 其实这个是可选的，下面有一句话：<font color=orange>These variables are useful when configuring a SonarQube analysis using standard build steps such as Maven, Gradle, Ant, and command line scripts.This feature is not needed if you're using "SonarQube Scanner" or "SonarScanner for MSBuild" build steps.</font>
 
-翻译过来就是：![图片](http://cdn.mjava.top/FrM7HmTx_APStJMI0OHlMQO6WL3W)
+翻译过来就是：![图片](http://xhh.dengzii.com/FrM7HmTx_APStJMI0OHlMQO6WL3W)
 因为我们这里用的就是<font color=orange>SonarQube Scanner</font>,所以这个我们是可以不用勾上的，但是勾上也没影响；
 
 
@@ -147,11 +147,11 @@ Administration->Security->Users
 
 在原来构建的基础上加上<font color=orange>Execute SonarQube Scanner</font>，就可以了
 
-![图片](http://cdn.mjava.top/FgZ021lPaTWzgOPsG7veK1cn7lIB)
+![图片](http://xhh.dengzii.com/FgZ021lPaTWzgOPsG7veK1cn7lIB)
 
 在<font color=orange>Analysis properties</font>里填上构建的参数
 
-![图片](http://cdn.mjava.top/FiFA65-xUZCh62Y5HfIgxQzvMx7D)
+![图片](http://xhh.dengzii.com/FiFA65-xUZCh62Y5HfIgxQzvMx7D)
 
 >唯一的项目标识符（必填）
 >sonar.projectKey =tiny-config1
@@ -179,7 +179,7 @@ Administration->Security->Users
 
 #### 错误解决（没有错误可跳过这段）
 如果在构建项目的时候,Jenkins控制台如果报一下错误，这是因为SonarQube的Java版本太低造成的
-![图片](http://cdn.mjava.top/FnTRL4pSwrKk5Xwbzobo89VKHf5m)
+![图片](http://xhh.dengzii.com/FnTRL4pSwrKk5Xwbzobo89VKHf5m)
 
 ##### 升级SonarQube的Java版本
 
@@ -187,7 +187,7 @@ Administration->Security->Users
 
 > 如果你版本没升级，右边会有个update按钮，点击就可以升级了，升级完后重启SonarQube;这边因为我已经升级过了，所以没有这个按钮
 
-![图片](http://cdn.mjava.top/FgbCXvUiteJ9iGCCYC6qbInX0VSX)
+![图片](http://xhh.dengzii.com/FgbCXvUiteJ9iGCCYC6qbInX0VSX)
 
 
 
@@ -195,16 +195,16 @@ Administration->Security->Users
 
 Jenkins控制台显示SUCCESS就表示构建成功了
 
-![图片](http://cdn.mjava.top/FoijfnBHiJAZ7lA7YqmdQb-bEqUF)
+![图片](http://xhh.dengzii.com/FoijfnBHiJAZ7lA7YqmdQb-bEqUF)
 
 这时候就可以点击构建项目的SonarQube直接跳转到SonarQube控制台了
 
-![图片](http://cdn.mjava.top/FhXgRD7rBp5RBc2D6uBmH5mIBNKJ)
+![图片](http://xhh.dengzii.com/FhXgRD7rBp5RBc2D6uBmH5mIBNKJ)
 
 
 这里就可以看到结果了
 
-![图片](http://cdn.mjava.top/FkPydWtLuuliKAq1hc8Ex45nnTlu)
+![图片](http://xhh.dengzii.com/FkPydWtLuuliKAq1hc8Ex45nnTlu)
 
 
 ## 总结

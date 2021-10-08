@@ -15,4 +15,4 @@ categories:
 - Java
 ---
 
-![Stream](http://cdn.mjava.top/blog/java_8_stream.png)
+![Stream](http://xhh.dengzii.com/blog/java_8_stream.png)

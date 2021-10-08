@@ -86,7 +86,7 @@ categories:
 public static int value = 123
 ```
 
-![图片](http://cdn.mjava.top/blog/20200726220517.jpeg)
+![图片](http://xhh.dengzii.com/blog/20200726220517.jpeg)
 
 ## 解析
 
@@ -96,7 +96,7 @@ public static int value = 123
 
   > 下面红框中的都属于符号引用
 
-  ![图片](http://cdn.mjava.top/blog/20200726220833.png)
+  ![图片](http://xhh.dengzii.com/blog/20200726220833.png)
 
 - **直接引用（Direct References）**：直接引用是可以直接指向目标的指针、相对偏移量或者是一个能间接定位到目标的句柄。直接引用是和虚拟机实现的内存布局直接相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那引用的目标必定已经在虚拟机的内存中存在。
 

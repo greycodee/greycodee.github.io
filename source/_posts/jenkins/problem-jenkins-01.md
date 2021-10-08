@@ -16,7 +16,7 @@ summary:
 ## 前言
 
 	Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：
-![jenkins插件管理界面](http://cdn.mjava.top/blog/20191108102617.png)
+![jenkins插件管理界面](http://xhh.dengzii.com/blog/20191108102617.png)
 
 Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.
 
@@ -26,7 +26,7 @@ Durable Task Plugin version 1.29 is older than required. To fix, install version
 
 可以看到，本地安装的版本和刚才提示的一样，是1.29版本的，刚才提示说太旧了，要更新到1.33版本。
 
-![jenkins插件管理界面](http://cdn.mjava.top/blog/20191108100855.png)
+![jenkins插件管理界面](http://xhh.dengzii.com/blog/20191108100855.png)
 
 
 
@@ -34,7 +34,7 @@ Durable Task Plugin version 1.29 is older than required. To fix, install version
 
 当你理所应当的去这个界面准备搜索这个插件并更新时。。。。你傻了，，怎么搜不到？？？WTF
 
-![jenkins插件管理界面](http://cdn.mjava.top/blog/20191108102907.png)
+![jenkins插件管理界面](http://xhh.dengzii.com/blog/20191108102907.png)
 
 
 
@@ -44,34 +44,34 @@ Durable Task Plugin version 1.29 is older than required. To fix, install version
 
 - 进入后在输入框里输入你刚才要下载的插件:
 
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108101610.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108101610.png)
 
 
 - 选择对应的插件
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108101748.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108101748.png)
 
 
 - 然后点击右上角
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108101807.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108101807.png)
 
 
 - 下载刚才提示的1.33版本
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108101832.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108101832.png)
 
 
 - 下载完成后是一个hpi文件
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108102109.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108102109.png)
 
 
 ## 导入插件
 - 到插件管理界面，找到Upload Plugin
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108102152.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108102152.png)
 
 - 然后选择刚才下载的插件，点击导入
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108102223.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108102223.png)
 
 - 可以看到插件正在导入
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108102240.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108102240.png)
 
 - 导入完成后，重启Jenkins就OK了
-![jenkins插件下载](http://cdn.mjava.top/blog/20191108102254.png)
+![jenkins插件下载](http://xhh.dengzii.com/blog/20191108102254.png)

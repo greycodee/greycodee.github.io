@@ -28,11 +28,11 @@ FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务�
 
 - **Client**：客户端，上传下载数据的服务器，也就是我们自己的项目所部署在的服务器。
 
-- 结构图![图片](http://cdn.mjava.top/blog/20200507152801.webp)
+- 结构图![图片](http://xhh.dengzii.com/blog/20200507152801.webp)
 
 
 
-- 上传文件流程![图片](http://cdn.mjava.top/blog/20200507152857.webp)
+- 上传文件流程![图片](http://xhh.dengzii.com/blog/20200507152857.webp)
 
 ## 安装环境
 
@@ -221,7 +221,7 @@ mkdir -p /data/fastdfs/client
 group1/M00/00/00/rBA2iV6yvU2AEXUfAAACGTXt3Kw94.yaml
 ```
 
-![图片](http://cdn.mjava.top/blog/20200506215501.png)
+![图片](http://xhh.dengzii.com/blog/20200506215501.png)
 
 ## 安装Nginx
 
@@ -233,7 +233,7 @@ group1/M00/00/00/rBA2iV6yvU2AEXUfAAACGTXt3Kw94.yaml
 #创建文件夹
 mkdir -p /data/nginx
 #进入文件夹并下载nginx配置文件
-cd /data/nginx && wget http://cdn.mjava.top/file/nginx.conf
+cd /data/nginx && wget http://xhh.dengzii.com/file/nginx.conf
 ```
 
 > 配置文件已经修改过了，直接下载即可使用
@@ -261,4 +261,4 @@ http://172.16.54.137:81/group1/M00/00/00/rBA2iV6yvU2AEXUfAAACGTXt3Kw94.yaml
 
 这里只是示例了单机的fastDFS安装，一般fastDFS都是分布式安装的。具体可以通过下载这个结构图去进行安装。此时如果配置了多个group，则需要安装`fastdfs-nginx-module`这个nginx的模块。
 
-![图片](http://cdn.mjava.top/blog/20200507132841.png)
+![图片](http://xhh.dengzii.com/blog/20200507132841.png)

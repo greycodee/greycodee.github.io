@@ -102,7 +102,7 @@ docker run -d -p 8080:8080 -p 50000:50000 -u root -v /var/run/docker.sock:/var/r
 docker logs jenkins 
 ```
 
-![log界面](http://cdn.mjava.top/blog/jenkins_docker_logs_4345.png)
+![log界面](http://xhh.dengzii.com/blog/jenkins_docker_logs_4345.png)
 > 记下43455b344f904cf69a4af9e231f7d48d这个密码，等下要用到
 
 ## 初始化Jenkins
@@ -111,7 +111,7 @@ docker logs jenkins
 
 在浏览器访问172.16.54.131:8080这个地址，进入Jenkins的web界面。（如果访问不了，请开启防火墙的8080端口）
 
-![jenkins界面](http://cdn.mjava.top/blog/jenkins_web_sign_in_201911071359.png)
+![jenkins界面](http://xhh.dengzii.com/blog/jenkins_web_sign_in_201911071359.png)
 
 在输入框中填入刚才保存的密码
 
@@ -119,13 +119,13 @@ docker logs jenkins
 
 推荐直接选 安装推荐的插件
 
-![Jenkins自定义界面](http://cdn.mjava.top/blog/jenkins_setupwizard_1911071408.png)
+![Jenkins自定义界面](http://xhh.dengzii.com/blog/jenkins_setupwizard_1911071408.png)
 
 ### 安装插件
 
 到这个界面等他安装完成，时间会长一点
 
-![Jenkins安装插件](http://cdn.mjava.top/blog/jenkins_191107141216.png)
+![Jenkins安装插件](http://xhh.dengzii.com/blog/jenkins_191107141216.png)
 
 > 如这个界面插件下载失败，直接点继续，进行下一步，具体解决办法可以看这个篇文章
 >
@@ -136,17 +136,17 @@ docker logs jenkins
 ### 创建用户
 
 设置你的登录账号和密码，然后点保存完成
-![Jenkins创建用户](http://cdn.mjava.top/blog/jenkins_20191107160016.png)
+![Jenkins创建用户](http://xhh.dengzii.com/blog/jenkins_20191107160016.png)
 
 ### 实例配置
 默认直接点保存完成
-![Jenkins实例配置](http://cdn.mjava.top/blog/jenkins_20191107160056.png)
+![Jenkins实例配置](http://xhh.dengzii.com/blog/jenkins_20191107160056.png)
 
 ### 开始使用
 点击开始使用Jenkins
-![Jenkins开始使用](http://cdn.mjava.top/blog/jenkins_20191107160129.png)
+![Jenkins开始使用](http://xhh.dengzii.com/blog/jenkins_20191107160129.png)
 
 ### Jenkins主界面
 进入Jenkins主界面，到此教程结束
-![Jenkins主界面](http://cdn.mjava.top/blog/jenkins_20191107160204.png)
+![Jenkins主界面](http://xhh.dengzii.com/blog/jenkins_20191107160204.png)
 

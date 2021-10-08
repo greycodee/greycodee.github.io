@@ -23,13 +23,13 @@ categories:
 
 当然ArrayList里的方法不止这些，本文主要讲一些常用的方法
 
-![图片](http://cdn.mjava.top/blog/20200103101050.png)
+![图片](http://xhh.dengzii.com/blog/20200103101050.png)
 
 ## 方法变量
 
 `Arraylist`里的方法变量主要有以下几个
 
-![图片](http://cdn.mjava.top/blog/Selection_005.png)
+![图片](http://xhh.dengzii.com/blog/Selection_005.png)
 
 
 
@@ -47,7 +47,7 @@ List<String> list=new ArrayList<>(5);
 
 ##### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_004.png)
+![图片](http://xhh.dengzii.com/blog/Selection_004.png)
 
 #### 传入一个list对象
 
@@ -63,7 +63,7 @@ List<String> list=new ArrayList<>(Arrays.asList("z","m","h"));
 
 ##### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_006.png)
+![图片](http://xhh.dengzii.com/blog/Selection_006.png)
 
 ### 无参构造
 
@@ -77,7 +77,7 @@ List<String> list=new ArrayList<>();
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/20200103112943.png)
+![图片](http://xhh.dengzii.com/blog/20200103112943.png)
 
 ## add方法
 
@@ -96,27 +96,27 @@ list.add("灰灰HK");
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_007.png)
+![图片](http://xhh.dengzii.com/blog/Selection_007.png)
 
 - <font color=orange>ensureCapacityInternal(int minCapacity)</font>确保数组容量充足
 
-![图片](http://cdn.mjava.top/blog/Selection_009.png)
+![图片](http://xhh.dengzii.com/blog/Selection_009.png)
 
 - <font color=orange>calculateCapacity(Object[] elementData, int minCapacity)</font>
 
-![图片](http://cdn.mjava.top/blog/Selection_010.png)
+![图片](http://xhh.dengzii.com/blog/Selection_010.png)
 
 - 再回到<font color=orange>ensureExplicitCapacity(int minCapacity)</font>这个方法，这个方法先`修改次数加1`，然后判断`size+1`是不是比当前的数组容量大，如果比当前的数组容量大，则进行扩容操作，扩大容量为原数组的`1.5倍`
 
 > 比如第二次调用add方法，此时`size+1=2`, ` elementData.length=10`,为什么等于10呢？因为第一次默认把数组容量从0扩大到了10,这时`size+1`比`elementData.length`小，就不会进行扩容操作
 
-![图片](http://cdn.mjava.top/blog/Selection_011.png)
+![图片](http://xhh.dengzii.com/blog/Selection_011.png)
 
 - <font color=orange>grow(int minCapacity)</font>扩容
 
 > 这里调用`Arrays.copyOf()`方法进行复制操作，当进一步深入这个方法时，发现是由`System.arraycopy()`这个方法实现复制功能的，这个方法由`native`关键字修饰，表示不是由`Java`语言实现的，一般是c/cpp实现
 
-![图片](http://cdn.mjava.top/blog/Selection_012.png)
+![图片](http://xhh.dengzii.com/blog/Selection_012.png)
 
 #### 小结
 
@@ -146,7 +146,7 @@ list.add(0,"灰灰");
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_013.png)
+![图片](http://xhh.dengzii.com/blog/Selection_013.png)
 
 > 可以看到，这边又用到了`System.arraycopy()`这个方法
 
@@ -154,7 +154,7 @@ list.add(0,"灰灰");
 
 > 这里他是和`size`对比，而不是和数组的`length`对比，我个人认为这样第一节省了空间，第二方便后面移动的操作
 
-![图片](http://cdn.mjava.top/blog/Selection_014.png)
+![图片](http://xhh.dengzii.com/blog/Selection_014.png)
 
 - <font color=orange>System.arraycopy()</font>拷贝数组
 
@@ -192,7 +192,7 @@ list.get(0);
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_015.png)
+![图片](http://xhh.dengzii.com/blog/Selection_015.png)
 
 - <font color=orange>rangeCheck(int index)</font>判断是否越界
 
@@ -234,7 +234,7 @@ list.set(0,"灰灰");
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_016.png)
+![图片](http://xhh.dengzii.com/blog/Selection_016.png)
 
 ## remove方法
 
@@ -252,7 +252,7 @@ list.remove(0);
 
 > 当删除的元素为最后一个元素时，`numMoved`就小于0了，就不会进行移动元素的操作
 
-![图片](http://cdn.mjava.top/blog/Selection_017.png)
+![图片](http://xhh.dengzii.com/blog/Selection_017.png)
 
 ### remove(Object o)
 
@@ -268,7 +268,7 @@ list.remove("hk");
 
 #### 源码解析
 
-![图片](http://cdn.mjava.top/blog/Selection_018.png)
+![图片](http://xhh.dengzii.com/blog/Selection_018.png)
 
 - <font color=orange>fastRemove(int index)</font>删除元素
 
@@ -299,7 +299,7 @@ list.clear();
 
 #### 源码分析
 
-![图片](http://cdn.mjava.top/blog/Selection_019.png)
+![图片](http://xhh.dengzii.com/blog/Selection_019.png)
 
 ## 总结
 

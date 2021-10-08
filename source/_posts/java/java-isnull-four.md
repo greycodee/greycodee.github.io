@@ -37,6 +37,6 @@ public class demo1 {
 }
 ```
 ## 二.输出结果
-![控制台输出](http://cdn.mjava.top/blog/javaands1.png)
+![控制台输出](http://xhh.dengzii.com/blog/javaands1.png)
 
 >可以看到用"=="判断的那组出现了不一致的情况

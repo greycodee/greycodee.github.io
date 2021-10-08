@@ -21,7 +21,7 @@ categories:
 
 # 【数据结构】手写平衡二叉树（AVL）
 
-![图片](http://cdn.mjava.top/blog/20200201165139.jpg)
+![图片](https://i.imgur.com/5wIcYig.jpg)
 
 > 积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬
 >
@@ -41,19 +41,19 @@ categories:
 
 - 左左结构——右旋
 
-![左左结构](http://cdn.mjava.top/blog/20200201153234.jpg)
+![左左结构](https://i.imgur.com/FHk4xan.jpg)
 
 - 右右结构——左旋
 
-![右右结构](http://cdn.mjava.top/blog/20200201153301.jpg)
+![右右结构](https://i.imgur.com/p47YbC8.jpg)
 
 - 左右结构——左子先左旋，然后整体右旋
 
-![左右结构](http://cdn.mjava.top/blog/20200201153329.jpg)
+![左右结构](https://i.imgur.com/Ev2DtLt.jpg)
 
 - 右左结构——右子先右旋，然后整体左旋
 
-![右左结构](http://cdn.mjava.top/blog/20200201153403.jpg)
+![右左结构](https://i.imgur.com/vFcE6tK.jpg)
 
 ## 代码实现
 
