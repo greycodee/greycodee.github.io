@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "5.4.0"
+    "version": "6.0.0"
   },
   "dependencies": {
     "eslint": "^7.31.0",
-    "hexo": "^5.4.0",
+    "hexo": "^6.0.0",
     "hexo-auto-category": "^0.2.1",
     "hexo-deployer-git": "^3.0.0",
     "hexo-deployer-sftp": "^0.4.1",
