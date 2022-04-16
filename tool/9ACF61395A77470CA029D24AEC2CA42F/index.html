@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      利用腾讯位置API进行的阿里云DDNS工具 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>利用腾讯位置API进行的阿里云DDNS工具</h2>
+  <p class="post-date">2021-07-26</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/aliyun-ddns"><img src="https://github-readme-stats.vercel.app/api/pin/?username=greycodee&repo=aliyun-ddns" alt="aliyun-ddns"></a></p>
+<p>本应用是基于阿里云SDK进行开发的，可以动态更新阿里云域名的DNS解析，运行环境是 <code>Python 3</code></p>
+<p>利用<a target="_blank" rel="noopener external nofollow noreferrer" href="https://lbs.qq.com/">腾讯位置</a>提供的 API 进行公网 IP 的获取，可以查看<a href="doc/tencent_lbs.md">如何获取腾讯位置的 API 密钥</a></p>
+<p>由于腾讯位置的 API 免费配额为每日 10000 次，请合理使用</p>
+<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><p>程序从环境变量中获取配置，运行前<strong>先设置环境变量</strong></p>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ALI_ACCESS_KEY_ID</td>
+<td>阿里云 ACCESS_KEY_ID（必填）</td>
+</tr>
+<tr>
+<td>ALI_ACCESS_KEY_SECRET</td>
+<td>阿里云 ACCESS_KEY_SECRET（必填）</td>
+</tr>
+<tr>
+<td>ALI_REGION_ID</td>
+<td>阿里云区域 ID（默认：cn-hangzhou）</td>
+</tr>
+<tr>
+<td>DNS_TYPE</td>
+<td>解析类型（默认：A）</td>
+</tr>
+<tr>
+<td>DNS_DOMAIN</td>
+<td>域名（必填）</td>
+</tr>
+<tr>
+<td>DNS_SUB_DOMAIN</td>
+<td>二级域名（默认：@）</td>
+</tr>
+<tr>
+<td>TENCENT_LBS_KEY</td>
+<td>腾讯位置应用 KEY</td>
+</tr>
+<tr>
+<td>TENCENT_LBS_SK</td>
+<td>腾讯位置应用签名加密 SK</td>
+</tr>
+</tbody></table>
+<h3 id="环境字段说明"><a href="#环境字段说明" class="headerlink" title="环境字段说明"></a>环境字段说明</h3><p><strong>DNS_TYPE</strong> 支持的解析类型：</p>
+<blockquote>
+<p>点击查看<a target="_blank" rel="noopener external nofollow noreferrer" href="https://help.aliyun.com/document_detail/29805.html?spm=a2c4g.11186623.2.8.4d3316267Ov7hF">官方详细说明</a></p>
+</blockquote>
+<ul>
+<li>A：将域名指向一个IPV4地址</li>
+<li>CNAME：将域名指向另外一个域名</li>
+<li>AAAA：将域名指向一个IPV6地址</li>
+</ul>
+<p><strong>DNS_SUB_DOMAIN</strong> 域名前缀，常见用法有：</p>
+<ul>
+<li><p>www：解析后的域名为<a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.aliyun.com./">www.aliyun.com。</a></p>
+</li>
+<li><p>@：直接解析主域名 aliyun.com。</p>
+</li>
+<li><p>*：泛解析，匹配其他所有域名 *.aliyun.com。</p>
+</li>
+<li><p>mail：将域名解析为mail.aliyun.com，通常用于解析邮箱服务器。</p>
+</li>
+<li><p>二级域名：如：abc.aliyun.com，填写abc。</p>
+</li>
+<li><p>手机网站：如：m.aliyun.com，填写m。</p>
+</li>
+<li><p>显性URL：不支持泛解析（泛解析：将所有子域名解析到同一地址）</p>
+</li>
+</ul>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>当设置好环境变量后，使用以下命令安装依赖</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -r requeirments.txt</span><br></pre></td></tr></table></figure>
+<p>安装依赖后，直接运行 <code>main.py</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python main.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="以-Docker-运行"><a href="#以-Docker-运行" class="headerlink" title="以 Docker 运行"></a>以 Docker 运行</h2><p>如果你本地没有 python 环境，可以直接使用 docker 来运行本程序</p>
+<p>先拉取镜像：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker pull greycodee/aliyun-ddns</span><br></pre></td></tr></table></figure>
+
+<p>然后运行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -e ALI_ACCESS_KEY_ID=&quot;阿里云AK&quot; \</span><br><span class="line">              -e ALI_ACCESS_KEY_SECRET=&quot;阿里云AKS&quot; \</span><br><span class="line">              -e DNS_DOMAIN=&quot;你的域名&quot; \</span><br><span class="line">              -e DNS_SUB_DOMAIN=&quot;二级域名名称&quot; \</span><br><span class="line">              -e TENCENT_LBS_KEY=&quot;腾讯位置应用KEY&quot; \</span><br><span class="line">              -e TENCENT_LBS_SK=&quot;腾讯位置应用签名SK&quot; \</span><br><span class="line">              greycodee/aliyun-ddns</span><br></pre></td></tr></table></figure>
+
+<p>如果你想看日志的话，可以使用 <code>-v</code> 命令把 docker 容器里的 <code>/root/logs</code> 日志目录挂载出来，这里面存放着程序的运行日志</p>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><p>在本目录中的 <strong>Dockerfile</strong> 文件中，更改文件里的环境变量参数为你的数据，具体参数字段含义见上文介绍。<br>更改完参数后，可以在<strong>当前目录</strong>使用 <code>docker build</code> 构建命令来构建你自己来镜像</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker build -t 设置镜像标签  .</span><br></pre></td></tr></table></figure>
+<p>构建完成后就可以使用命令来运行你刚才构建的镜像了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d 设置的镜像标签</span><br></pre></td></tr></table></figure>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#DDNS" >
+    <span class="tag-code">DDNS</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/gof/234C81B9931C44CB9B88E0E53210BB48/">
+        <span class="nav-arrow">← </span>
+        
+          UML箭头在Java中的含义
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/vue/2CA7C67D02E74713A030F09651A5F164/">
+        
+          小白学前端之TypeScript使用Vuex 4.0
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">介绍</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-nav-text">快速开始</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%8E%AF%E5%A2%83%E5%AD%97%E6%AE%B5%E8%AF%B4%E6%98%8E"><span class="toc-nav-text">环境字段说明</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-nav-text">运行</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%A5-Docker-%E8%BF%90%E8%A1%8C"><span class="toc-nav-text">以 Docker 运行</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Dockerfile"><span class="toc-nav-text">Dockerfile</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/tool/9ACF61395A77470CA029D24AEC2CA42F/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

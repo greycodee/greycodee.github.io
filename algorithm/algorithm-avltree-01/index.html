@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      【数据结构】手写平衡二叉树（AVL） | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>【数据结构】手写平衡二叉树（AVL）</h2>
+  <p class="post-date">2020-02-01</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="【数据结构】手写平衡二叉树（AVL）"><a href="#【数据结构】手写平衡二叉树（AVL）" class="headerlink" title="【数据结构】手写平衡二叉树（AVL）"></a>【数据结构】手写平衡二叉树（AVL）</h1><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/DdjSj9k-20211008161234805.jpg" alt="图片"></p>
+<blockquote>
+<p>积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬</p>
+<p>本文源代码：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/z573419235/studyDemo/blob/master/BaseJava/src/dataStructure/AVLTree.java">手写AVL树</a></p>
+</blockquote>
+<h2 id="什么是平衡二叉树？"><a href="#什么是平衡二叉树？" class="headerlink" title="什么是平衡二叉树？"></a>什么是平衡二叉树？</h2><p>平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵<a target="_blank" rel="noopener external nofollow noreferrer" href="https://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/10421057">平衡二叉树</a>。AVL树查找的时间复杂度为O(logN)。</p>
+<h3 id="平衡二叉树基本特点"><a href="#平衡二叉树基本特点" class="headerlink" title="平衡二叉树基本特点"></a>平衡二叉树基本特点</h3><ul>
+<li>左右子树深度差不能大于1</li>
+<li>左边子树永远比根节点小</li>
+<li>右边子树永远比根节点大</li>
+</ul>
+<h3 id="平衡二叉树基本结构及操作"><a href="#平衡二叉树基本结构及操作" class="headerlink" title="平衡二叉树基本结构及操作"></a>平衡二叉树基本结构及操作</h3><ul>
+<li>左左结构——右旋</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/7Jtj6ns.jpg" alt="左左结构"></p>
+<ul>
+<li>右右结构——左旋</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/oJoN5kJ-20211008170036933.jpg" alt="右右结构"></p>
+<ul>
+<li>左右结构——左子先左旋，然后整体右旋</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/mH97Bzf.jpg" alt="左右结构"></p>
+<ul>
+<li>右左结构——右子先右旋，然后整体左旋</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/6ZSA7aq.jpg" alt="右左结构"></p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>先创建一个内部类Node，来表示树的每个节点</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AVLTree</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Node rootNode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//二叉树节点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">Node</span>&#123;</span><br><span class="line">        <span class="keyword">public</span> Node parent; <span class="comment">//父</span></span><br><span class="line">        <span class="keyword">public</span> Node left;	<span class="comment">//左子树</span></span><br><span class="line">        <span class="keyword">public</span> Node right;	<span class="comment">//右子树</span></span><br><span class="line">        <span class="meta">@NotNull</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> data;	<span class="comment">//存放的数据</span></span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> depth;	<span class="comment">//深度</span></span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> balance;	<span class="comment">//平衡因子</span></span><br><span class="line">		<span class="comment">//有参构造方法</span></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(<span class="type">int</span> data)</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>.data=data;</span><br><span class="line">            <span class="built_in">this</span>.depth=<span class="number">1</span>;</span><br><span class="line">            <span class="built_in">this</span>.balance=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p>暴露一个方法给外部调用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**添加数据方法*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> data)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.rootNode==<span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="built_in">this</span>.rootNode=<span class="keyword">new</span> <span class="title class_">Node</span>(data);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.insert(rootNode,data);</span><br><span class="line">        <span class="comment">//判断根节点是否有父  有的话说明有旋转操作，更新根节点</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.rootNode.parent!=<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="built_in">this</span>.rootNode=<span class="built_in">this</span>.rootNode.parent;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际内部是调用另一个<code>insert</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(Node root,<span class="type">int</span> data)</span>&#123;</span><br><span class="line">    <span class="comment">//插入的数据比根小</span></span><br><span class="line">    <span class="keyword">if</span> (data&lt;root.data)&#123;</span><br><span class="line">        <span class="keyword">if</span> (root.left==<span class="literal">null</span>)&#123;</span><br><span class="line">            root.left=<span class="keyword">new</span> <span class="title class_">Node</span>(data);</span><br><span class="line">            root.left.parent=root;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.insert(root.left,data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//插入的数据比根大</span></span><br><span class="line">    <span class="keyword">if</span> (data&gt;root.data)&#123;</span><br><span class="line">        <span class="keyword">if</span> (root.right==<span class="literal">null</span>) &#123;</span><br><span class="line">            root.right=<span class="keyword">new</span> <span class="title class_">Node</span>(data);</span><br><span class="line">            root.right.parent=root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">this</span>.insert(root.right,data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    root.balance=<span class="built_in">this</span>.getBalance(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (root.balance&gt;<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="comment">//判断左子的平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (root.left.balance&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">this</span>.leftTurn(root.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.rightTurn(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.balance&lt;-<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="comment">//判断右子的平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (root.right.balance&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">this</span>.rightTurn(root.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.leftTurn(root);</span><br><span class="line">    &#125;</span><br><span class="line">    root.depth=<span class="built_in">this</span>.getDepth(root);</span><br><span class="line">    root.balance=<span class="built_in">this</span>.getBalance(root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="右旋"><a href="#右旋" class="headerlink" title="右旋"></a>右旋</h3><blockquote>
+<p>右旋的操作如下</p>
+</blockquote>
+<ul>
+<li>我父变成左子的父</li>
+<li>左子变成我的父</li>
+<li>我变成左子的右子</li>
+<li>左子的右子变成我的左子</li>
+<li>(当左子的右子存在时)我变成左子的右子的父</li>
+<li>计算左右节点的深度</li>
+<li>计算深度差</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rightTurn</span><span class="params">(<span class="meta">@NotNull</span> Node node)</span>&#123;</span><br><span class="line">    Node parent=node.parent;</span><br><span class="line">    Node leftSon=node.left;</span><br><span class="line">    Node leftSon_rightSon=leftSon.right;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果父不为空，判断我是在父的左节点还是右节点</span></span><br><span class="line">    <span class="keyword">if</span> (parent!=<span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.left)&#123;</span><br><span class="line">            <span class="comment">//我在父的左节点上，把我的左子变成父的左子</span></span><br><span class="line">            parent.left=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.right)&#123;</span><br><span class="line">            <span class="comment">//我在父的右节点上，把我的左子变成父的右子</span></span><br><span class="line">            parent.right=leftSon;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    leftSon.parent=parent;</span><br><span class="line">    node.parent=leftSon;</span><br><span class="line">    leftSon.right=node;</span><br><span class="line">    node.left=leftSon_rightSon;</span><br><span class="line">    <span class="comment">//如果左子的右子确实存在的</span></span><br><span class="line">    <span class="keyword">if</span> (leftSon_rightSon!=<span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="comment">//我变成左子的右子的父</span></span><br><span class="line">        leftSon_rightSon.parent=node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//重新计算深度和平衡因子</span></span><br><span class="line">    node.depth=<span class="built_in">this</span>.getDepth(node);</span><br><span class="line">    node.balance=<span class="built_in">this</span>.getBalance(node);</span><br><span class="line">    leftSon.depth=<span class="built_in">this</span>.getDepth(leftSon);</span><br><span class="line">    leftSon.balance=<span class="built_in">this</span>.getBalance(leftSon);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h3><blockquote>
+<p>左旋的操作如下</p>
+</blockquote>
+<ul>
+<li>我的父变右子的父</li>
+<li>右子变成我的父</li>
+<li>我变成右子的左子</li>
+<li>右子的左子变成我的右子</li>
+<li>(当右子的左子存在时)我变成右子的左子的父</li>
+<li>计算左右节点的深度</li>
+<li>计算深度差</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">leftTurn</span><span class="params">(<span class="meta">@NotNull</span> Node node)</span>&#123;</span><br><span class="line">    Node parent=node.parent;</span><br><span class="line">    Node rightSon=node.right;</span><br><span class="line">    Node rightSon_leftSon=rightSon.left;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (parent!=<span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.left)&#123;</span><br><span class="line">            parent.left=rightSon;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node==parent.right)&#123;</span><br><span class="line">            parent.right=rightSon;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    rightSon.parent=parent;</span><br><span class="line">    node.parent=rightSon;</span><br><span class="line">    rightSon.left=node;</span><br><span class="line">    node.right=rightSon_leftSon;</span><br><span class="line">    <span class="keyword">if</span> (rightSon_leftSon!=<span class="literal">null</span>)&#123;</span><br><span class="line">        rightSon_leftSon.parent=node;</span><br><span class="line">    &#125;</span><br><span class="line">    node.depth=<span class="built_in">this</span>.getDepth(node);</span><br><span class="line">    node.balance=<span class="built_in">this</span>.getBalance(node);</span><br><span class="line">    rightSon.depth=<span class="built_in">this</span>.getDepth(rightSon);</span><br><span class="line">    rightSon.balance=<span class="built_in">this</span>.getBalance(rightSon);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="计算深度"><a href="#计算深度" class="headerlink" title="计算深度"></a>计算深度</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**计算深度*/</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getDepth</span><span class="params">(Node node)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">depth</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(node.left==<span class="literal">null</span> &amp;&amp; node.right!=<span class="literal">null</span>) &#123;</span><br><span class="line">        depth=node.right.depth;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node.right==<span class="literal">null</span> &amp;&amp; node.left!=<span class="literal">null</span>) &#123;</span><br><span class="line">        depth=node.left.depth;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (node.right!=<span class="literal">null</span> &amp;&amp; node.left!=<span class="literal">null</span>) &#123;</span><br><span class="line">        depth=Math.max(node.left.depth,node.right.depth);</span><br><span class="line">    &#125;</span><br><span class="line">    depth++;</span><br><span class="line">    <span class="keyword">return</span> depth;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="计算平衡因子"><a href="#计算平衡因子" class="headerlink" title="计算平衡因子"></a>计算平衡因子</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**计算左右深度差*/</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getBalance</span><span class="params">(Node node)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">leftDepth</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">rightDepth</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(node.left!=<span class="literal">null</span>)&#123;</span><br><span class="line">        leftDepth=node.left.depth;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node.right!=<span class="literal">null</span>)&#123;</span><br><span class="line">        rightDepth=node.right.depth;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *      左减右</span></span><br><span class="line"><span class="comment">         * 为负数：右边子树高</span></span><br><span class="line"><span class="comment">         * 为正数: 左边子树高</span></span><br><span class="line"><span class="comment">         * */</span></span><br><span class="line">    <span class="keyword">return</span> leftDepth-rightDepth;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="附言"><a href="#附言" class="headerlink" title="附言"></a>附言</h2><p>如果代码和静态图看不太明白的话，这边推荐几个动画演示的网站(可能需要科学上网)：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://visualgo.net/zh">visualgo在线</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">数据结构可视化</a></p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#AVL" >
+    <span class="tag-code">AVL</span>
+  </a>
+
+  <a href="/tags#数据结构" >
+    <span class="tag-code">数据结构</span>
+  </a>
+
+  <a href="/tags#平衡二叉树" >
+    <span class="tag-code">平衡二叉树</span>
+  </a>
+
+  <a href="/tags#二叉树" >
+    <span class="tag-code">二叉树</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/recommend/recommend-tool-1/">
+        <span class="nav-arrow">← </span>
+        
+          【转】免费可商用，最值得收藏的10个插画素材网站
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/mysql/mysql-utf8mb4-error/">
+        
+          插入emoji到mysql时提示了一个表里不存在的字段的错误
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E6%89%8B%E5%86%99%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%88AVL%EF%BC%89"><span class="toc-nav-text">【数据结构】手写平衡二叉树（AVL）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%9F"><span class="toc-nav-text">什么是平衡二叉树？</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E7%89%B9%E7%82%B9"><span class="toc-nav-text">平衡二叉树基本特点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%8F%8A%E6%93%8D%E4%BD%9C"><span class="toc-nav-text">平衡二叉树基本结构及操作</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">代码实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-nav-text">插入数据</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%B3%E6%97%8B"><span class="toc-nav-text">右旋</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B7%A6%E6%97%8B"><span class="toc-nav-text">左旋</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E6%B7%B1%E5%BA%A6"><span class="toc-nav-text">计算深度</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B9%B3%E8%A1%A1%E5%9B%A0%E5%AD%90"><span class="toc-nav-text">计算平衡因子</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%99%84%E8%A8%80"><span class="toc-nav-text">附言</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/algorithm/algorithm-avltree-01/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

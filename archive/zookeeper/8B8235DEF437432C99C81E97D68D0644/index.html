@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      ZooKeeper客户端详解及可视化客户端 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>ZooKeeper客户端详解及可视化客户端</h2>
+  <p class="post-date">2021-08-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>我们可以去 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://zookeeper.apache.org/releases.html">ZooKeeper 官网</a> 下载，这里我下载了 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz">ZooKeeper 3.7.0</a> 版本</p>
+<p>下载解压后，进入 <code>apache-zookeeper-3.7.0-bin/bin</code> 目录，这里有<strong>客户端</strong>、<strong>服务端</strong>和一些工具。在 Windows 中可以执行<code>.cmd</code> 结尾的执行文件，在 Mac 或 Linux 中可以执行 <code>.sh</code> 结尾的可执行文件。名为 <code>zkCli</code> 的文件就是 ZooKeeper 的客户端了，我们可以用这个客户端来连接到 ZooKeeper 注册中心，来对节点进行查看或增删操作。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><blockquote>
+<p>我是在 <strong>Mac 环境下演示使用的</strong></p>
+</blockquote>
+<p>接下来就说下这个客户端怎么使用。</p>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>第一步就是要连接到 ZooKeeper 服务，当你执行 <code>zkCli.sh</code> 不带任何参数时，它默认是连接到本地的 <code>localhost:2181</code> 地址。如果你要连接到指定地址，可以使用 <code>-server</code> 配置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./zkCli.sh -server localhost:2181</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还可以加上连接超时时间（单位：毫秒）</span></span><br><span class="line">./zkCli.sh -<span class="built_in">timeout</span> 3000 -server localhost:2181</span><br></pre></td></tr></table></figure>
+
+<p>连接上后，终端就会变成这样：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 0] </span><br></pre></td></tr></table></figure>
+
+<p>然后你可以输入 <code>help</code> 来查看执行的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ZooKeeper -server host:port -client-configuration properties-file cmd args</span><br><span class="line">	addWatch [-m mode] path <span class="comment"># optional mode is one of [PERSISTENT, PERSISTENT_RECURSIVE] - default is PERSISTENT_RECURSIVE</span></span><br><span class="line">	addauth scheme auth</span><br><span class="line">	close</span><br><span class="line">	config [-c] [-w] [-s]</span><br><span class="line">	connect host:port</span><br><span class="line">	create [-s] [-e] [-c] [-t ttl] path [data] [acl]</span><br><span class="line">	delete [-v version] path</span><br><span class="line">	deleteall path [-b batch size]</span><br><span class="line">	delquota [-n|-b|-N|-B] path</span><br><span class="line">	get [-s] [-w] path</span><br><span class="line">	getAcl [-s] path</span><br><span class="line">	getAllChildrenNumber path</span><br><span class="line">	getEphemerals path</span><br><span class="line">	<span class="built_in">history</span></span><br><span class="line">	listquota path</span><br><span class="line">	<span class="built_in">ls</span> [-s] [-w] [-R] path</span><br><span class="line">	printwatches on|off</span><br><span class="line">	quit</span><br><span class="line">	reconfig [-s] [-v version] [[-file path] | [-members serverID=host:port1:port2;port3[,...]*]] | [-add serverId=host:port1:port2;port3[,...]]* [-remove serverId[,...]*]</span><br><span class="line">	redo cmdno</span><br><span class="line">	removewatches path [-c|-d|-a] [-l]</span><br><span class="line">	<span class="built_in">set</span> [-s] [-v version] path data</span><br><span class="line">	setAcl [-s] [-v version] [-R] path acl</span><br><span class="line">	setquota -n|-b|-N|-B val path</span><br><span class="line">	<span class="built_in">stat</span> [-w] path</span><br><span class="line">	<span class="built_in">sync</span> path</span><br><span class="line">	version</span><br><span class="line">	<span class="built_in">whoami</span></span><br></pre></td></tr></table></figure>
+
+<p>在客户端里面，也可以使用命令 <code>connect</code> 来切换连接的 ZooKeeper 的服务地址：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 12] connect localhost:2181</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建节点"><a href="#创建节点" class="headerlink" title="创建节点"></a>创建节点</h2><h3 id="永久节点"><a href="#永久节点" class="headerlink" title="永久节点"></a>永久节点</h3><p>可以使用 <code>create</code> 命令来创建一个永久节点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 18] create /node</span><br><span class="line">Created /node</span><br></pre></td></tr></table></figure>
+
+<h3 id="临时节点"><a href="#临时节点" class="headerlink" title="临时节点"></a>临时节点</h3><p>临时节点当客户端断开后，这个节点就会被删除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 19] create -e /tmp_node</span><br><span class="line">Created /tmp_node</span><br></pre></td></tr></table></figure>
+
+<p>临时节点不能够有子节点，当要创建它的子节点时就会报错 <code>Ephemerals cannot have children</code> :</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 20] create -e /tmp_node/t1</span><br><span class="line">Ephemerals cannot have children: /tmp_node/t1</span><br></pre></td></tr></table></figure>
+
+<h3 id="顺序节点"><a href="#顺序节点" class="headerlink" title="顺序节点"></a>顺序节点</h3><p>ZooKeeper 可以为我们自定创建递增的顺序节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 23] create -s /seq_node</span><br><span class="line">Created /seq_node0000000017</span><br><span class="line">[zk: localhost:2181(CONNECTED) 24] create -s /seq_node</span><br><span class="line">Created /seq_node0000000018</span><br><span class="line">[zk: localhost:2181(CONNECTED) 25] create -s /seq_node</span><br><span class="line">Created /seq_node0000000019</span><br></pre></td></tr></table></figure>
+
+<h3 id="容器节点"><a href="#容器节点" class="headerlink" title="容器节点"></a>容器节点</h3><p>容器节点当其子<strong>所有节点</strong>都被删除时，它自己也会被删除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建容器节点</span></span><br><span class="line">[zk: localhost:2181(CONNECTED) 39] create -c /container</span><br><span class="line">Created /container</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建容器节点的子节点</span></span><br><span class="line">[zk: localhost:2181(CONNECTED) 43] create /container/c1</span><br><span class="line">Created /container/c1</span><br><span class="line">[zk: localhost:2181(CONNECTED) 44] create /container/c2</span><br><span class="line">Created /container/c2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除容器节点的子节点</span></span><br><span class="line">[zk: localhost:2181(CONNECTED) 46] delete /container/c1</span><br><span class="line">[zk: localhost:2181(CONNECTED) 47] delete /container/c2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 过了一会后，容器节点被删除了</span></span><br><span class="line">[zk: localhost:2181(CONNECTED) 56] get /container</span><br><span class="line">org.apache.zookeeper.KeeperException<span class="variable">$NoNodeException</span>: KeeperErrorCode = NoNode <span class="keyword">for</span> /container</span><br></pre></td></tr></table></figure>
+
+<h3 id="ttl-节点"><a href="#ttl-节点" class="headerlink" title="ttl 节点"></a>ttl 节点</h3><p>ZooKeeper 也可以为节点设置有效期，单位是毫秒。要创建这个节点时，需要 ZooKeeper 服务端在启动时设置 <code>zookeeper.extendedTypesEnabled=true</code> ，否则在创建时就会失败：<code>KeeperErrorCode = Unimplemented</code></p>
+<p>创建时设置的过期时间单位时毫秒：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 57] create -t 3000 /ttl_node</span><br><span class="line">Created /ttl_node</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h2><p>在 <code>zkCli</code> 中可以用 <code>delete</code> 命令来删除节点，在删除一个节点时，必须保证该节点下面没有子节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 6] create /node1</span><br><span class="line">Created /node1</span><br><span class="line">[zk: localhost:2181(CONNECTED) 7] delete /node1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有子节点的话，删除时会报错</span></span><br><span class="line">[zk: localhost:2181(CONNECTED) 10] create /node1</span><br><span class="line">Created /node1</span><br><span class="line">[zk: localhost:2181(CONNECTED) 11] create /node1/n1</span><br><span class="line">Created /node1/n1</span><br><span class="line">[zk: localhost:2181(CONNECTED) 12] delete /node1</span><br><span class="line">Node not empty: /node1</span><br></pre></td></tr></table></figure>
+
+<p>如果你想一次性删除节点包括其所有子节点时，可以使用 <code>deleteall</code> 命令来进行删除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 14] deleteall /node1</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看节点"><a href="#查看节点" class="headerlink" title="查看节点"></a>查看节点</h2><h3 id="查看所有子节点"><a href="#查看所有子节点" class="headerlink" title="查看所有子节点"></a>查看所有子节点</h3><p>我们可以用 <code>ls</code> 命令来查看某个节点的所有子节点，比如我们查看根目录下的所有节点时，就可以这样用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 20] <span class="built_in">ls</span> /</span><br><span class="line">[quota, zookeeper]</span><br></pre></td></tr></table></figure>
+
+<p>查看 zookeeper 节点的子节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 21] <span class="built_in">ls</span> /zookeeper</span><br><span class="line">[config, quota]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看节点的状态"><a href="#查看节点的状态" class="headerlink" title="查看节点的状态"></a>查看节点的状态</h3><p>可以用 <code>stat</code> 来查看一个节点的状态，比如我们查看根节点的状态时：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 22] <span class="built_in">stat</span> /</span><br><span class="line">cZxid = 0x0</span><br><span class="line">ctime = Thu Jan 01 08:00:00 CST 1970</span><br><span class="line">mZxid = 0x0</span><br><span class="line">mtime = Thu Jan 01 08:00:00 CST 1970</span><br><span class="line">pZxid = 0xe</span><br><span class="line">cversion = 4</span><br><span class="line">dataVersion = 0</span><br><span class="line">aclVersion = 0</span><br><span class="line">ephemeralOwner = 0x0</span><br><span class="line">dataLength = 0</span><br><span class="line">numChildren = 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>字段说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>czxid</td>
+<td>创建znode的zxid</td>
+</tr>
+<tr>
+<td>mzxid</td>
+<td>最近一次修改znode的zxid(创建、删除、set直系子节点、set自身节点都会计数)</td>
+</tr>
+<tr>
+<td>pzxid</td>
+<td>最近一次修改子节点的zxid(创建、删除直系子节点都会计数，set子节点不会计数)</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td>创建znode的时间，单位毫秒</td>
+</tr>
+<tr>
+<td>mtime</td>
+<td>最近一次修改znode的时间，单位毫秒</td>
+</tr>
+<tr>
+<td>dataVersion</td>
+<td>修改znode数据的次数</td>
+</tr>
+<tr>
+<td>cversion</td>
+<td>修改子节点的次数(创建、删除直系子节点都会计数，set子节点不会计数)</td>
+</tr>
+<tr>
+<td>aclVersion</td>
+<td>该znode的ACL修改次数</td>
+</tr>
+<tr>
+<td>ephemeralOwner</td>
+<td>临时znode节点的session id，如果不是临时节点，值为0</td>
+</tr>
+<tr>
+<td>dataLength</td>
+<td>znode携带的数据长度，单位字节</td>
+</tr>
+<tr>
+<td>numChildren</td>
+<td>直系子节点的数量(不会递归计算孙节点)</td>
+</tr>
+</tbody></table>
+<h3 id="查看节点的数据"><a href="#查看节点的数据" class="headerlink" title="查看节点的数据"></a>查看节点的数据</h3><p>可以使用 <code>set</code> 命令来设置节点的数据，当要获取这个设置的数据时，就可以使用 <code>get</code> 命令来获取节点的数据</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[zk: localhost:2181(CONNECTED) 27] create /node</span><br><span class="line">Created /node</span><br><span class="line">[zk: localhost:2181(CONNECTED) 28] <span class="built_in">set</span> /node 我的数据</span><br><span class="line">[zk: localhost:2181(CONNECTED) 29] get /node</span><br><span class="line">我的数据</span><br></pre></td></tr></table></figure>
+
+<h2 id="终端可视化客户端"><a href="#终端可视化客户端" class="headerlink" title="终端可视化客户端"></a>终端可视化客户端</h2><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/PP6ACH0.gif" alt="screen1"></p>
+<p>下载地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/zk-cli/releases">https://github.com/greycodee/zk-cli/releases</a></p>
+<p>Github：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/zk-cli">https://github.com/greycodee/zk-cli</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#分布式" >
+    <span class="tag-code">分布式</span>
+  </a>
+
+  <a href="/tags#ZooKeeper" >
+    <span class="tag-code">ZooKeeper</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/vue/2CA7C67D02E74713A030F09651A5F164/">
+        <span class="nav-arrow">← </span>
+        
+          小白学前端之TypeScript使用Vuex 4.0
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/">
+        
+          ZooKeeper单机伪集群搭建
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="toc-nav-text">下载</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-nav-text">连接</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9"><span class="toc-nav-text">创建节点</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B0%B8%E4%B9%85%E8%8A%82%E7%82%B9"><span class="toc-nav-text">永久节点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%B4%E6%97%B6%E8%8A%82%E7%82%B9"><span class="toc-nav-text">临时节点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%A1%BA%E5%BA%8F%E8%8A%82%E7%82%B9"><span class="toc-nav-text">顺序节点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%B9%E5%99%A8%E8%8A%82%E7%82%B9"><span class="toc-nav-text">容器节点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ttl-%E8%8A%82%E7%82%B9"><span class="toc-nav-text">ttl 节点</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="toc-nav-text">删除节点</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9"><span class="toc-nav-text">查看节点</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%AD%90%E8%8A%82%E7%82%B9"><span class="toc-nav-text">查看所有子节点</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-nav-text">查看节点的状态</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-nav-text">查看节点的数据</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%BB%88%E7%AB%AF%E5%8F%AF%E8%A7%86%E5%8C%96%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-nav-text">终端可视化客户端</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

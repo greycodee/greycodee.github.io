@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      gitalk更换自定义代理 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>gitalk更换自定义代理</h2>
+  <p class="post-date">2021-03-11</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>首先注册一个<a target="_blank" rel="noopener external nofollow noreferrer" href="https://dash.cloudflare.com/">https://dash.cloudflare.com/</a> 的账号</p>
+<p>然后创建一个<code>Workers</code>。</p>
+<p>然后将代码复制到输入框里：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">CORS Anywhere as a Cloudflare Worker!</span></span><br><span class="line"><span class="comment">(c) 2019 by Zibri (www.zibri.org)</span></span><br><span class="line"><span class="comment">email: zibri AT zibri DOT org</span></span><br><span class="line"><span class="comment">https://github.com/Zibri/cloudflare-cors-anywhere</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">whitelist = [ &quot;^http.?://www.zibri.org$&quot;, &quot;zibri.org$&quot;, &quot;test\\..*&quot; ];  // regexp for whitelisted urls</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line">blacklist = [ ];           <span class="comment">// regexp for blacklisted urls</span></span><br><span class="line">whitelist = [ <span class="string">&quot;.*&quot;</span> ];     <span class="comment">// regexp for whitelisted origins</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isListed</span>(<span class="params">uri,listing</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> ret=<span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> uri == <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">        listing.<span class="title function_">forEach</span>(<span class="function">(<span class="params">m</span>)=&gt;</span>&#123;</span><br><span class="line">	          <span class="keyword">if</span> (uri.<span class="title function_">match</span>(m)!=<span class="literal">null</span>) ret=<span class="literal">true</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;            <span class="comment">//   decide what to do when Origin is null</span></span><br><span class="line">    	  ret=<span class="literal">true</span>;    <span class="comment">// true accepts null origins false rejects them.</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&quot;fetch&quot;</span>, <span class="keyword">async</span> event=&gt;&#123;</span><br><span class="line">    event.<span class="title function_">respondWith</span>((<span class="keyword">async</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        isOPTIONS = (event.<span class="property">request</span>.<span class="property">method</span> == <span class="string">&quot;OPTIONS&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> origin_url = <span class="keyword">new</span> <span class="title function_">URL</span>(event.<span class="property">request</span>.<span class="property">url</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">fix</span>(<span class="params">myHeaders</span>) &#123;</span><br><span class="line">            <span class="comment">//            myHeaders.set(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span></span><br><span class="line">            myHeaders.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Origin&quot;</span>, event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;Origin&quot;</span>));</span><br><span class="line">            <span class="keyword">if</span> (isOPTIONS) &#123;</span><br><span class="line">                myHeaders.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Methods&quot;</span>, event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;access-control-request-method&quot;</span>));</span><br><span class="line">                acrh = event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;access-control-request-headers&quot;</span>);</span><br><span class="line">                <span class="comment">//myHeaders.set(&quot;Access-Control-Allow-Credentials&quot;, &quot;true&quot;);</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (acrh) &#123;</span><br><span class="line">                    myHeaders.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Headers&quot;</span>, acrh);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                myHeaders.<span class="title function_">delete</span>(<span class="string">&quot;X-Content-Type-Options&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> myHeaders;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> fetch_url = <span class="built_in">unescape</span>(<span class="built_in">unescape</span>(origin_url.<span class="property">search</span>.<span class="title function_">substr</span>(<span class="number">1</span>)));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> orig = event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;Origin&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> remIp = event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;CF-Connecting-IP&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((!<span class="title function_">isListed</span>(fetch_url, blacklist)) &amp;&amp; (<span class="title function_">isListed</span>(orig, whitelist))) &#123;</span><br><span class="line"></span><br><span class="line">            xheaders = event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">get</span>(<span class="string">&quot;x-cors-headers&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (xheaders != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    xheaders = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(xheaders);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (origin_url.<span class="property">search</span>.<span class="title function_">startsWith</span>(<span class="string">&quot;?&quot;</span>)) &#123;</span><br><span class="line">                recv_headers = &#123;&#125;;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> pair <span class="keyword">of</span> event.<span class="property">request</span>.<span class="property">headers</span>.<span class="title function_">entries</span>()) &#123;</span><br><span class="line">                    <span class="keyword">if</span> ((pair[<span class="number">0</span>].<span class="title function_">match</span>(<span class="string">&quot;^origin&quot;</span>) == <span class="literal">null</span>) &amp;&amp; </span><br><span class="line">			(pair[<span class="number">0</span>].<span class="title function_">match</span>(<span class="string">&quot;eferer&quot;</span>) == <span class="literal">null</span>) &amp;&amp; </span><br><span class="line">			(pair[<span class="number">0</span>].<span class="title function_">match</span>(<span class="string">&quot;^cf-&quot;</span>) == <span class="literal">null</span>) &amp;&amp; </span><br><span class="line">			(pair[<span class="number">0</span>].<span class="title function_">match</span>(<span class="string">&quot;^x-forw&quot;</span>) == <span class="literal">null</span>) &amp;&amp; </span><br><span class="line">			(pair[<span class="number">0</span>].<span class="title function_">match</span>(<span class="string">&quot;^x-cors-headers&quot;</span>) == <span class="literal">null</span>)</span><br><span class="line">		    ) recv_headers[pair[<span class="number">0</span>]] = pair[<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">		    </span><br><span class="line">                <span class="keyword">if</span> (xheaders != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="title class_">Object</span>.<span class="title function_">entries</span>(xheaders).<span class="title function_">forEach</span>(<span class="function">(<span class="params">c</span>)=&gt;</span>recv_headers[c[<span class="number">0</span>]] = c[<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                newreq = <span class="keyword">new</span> <span class="title class_">Request</span>(event.<span class="property">request</span>,&#123;</span><br><span class="line">                    <span class="string">&quot;headers&quot;</span>: recv_headers</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">var</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(fetch_url,newreq);</span><br><span class="line">                <span class="keyword">var</span> myHeaders = <span class="keyword">new</span> <span class="title class_">Headers</span>(response.<span class="property">headers</span>);</span><br><span class="line">                cors_headers = [];</span><br><span class="line">                allh = &#123;&#125;;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> pair <span class="keyword">of</span> response.<span class="property">headers</span>.<span class="title function_">entries</span>()) &#123;</span><br><span class="line">                    cors_headers.<span class="title function_">push</span>(pair[<span class="number">0</span>]);</span><br><span class="line">                    allh[pair[<span class="number">0</span>]] = pair[<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                cors_headers.<span class="title function_">push</span>(<span class="string">&quot;cors-received-headers&quot;</span>);</span><br><span class="line">                myHeaders = <span class="title function_">fix</span>(myHeaders);</span><br><span class="line"></span><br><span class="line">                myHeaders.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Expose-Headers&quot;</span>, cors_headers.<span class="title function_">join</span>(<span class="string">&quot;,&quot;</span>));</span><br><span class="line"></span><br><span class="line">                myHeaders.<span class="title function_">set</span>(<span class="string">&quot;cors-received-headers&quot;</span>, <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(allh));</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (isOPTIONS) &#123;</span><br><span class="line">                    <span class="keyword">var</span> body = <span class="literal">null</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">var</span> body = <span class="keyword">await</span> response.<span class="title function_">arrayBuffer</span>();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">var</span> init = &#123;</span><br><span class="line">                    <span class="attr">headers</span>: myHeaders,</span><br><span class="line">                    <span class="attr">status</span>: (isOPTIONS ? <span class="number">200</span> : response.<span class="property">status</span>),</span><br><span class="line">                    <span class="attr">statusText</span>: (isOPTIONS ? <span class="string">&quot;OK&quot;</span> : response.<span class="property">statusText</span>)</span><br><span class="line">                &#125;;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(body,init);</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">var</span> myHeaders = <span class="keyword">new</span> <span class="title class_">Headers</span>();</span><br><span class="line">                myHeaders = <span class="title function_">fix</span>(myHeaders);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> event.<span class="property">request</span>.<span class="property">cf</span> != <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> event.<span class="property">request</span>.<span class="property">cf</span>.<span class="property">country</span> != <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">                        country = event.<span class="property">request</span>.<span class="property">cf</span>.<span class="property">country</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span></span><br><span class="line">                        country = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> event.<span class="property">request</span>.<span class="property">cf</span>.<span class="property">colo</span> != <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">                        colo = event.<span class="property">request</span>.<span class="property">cf</span>.<span class="property">colo</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span></span><br><span class="line">                        colo = <span class="literal">false</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    country = <span class="literal">false</span>;</span><br><span class="line">                    colo = <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(</span><br><span class="line">                	<span class="string">&quot;CLOUDFLARE-CORS-ANYWHERE\n\n&quot;</span> + </span><br><span class="line">                	<span class="string">&quot;Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n&quot;</span> + </span><br><span class="line">                	<span class="string">&quot;Usage:\n&quot;</span> + origin_url.<span class="property">origin</span> + <span class="string">&quot;/?uri\n\n&quot;</span> +</span><br><span class="line">			<span class="string">&quot;Donate:\nhttps://paypal.me/Zibri/5\n\n&quot;</span> +</span><br><span class="line">                	<span class="string">&quot;Limits: 100,000 requests/day\n&quot;</span> + </span><br><span class="line">                	<span class="string">&quot;          1,000 requests/10 minutes\n\n&quot;</span> + </span><br><span class="line">                	(orig != <span class="literal">null</span> ? <span class="string">&quot;Origin: &quot;</span> + orig + <span class="string">&quot;\n&quot;</span> : <span class="string">&quot;&quot;</span>) + </span><br><span class="line">                	<span class="string">&quot;Ip: &quot;</span> + remIp + <span class="string">&quot;\n&quot;</span> + </span><br><span class="line">                	(country ? <span class="string">&quot;Country: &quot;</span> + country + <span class="string">&quot;\n&quot;</span> : <span class="string">&quot;&quot;</span>) + </span><br><span class="line">                	(colo ? <span class="string">&quot;Datacenter: &quot;</span> + colo + <span class="string">&quot;\n&quot;</span> : <span class="string">&quot;&quot;</span>) + <span class="string">&quot;\n&quot;</span> + </span><br><span class="line">                	((xheaders != <span class="literal">null</span>) ? <span class="string">&quot;\nx-cors-headers: &quot;</span> + <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(xheaders) : <span class="string">&quot;&quot;</span>),</span><br><span class="line">                	&#123;<span class="attr">status</span>: <span class="number">200</span>, <span class="attr">headers</span>: myHeaders&#125;</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(</span><br><span class="line">                <span class="string">&quot;Create your own cors proxy&lt;/br&gt;\n&quot;</span> + </span><br><span class="line">                <span class="string">&quot;&lt;a href=&#x27;https://github.com/Zibri/cloudflare-cors-anywhere&#x27;&gt;https://github.com/Zibri/cloudflare-cors-anywhere&lt;/a&gt;&lt;/br&gt;\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;\nDonate&lt;/br&gt;\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;&lt;a href=&#x27;https://paypal.me/Zibri/5&#x27;&gt;https://paypal.me/Zibri/5&lt;/a&gt;\n&quot;</span>,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">status</span>: <span class="number">403</span>,</span><br><span class="line">                    <span class="attr">statusText</span>: <span class="string">&#x27;Forbidden&#x27;</span>,</span><br><span class="line">                    <span class="attr">headers</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;text/html&quot;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    )());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>作者地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Zibri/cloudflare-cors-anywhere">https://github.com/Zibri/cloudflare-cors-anywhere</a></p>
+</blockquote>
+<p>点击保存部署就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/IdsktUr.png" alt="20210311121528"></p>
+<p>然后吧<code>gitalk</code>的代理换到你自己上面的部署地址就可以了。类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://【上面部署的地址】.workers.dev/?https://github.com/login/oauth/access_token</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#gitalk" >
+    <span class="tag-code">gitalk</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/nio/534d0985-a4a0-4239-ae81-d76378f64552/">
+        <span class="nav-arrow">← </span>
+        
+          Java的NIO编程-Channel
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/golang/e1273901-26b1-4cfb-a55c-a9f5047855a5/">
+        
+          go自定义库上传github下载不了问题
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/33f09b03-a5a7-4d66-93d3-7063905f9b81/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

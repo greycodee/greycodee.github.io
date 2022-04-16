@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Java类初始化 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Java类初始化</h2>
+  <p class="post-date">2020-09-16</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="代码结果？"><a href="#代码结果？" class="headerlink" title="代码结果？"></a>代码结果？</h2><p>首先，我们来看看下面的代码的输出的结果，可以先试着想一下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725004926.png" alt="图片"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//结果</span></span><br><span class="line">Code</span><br><span class="line">公众号</span><br></pre></td></tr></table></figure>
+
+<p>这时候有同学就会想，以前不是说类加载时，静态代码块都会加载的嘛！怎么<code>Test1</code>里的静态代码块没有加载呢？下面就来看看到底怎么回事</p>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p>了解类加载前，首先熟悉一下类的生命周期</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725003859.png" alt="图片"></p>
+<p>这里注意几个点：</p>
+<ul>
+<li><code>解析阶段</code>可以在<code>初始化阶段</code>之后，这是为了支持Java语言的运行时绑定特性（也称为<code>动态绑定</code>或<code>晚期绑定</code>）</li>
+<li>这些阶段通常都是互相交叉地混合进行的，会在一个阶段执行的过程中调用、激活另一个阶段。</li>
+</ul>
+<h2 id="初始化和实例化"><a href="#初始化和实例化" class="headerlink" title="初始化和实例化"></a>初始化和实例化</h2><p>我相信很多人跟我刚开始一样，搞不清他们两个的区别，搞不清<code>new</code>一个对象，到底是对这个对象进行了初始化还是实例化呢？</p>
+<ul>
+<li><p><code>初始化</code>：是完成程序执行前的准备工作。在这个阶段，静态的（变量，方法，代码块）会被执行。同时在会开辟一块存储空间用来存放静态的数据。初始化只在类加载的时候执行<code>一次</code>。</p>
+</li>
+<li><p><code>实例化</code>：是指创建一个对象的过程。这个过程中会在堆中开辟内存，将一些非静态的方法，变量存放在里面。在程序执行的过程中，可以创建多个对象，既多次实例化。每次实例化都会开辟一块新的内存。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725183421.png" alt="图片"></p>
+</li>
+</ul>
+<h2 id="类的初始化"><a href="#类的初始化" class="headerlink" title="类的初始化"></a>类的初始化</h2><p>《Java虚拟机规范》中并没有对<code>加载</code>进行强制约束，这点可以交给虚拟机的具体实现来自由把握。但是对于<code>初始化阶段</code>，《Java虚拟机规范》则是严格规定了有且只有<code>六种情况</code>必须立即对类进行“初始化”（而加载、验证、准备自然需要在此之前开始）：</p>
+<ul>
+<li><p>遇到<code>new</code>、<code>getstatic</code>、<code>putstatic</code>或<code>invokestatic</code>这四条字节码指令时，如果类型没有进行过初始化，则需要先触发其初始化阶段。那到底什么时候能够生成这些指令呢？其实看下字节码就都明白了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725172134.png" alt="图片"></p>
+</li>
+<li><p>使用<code>java.lang.reflect</code>包的方法对类型进行<code>反射调用</code>的时候，如果类型没有进行过初始化，则需要先触发其初始化。</p>
+</li>
+<li><p>当初始化类的时候，如果发现其<code>父类</code>还没有进行过初始化，则需要先触发其父类的初始化。</p>
+</li>
+<li><p>当虚拟机启动时，用户需要指定一个要执行的<code>主类</code>（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+</li>
+<li><p>当使用JDK 7新加入的动态语言支持时，如果一个<code>java.lang.invoke.MethodHandle</code>实例最后的解析结果为<code>REF_getStatic</code>、<code>REF_putStatic</code>、<code>REF_invokeStatic</code>、<code>REF_newInvokeSpecial</code>四种类型的方法句柄，并且这个方法句柄对应的类没有进行过初始化，则需要先触发其初始化。</p>
+</li>
+<li><p>当一个接口中定义了<code>JDK 8</code>新加入的默认方法（被<code>default关键字</code>修饰的接口方法）时，如果有这个接口的实现类发生了初始化，那该接口要在其之前被初始化。</p>
+</li>
+</ul>
+<blockquote>
+<p><code>java.lang.invoke.MethodHandle</code> 是<code>JDK7</code>中新加入类似反射功能的一个类</p>
+</blockquote>
+<h2 id="被动引用"><a href="#被动引用" class="headerlink" title="被动引用"></a>被动引用</h2><p>对于以上这六种会触发类型进行<code>初始化</code>的场景，《Java虚拟机规范》中使用了一个非常强烈的限定语——“有且只有”，这六种场景中的行为称为对一个类型进行<code>主动引用</code>。除此之外，所有引用类型的方式都不会触发初始化，称为<code>被动引用。</code></p>
+<p>像文章一开始的代码，就属于被动引用，对于静态字段，<strong>只有直接定义这个字段的类才会被初始化</strong>，因此通过其子类来引用父类中定义的静态字段，只会触发父类的初始化而不会触发子类的初始化。</p>
+<h3 id="例子1–对象数组"><a href="#例子1–对象数组" class="headerlink" title="例子1–对象数组"></a>例子1–对象数组</h3><p>直接上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725184328.png" alt="图片"></p>
+<p>以上代码执行后并不会输出<code>灰色</code>两个字，因为创建对象数组时并没有去初始化<code>Test1</code>这个类，而是用<code>anewarray</code>字节码指令去初始化了另外一个类，它是一个由虚拟机自动生成的、直接继承于java.lang.Object的子类。</p>
+<blockquote>
+<p>拓展：数组越界检查没有封装在数组元素的访问类中，而是封装在数组访问的<code>xaload</code>,<code>xastore</code>字节码指令中</p>
+</blockquote>
+<h3 id="例子2–final修饰的静态字段"><a href="#例子2–final修饰的静态字段" class="headerlink" title="例子2–final修饰的静态字段"></a>例子2–final修饰的静态字段</h3><ul>
+<li>被<code>final</code>修饰的静态字段</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725194122.png" alt="图片"></p>
+<p>此时运行该代码时，只会输出<code>灰色Code</code>字样，<code>Test1</code>并没有触发初始化阶段。这是因为在<code>编译阶段</code>通过<code>常量传播优化</code>，已经将此常量的值<code>灰色Code</code>直接存储在<code>ClassLoadTest</code>类的常量池中，所以当<code>ClassLoadTest</code>类调用<code>Test1</code>里的<code>value</code>时，都变成了对自身常量池的调用，和<code>Test1</code>类没有任何关系。</p>
+<ul>
+<li><p>没有<code>final</code>修饰的静态字段</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200725194514.png" alt="图片"></p>
+</li>
+</ul>
+<p>没有使用<code>final</code>修饰的静态变量，字节码出现了<code>getstatic</code>，所以触发<code>Test1</code>的初始化阶段，此时运行结果将会输出<code>灰色</code>和<code>灰色Code</code></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#JVM" >
+    <span class="tag-code">JVM</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/thread/create-thread-3/">
+        <span class="nav-arrow">← </span>
+        
+          创建线程的3种方式
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/java/jvm/java-class-load-1/">
+        
+          JVM中的双亲委派机制
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%9C%EF%BC%9F"><span class="toc-nav-text">代码结果？</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-nav-text">类的生命周期</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="toc-nav-text">初始化和实例化</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-nav-text">类的初始化</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A2%AB%E5%8A%A8%E5%BC%95%E7%94%A8"><span class="toc-nav-text">被动引用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%8B%E5%AD%901%E2%80%93%E5%AF%B9%E8%B1%A1%E6%95%B0%E7%BB%84"><span class="toc-nav-text">例子1–对象数组</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BE%8B%E5%AD%902%E2%80%93final%E4%BF%AE%E9%A5%B0%E7%9A%84%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5"><span class="toc-nav-text">例子2–final修饰的静态字段</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/java/jvm/java-class-init/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

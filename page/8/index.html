@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-arraydeque-source-1/">【源码解析】你真的了解ArrayDeque嘛？</a>
+      </h2>
+      <p class="article-date">2020年1月8日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#源码解析" >
+    <span class="tag-code">源码解析</span>
+  </a>
+
+  <a href="/tags#ArrayDeque" >
+    <span class="tag-code">ArrayDeque</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+  积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬
+
+前言 
+上篇文章说LinkedList也可以实现队列和栈的功能，但是我们一般要用队列功能的话推荐使用ArrayDeque,因为他层是数组，而队列和栈都是只要操作头部或尾部，所以这样的话数组的性能就比链表快一点。
+LinkedL ...
+        
+      </div>
+      <a class="more" href="/java/java-arraydeque-source-1/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-linkedlist-source-1/">【源码解析】想了解LinkedList？看这篇文章就对了</a>
+      </h2>
+      <p class="article-date">2020年1月5日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#源码分析" >
+    <span class="tag-code">源码分析</span>
+  </a>
+
+  <a href="/tags#LinkedList" >
+    <span class="tag-code">LinkedList</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+  积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。
+  本文基于JDK1.8
+
+前言 
+LinkedList由于实现了Deque这个接口，所以可以当栈和队列使用。不过一般要用栈或队列的时候推荐使用ArrayDeque,所以这里就不讲LinkedList的栈和队列功能了🌚。还是 ...
+        
+      </div>
+      <a class="more" href="/java/java-linkedlist-source-1/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-arraylist-source-1/">【源码解析】扒开ArrayList的外衣</a>
+      </h2>
+      <p class="article-date">2020年1月3日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#ArrayList" >
+    <span class="tag-code">ArrayList</span>
+  </a>
+
+  <a href="/tags#源码解析" >
+    <span class="tag-code">源码解析</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。
+
+本文内容当然ArrayList里的方法不止这些，本文主要讲一些常用的方法
+
+方法变量Arraylist里的方法变量主要有以下几个
+
+构造方法有参构造传入数组的大小代码实现List&lt;String&gt; list=new A ...
+        
+      </div>
+      <a class="more" href="/java/java-arraylist-source-1/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-base-wei/">【图】用图片告诉你Java中的位运算</a>
+      </h2>
+      <p class="article-date">2019年12月30日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+前言​        虽然位运算在实际开发中并不常用,但是在各种算法中却常常见到它们的身影.因为是直接操作二进制的,所以机器执行起来就快很多,所以尽管实际业务中不常用,但如果你不想只做个码农,这个基础还是要掌握的;
+讲位操作之前,就必须要知道原码、反码、补码
+
+其中正数的原码&#x3D;反 ...
+        
+      </div>
+      <a class="more" href="/java/java-base-wei/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-builder/">设计模式之建造者模式【用好玩的故事讲清楚设计模式】</a>
+      </h2>
+      <p class="article-date">2019年12月27日</p>
+      
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#建造者模式" >
+    <span class="tag-code">建造者模式</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬
+所有源代码都在这:https://github.com/z573419235/GofDemo
+各位大佬记得点个星星哦
+
+前言建造者模式用于实例化一个比较复杂的实体类,当你实例化一个类时,它的构造参数比较多时,就可以用建造者模式来简 ...
+        
+      </div>
+      <a class="more" href="/gof/gof-builder/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-prototype/">一个故事一个模式-原型模式</a>
+      </h2>
+      <p class="article-date">2019年12月25日</p>
+      
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#原型模式" >
+    <span class="tag-code">原型模式</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬
+所有源代码都在这:https://github.com/z573419235/GofDemo
+各位大佬记得点个星星哦
+
+前言    前几天生病了,每天头昏脑胀的,诶,生病的时候才知道身体健康的重要性,以后还是要加强锻炼,身体是革命 ...
+        
+      </div>
+      <a class="more" href="/gof/gof-prototype/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/mysql/mysql-update-driver-connector-8/">更新驱动到mysql-connector-java-8遇到的一些问题</a>
+      </h2>
+      <p class="article-date">2019年12月25日</p>
+      
+        
+  <a href="/tags#Pit" >
+    <span class="tag-code">Pit</span>
+  </a>
+
+  <a href="/tags#MySQL" >
+    <span class="tag-code">MySQL</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          更新驱动到mysql-connector-java-8遇到的一些问题问题POM&lt;dependency&gt;    &lt;groupId&gt;mysql&lt;/groupId&gt;    &lt;artifactId&gt;mysql-connector-java&lt;/ar ...
+        
+      </div>
+      <a class="more" href="/mysql/mysql-update-driver-connector-8/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/docker/docker-transfer-pit/">Docker迁移根目录导致mysql权限问题</a>
+      </h2>
+      <p class="article-date">2019年12月20日</p>
+      
+        
+  <a href="/tags#Docker" >
+    <span class="tag-code">Docker</span>
+  </a>
+
+  <a href="/tags#Mysql" >
+    <span class="tag-code">Mysql</span>
+  </a>
+
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+  <a href="/tags#Pit" >
+    <span class="tag-code">Pit</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题描述　　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现&#x2F;var&#x2F;lib&#x2F;docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂&#x2F;＂,和＂&#x2F;home＂目录，发现home目录使用几乎为零，于是准备迁移Do ...
+        
+      </div>
+      <a class="more" href="/docker/docker-transfer-pit/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-taemplate-method/">设计模式系列-模板方法模式</a>
+      </h2>
+      <p class="article-date">2019年12月20日</p>
+      
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#模板方法模式" >
+    <span class="tag-code">模板方法模式</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
+
+文前常规发言　　模板方法的设计符合迪米特法则，也就是最少知道原则，他通过对一些重复方法的封装，减少类之间的耦合，让调用者也更省心，原来要调两三个方法才能实现的功能，现在调一个就可以了；就像我们伟大的祖国，现在也在推行这种模式呢． ...
+        
+      </div>
+      <a class="more" href="/gof/gof-taemplate-method/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/algorithm/array-vs-linked/">恍然大悟，数组和链表的区别</a>
+      </h2>
+      <p class="article-date">2019年12月18日</p>
+      
+        
+  <a href="/tags#数据结构" >
+    <span class="tag-code">数据结构</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
+
+文前发言　　在Java中，很多地方都使用了数组和链表，还有两种组合的叫数组链表结构，就是常说的哈希表，HashMap底层的数据结构就是哈希表．远了，远了，这里不讲HashMap,这里讲数组和链表；
+
+数组
+数组是我们平时用的最多 ...
+        
+      </div>
+      <a class="more" href="/algorithm/array-vs-linked/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/7/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/9/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

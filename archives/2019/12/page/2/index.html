@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Archives</h2>
+  <p class="post-date">Archives</p>
+</div>
+<main class="app-body" id="archives">
+  
+  
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2022
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/archive/7F482D9706354A288702DCCB66C81BF2/" class="archive-title">【译】为什么 Web 3.0 很重要，你应该知道</a>
+        <p class="archive-date">04-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/8B135153FD9D41DE928DF42F84AD1ECA/" class="archive-title">Redis是怎样通讯的？</a>
+        <p class="archive-date">03-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/2852F14D7D13471798CE28C544741E89/" class="archive-title">MySQL是怎样通讯的？</a>
+        <p class="archive-date">03-27</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/FA21243A47644D98B4380AE439D2A69F/" class="archive-title">什么是P2P网络</a>
+        <p class="archive-date">02-22</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2021
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/linux/0A5A3927BAEA4155849C174E4C613913/" class="archive-title">centos 多网卡配置优先级</a>
+        <p class="archive-date">09-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/" class="archive-title">用 Json-Schema 来验证你的请求参数</a>
+        <p class="archive-date">08-19</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/" class="archive-title">AviatorScript轻量级高性能脚本语言</a>
+        <p class="archive-date">08-17</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/" class="archive-title">ZooKeeper单机伪集群搭建</a>
+        <p class="archive-date">08-11</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/" class="archive-title">ZooKeeper客户端详解及可视化客户端</a>
+        <p class="archive-date">08-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/vue/2CA7C67D02E74713A030F09651A5F164/" class="archive-title">小白学前端之TypeScript使用Vuex 4.0</a>
+        <p class="archive-date">07-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/9ACF61395A77470CA029D24AEC2CA42F/" class="archive-title">利用腾讯位置API进行的阿里云DDNS工具</a>
+        <p class="archive-date">07-26</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/234C81B9931C44CB9B88E0E53210BB48/" class="archive-title">UML箭头在Java中的含义</a>
+        <p class="archive-date">07-18</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/essay/8B40046C17644103BD2A256EB938884C/" class="archive-title">记一次很久以前做的梦【加密】</a>
+        <p class="archive-date">07-15</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/quarkus/3EC6E900CDCB4BCEBA3B0BE40C9AADBB/" class="archive-title">Quarkus项目配置方式详解</a>
+        <p class="archive-date">07-12</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/quarkus/5756337C1CEA4B599E678A3380DCFE00/" class="archive-title">Quarkus构建native-image遇到的问题及解决</a>
+        <p class="archive-date">07-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/quarkus/5870388109C640649633FA0BB2F5C9C1/" class="archive-title">使用Maven工具创建Quarkus项目</a>
+        <p class="archive-date">07-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/code/FFC3580D7E244B5282E3FDD7F3EB8E95/" class="archive-title">开发SaaS应用的12条准则【转】</a>
+        <p class="archive-date">07-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/vertx/10EF2E95447C468CB55BD7BD0675C090/" class="archive-title">vertx的web开发学习笔记</a>
+        <p class="archive-date">07-05</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/74CAAAFD610241A1B8ECDB5F3BB33EE4/" class="archive-title">Java删除文件后电脑磁盘空间没有恢复</a>
+        <p class="archive-date">07-03</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/essay/A98D5EC3509F483E80919CA2E09BDA1B/" class="archive-title">程序员的酒后真言</a>
+        <p class="archive-date">06-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/21324399FBDC41CBA815D2069BB62168/" class="archive-title">免费全自动SEO优化</a>
+        <p class="archive-date">06-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/C334612CBDCE41E79F7EA6A2F3F4C10C/" class="archive-title">百度、谷歌、必应三大站长API密钥申请流程</a>
+        <p class="archive-date">06-17</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/9AFC3EFAEC15479BB5FBC6F670594A94/" class="archive-title">后端服务器时间不一致问题解决手册</a>
+        <p class="archive-date">06-15</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/0D992236EC6B4E5EAD15886D992FF84B/" class="archive-title">用Darabonba一键生成7种语言的代码</a>
+        <p class="archive-date">06-05</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/protocol/0143CD7666CD44389FE6F565E10EEE1A/" class="archive-title">什么是HTTP协议？</a>
+        <p class="archive-date">06-04</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/EEF92888390B4E7C866FE7ADA6A0B42B/" class="archive-title">使用Nacos实现网关动态路由</a>
+        <p class="archive-date">05-08</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/C2E28AA517AA45768B679D93F248B5DE/" class="archive-title">Dubbo项目双注册中心</a>
+        <p class="archive-date">05-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/9944CC0FEBD34A3EBD04EAA1564F4C3A/" class="archive-title">快速搭建一个SpringGateway网关</a>
+        <p class="archive-date">05-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/protocol/4dd3868b-e23e-4446-b7ec-fd95e98612f4/" class="archive-title">telnet使用smtp协议发送qq邮件</a>
+        <p class="archive-date">03-23</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/golang/47ca1795-f020-44a6-9847-02ef3955f6c9/" class="archive-title">【go库】钉钉机器人</a>
+        <p class="archive-date">03-19</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/golang/e1273901-26b1-4cfb-a55c-a9f5047855a5/" class="archive-title">go自定义库上传github下载不了问题</a>
+        <p class="archive-date">03-19</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/33f09b03-a5a7-4d66-93d3-7063905f9b81/" class="archive-title">gitalk更换自定义代理</a>
+        <p class="archive-date">03-11</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/nio/534d0985-a4a0-4239-ae81-d76378f64552/" class="archive-title">Java的NIO编程-Channel</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/nio/2571330c-67ef-4d4c-8717-6c96768009c7/" class="archive-title">Java的NIO编程-Selector</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/nio/8d2049e3-3eb1-46ed-a44b-57398964eb21/" class="archive-title">Java的NIO编程-Buffer</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/nio/0702ff46-16cd-4520-9d33-0794cfda4b09/" class="archive-title">Java的NIO编程-Reactor模式</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/c16646bf-1474-42a7-a5cd-84b99669062c/" class="archive-title">Disruptor-消费模式简介(池化)</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/18e3fbd6-ff4b-4a0a-b82f-a547dbef8d0c/" class="archive-title">Disruptor-缓存行填充</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/ff51336d-70d4-449c-9214-fff2542bef1f/" class="archive-title">Disruptor-等待策略</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/9a1bdb74-8ed3-4905-88bc-7b3b4e0a4af2/" class="archive-title">Disruptor-消费模式简介(单个实例)</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/b3025291-ae52-4d26-a70c-66a79bda07d7/" class="archive-title">Disruptor-实例化方法</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/a552f7f0-4cbe-4628-8fcf-02f8b8730b56/" class="archive-title">Disruptor-快速开始</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/disruptor/926f33f0-651d-471a-ad0c-b632fcce8c0f/" class="archive-title">Disruptor-生产者发布方式</a>
+        <p class="archive-date">03-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/dubbo/dcf9d2d8-9c11-404a-874d-57834303dcac/" class="archive-title">Dubbo的Telnet调试三部曲</a>
+        <p class="archive-date">02-05</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/79b5fe12-9c60-4b93-be92-dffb00fa39c7/" class="archive-title">Hexo使用UUID生成文章路径</a>
+        <p class="archive-date">01-27</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/github-actions-build-pi-kernerl/" class="archive-title">使用GitHub Actions编译树莓派内核</a>
+        <p class="archive-date">01-26</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2020
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/recommend/git-commend-note/" class="archive-title">Git常用命令</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/fegin-resttemplate-addheard/" class="archive-title">Fegin和RestTemplate添加全局请求头</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/mdc-test/" class="archive-title">浅谈MDC</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jdkproxy-cglib/" class="archive-title">JDKproxy和Cglib初探</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-base-data-pack/" class="archive-title">Java包装类缓存机制</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/java-jvm-stack-1/" class="archive-title">JVM运行时栈帧</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/java-class-load-2/" class="archive-title">JVM类加载过程</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/java-class-load-1/" class="archive-title">JVM中的双亲委派机制</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/java-class-init/" class="archive-title">Java类初始化</a>
+        <p class="archive-date">09-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/thread/create-thread-3/" class="archive-title">创建线程的3种方式</a>
+        <p class="archive-date">06-22</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/tool/git-tool-command/" class="archive-title">吐血整理Git常用命令</a>
+        <p class="archive-date">06-22</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/apring-aop-ann/" class="archive-title">创建一个自定义注解</a>
+        <p class="archive-date">06-22</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/jvm-gc-alg/" class="archive-title">JVM4种垃圾收集算法</a>
+        <p class="archive-date">05-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/jvm-object-four-quote/" class="archive-title">Java四种引用方法使用和对比</a>
+        <p class="archive-date">05-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/jvm-object-is-alive/" class="archive-title">JVM判断对象是否还活着的两种方法</a>
+        <p class="archive-date">05-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/jvm-running-data-area/" class="archive-title">JVM运行时数据区域</a>
+        <p class="archive-date">05-26</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/jvm/jvm-javastack-EscapeAnalysis/" class="archive-title">JVM逃逸分析技术</a>
+        <p class="archive-date">05-26</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/web-security/spring-security-oauth-server-demo/" class="archive-title">基于SpringCloud搭建Spring-security-oauth认证服务器</a>
+        <p class="archive-date">05-19</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/web-security/sso-and-cas/" class="archive-title">SSO单点登录和CAS框架</a>
+        <p class="archive-date">05-14</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/archive/web-security/oauth-and-jwt/" class="archive-title">OAuth2.0与JWT</a>
+        <p class="archive-date">05-12</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/linux-fastdfs-install/" class="archive-title">fastDFS安装使用教程</a>
+        <p class="archive-date">05-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/mysql/mysql-utf8mb4-error/" class="archive-title">插入emoji到mysql时提示了一个表里不存在的字段的错误</a>
+        <p class="archive-date">04-29</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/algorithm/algorithm-avltree-01/" class="archive-title">【数据结构】手写平衡二叉树（AVL）</a>
+        <p class="archive-date">02-01</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/recommend/recommend-tool-1/" class="archive-title">【转】免费可商用，最值得收藏的10个插画素材网站</a>
+        <p class="archive-date">01-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-arraydeque-source-1/" class="archive-title">【源码解析】你真的了解ArrayDeque嘛？</a>
+        <p class="archive-date">01-08</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-linkedlist-source-1/" class="archive-title">【源码解析】想了解LinkedList？看这篇文章就对了</a>
+        <p class="archive-date">01-05</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-arraylist-source-1/" class="archive-title">【源码解析】扒开ArrayList的外衣</a>
+        <p class="archive-date">01-03</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2019
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/java/java-base-wei/" class="archive-title">【图】用图片告诉你Java中的位运算</a>
+        <p class="archive-date">12-30</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-builder/" class="archive-title">设计模式之建造者模式【用好玩的故事讲清楚设计模式】</a>
+        <p class="archive-date">12-27</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-prototype/" class="archive-title">一个故事一个模式-原型模式</a>
+        <p class="archive-date">12-25</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/mysql/mysql-update-driver-connector-8/" class="archive-title">更新驱动到mysql-connector-java-8遇到的一些问题</a>
+        <p class="archive-date">12-25</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/docker/docker-transfer-pit/" class="archive-title">Docker迁移根目录导致mysql权限问题</a>
+        <p class="archive-date">12-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-taemplate-method/" class="archive-title">设计模式系列-模板方法模式</a>
+        <p class="archive-date">12-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/algorithm/array-vs-linked/" class="archive-title">恍然大悟，数组和链表的区别</a>
+        <p class="archive-date">12-18</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-abstract-factory/" class="archive-title">设计模式系列-抽象工厂模式</a>
+        <p class="archive-date">12-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-factory-method/" class="archive-title">设计模式系列-工厂模式</a>
+        <p class="archive-date">12-15</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-oop-7-all/" class="archive-title">OOP程序七大原则</a>
+        <p class="archive-date">12-15</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/build-jenkins-sonarqube/" class="archive-title">Jenkins教程-集成SonarQube</a>
+        <p class="archive-date">12-13</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-8-stream-method/" class="archive-title">Java8 Stream方法大全</a>
+        <p class="archive-date">12-10</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-array-init/" class="archive-title">Java数组的几种初始化方式</a>
+        <p class="archive-date">12-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/spring/spring-boot-resttemplate-example/" class="archive-title">RestTemplate简单使用</a>
+        <p class="archive-date">11-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/nacos-post-error/" class="archive-title">Nacos报[NACOS HTTP-POST]</a>
+        <p class="archive-date">11-14</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/problem-jenkins-01/" class="archive-title">Jenkins插件版本太旧的更新方法</a>
+        <p class="archive-date">11-12</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/build-jenkins-ci-cd/" class="archive-title">Jenkins教程-Docker+GitLab持续部署持续集成</a>
+        <p class="archive-date">11-12</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/build-jenkins-mavne/" class="archive-title">Jenkins教程-创建Maven项目</a>
+        <p class="archive-date">11-12</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/problem-jenkins-02/" class="archive-title">Jenkins初始化界面插件安装失败解决方法</a>
+        <p class="archive-date">11-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/jenkins/build-jenkins-docker/" class="archive-title">Jenkins教程-搭建(Docker版)</a>
+        <p class="archive-date">11-07</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/gof/gof-singleton/" class="archive-title">设计模式系例-单例模式</a>
+        <p class="archive-date">10-22</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/rocketmq/rocketmq-cluster-build/" class="archive-title">RocketMQ集群搭建</a>
+        <p class="archive-date">10-09</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/vue/vue-cli3-11-problem/" class="archive-title">Vue Cli3-11创建项目慢的问题</a>
+        <p class="archive-date">09-05</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/docker/docker-mysql/" class="archive-title">Docker下安装mysql并设置用户权限</a>
+        <p class="archive-date">09-03</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/build-docker-pi/" class="archive-title">树莓派安装docker</a>
+        <p class="archive-date">08-30</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/linux/problem-jdk-timezone/" class="archive-title">JDK时区问题</a>
+        <p class="archive-date">08-27</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-equals/" class="archive-title">Java的==和equals</a>
+        <p class="archive-date">08-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/java-isnull-four/" class="archive-title">Java中String判断为空的4大方法比较</a>
+        <p class="archive-date">08-20</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/algorithm/algorithm-recursive-01/" class="archive-title">递归算法-获取json中指定key的所有值</a>
+        <p class="archive-date">08-17</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/java/problem-java-base64/" class="archive-title">Base64影响泰文字段取值问题</a>
+        <p class="archive-date">08-14</p>
+      </div>
+    
+  </div>
+</section>
+  
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archives/2019/12/page/2/index.html';
+    $('#article-banner').geopattern(url);
+    $('.header').removeClass('fixed-header');
+  })();
+</script>
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

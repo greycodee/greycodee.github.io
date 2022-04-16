@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-abstract-factory/">设计模式系列-抽象工厂模式</a>
+      </h2>
+      <p class="article-date">2019年12月16日</p>
+      
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#抽象工厂模式" >
+    <span class="tag-code">抽象工厂模式</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬
+
+突然开始的正文紧接着上一章的工厂方法模式，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类AllCarFactory，本来他只定义了生产汽车这个方法，下面的 ...
+        
+      </div>
+      <a class="more" href="/gof/gof-abstract-factory/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-factory-method/">设计模式系列-工厂模式</a>
+      </h2>
+      <p class="article-date">2019年12月15日</p>
+      
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#工厂方法模式" >
+    <span class="tag-code">工厂方法模式</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬
+
+前言工厂模式有一下三种
+
+简单工厂模式
+工厂方法模式
+抽象工厂模式
+
+其中简单工厂模式不在23中模式之中，更多的是一种编程习惯，而我们平常所说的工厂模式一般指的是工厂方法模式，抽象工厂在实际的业务开发中也用的比较少，因为它有时候 ...
+        
+      </div>
+      <a class="more" href="/gof/gof-factory-method/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/gof-oop-7-all/">OOP程序七大原则</a>
+      </h2>
+      <p class="article-date">2019年12月15日</p>
+      
+        
+  <a href="/tags#GOF" >
+    <span class="tag-code">GOF</span>
+  </a>
+
+  <a href="/tags#OOP" >
+    <span class="tag-code">OOP</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+开闭原则开闭原则相当于所有原则的祖先，主张对修改关闭，对拓展开放．
+里氏替换原则当两个类有继承关系时，子类不能修改父类的方法和变量.  里氏替换中的替换指的是：当有父类出现的地方，这个父类可以替换成子类，而且对程序没有影响，这就遵循了里氏替换原则；当替换成子类时对程序有影响，说明子类修改了 ...
+        
+      </div>
+      <a class="more" href="/gof/gof-oop-7-all/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/jenkins/build-jenkins-sonarqube/">Jenkins教程-集成SonarQube</a>
+      </h2>
+      <p class="article-date">2019年12月13日</p>
+      
+        
+  <a href="/tags#Docker" >
+    <span class="tag-code">Docker</span>
+  </a>
+
+  <a href="/tags#Jenkins" >
+    <span class="tag-code">Jenkins</span>
+  </a>
+
+  <a href="/tags#SonarQube" >
+    <span class="tag-code">SonarQube</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          什么是SonarQube?看看维基百科的说明：
+SonarQube与CI&#x2F;CD架构图
+Docker运行SonarQube简单了解之后，开始安装SonarQube.这里用Docker安装
+
+注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持my ...
+        
+      </div>
+      <a class="more" href="/jenkins/build-jenkins-sonarqube/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-8-stream-method/">Java8 Stream方法大全</a>
+      </h2>
+      <p class="article-date">2019年12月10日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+
+        
+      </div>
+      <a class="more" href="/java/java-8-stream-method/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/java-array-init/">Java数组的几种初始化方式</a>
+      </h2>
+      <p class="article-date">2019年12月9日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          一维数组初始化容量/*** 定义容量为5,初始值为0的int一维数组*/int array[]=new int[5];int[] array2=new int[5];
+
+初始化值/*** 初始化一维容量为5的一维数组的值*/int[] array10=&#123;1,2,3,4,5&#125 ...
+        
+      </div>
+      <a class="more" href="/java/java-array-init/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/spring/spring-boot-resttemplate-example/">RestTemplate简单使用</a>
+      </h2>
+      <p class="article-date">2019年11月20日</p>
+      
+        
+  <a href="/tags#SpringBoot" >
+    <span class="tag-code">SpringBoot</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言本文只讲常用的**GET** 和**POST**请求,其他类型的请求(如**PUT**，**PATCH**)请求方式都差不多，有兴趣的可以查看RestTemplate源码。
+
+GET
+GET官方给了getForEntity和getForObject两种种方法，每个方法又有三个重载方法
+
+ ...
+        
+      </div>
+      <a class="more" href="/spring/spring-boot-resttemplate-example/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/nacos-post-error/">Nacos报[NACOS HTTP-POST]</a>
+      </h2>
+      <p class="article-date">2019年11月14日</p>
+      
+        
+  <a href="/tags#Nacos" >
+    <span class="tag-code">Nacos</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题　由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。
+ ...
+        
+      </div>
+      <a class="more" href="/java/nacos-post-error/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/jenkins/problem-jenkins-01/">Jenkins插件版本太旧的更新方法</a>
+      </h2>
+      <p class="article-date">2019年11月12日</p>
+      
+        
+  <a href="/tags#Jenkins" >
+    <span class="tag-code">Jenkins</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况：
+
+
+Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33  ...
+        
+      </div>
+      <a class="more" href="/jenkins/problem-jenkins-01/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a>
+      </h2>
+      <p class="article-date">2019年11月12日</p>
+      
+        
+  <a href="/tags#Jenkins" >
+    <span class="tag-code">Jenkins</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          目录
+Jenkins教程-搭建(Docker版)
+
+Jenkins教程-创建Maven项目
+
+Jenkins教程-Docker+GitLab持续部署持续集成
+
+
+环境
+
+
+
+地址
+系统
+安装的软件
+
+
+
+主机１
+10.25.0.72
+Centos 7
+Docker　,　Jenkins(Doc ...
+        
+      </div>
+      <a class="more" href="/jenkins/build-jenkins-ci-cd/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/8/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/10/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

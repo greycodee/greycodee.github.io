@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      用 Json-Schema 来验证你的请求参数 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>用 Json-Schema 来验证你的请求参数</h2>
+  <p class="post-date">2021-08-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Json-Schema 是一个用来验证、描述 Json 数据的一个标准，它可以用来验证你的请求数据是否和你定义的 Schema 是否一致。比如下面的 Json 数据中：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span><span class="string">&quot;coder&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果不预先告诉你字段的含义，你知道 <code>name</code> 是什么意思吗？它到底是指人名还是一个物品的名字还是其他？<code>desc</code> 又是什么意思呢？</p>
+<p>这时候，就可以用 Json-Schema 来描述它了</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;$schema&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://json-schema.org/draft-07/schema&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;$id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://example.com/example.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这是一个Json数据&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;描述个人信息的数据&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;name&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;desc&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;人的姓名&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;个人简介&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面我们用 Json-Schema 来描述了刚开始的 Json 数据，这样就可以清楚的知道 name 是人的姓名，desc 是个人简介，在也不用自己去猜了。</p>
+<h2 id="Json-Schema-字段说明"><a href="#Json-Schema-字段说明" class="headerlink" title="Json Schema 字段说明"></a>Json Schema 字段说明</h2><p>在上面的 Json-Schema 数据中，每个字段都有其的含义</p>
+<ul>
+<li><code>$schema</code> ：主要用于版本控制</li>
+<li><code>$id</code> ：定义字段在 schema 中的地址</li>
+<li><code>title</code> 和 <code>description</code> ：用于描述和说明 Schema 的作用</li>
+<li><code>type</code> ：定义字段的数据类型</li>
+<li><code>required</code> ：Json 数据中包含的字段</li>
+<li>……</li>
+</ul>
+<p>由于 Json-Schema 有许多草案，每个草案的字段都有一点区别，具体可以看一下的草案资料：</p>
+<ol>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/draft/2020-12/release-notes.html">草案 2019-09 迁移 草案 2020-12</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/draft/2019-09/release-notes.html">草案-07 迁移 草案 2019-09</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/draft-07/json-schema-release-notes.html">草案-06 迁移 草案-07</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/draft-06/json-schema-release-notes.html">草案-04 迁移 草案-06 文档说明</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/specification-links.html">所有草案版本文档</a></li>
+</ol>
+<h2 id="使用-Json-Schema-验证-Json-数据"><a href="#使用-Json-Schema-验证-Json-数据" class="headerlink" title="使用 Json-Schema 验证 Json 数据"></a>使用 Json-Schema 验证 Json 数据</h2><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/hlpzY6image-20210820162428822.png" alt="image-20210820162428822"></p>
+<p>Json-Schema 支持多种语言的验证器，一般都是第三方实现的，这里我们使用 Java 验证器来验证一个 Json 数据，Java 验证器这里选用了 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/everit-org/json-schema">everit-org&#x2F;json-schema</a> 验证器来使用，不过它最高支持到<strong>草案7</strong>，像最新的<strong>草案2020-12</strong>它是不支持的。</p>
+<h3 id="Java-验证-Json-数据"><a href="#Java-验证-Json-数据" class="headerlink" title="Java 验证 Json 数据"></a>Java 验证 Json 数据</h3><p><strong>导入依赖：</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.everit-org.json-schema<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>org.everit.json.schema<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.13.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>jitpack.io<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://jitpack.io<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>导入所需依赖，由于这个包没有上传到中央仓库，所以要设置仓库地址</p>
+<p><strong>代码实现：</strong></p>
+<p>导入依赖后就可以用代码来实现一个使用 Json-Schema 验证 Json 数据的功能了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="type">String</span> <span class="variable">jsonSchema</span> <span class="operator">=</span> <span class="string">&quot;&#123;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;$schema\&quot;: \&quot;http://json-schema.org/draft-07/schema\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;$id\&quot;: \&quot;http://example.com/example.json\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;type\&quot;: \&quot;object\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;title\&quot;: \&quot;这是一个Json数据\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;description\&quot;: \&quot;描述个人信息的数据\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;required\&quot;: [\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        \&quot;name\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        \&quot;desc\&quot;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    ],\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    \&quot;properties\&quot;: &#123;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        \&quot;name\&quot;: &#123;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;            \&quot;type\&quot;: \&quot;string\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;            \&quot;description\&quot;: \&quot;人的姓名\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        &#125;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        \&quot;desc\&quot;: &#123;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;            \&quot;type\&quot;: \&quot;string\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;            \&quot;description\&quot;: \&quot;个人简介\&quot;,\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;        &#125;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;    &#125;\n&quot;</span> +</span><br><span class="line">    <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">  <span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JSONObject</span>(<span class="keyword">new</span> <span class="title class_">JSONTokener</span>(jsonSchema));</span><br><span class="line">  <span class="type">Schema</span> <span class="variable">schema</span> <span class="operator">=</span> SchemaLoader.load(jsonObject);</span><br><span class="line">  schema.validate(<span class="keyword">new</span> <span class="title class_">JSONObject</span>(<span class="string">&quot;&#123;\n&quot;</span> +</span><br><span class="line">                                 <span class="string">&quot;  \&quot;name\&quot;:\&quot;greycode\&quot;,\n&quot;</span> +</span><br><span class="line">                                 <span class="string">&quot;  \&quot;desc\&quot;:\&quot;coder\&quot;\n&quot;</span> +</span><br><span class="line">                                 <span class="string">&quot;&#125;&quot;</span>));</span><br><span class="line">&#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;验证异常：&quot;</span>+e.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里用了上面的 Json 数据和 Json-Schema，当验证通过时，不会有任何输出，同时也没有任何异常。</p>
+<p>当我们把 <code>desc</code> 的数据改为如下数据时：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span><span class="number">1</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>此时由于 <code>desc</code> 的数据类型变为了数字类型，所以我们就可以捕获到异常并输出：<code>验证异常：#/desc: expected type: String, found: Integer</code></p>
+<h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li>所有的第三方 Json-Schema 验证器：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/implementations.html#validators">https://json-schema.org/implementations.html#validators</a></li>
+<li>Jaon-Schema 生成器：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/implementations.html#schema-generators">https://json-schema.org/implementations.html#schema-generators</a></li>
+<li>通过 Json-Schema 生成代码、数据等：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/implementations.html#generators-from-schemas">https://json-schema.org/implementations.html#generators-from-schemas</a></li>
+<li>在线 Json 转换 Json-Schema ：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jsonschema.net/home">https://www.jsonschema.net/home</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://json-schema.org/">https://json-schema.org/</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Json-Schema" >
+    <span class="tag-code">Json-Schema</span>
+  </a>
+
+  <a href="/tags#参数验证" >
+    <span class="tag-code">参数验证</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/">
+        <span class="nav-arrow">← </span>
+        
+          AviatorScript轻量级高性能脚本语言
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/linux/0A5A3927BAEA4155849C174E4C613913/">
+        
+          centos 多网卡配置优先级
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-nav-text">简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Json-Schema-%E5%AD%97%E6%AE%B5%E8%AF%B4%E6%98%8E"><span class="toc-nav-text">Json Schema 字段说明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8-Json-Schema-%E9%AA%8C%E8%AF%81-Json-%E6%95%B0%E6%8D%AE"><span class="toc-nav-text">使用 Json-Schema 验证 Json 数据</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Java-%E9%AA%8C%E8%AF%81-Json-%E6%95%B0%E6%8D%AE"><span class="toc-nav-text">Java 验证 Json 数据</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B5%84%E6%96%99"><span class="toc-nav-text">资料</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

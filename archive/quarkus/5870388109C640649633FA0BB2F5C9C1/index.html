@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      使用Maven工具创建Quarkus项目 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用Maven工具创建Quarkus项目</h2>
+  <p class="post-date">2021-07-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>我这边使用的是 <code>Maven 3.8.1</code>  版本，可以使用 Quarkus 官方提供的 <code>io.quarkus:quarkus-maven-plugin:2.0.1.Final</code>  插件来快速穿件 Quarkus 项目。</p>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>使用以下 Maven 命令来创建一个新项目：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn io.quarkus:quarkus-maven-plugin:2.0.1.Final:create \</span><br><span class="line">    -DprojectGroupId=top.mjava \</span><br><span class="line">    -DprojectArtifactId=quarkus-demo \</span><br><span class="line">    -DprojectVersion=1.0 \</span><br><span class="line">    -DclassName=&quot;top.mjava.demo.Application&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在执行命令的当前目录下会为项目生成和 ArtifactId 同名的文件夹，如果已存在该同名文件夹，则项目会创建失败。</p>
+<p>在 <code>src/main/docker</code> 目录下还生成了 native 和 jvm 模式的 Dockerfile，构建镜像和运行容器的指令写在这些 Dockerfile 中。</p>
+<h3 id="命令描述"><a href="#命令描述" class="headerlink" title="命令描述"></a>命令描述</h3><table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">默认值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>projectGroupId</code></td>
+<td align="left"><code>org.acme.sample</code></td>
+<td align="left">项目的 GroupId</td>
+</tr>
+<tr>
+<td align="left"><code>projectArtifactId</code></td>
+<td align="left">没有默认值，但是必填</td>
+<td align="left">项目的 ArtifactId</td>
+</tr>
+<tr>
+<td align="left"><code>projectVersion</code></td>
+<td align="left"><code>1.0.0-SNAPSHOT</code></td>
+<td align="left">项目版本</td>
+</tr>
+<tr>
+<td align="left"><code>platformGroupId</code></td>
+<td align="left"><code>io.quarkus</code></td>
+<td align="left">目标平台的组 ID。鉴于所有现有平台都来自 io.quarkus，实际上不会明确使用这一平台。但它仍然是一个选择。</td>
+</tr>
+<tr>
+<td align="left"><code>platformArtifactId</code></td>
+<td align="left"><code>quarkus-universe-bom</code></td>
+<td align="left">目标平台 BOM 的工件 ID。为了使用本地构建的 Quarkus，它应该是 quarkus-bom。</td>
+</tr>
+<tr>
+<td align="left"><code>platformVersion</code></td>
+<td align="left">如果未指定，将解析最新的。</td>
+<td align="left">您希望项目使用的平台版本。它还可以接受版本范围，在这种情况下，将使用指定范围中的最新版本。</td>
+</tr>
+<tr>
+<td align="left"><code>className</code></td>
+<td align="left"><em>如果省略则不创建</em></td>
+<td align="left">生成的资源的完全限定名称</td>
+</tr>
+<tr>
+<td align="left"><code>path</code></td>
+<td align="left"><code>/hello</code></td>
+<td align="left">资源路径，仅在设置了 className 时生效。</td>
+</tr>
+<tr>
+<td align="left"><code>extensions</code></td>
+<td align="left"><em>[]</em></td>
+<td align="left">要添加到项目的扩展列表（逗号分隔）</td>
+</tr>
+</tbody></table>
+<h2 id="管理扩展"><a href="#管理扩展" class="headerlink" title="管理扩展"></a>管理扩展</h2><p>创建项目后就可以进入到项目文件夹，可以使用简短的命令来操作项目了，例如：<code>mvn quarkus:[command]</code></p>
+<h3 id="查看所有扩展"><a href="#查看所有扩展" class="headerlink" title="查看所有扩展"></a>查看所有扩展</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn quarkus:list-extensions</span><br></pre></td></tr></table></figure>
+
+<p>该命令可以查看当前项目所使用的的所有扩展。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜  quarkus-demo: mvn quarkus:list-extensions</span><br><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] -----------------------&lt; top.mjava:quarkus-demo &gt;-----------------------</span><br><span class="line">[INFO] Building quarkus-demo 1.0</span><br><span class="line">[INFO] --------------------------------[ jar ]---------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- quarkus-maven-plugin:2.0.1.Final:list-extensions (default-cli) @ quarkus-demo ---</span><br><span class="line">[INFO] Current Quarkus extensions available: </span><br><span class="line">[INFO] </span><br><span class="line">[INFO] Blaze-Persistence                                  blaze-persistence-integration-quarkus             </span><br><span class="line">[INFO] Camel ActiveMQ                                     camel-quarkus-activemq                            </span><br><span class="line">[INFO] Camel Async HTTP Client (AHC)                      camel-quarkus-ahc                                 </span><br><span class="line">[INFO] Camel Async HTTP Client (AHC) Websocket            camel-quarkus-ahc-ws                              </span><br><span class="line">[INFO] Camel AMQP                                         camel-quarkus-amqp           </span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加扩展"><a href="#添加扩展" class="headerlink" title="添加扩展"></a>添加扩展</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn quarkus:add-extensions -Dextension=vertx</span><br></pre></td></tr></table></figure>
+
+<p>该命令可以添加扩展，例如上面这条命令为项目添加了 <code>vertx</code> 扩展</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜  quarkus-demo: mvn quarkus:add-extensions -Dextension=vertx</span><br><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] -----------------------&lt; top.mjava:quarkus-demo &gt;-----------------------</span><br><span class="line">[INFO] Building quarkus-demo 1.0</span><br><span class="line">[INFO] --------------------------------[ jar ]---------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- quarkus-maven-plugin:2.0.1.Final:add-extensions (default-cli) @ quarkus-demo ---</span><br><span class="line">[INFO] [SUCCESS] ✅  Extension io.quarkus:quarkus-vertx has been installed</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  2.370 s</span><br><span class="line">[INFO] Finished at: 2021-07-09T15:06:50+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除扩展"><a href="#删除扩展" class="headerlink" title="删除扩展"></a>删除扩展</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn quarkus:remove-extensions -Dextension=vertx</span><br></pre></td></tr></table></figure>
+
+<p>该命令可以删除不用的扩展，比如删除刚刚添加的 <code>vertx</code> 扩展</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜  quarkus-demo: mvn quarkus:remove-extensions -Dextension=vertx</span><br><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] -----------------------&lt; top.mjava:quarkus-demo &gt;-----------------------</span><br><span class="line">[INFO] Building quarkus-demo 1.0</span><br><span class="line">[INFO] --------------------------------[ jar ]---------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- quarkus-maven-plugin:2.0.1.Final:remove-extensions (default-cli) @ quarkus-demo ---</span><br><span class="line">[INFO] [SUCCESS] ✅  Extension io.quarkus:quarkus-vertx has been uninstalled</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  2.112 s</span><br><span class="line">[INFO] Finished at: 2021-07-09T15:08:48+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目构建"><a href="#项目构建" class="headerlink" title="项目构建"></a>项目构建</h2><h3 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn quarkus:dev</span><br></pre></td></tr></table></figure>
+
+<p>执行该命令时，项目会被运行，此时访问 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://localhost:8080/hello">http://localhost:8080/hello</a> 就会得到 <code>Hello RESTEasy</code> 输出</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">  quarkus-demo: mvn quarkus:dev                             </span><br><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] -----------------------&lt; top.mjava:quarkus-demo &gt;-----------------------</span><br><span class="line">[INFO] Building quarkus-demo 1.0</span><br><span class="line">[INFO] --------------------------------[ jar ]---------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- quarkus-maven-plugin:2.0.1.Final:dev (default-cli) @ quarkus-demo ---</span><br><span class="line">[INFO] Invoking io.quarkus:quarkus-maven-plugin:2.0.1.Final:generate-code @ quarkus-demo</span><br><span class="line">[INFO] Invoking org.apache.maven.plugins:maven-resources-plugin:2.6:resources @ quarkus-demo</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] Copying 2 resources</span><br><span class="line">[INFO] Invoking org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile @ quarkus-demo</span><br><span class="line">[INFO] Nothing to compile - all classes are up to date</span><br><span class="line">[INFO] Invoking org.apache.maven.plugins:maven-resources-plugin:2.6:testResources @ quarkus-demo</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /Users/zheng/coding/study/quarkus-demo/src/test/resources</span><br><span class="line">[INFO] Invoking org.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile @ quarkus-demo</span><br><span class="line">[INFO] Nothing to compile - all classes are up to date</span><br><span class="line">Listening for transport dt_socket at address: 5005</span><br><span class="line">__  ____  __  _____   ___  __ ____  ______ </span><br><span class="line"> --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ </span><br><span class="line"> -/ /_/ / /_/ / __ |/ , _/ ,&lt; / /_/ /\ \   </span><br><span class="line">--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   </span><br><span class="line">2021-07-09 15:16:47,146 INFO  [io.quarkus] (Quarkus Main Thread) quarkus-demo 1.0 on JVM (powered by Quarkus 2.0.1.Final) started in 3.412s. Listening on: http://localhost:8080</span><br><span class="line">2021-07-09 15:16:47,194 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.</span><br><span class="line">2021-07-09 15:16:47,199 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, resteasy, smallrye-context-propagation]</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建项目"><a href="#构建项目" class="headerlink" title="构建项目"></a>构建项目</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn quarkus:build</span><br></pre></td></tr></table></figure>
+
+<p>该命令会构建项目，并会在 <code>target/quarkus-app/</code> 目录下创建一个可运行的 <code>jar</code> 包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜  quarkus-demo mvn quarkus:build</span><br><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] -----------------------&lt; top.mjava:quarkus-demo &gt;-----------------------</span><br><span class="line">[INFO] Building quarkus-demo 1.0</span><br><span class="line">[INFO] --------------------------------[ jar ]---------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- quarkus-maven-plugin:2.0.1.Final:build (default-cli) @ quarkus-demo ---</span><br><span class="line">[INFO] [org.jboss.threads] JBoss Threads version 3.4.0.Final</span><br><span class="line">[INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 1977ms</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  4.776 s</span><br><span class="line">[INFO] Finished at: 2021-07-09T15:13:54+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>更多命令可以执行下面的命令查看，本文只介绍了几种常用的</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn io.quarkus:quarkus-maven-plugin:2.0.1.Final:help</span><br><span class="line"></span><br><span class="line">// 或者在项目目录下可使用简短命令</span><br><span class="line">mvn quarkus:help</span><br></pre></td></tr></table></figure>
+
+<p>参考资料：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://quarkus.io/guides/maven-tooling">https://quarkus.io/guides/maven-tooling</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Quarkus" >
+    <span class="tag-code">Quarkus</span>
+  </a>
+
+  <a href="/tags#Maven" >
+    <span class="tag-code">Maven</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/archive/code/FFC3580D7E244B5282E3FDD7F3EB8E95/">
+        <span class="nav-arrow">← </span>
+        
+          开发SaaS应用的12条准则【转】
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/quarkus/5756337C1CEA4B599E678A3380DCFE00/">
+        
+          Quarkus构建native-image遇到的问题及解决
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-nav-text">环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-nav-text">创建项目</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%91%BD%E4%BB%A4%E6%8F%8F%E8%BF%B0"><span class="toc-nav-text">命令描述</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AE%A1%E7%90%86%E6%89%A9%E5%B1%95"><span class="toc-nav-text">管理扩展</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E6%89%A9%E5%B1%95"><span class="toc-nav-text">查看所有扩展</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%89%A9%E5%B1%95"><span class="toc-nav-text">添加扩展</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4%E6%89%A9%E5%B1%95"><span class="toc-nav-text">删除扩展</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-nav-text">项目构建</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%90%E8%A1%8C%E9%A1%B9%E7%9B%AE"><span class="toc-nav-text">运行项目</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-nav-text">构建项目</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-nav-text">总结</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/quarkus/5870388109C640649633FA0BB2F5C9C1/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      使用GitHub Actions编译树莓派内核 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用GitHub Actions编译树莓派内核</h2>
+  <p class="post-date">2021-01-26</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="仓库地址"><a href="#仓库地址" class="headerlink" title="仓库地址"></a>仓库地址</h2><p>仓库地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/GreyCode9/make-raspberrypi-kernel">https://github.com/GreyCode9/make-raspberrypi-kernel</a></p>
+<h2 id="创建秘钥"><a href="#创建秘钥" class="headerlink" title="创建秘钥"></a>创建秘钥</h2><ol>
+<li>点击Github右上角头像 -&gt; Settings -&gt; Developer settings -&gt; Personal access tokens -&gt; Generate new token</li>
+</ol>
+<span id="more"></span>
+
+<ol>
+<li><p>或者直接点这个链接进入： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/settings/tokens">https://github.com/settings/tokens</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126150521.png" alt="20210126150521"></p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126150712.png" alt="20210126150712"></p>
+<p><font color=red>创建后保存这个秘钥(秘钥只显示一次)</font></p>
+<h2 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h2><p>创建仓库**<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/GreyCode9/make-raspberrypi-kernel">make-raspberrypi-kernel</a>**</p>
+<p>然后点击仓库的Settings -&gt; Secrets -&gt;New repository secret</p>
+<p><strong>然后填入刚才生成的秘钥</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126151157.png" alt="20210126151157"></p>
+<h2 id="创建Actions"><a href="#创建Actions" class="headerlink" title="创建Actions"></a>创建Actions</h2><p>接着点击<strong>Actions</strong> ,创建一个Actions，然后填入如下内容</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Make</span> <span class="string">RaspberryPi</span> <span class="string">Kernel</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">tags:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;v*&#x27;</span> <span class="comment"># 当推送的Tag为v开头的，就会触发构建</span></span><br><span class="line"></span><br><span class="line"><span class="attr">env:</span></span><br><span class="line">  <span class="attr">USE_SSH_CONFIG:</span> <span class="literal">true</span> <span class="comment"># 是否使用ssh连接进行 true:使用 false:不使用</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-18.04</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pull</span> <span class="string">RaspberryPi</span> <span class="string">Kernel</span> <span class="string">linux</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cd ../</span></span><br><span class="line"><span class="string">          git clone https://github.com/raspberrypi/linux.git</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pull</span> <span class="string">RaspberryPi</span> <span class="string">Kernel</span> <span class="string">Tool</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cd ../</span></span><br><span class="line"><span class="string">          git clone https://github.com/raspberrypi/tools.git</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Move</span> <span class="string">.config</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">env.USE_SSH_CONFIG</span> <span class="string">==</span> <span class="string">&#x27;false&#x27;</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cp .config ../linux</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Debug</span> <span class="string">Session</span> <span class="comment"># 用SSH连接Actions</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">env.USE_SSH_CONFIG</span> <span class="string">==</span> <span class="string">&#x27;true&#x27;</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">csexton/debugger-action@master</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Make</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cd ../</span></span><br><span class="line"><span class="string">          export WORKPATH=$(pwd)</span></span><br><span class="line"><span class="string">          export PATH=$PATH:$WORKPATH/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin</span></span><br><span class="line"><span class="string">          export PATH=$PATH:$WORKPATH/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin</span></span><br><span class="line"><span class="string">          cd linux/</span></span><br><span class="line"><span class="string">          make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs -j8</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Create</span> <span class="string">Release</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">create_release</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/create-release@master</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">GITHUB_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.TOKEN</span> <span class="string">&#125;&#125;</span> <span class="comment"># 之前GitHub添加的Token</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">tag_name:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.ref</span> <span class="string">&#125;&#125;</span> <span class="comment"># (tag)标签名称</span></span><br><span class="line">          <span class="attr">release_name:</span> <span class="string">Release</span> <span class="string">$&#123;&#123;</span> <span class="string">github.ref</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">draft:</span> <span class="literal">false</span> <span class="comment"># 是否是草稿</span></span><br><span class="line">          <span class="attr">prerelease:</span> <span class="literal">false</span> <span class="comment"># 是否是预发布</span></span><br><span class="line">      <span class="comment"># 上传构建结果到 Release（把打包的tgz上传到Release）</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">build</span> <span class="string">TAR</span> <span class="string">PACKAGE</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          tar -czvf raspberrypi-kernel.tar.gz ../linux/arch/arm/boot</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">Release</span> <span class="string">Asset</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">upload-release-asset</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/upload-release-asset@master</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">GITHUB_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">upload_url:</span> <span class="string">$&#123;&#123;</span> <span class="string">steps.create_release.outputs.upload_url</span> <span class="string">&#125;&#125;</span> <span class="comment"># 上传地址，通过创建Release获取到的</span></span><br><span class="line">          <span class="attr">asset_path:</span> <span class="string">./raspberrypi-kernel.tar.gz</span> <span class="comment"># 要上传文件</span></span><br><span class="line">          <span class="attr">asset_name:</span> <span class="string">raspberrypi-kernel.tar.gz</span> <span class="comment"># 上传后的文件名</span></span><br><span class="line">          <span class="attr">asset_content_type:</span> <span class="string">application/gzip</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以在本地配置好<code>.config</code>文件然后上传到仓库，然后把Actions的配置文件中的<code>USE_SSH_CONFIG</code>字段改成<code>false</code>。</li>
+<li>也可以直接在<code>Actions</code>中进行配置<code>.config</code>文件，需要把<code>USE_SSH_CONFIG</code>字段改成<code>true</code>。</li>
+</ul>
+<h2 id="触发构建"><a href="#触发构建" class="headerlink" title="触发构建"></a>触发构建</h2><p>当上面完成后，就可以把代码pull到本地，然后根据自己的需求配置<code>.config</code>文件。执行命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag -a v1.0 -m &#x27;build kernel&#x27;</span><br><span class="line">git push origin v1.0</span><br></pre></td></tr></table></figure>
+
+<p>推送完成后，就可以看到Actions正在构建了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152258.png" alt="20210126152258"></p>
+<p>构建完成后，就可以在<code>Release</code>下载构建好的内核文件了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152413.png" alt="20210126152413"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20210126152428.png" alt="20210126152413"></p>
+<h2 id="资料索引"><a href="#资料索引" class="headerlink" title="资料索引"></a>资料索引</h2><ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/YAN-HUA/p/13530906.html">https://www.cnblogs.com/YAN-HUA/p/13530906.html</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="http://doc.openluat.com/article/166/0">http://doc.openluat.com/article/166/0</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.daimajiaoliu.com/daima/4793af6f2900402">https://www.daimajiaoliu.com/daima/4793af6f2900402</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+  <a href="/tags#Github Actions" >
+    <span class="tag-code">Github Actions</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/recommend/git-commend-note/">
+        <span class="nav-arrow">← </span>
+        
+          Git常用命令
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/linux/79b5fe12-9c60-4b93-be92-dffb00fa39c7/">
+        
+          Hexo使用UUID生成文章路径
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="toc-nav-text">仓库地址</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E7%A7%98%E9%92%A5"><span class="toc-nav-text">创建秘钥</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="toc-nav-text">创建仓库</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BAActions"><span class="toc-nav-text">创建Actions</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A7%A6%E5%8F%91%E6%9E%84%E5%BB%BA"><span class="toc-nav-text">触发构建</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%B5%84%E6%96%99%E7%B4%A2%E5%BC%95"><span class="toc-nav-text">资料索引</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/linux/github-actions-build-pi-kernerl/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

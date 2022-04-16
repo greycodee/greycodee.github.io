@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      用Darabonba一键生成7种语言的代码 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>用Darabonba一键生成7种语言的代码</h2>
+  <p class="post-date">2021-06-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/1PH6HFimage-20210605175031562.png" alt="图片"></p>
+<h2 id="0x1-介绍"><a href="#0x1-介绍" class="headerlink" title="0x1 介绍"></a>0x1 介绍</h2><p>最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/kS9v8bimage-20210604161124444-20211008164903058.png" alt="image-20210604161124444"></p>
+<h2 id="0x2-安装"><a href="#0x2-安装" class="headerlink" title="0x2 安装"></a>0x2 安装</h2><p>我们按照官方的步骤来安装它，因为是用 Nodejs 写的，所以可以用 npm 来安装它</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo npm install -g @darabonba/cli</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后可以在终端输入 <code>dara</code> ，如果输出版本号就是说明安装成功了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara</span><br><span class="line"></span><br><span class="line">The CLI for Darabonba 1.1.8</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x3-使用"><a href="#0x3-使用" class="headerlink" title="0x3 使用"></a>0x3 使用</h2><p>安装完成后就可以使用了，首先创建一个文件夹来存放这个项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir demo &amp;&amp; cd demo</span><br></pre></td></tr></table></figure>
+
+<p>然后用 <code>dara</code> 命令来进行初始化模块，然后依次输入包名等信息。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara init</span><br><span class="line">package scope: demo</span><br><span class="line">package name: demo</span><br><span class="line">package version: 1.0.0</span><br><span class="line">main entry: ./demo.dara</span><br></pre></td></tr></table></figure>
+
+<p>初始化完成后，我们就可以在 <code>demo.dara</code> 文件里进行 Darabonba DSL 表达式的编写里</p>
+<p>比如我们编写一个经典的输出 hello world！</p>
+<h3 id="编写-Darabonba-DSL-表达式"><a href="#编写-Darabonba-DSL-表达式" class="headerlink" title="编写 Darabonba DSL 表达式"></a>编写 Darabonba DSL 表达式</h3><p>在 <code>demo.dara</code> 文件里写入如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Console</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">init</span>(<span class="params"></span>)&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">hello</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span><br><span class="line">        <span class="title class_">Console</span>.<span class="title function_">log</span>(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装自定义模块"><a href="#安装自定义模块" class="headerlink" title="安装自定义模块"></a>安装自定义模块</h3><p>因为上面我们用到了 <code>Console</code> 模块，所以我们在当前文件路径下执行如下命令，进行模块的安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara install</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行后将显示下面这些信息</span></span><br><span class="line">fetching from remote repository</span><br><span class="line"></span><br><span class="line">1 libraries installed. (0 local, 1 remote)</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令后，当前文件夹下就会出现一个 <strong>libraries</strong> 文件夹</p>
+<h3 id="配置-Darafile"><a href="#配置-Darafile" class="headerlink" title="配置 Darafile"></a>配置 Darafile</h3><p><code>Darafile</code> 是 <code>Darabonba</code> 的模块管理文件，类似 <code>Java</code> 中的 <code>pom.xml</code> 或者 <code>Node.js</code> 中的 <code>package.json</code>，这里我们要生成 <code>Go</code> 和 <code>Java</code> 的代码，所以只要做如下配置就可以了。具体的可以查看<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/aliyun/darabonba/blob/master/doc/darafile.md">官方的详细介绍</a>。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scope&quot;</span><span class="punctuation">:</span> <span class="string">&quot;demo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;demo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./demo.dara&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;libraries&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Console&quot;</span><span class="punctuation">:</span> <span class="string">&quot;darabonba:Console:*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;java&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="string">&quot;top.mjava.demo&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;className&quot;</span><span class="punctuation">:</span><span class="string">&quot;TestDemo&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>libraries</code> 里配置我们刚才所使用的 <code>Console</code> 依赖模块，在 <code>java</code> 对象字段里配置了包名和类文件名。</p>
+<h3 id="生成代码"><a href="#生成代码" class="headerlink" title="生成代码"></a>生成代码</h3><p>官方暂时只支持 TypeScript、C#、Java、 Go、PHP、Python3、Python2、CPP 的代码生成，后续的话还会支持 Swift、Dart、Ruby、Lua、Kotlin。</p>
+<p>我们这边只生成一下 Java 和 Go 代码，所以执行下面的命令就可以了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成 Java 代码</span></span><br><span class="line">dara codegen java ./java-demo</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成 Go 代码</span></span><br><span class="line">dara codegen go ./go-demo</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令后，当前文件夹就会出现 <strong>java-demo</strong> 和 <strong>go-demo</strong> 两个文件夹了。然后就可以进入文件夹看到相应生成的代码了</p>
+<p><strong>Java</strong>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> top.mjava.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.aliyun.tea.*;</span><br><span class="line"><span class="keyword">import</span> com.aliyun.teaconsole.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TestDemo</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hello</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        com.aliyun.teaconsole.Client.log(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Go</strong>:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> client</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  console  <span class="string">&quot;github.com/alibabacloud-go/tea-console/client&quot;</span></span><br><span class="line">  <span class="string">&quot;github.com/alibabacloud-go/tea/tea&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Client <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewClient</span><span class="params">()</span></span>(*Client, <span class="type">error</span>) &#123;</span><br><span class="line">  client := <span class="built_in">new</span>(Client)</span><br><span class="line">  err := client.Init()</span><br><span class="line">  <span class="keyword">return</span> client, err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(client *Client)</span></span>Init()(_err <span class="type">error</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x3-自定义模块"><a href="#0x3-自定义模块" class="headerlink" title="0x3 自定义模块"></a>0x3 自定义模块</h2><p>上面所用到的 <code>Console</code> 就是通过自定义模块打包上传到了 Darabonba 的<a target="_blank" rel="noopener external nofollow noreferrer" href="https://darabonba.api.aliyun.com/module">模块仓库</a>，然后我们可以直接通过 <code>libraries</code> 来使用它。</p>
+<p>所以我们可以自定义自己的模块上传到 Darabonba 模块仓库，接下来我们自定义一个获取 <strong>UUID</strong> 的模块，让它支持 Java 和 Go 语言来生成使用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/drcDzN%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.jpg" alt="未命名文件"></p>
+<p>从上面的流程图可以知道，模块是由各个语言自己编写代码，然后通过 Darabonba 聚合后上传到模块仓库，然后使用者从仓库安装模块，并且下载对应语言的依赖包。</p>
+<p>我们这边要编写 Java 和 Go 语言获取 UUID 的代码，然后通过 Darabonba 打包上传到模块仓库。</p>
+<h3 id="配置模版"><a href="#配置模版" class="headerlink" title="配置模版"></a>配置模版</h3><p>编写模块我们也是用 Darabonba 先生成各个语言的模版代码，然后再编写相应的具体实现。</p>
+<p>初始化</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ dara init</span><br><span class="line">package scope: greycode</span><br><span class="line">package name: UUID</span><br><span class="line">package version: 1.0.0</span><br><span class="line">main entry: ./main.dara</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我们先配置好 <strong>Darafile</strong>:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scope&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UUID&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./main.dara&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;java&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="string">&quot;top.mjava.uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;packageInfo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UUID generated for Darabonba moudle&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://github.com/greycodee/tea-uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerEmail&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zhengminghui99@gmail.com&quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在 <strong>main.dara</strong> 里编写一个静态方法：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> <span class="variable">uuid</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">function</span> <span class="title function_">uuid</span>(<span class="params"></span>): string;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写-Java-模块"><a href="#编写-Java-模块" class="headerlink" title="编写 Java 模块"></a>编写 Java 模块</h3><p>按上面的步骤配置好后就可以生成 Java 代码了，在当前目录下执行下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara codegen java ./java</span><br></pre></td></tr></table></figure>
+
+<p>然后进入 <strong>java 文件夹</strong>，找到 <strong>Client.java</strong>，在 <code>uuid()</code> 方法里添加 UUID 生成的代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="keyword">package</span> top.mjava.uuid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.aliyun.tea.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">uuid</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">      	<span class="comment">// 添加这行代码</span></span><br><span class="line">        <span class="keyword">return</span> UUID.randomUUID().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编写好代码后，还需要配置 pom.xml 文件，然后把 Java 代码打包发布到 maven 仓库上。</strong></p>
+<p>配置好 pom.xml 文件到下面这几个配置</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>top.mjava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tea-uuid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>tea-uuid<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>还有把 pom.xml 里的仓库配置换成我们自己的，我这边也是用阿里云的 maven 参考。你们可以自己去阿里云 maven 注册自己的账号。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="deletion">-  &lt;distributionManagement&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;snapshotRepository&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;id&gt;sonatype-nexus-snapshots&lt;/id&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots&lt;/url&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;/snapshotRepository&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;repository&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;id&gt;sonatype-nexus-staging&lt;/id&gt;</span></span><br><span class="line"><span class="deletion">-      &lt;url&gt;https://oss.sonatype.org/service/local/staging/deploy/maven2/&lt;/url&gt;</span></span><br><span class="line"><span class="deletion">-    &lt;/repository&gt;</span></span><br><span class="line"><span class="deletion">-  &lt;/distributionManagement&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+ &lt;distributionManagement&gt;</span></span><br><span class="line"><span class="addition">+    &lt;repository&gt;</span></span><br><span class="line"><span class="addition">+        &lt;id&gt;rdc-releases_my&lt;/id&gt;</span></span><br><span class="line"><span class="addition">+        &lt;url&gt;https://repo.rdc.aliyun.com/repository/102997-release-dTwmzu/&lt;/url&gt;</span></span><br><span class="line"><span class="addition">+    &lt;/repository&gt;</span></span><br><span class="line"><span class="addition">+    &lt;snapshotRepository&gt;</span></span><br><span class="line"><span class="addition">+        &lt;id&gt;rdc-snapshots_my&lt;/id&gt;</span></span><br><span class="line"><span class="addition">+        &lt;url&gt;https://repo.rdc.aliyun.com/repository/102997-snapshot-d0gx8B/&lt;/url&gt;</span></span><br><span class="line"><span class="addition">+    &lt;/snapshotRepository&gt;</span></span><br><span class="line"><span class="addition">+ &lt;/distributionManagement&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置好后就可以执行下面的命令将代码打包推送到远程 maven 仓库了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn clean source:jar javadoc:jar package deploy -Dmaven.test.skip=true -Dgpg.skip</span><br></pre></td></tr></table></figure>
+
+<p>看到下面的信息就说明部署成功了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[INFO] 阿里云Maven中央仓库为阿里云云效提供的公共代理仓库，云效也提供了免费、可靠的Maven私有仓库Packages，欢迎您体验使用。https://www.aliyun.com/product/yunxiao/packages?channel=pd_maven_download</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  5.538 s</span><br><span class="line">[INFO] Finished at: 2021-06-05T16:00:28+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h4 id="Maven-命令执行出现问题解决办法"><a href="#Maven-命令执行出现问题解决办法" class="headerlink" title="Maven 命令执行出现问题解决办法"></a>Maven 命令执行出现问题解决办法</h4><ul>
+<li><p>如果执行 maven 命令进行部署时，出现下面的错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal org.apache.maven.plugins:maven-gpg-plugin:1.6:sign (sign-artifacts) on project tea-uuid: Unable to execute gpg command: Error while executing process. Cannot run program &quot;gpg&quot;: error=2, No such file or directory -&gt; [Help 1]</span><br></pre></td></tr></table></figure>
+
+<p>可以通过添加 <code>-Dgpg.skip</code> 解决</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn clean source:jar javadoc:jar package deploy -Dmaven.test.skip=true -Dgpg.skip</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果出现下面的的错误</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[ERROR] Failed to execute goal org.sonatype.plugins:nexus-staging-maven-plugin:1.6.3:deploy (injected-nexus-deploy) on project tea-uuid: Execution injected-nexus-deploy of goal org.sonatype.plugins:nexus-staging-maven-plugin:1.6.3:deploy failed: Server credentials with ID &quot;sonatype-nexus-staging&quot; not found! -</span><br></pre></td></tr></table></figure>
+
+<p>可以删除 pom.xml 文件里的 <code>sonatype-nexus-staging</code> 配置</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="deletion">- &lt;plugin&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;groupId&gt;org.sonatype.plugins&lt;/groupId&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;artifactId&gt;nexus-staging-maven-plugin&lt;/artifactId&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;version&gt;1.6.3&lt;/version&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;extensions&gt;true&lt;/extensions&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;configuration&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;serverId&gt;sonatype-nexus-staging&lt;/serverId&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;nexusUrl&gt;https://oss.sonatype.org/&lt;/nexusUrl&gt;</span></span><br><span class="line"><span class="deletion">-     &lt;autoReleaseAfterClose&gt;true&lt;/autoReleaseAfterClose&gt;</span></span><br><span class="line"><span class="deletion">-   &lt;/configuration&gt;</span></span><br><span class="line"><span class="deletion">- &lt;/plugin&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="编写-Go-模块"><a href="#编写-Go-模块" class="headerlink" title="编写 Go 模块"></a>编写 Go 模块</h3><p>老规矩，首先先生成 Go 的代码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dara codegen go ./go</span><br></pre></td></tr></table></figure>
+
+<p>然后编辑 <code>client.go</code> 文件，改为如下代码</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This file is auto-generated, don&#x27;t edit it. Thanks.</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @return uuid</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">package</span> client</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;github.com/google/uuid&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Uuid</span> <span class="params">()</span></span> (_result <span class="type">string</span>) &#123;</span><br><span class="line">  <span class="comment">// V4 基于随机数</span></span><br><span class="line">  u4 := uuid.New()</span><br><span class="line">  <span class="keyword">return</span> u4.String()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后 <code>go.mod </code> 文件里的 module 改为我们的上传 Go 代码的仓库地址</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">module github.com/greycodee/tea-uuid-<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
+
+<p>然后推送到 GitHub 并打上一个 Tag 作为这个 Go 库的版本号，这边我设置版本号为 <code>v1.0.0</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag v1.0.0</span><br><span class="line">git push origin v1.0.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="上传-Darabonba-仓库"><a href="#上传-Darabonba-仓库" class="headerlink" title="上传 Darabonba 仓库"></a>上传 Darabonba 仓库</h3><p>编写好相应模块的代码并打包上传到对应的原创仓库后，就可以配置 <strong>Darafile</strong> 文件了</p>
+<p>在 Darafile 添加 releases 信息</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scope&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UUID&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./main.dara&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;releases&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;go&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github.com/greycodee/tea-uuid-go/client:v1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;java&quot;</span><span class="punctuation">:</span> <span class="string">&quot;top.mjava:tea-uuid:1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;java&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="string">&quot;top.mjava.uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;packageInfo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UUID generated for Darabonba moudle&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://github.com/greycodee/tea-uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;developerEmail&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zhengminghui99@gmail.com&quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后去 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://darabonba.api.aliyun.com/admin/maintainer">Darabonba 模块仓库</a>里注册一个账号，然后点击<code>个人中心-&gt;Scope-&gt;添加scope</code>，添加一个 scope ，<strong>保持和 Darafile 文件里的 scope 一致。</strong></p>
+<p>注册完成后在项目目录下执行 <code>dara login</code> 命令，输入刚才注册的账号密码，进行登陆。</p>
+<p>执行 <code>dara pack</code> 进行打包</p>
+<p>再执行 <code>dara publish</code> 进行发布</p>
+<p>发布完成后就可在  Darabonba 模块仓库里看到刚才发布的包了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Cxudyeimage-20210605170948596-20211008164903196.png" alt="image-20210605170948596"></p>
+<blockquote>
+<p>Darabonba UUID 模块代码地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/tea-uuid">https://github.com/greycodee/tea-uuid</a></p>
+<p>Go 模块代码地址： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/tea-uuid-go">https://github.com/greycodee/tea-uuid-go</a></p>
+</blockquote>
+<h3 id="使用自定义的模块"><a href="#使用自定义的模块" class="headerlink" title="使用自定义的模块"></a>使用自定义的模块</h3><p>上传 Darabonba 模块仓库后，我们就可以向刚开始使用 Console 模块那样来使用 UUID 模块了</p>
+<p>Darafile 添加 libraries</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;libraries&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;UUID&quot;</span><span class="punctuation">:</span> <span class="string">&quot;greycode:UUID:*&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>dara</code> 代码里使用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Console</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="variable constant_">UUID</span>;</span><br><span class="line"><span class="title function_">init</span>(<span class="params"></span>)&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">hello</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span><br><span class="line">	<span class="title class_">Console</span>.<span class="title function_">log</span>(<span class="variable constant_">UUID</span>.<span class="title function_">uuid</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Darabonba" >
+    <span class="tag-code">Darabonba</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/protocol/0143CD7666CD44389FE6F565E10EEE1A/">
+        <span class="nav-arrow">← </span>
+        
+          什么是HTTP协议？
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/linux/9AFC3EFAEC15479BB5FBC6F670594A94/">
+        
+          后端服务器时间不一致问题解决手册
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x1-%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">0x1 介绍</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x2-%E5%AE%89%E8%A3%85"><span class="toc-nav-text">0x2 安装</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x3-%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">0x3 使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BC%96%E5%86%99-Darabonba-DSL-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-nav-text">编写 Darabonba DSL 表达式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%89%E8%A3%85%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97"><span class="toc-nav-text">安装自定义模块</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AE-Darafile"><span class="toc-nav-text">配置 Darafile</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81"><span class="toc-nav-text">生成代码</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97"><span class="toc-nav-text">0x3 自定义模块</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AE%E6%A8%A1%E7%89%88"><span class="toc-nav-text">配置模版</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BC%96%E5%86%99-Java-%E6%A8%A1%E5%9D%97"><span class="toc-nav-text">编写 Java 模块</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Maven-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-nav-text">Maven 命令执行出现问题解决办法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BC%96%E5%86%99-Go-%E6%A8%A1%E5%9D%97"><span class="toc-nav-text">编写 Go 模块</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%8A%E4%BC%A0-Darabonba-%E4%BB%93%E5%BA%93"><span class="toc-nav-text">上传 Darabonba 仓库</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%A8%A1%E5%9D%97"><span class="toc-nav-text">使用自定义的模块</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/tool/0D992236EC6B4E5EAD15886D992FF84B/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

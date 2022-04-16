@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Jenkins教程-创建Maven项目 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Jenkins教程-创建Maven项目</h2>
+  <p class="post-date">2019-11-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mjava.top/jenkins/build-jenkins-docker/">Jenkins教程-搭建(Docker版)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mjava.top/jenkins/build-jenkins-mavne/">Jenkins教程-创建Maven项目</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mjava.top/jenkins/build-jenkins-ci-cd/">Jenkins教程-Docker+GitLab持续部署持续集成</a></p>
+</li>
+</ul>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>本教程是和gitlab集成,所以要有gitlab仓库。注意：如果后期要弄自动部署的话,你Jenkins的地址gitlab必须能访问到。不然gitlab监听到事件就通知不了Jenkins了；</p>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+<li>Centos 7</li>
+<li>Jenkins(Docker版)</li>
+</ul>
+<h3 id="所需插件"><a href="#所需插件" class="headerlink" title="所需插件"></a>所需插件</h3><blockquote>
+<p>除了搭建Jenkins时安装的插件,还需安装的插件</p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://plugins.jenkins.io/maven-plugin">Maven Integration</a></li>
+</ul>
+<h3 id="安装Maven"><a href="#安装Maven" class="headerlink" title="安装Maven"></a>安装Maven</h3><p>点击侧边栏的Manage Jenkins,然后点击Global Tool Configuration,进入全局工具设置<br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112105932.png" alt="Jenkins界面"></p>
+<p>然后找到Maven,点击Add Maven,可以选择你要的Maven版本，然后设置一个名字。点击保存</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112110029.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112110130.png" alt="Jenkins界面"></p>
+<h3 id="创建Git登录凭证"><a href="#创建Git登录凭证" class="headerlink" title="创建Git登录凭证"></a>创建Git登录凭证</h3><p>点击侧边栏的凭证，然后按图点击<br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111043-20211009110702592.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111058-20211009110708086.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111115-20211009110713642.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111130-20211009110721384.png" alt="Jenkins界面"></p>
+<p>这边Kind有很多选项，这边选择Username with password,用账户密码来设置；然后在Username和Password输入框中分别输入gitlab的账号和密码。点击OK保存；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111529-20211009110727391.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111806-20211009110733127.png" alt="Jenkins界面"></p>
+<p>保存后就会出现你保存好的凭证；</p>
+<h2 id="创建JOB"><a href="#创建JOB" class="headerlink" title="创建JOB"></a>创建JOB</h2><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112111950.png" alt="Jenkins界面"></p>
+<h3 id="创建Maven项目"><a href="#创建Maven项目" class="headerlink" title="创建Maven项目"></a>创建Maven项目</h3><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112035.png" alt="Jenkins界面"></p>
+<h3 id="输入你的gitlab项目地址，然后选择刚才配置的凭证"><a href="#输入你的gitlab项目地址，然后选择刚才配置的凭证" class="headerlink" title="输入你的gitlab项目地址，然后选择刚才配置的凭证"></a>输入你的gitlab项目地址，然后选择刚才配置的凭证</h3><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112620.png" alt="Jenkins界面"></p>
+<h3 id="输入Maven打包命令，然后点击保存"><a href="#输入Maven打包命令，然后点击保存" class="headerlink" title="输入Maven打包命令，然后点击保存"></a>输入Maven打包命令，然后点击保存</h3><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112719.png" alt="Jenkins界面"></p>
+<h3 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h3><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112747.png" alt="Jenkins界面"></p>
+<h3 id="查看构建项目日志"><a href="#查看构建项目日志" class="headerlink" title="查看构建项目日志"></a>查看构建项目日志</h3><blockquote>
+<p>第一次构建会比慢，因为他要下载maven相关构建的包</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112803.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112841.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112112854.png" alt="Jenkins界面"></p>
+<h3 id="查看构建好的jar包"><a href="#查看构建好的jar包" class="headerlink" title="查看构建好的jar包"></a>查看构建好的jar包</h3><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112122030.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112122112.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112122135.png" alt="Jenkins界面"><br><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/09/20191112122200.png" alt="Jenkins界面"></p>
+<blockquote>
+<p>到此，构建maven项目已结束，可以下载这个jar包进行部署。后面会有自动构建部署的教程</p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Jenkins" >
+    <span class="tag-code">Jenkins</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/jenkins/problem-jenkins-02/">
+        <span class="nav-arrow">← </span>
+        
+          Jenkins初始化界面插件安装失败解决方法
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/jenkins/build-jenkins-ci-cd/">
+        
+          Jenkins教程-Docker+GitLab持续部署持续集成
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-nav-text">目录</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="toc-nav-text">前期准备</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-nav-text">环境</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%89%80%E9%9C%80%E6%8F%92%E4%BB%B6"><span class="toc-nav-text">所需插件</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AE%89%E8%A3%85Maven"><span class="toc-nav-text">安装Maven</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BAGit%E7%99%BB%E5%BD%95%E5%87%AD%E8%AF%81"><span class="toc-nav-text">创建Git登录凭证</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BAJOB"><span class="toc-nav-text">创建JOB</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BAMaven%E9%A1%B9%E7%9B%AE"><span class="toc-nav-text">创建Maven项目</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BE%93%E5%85%A5%E4%BD%A0%E7%9A%84gitlab%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80%EF%BC%8C%E7%84%B6%E5%90%8E%E9%80%89%E6%8B%A9%E5%88%9A%E6%89%8D%E9%85%8D%E7%BD%AE%E7%9A%84%E5%87%AD%E8%AF%81"><span class="toc-nav-text">输入你的gitlab项目地址，然后选择刚才配置的凭证</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BE%93%E5%85%A5Maven%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4%EF%BC%8C%E7%84%B6%E5%90%8E%E7%82%B9%E5%87%BB%E4%BF%9D%E5%AD%98"><span class="toc-nav-text">输入Maven打包命令，然后点击保存</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%BC%80%E5%A7%8B%E6%9E%84%E5%BB%BA"><span class="toc-nav-text">开始构建</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE%E6%97%A5%E5%BF%97"><span class="toc-nav-text">查看构建项目日志</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%9E%84%E5%BB%BA%E5%A5%BD%E7%9A%84jar%E5%8C%85"><span class="toc-nav-text">查看构建好的jar包</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/jenkins/build-jenkins-mavne/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      【源码解析】扒开ArrayList的外衣 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>【源码解析】扒开ArrayList的外衣</h2>
+  <p class="post-date">2020-01-03</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。</p>
+</blockquote>
+<h2 id="本文内容"><a href="#本文内容" class="headerlink" title="本文内容"></a>本文内容</h2><p>当然ArrayList里的方法不止这些，本文主要讲一些常用的方法</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200103101050.png" alt="图片"></p>
+<h2 id="方法变量"><a href="#方法变量" class="headerlink" title="方法变量"></a>方法变量</h2><p><code>Arraylist</code>里的方法变量主要有以下几个</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_005.png" alt="图片"></p>
+<h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><h3 id="有参构造"><a href="#有参构造" class="headerlink" title="有参构造"></a>有参构造</h3><h4 id="传入数组的大小"><a href="#传入数组的大小" class="headerlink" title="传入数组的大小"></a>传入数组的大小</h4><h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<h5 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h5><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_004.png" alt="图片"></p>
+<h4 id="传入一个list对象"><a href="#传入一个list对象" class="headerlink" title="传入一个list对象"></a>传入一个list对象</h4><p>其实这个就相当于把传入的list对象里的数据<font color=orange>复制</font>到新的ArrayList对象</p>
+<h5 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(Arrays.asList(<span class="string">&quot;z&quot;</span>,<span class="string">&quot;m&quot;</span>,<span class="string">&quot;h&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里用来<code>Arrays</code>工具类里的<code>asList</code>方法，它的源码里是直接返回一个List，有兴趣的可以去看看，这里就不介绍了</p>
+</blockquote>
+<h5 id="源码解析-1"><a href="#源码解析-1" class="headerlink" title="源码解析"></a>源码解析</h5><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_006.png" alt="图片"></p>
+<h3 id="无参构造"><a href="#无参构造" class="headerlink" title="无参构造"></a>无参构造</h3><p>这个比较简单，直接赋值一个空数组</p>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-2"><a href="#源码解析-2" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200103112943.png" alt="图片"></p>
+<h2 id="add方法"><a href="#add方法" class="headerlink" title="add方法"></a>add方法</h2><p>add一般常用的有两个方法，一个就是<code>add(E e)</code>在尾部添加数据，一个就是<code>add(int index,E element)</code>在指定位置插入元素</p>
+<h3 id="add-E-e"><a href="#add-E-e" class="headerlink" title="add(E e)"></a>add(E e)</h3><p>这个是<code>Arrayist</code>的主要方法，平时用的也是最多的方法之一，所以源码比较复杂，比较长</p>
+<h4 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;灰灰HK&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-3"><a href="#源码解析-3" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_007.png" alt="图片"></p>
+<ul>
+<li><font color=orange>ensureCapacityInternal(int minCapacity)</font>确保数组容量充足</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_009.png" alt="图片"></p>
+<ul>
+<li><font color=orange>calculateCapacity(Object[] elementData, int minCapacity)</font></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_010.png" alt="图片"></p>
+<ul>
+<li>再回到<font color=orange>ensureExplicitCapacity(int minCapacity)</font>这个方法，这个方法先<code>修改次数加1</code>，然后判断<code>size+1</code>是不是比当前的数组容量大，如果比当前的数组容量大，则进行扩容操作，扩大容量为原数组的<code>1.5倍</code></li>
+</ul>
+<blockquote>
+<p>比如第二次调用add方法，此时<code>size+1=2</code>, <code> elementData.length=10</code>,为什么等于10呢？因为第一次默认把数组容量从0扩大到了10,这时<code>size+1</code>比<code>elementData.length</code>小，就不会进行扩容操作</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_011.png" alt="图片"></p>
+<ul>
+<li><font color=orange>grow(int minCapacity)</font>扩容</li>
+</ul>
+<blockquote>
+<p>这里调用<code>Arrays.copyOf()</code>方法进行复制操作，当进一步深入这个方法时，发现是由<code>System.arraycopy()</code>这个方法实现复制功能的，这个方法由<code>native</code>关键字修饰，表示不是由<code>Java</code>语言实现的，一般是c&#x2F;cpp实现</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_012.png" alt="图片"></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>到这里，add的方法流程就走完了，其核心步骤：</p>
+<ul>
+<li><p>每次添加元素时判断数组容量是否充足</p>
+</li>
+<li><p><font color=orange>第一次</font>添加元素，把数组容量扩容到10</p>
+</li>
+<li><p>扩容时，除第一次，以后的每次扩容为<font color=orange>原大小的1.5倍</font></p>
+</li>
+<li><p>扩容后调用<code>System.arraycopy()</code>方法把原数组的元素复制到扩容后的新数组</p>
+</li>
+</ul>
+<h3 id="add-int-index-E-element"><a href="#add-int-index-E-element" class="headerlink" title="add(int index, E element)"></a>add(int index, E element)</h3><p>该方法为在指定位置插入元素，该位置及后面所有元素后移</p>
+<h4 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.add(<span class="number">0</span>,<span class="string">&quot;灰灰&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-4"><a href="#源码解析-4" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_013.png" alt="图片"></p>
+<blockquote>
+<p>可以看到，这边又用到了<code>System.arraycopy()</code>这个方法</p>
+</blockquote>
+<ul>
+<li><font color=orange>rangeCheckForAdd(int index)</font>判断是否越界</li>
+</ul>
+<blockquote>
+<p>这里他是和<code>size</code>对比，而不是和数组的<code>length</code>对比，我个人认为这样第一节省了空间，第二方便后面移动的操作</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_014.png" alt="图片"></p>
+<ul>
+<li><font color=orange>System.arraycopy()</font>拷贝数组</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">arraycopy</span><span class="params">(Object src,  <span class="type">int</span>  srcPos,</span></span><br><span class="line"><span class="params">                             		Object dest, <span class="type">int</span> destPos,</span></span><br><span class="line"><span class="params">                                    <span class="type">int</span> length)</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>src    原数组对象</li>
+<li>srcPos    原数组起始位置</li>
+<li>dest    目标数组</li>
+<li>destPos    目标数组起始位置</li>
+<li>length    复制多少个数据</li>
+</ul>
+</blockquote>
+<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>插入方法其主要步骤如下:</p>
+<ul>
+<li>检查插入的位置是否越界</li>
+<li>检查数组容量是否充足，不充足进行扩容相关操作</li>
+<li>调用<code>System.arraycopy()</code>进行<code>index</code>及后面的元素后移</li>
+</ul>
+<h2 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h2><h3 id="get-int-index"><a href="#get-int-index" class="headerlink" title="get(int index)"></a>get(int index)</h3><h4 id="代码实现-5"><a href="#代码实现-5" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.get(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-5"><a href="#源码解析-5" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_015.png" alt="图片"></p>
+<ul>
+<li><font color=orange>rangeCheck(int index)</font>判断是否越界</li>
+</ul>
+<blockquote>
+<p>get个add方法判断越界的方法是不一样的，这边是<code>index&gt;=size</code>,多了个<code>等于</code>，为什么要多个等于呢？因为数组是从0开始的，而size<font color=orange>相当于</font>是开始的从1开始的</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rangeCheck</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (index &gt;= size)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>(outOfBoundsMsg(index));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><font color=orange>elementData(int index)</font>直接返回对应下标的数组元素</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">E <span class="title function_">elementData</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (E) elementData[index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h4><p>get方法比较简单，主要步骤为：</p>
+<ul>
+<li>检查是否越界</li>
+<li>返回对应元素</li>
+</ul>
+<h2 id="set方法"><a href="#set方法" class="headerlink" title="set方法"></a>set方法</h2><h3 id="set-int-index-E-element"><a href="#set-int-index-E-element" class="headerlink" title="set(int index, E element)"></a>set(int index, E element)</h3><h4 id="代码实现-6"><a href="#代码实现-6" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.set(<span class="number">0</span>,<span class="string">&quot;灰灰&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-6"><a href="#源码解析-6" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_016.png" alt="图片"></p>
+<h2 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a>remove方法</h2><h3 id="remove-int-index"><a href="#remove-int-index" class="headerlink" title="remove(int index)"></a>remove(int index)</h3><h4 id="代码实现-7"><a href="#代码实现-7" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.remove(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-7"><a href="#源码解析-7" class="headerlink" title="源码解析"></a>源码解析</h4><blockquote>
+<p>当删除的元素为最后一个元素时，<code>numMoved</code>就小于0了，就不会进行移动元素的操作</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_017.png" alt="图片"></p>
+<h3 id="remove-Object-o"><a href="#remove-Object-o" class="headerlink" title="remove(Object o)"></a>remove(Object o)</h3><blockquote>
+<p>这个方法在实际中用的比较少，因为<code>AraryList</code>是可以保存重复的元素，所以删除是<font color=orange>删除最早添加的元素</font></p>
+</blockquote>
+<h4 id="代码实现-8"><a href="#代码实现-8" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.remove(<span class="string">&quot;hk&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码解析-8"><a href="#源码解析-8" class="headerlink" title="源码解析"></a>源码解析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_018.png" alt="图片"></p>
+<ul>
+<li><font color=orange>fastRemove(int index)</font>删除元素</li>
+</ul>
+<blockquote>
+<p>这个方法和remove(int index)内部的操作类似，不过这边不保存被删除的元素</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">fastRemove</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="type">int</span> <span class="variable">numMoved</span> <span class="operator">=</span> size - index - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</span><br><span class="line">        System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                         numMoved);</span><br><span class="line">    elementData[--size] = <span class="literal">null</span>; <span class="comment">// clear to let GC do its work</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="clear方法"><a href="#clear方法" class="headerlink" title="clear方法"></a>clear方法</h2><h3 id="clear"><a href="#clear" class="headerlink" title="clear()"></a>clear()</h3><h4 id="代码实现-9"><a href="#代码实现-9" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hk&quot;</span>);</span><br><span class="line">list.clear();</span><br></pre></td></tr></table></figure>
+
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/Selection_019.png" alt="图片"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>ArrayList</code>底层扩容或者移动数组元素时都调用了<code>System.arraycopy()</code>来进行相关操作，平时进行我们进行数组复制或移动的时候也可以调用这个方法了，这个性能比循环复制性能高多了，特别是在大量数据的时候。</p>
+<p>文章好几次出现了<code>modCount++</code>这个操作，这个<code>modCount</code>主要用户内部类的迭代器</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#ArrayList" >
+    <span class="tag-code">ArrayList</span>
+  </a>
+
+  <a href="/tags#源码解析" >
+    <span class="tag-code">源码解析</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/java-base-wei/">
+        <span class="nav-arrow">← </span>
+        
+          【图】用图片告诉你Java中的位运算
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/java/java-linkedlist-source-1/">
+        
+          【源码解析】想了解LinkedList？看这篇文章就对了
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9C%AC%E6%96%87%E5%86%85%E5%AE%B9"><span class="toc-nav-text">本文内容</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%96%B9%E6%B3%95%E5%8F%98%E9%87%8F"><span class="toc-nav-text">方法变量</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-nav-text">构造方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%89%E5%8F%82%E6%9E%84%E9%80%A0"><span class="toc-nav-text">有参构造</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BC%A0%E5%85%A5%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="toc-nav-text">传入数组的大小</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-nav-text">源码解析</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BC%A0%E5%85%A5%E4%B8%80%E4%B8%AAlist%E5%AF%B9%E8%B1%A1"><span class="toc-nav-text">传入一个list对象</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-1"><span class="toc-nav-text">源码解析</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%97%A0%E5%8F%82%E6%9E%84%E9%80%A0"><span class="toc-nav-text">无参构造</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-2"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-2"><span class="toc-nav-text">源码解析</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#add%E6%96%B9%E6%B3%95"><span class="toc-nav-text">add方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#add-E-e"><span class="toc-nav-text">add(E e)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-3"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-3"><span class="toc-nav-text">源码解析</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-nav-text">小结</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#add-int-index-E-element"><span class="toc-nav-text">add(int index, E element)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-4"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-4"><span class="toc-nav-text">源码解析</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-nav-text">小结</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#get%E6%96%B9%E6%B3%95"><span class="toc-nav-text">get方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#get-int-index"><span class="toc-nav-text">get(int index)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-5"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-5"><span class="toc-nav-text">源码解析</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="toc-nav-text">小结</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#set%E6%96%B9%E6%B3%95"><span class="toc-nav-text">set方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#set-int-index-E-element"><span class="toc-nav-text">set(int index, E element)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-6"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-6"><span class="toc-nav-text">源码解析</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#remove%E6%96%B9%E6%B3%95"><span class="toc-nav-text">remove方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#remove-int-index"><span class="toc-nav-text">remove(int index)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-7"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-7"><span class="toc-nav-text">源码解析</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#remove-Object-o"><span class="toc-nav-text">remove(Object o)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-8"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-8"><span class="toc-nav-text">源码解析</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#clear%E6%96%B9%E6%B3%95"><span class="toc-nav-text">clear方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#clear"><span class="toc-nav-text">clear()</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-9"><span class="toc-nav-text">代码实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-nav-text">源码分析</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-nav-text">总结</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/java/java-arraylist-source-1/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

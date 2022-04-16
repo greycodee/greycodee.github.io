@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Disruptor-快速开始 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Disruptor-快速开始</h2>
+  <p class="post-date">2021-03-01</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="创建一个事件实体"><a href="#创建一个事件实体" class="headerlink" title="创建一个事件实体"></a>创建一个事件实体</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LongEvent</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> Long <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建一个事件实体工厂"><a href="#创建一个事件实体工厂" class="headerlink" title="创建一个事件实体工厂"></a>创建一个事件实体工厂</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LongEventFactory</span> <span class="keyword">implements</span> <span class="title class_">EventFactory</span>&lt;LongEvent&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> LongEvent <span class="title function_">newInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LongEvent</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建两个事件处理类"><a href="#创建两个事件处理类" class="headerlink" title="创建两个事件处理类"></a>创建两个事件处理类</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* EventHandler&lt;LongEvent&gt; 是没有池化的实现方式,每个消费者中只有一个示例</span></span><br><span class="line"><span class="comment">* WorkHandler&lt;LongEvent&gt; 是池化的实现方式，每个消费者中可以以类似线程池的方式去执行这个事件</span></span><br><span class="line"><span class="comment">* 实际根据业务场景 实现其中一个接口就可以</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">A1Handler</span> <span class="keyword">implements</span> <span class="title class_">EventHandler</span>&lt;LongEvent&gt; , WorkHandler&lt;LongEvent&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(LongEvent longEvent, <span class="type">long</span> l, <span class="type">boolean</span> b)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">id</span> <span class="operator">=</span> longEvent.getId();</span><br><span class="line">        id+=<span class="number">1</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">        System.out.println(System.currentTimeMillis()+<span class="string">&quot;+A1Handler:&quot;</span>+id);</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 池化执行</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(LongEvent longEvent)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">id</span> <span class="operator">=</span> longEvent.getId();</span><br><span class="line">        id+=<span class="number">10</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">        System.out.println(System.currentTimeMillis()+<span class="string">&quot;+A1Handler:&quot;</span>+id);</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">A2Handler</span> <span class="keyword">implements</span> <span class="title class_">EventHandler</span>&lt;LongEvent&gt; , WorkHandler&lt;LongEvent&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(LongEvent longEvent, <span class="type">long</span> l, <span class="type">boolean</span> b)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">id</span> <span class="operator">=</span> longEvent.getId();</span><br><span class="line">        id+=<span class="number">3</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">        System.out.println(System.currentTimeMillis()+<span class="string">&quot;+A2Handler:&quot;</span>+id);</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 池化执行</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(LongEvent longEvent)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">id</span> <span class="operator">=</span> longEvent.getId();</span><br><span class="line">        id+=<span class="number">30</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">        System.out.println(Thread.currentThread().getName());</span><br><span class="line">        System.out.println(System.currentTimeMillis()+<span class="string">&quot;+A2Handler:&quot;</span>+id);</span><br><span class="line">        System.out.println(<span class="string">&quot;**************************&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="实例化Disruptor"><a href="#实例化Disruptor" class="headerlink" title="实例化Disruptor"></a>实例化Disruptor</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 事件工厂</span></span><br><span class="line"><span class="type">LongEventFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LongEventFactory</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义RingBuff大小  注意：数值一定是2的幂次方</span></span><br><span class="line"><span class="type">int</span> <span class="variable">bufferSize</span> <span class="operator">=</span> <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建ThreadFactory</span></span><br><span class="line"><span class="type">ThreadFactory</span> <span class="variable">threadFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadFactory</span>() &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> <span class="string">&quot;DisruptorWorker&quot;</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Thread <span class="title function_">newThread</span><span class="params">(Runnable r)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(r, prefix + <span class="string">&quot;-&quot;</span> + counter++);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 实例化Disruptor （官方有4个实例化方法）</span></span><br><span class="line"><span class="comment"> * factory 是事件工厂</span></span><br><span class="line"><span class="comment"> * bufferSize 是上面定义的RingBuffer的大小</span></span><br><span class="line"><span class="comment"> * ProducerType.MULTI 是生产者模式 有SINGL和MULTI两种</span></span><br><span class="line"><span class="comment"> * new BlockingWaitStrategy() 是等待阻塞策略</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Disruptor&lt;LongEvent&gt; disruptor = <span class="keyword">new</span> <span class="title class_">Disruptor</span>&lt;LongEvent&gt;(</span><br><span class="line">    factory, </span><br><span class="line">    bufferSize, </span><br><span class="line">    threadFactory,</span><br><span class="line">    ProducerType.MULTI,</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">BlockingWaitStrategy</span>());</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建消费者"><a href="#创建消费者" class="headerlink" title="创建消费者"></a>创建消费者</h2><h3 id="单个模式"><a href="#单个模式" class="headerlink" title="单个模式"></a>单个模式</h3><p>disruptor会创建2和线程，一个线程用来执行<code>A1Handler</code>，一个线程用来执行<code>A2Handler</code>.每个线程互不影响。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">disruptor.handleEventsWith(<span class="keyword">new</span> <span class="title class_">A1Handler</span>(),<span class="keyword">new</span> <span class="title class_">A2Handler</span>());</span><br></pre></td></tr></table></figure>
+
+<h3 id="池化模式"><a href="#池化模式" class="headerlink" title="池化模式"></a>池化模式</h3><p>disruptor会创建4个线程，其中两个线程组成<strong>线程池</strong>来执行<code>A1Handler</code>，另外两个线程也组成<strong>线程池</strong>用来执行<code>A2Handler</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">disruptor.handleEventsWithWorkerPool(<span class="keyword">new</span> <span class="title class_">A1Handler</span>(),<span class="keyword">new</span> <span class="title class_">A1Handler</span>())</span><br><span class="line">disruptor.handleEventsWithWorkerPool(<span class="keyword">new</span> <span class="title class_">A2Handler</span>(),<span class="keyword">new</span> <span class="title class_">A2Handler</span>())</span><br></pre></td></tr></table></figure>
+
+<h2 id="获取RingBuffer"><a href="#获取RingBuffer" class="headerlink" title="获取RingBuffer"></a>获取RingBuffer</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">RingBuffer&lt;LongEvent&gt; ringBuffer = disruptor.start();</span><br></pre></td></tr></table></figure>
+
+<h2 id="生产者发布消息"><a href="#生产者发布消息" class="headerlink" title="生产者发布消息"></a>生产者发布消息</h2><p>这边直接使用Java8的发布方式来发布消息</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建ByteBuffer缓冲区 </span></span><br><span class="line"><span class="type">ByteBuffer</span> <span class="variable">bb</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">8</span>);</span><br><span class="line"><span class="comment">// 生产者发布5条消息</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">long</span> <span class="variable">l</span> <span class="operator">=</span> <span class="number">0</span>; l&lt;<span class="number">5</span>; l++) &#123;</span><br><span class="line">    <span class="comment">// 写入消息到Bufer缓冲区</span></span><br><span class="line">    bb.putLong(<span class="number">0</span>, l);</span><br><span class="line">    <span class="comment">// Java8 lambda发布方式</span></span><br><span class="line">    ringBuffer.publishEvent((event,sequece,buffer) -&gt; event.setId(buffer.getLong(<span class="number">0</span>)),bb);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="string">&quot;发布完成&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="完整的Main方法"><a href="#完整的Main方法" class="headerlink" title="完整的Main方法"></a>完整的Main方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DisruptorMain</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 实例化事件工厂</span></span><br><span class="line">        <span class="type">LongEventFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LongEventFactory</span>();</span><br><span class="line">        <span class="comment">// 定义RingBuffer大小</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">bufferSize</span> <span class="operator">=</span> <span class="number">1024</span>;</span><br><span class="line">        <span class="comment">// 创建线程工厂</span></span><br><span class="line">        <span class="type">ThreadFactory</span> <span class="variable">threadFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadFactory</span>() &#123;</span><br><span class="line">            <span class="keyword">private</span> <span class="type">int</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">private</span> <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> <span class="string">&quot;DisruptorWorker&quot;</span>;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Thread <span class="title function_">newThread</span><span class="params">(Runnable r)</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(r, prefix + <span class="string">&quot;-&quot;</span> + counter++);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// 实例化Disruptor</span></span><br><span class="line">        Disruptor&lt;LongEvent&gt; disruptor = <span class="keyword">new</span> <span class="title class_">Disruptor</span>&lt;LongEvent&gt;(</span><br><span class="line">                factory,</span><br><span class="line">                bufferSize,</span><br><span class="line">                threadFactory,</span><br><span class="line">                ProducerType.MULTI,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">BlockingWaitStrategy</span>());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 并行模式 两个Handler互不影响</span></span><br><span class="line">        disruptor.handleEventsWith(<span class="keyword">new</span> <span class="title class_">A1Handler</span>(),<span class="keyword">new</span> <span class="title class_">A2Handler</span>());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 并行 每个消费端有两个线程实例 (池化模式)</span></span><br><span class="line"><span class="comment">//        disruptor.handleEventsWithWorkerPool(new A1Handler(),new A1Handler());</span></span><br><span class="line"><span class="comment">//        disruptor.handleEventsWithWorkerPool(new A2Handler(),new A2Handler());</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取RingBuffer</span></span><br><span class="line">        RingBuffer&lt;LongEvent&gt; ringBuffer = disruptor.start();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建ByteBuffer缓冲区</span></span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">bb</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">8</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">long</span> <span class="variable">l</span> <span class="operator">=</span> <span class="number">0</span>; l&lt;<span class="number">5</span>; l++) &#123;</span><br><span class="line">            <span class="comment">// 写入数据到缓冲区</span></span><br><span class="line">            bb.putLong(<span class="number">0</span>, l);</span><br><span class="line">            <span class="comment">// Java8的发布方式</span></span><br><span class="line">            ringBuffer.publishEvent((event,sequece,buffer) -&gt; event.setId(buffer.getLong(<span class="number">0</span>)),bb);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;发布完成&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/disruptor/926f33f0-651d-471a-ad0c-b632fcce8c0f/">
+        <span class="nav-arrow">← </span>
+        
+          Disruptor-生产者发布方式
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/java/disruptor/b3025291-ae52-4d26-a70c-66a79bda07d7/">
+        
+          Disruptor-实例化方法
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BA%8B%E4%BB%B6%E5%AE%9E%E4%BD%93"><span class="toc-nav-text">创建一个事件实体</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BA%8B%E4%BB%B6%E5%AE%9E%E4%BD%93%E5%B7%A5%E5%8E%82"><span class="toc-nav-text">创建一个事件实体工厂</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E7%B1%BB"><span class="toc-nav-text">创建两个事件处理类</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96Disruptor"><span class="toc-nav-text">实例化Disruptor</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-nav-text">创建消费者</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8D%95%E4%B8%AA%E6%A8%A1%E5%BC%8F"><span class="toc-nav-text">单个模式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B1%A0%E5%8C%96%E6%A8%A1%E5%BC%8F"><span class="toc-nav-text">池化模式</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%8E%B7%E5%8F%96RingBuffer"><span class="toc-nav-text">获取RingBuffer</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E5%B8%83%E6%B6%88%E6%81%AF"><span class="toc-nav-text">生产者发布消息</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84Main%E6%96%B9%E6%B3%95"><span class="toc-nav-text">完整的Main方法</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/java/disruptor/a552f7f0-4cbe-4628-8fcf-02f8b8730b56/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

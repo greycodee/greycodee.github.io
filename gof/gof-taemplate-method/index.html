@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      设计模式系列-模板方法模式 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>设计模式系列-模板方法模式</h2>
+  <p class="post-date">2019-12-20</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191220000613-20211008162150348.jpg" alt="图片"></p>
+<blockquote>
+<p>积千里跬步，汇万里江河．每天进步一点点，终有一天将成大佬</p>
+</blockquote>
+<h2 id="文前常规发言"><a href="#文前常规发言" class="headerlink" title="文前常规发言"></a>文前常规发言</h2><p>　　模板方法的设计<font color=orange>符合迪米特法则</font>，也就是最少知道原则，他通过对一些重复方法的封装，减少类之间的耦合，让调用者也更省心，原来要调两三个方法才能实现的功能，现在调一个就可以了；就像我们伟大的祖国，现在也在推行这种模式呢．以前区办一些证明什么的，要跑三四个地方，还要保证这三四个地方都正常帮你办理，如果其中一个地方没办理，那么整个流程就都作废了．现在好了，提倡最多跑一次，只要去一个地方办<font color=orange>一次</font>手续就可以了，你只要知道这个地方能办好就行，其他的就不用烦心了；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219215431.gif" alt="图片"></p>
+<h2 id="阿狗卖电脑"><a href="#阿狗卖电脑" class="headerlink" title="阿狗卖电脑"></a>阿狗卖电脑</h2><p>　　阿狗是一个三十五岁没了头发的年轻小伙，当问及为什么没了头发，阿狗摸摸头，眼里充满了悔恨的泪水；要不是小时候没听大人的话，长大了也不至于做程序员啊－－－阿狗唉声叹气的说道．听到这里，我仿佛已经知道了答案．当我问他为什么现在改行卖电脑了，他说外面的世界很大，想趁年轻，多闯闯（<font color=orange>实则是被公司裁员，被迫来卖电脑了</font>）；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219220453-20211008162142649.gif" alt="图片"></p>
+<p>看看他的电脑店里都有什么</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 阿狗电脑店</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AGouShop</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *显卡</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">xianKa</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *cpu</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">cpu</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *电源</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">dianYuan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *主板</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">zhuBan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *硬盘</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">yingPan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *内存条</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">neiCun</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *机箱</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">jiXiang</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还不错，该有的都有了．当我们正在店里逛着时，来了两个顾客，<font color=orange>阿猫</font>和<font color=orange>大牛</font>，他们都来到阿狗店电脑店，挑选的电脑配件，准备组装电脑．</p>
+<p>看看阿猫：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219222853.png" alt="图片"></p>
+<p>在看看大牛的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219222925.png" alt="图片"></p>
+<p>再看看他们怎么组装的吧：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219223122.png" alt="图片"></p>
+<h2 id="有想法的阿狗"><a href="#有想法的阿狗" class="headerlink" title="有想法的阿狗"></a>有想法的阿狗</h2><p>　　阿狗自从卖电脑后，发现头上的头发也慢慢的长了出来了，每天也更加自信了．一天，他发现客户有个痛点，就是买电脑要分别买好配件，然后再自己组装，有时候买的配件有问题，又要拿去换，导致费时费力．这时，阿狗头脑灵光一闪，想到了当年做程序员时的<font color=orange>模板方法模式</font>；何不把客户组装电脑的步骤自己承包，这样客户只要来买电脑时选下<font color=orange>配件</font>，我就帮他组装好给他．客户省心省力，到时候生意肯定好；于是他改造了他的电脑店：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 阿狗电脑店</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AGouShop</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *显卡</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">xianKa</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *cpu</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">cpu</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *电源</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">dianYuan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *主板</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">zhuBan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *硬盘</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">yingPan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *内存条</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">neiCun</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *机箱</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">jiXiang</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 阿狗帮客户装电脑</span></span><br><span class="line"><span class="comment">     * 模板方法</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">zhuZHuang</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;阿狗开始组装电脑＝＝＝＝＝＝&quot;</span>);</span><br><span class="line">        <span class="built_in">this</span>.cpu();</span><br><span class="line">        <span class="built_in">this</span>.dianYuan();</span><br><span class="line">        <span class="built_in">this</span>.neiCun();</span><br><span class="line">        <span class="built_in">this</span>.xianKa();</span><br><span class="line">        <span class="built_in">this</span>.yingPan();</span><br><span class="line">        <span class="built_in">this</span>.zhuBan();</span><br><span class="line">        <span class="built_in">this</span>.jiXiang();</span><br><span class="line">        System.out.println(<span class="string">&quot;阿狗电脑组装完成＝＝＝＝＝＝&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上次的阿猫又来买电脑了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219232821-20211008162122034.png" alt="图片"></p>
+<p>看看结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219232931.png" alt="图片"></p>
+<h2 id="客户反馈"><a href="#客户反馈" class="headerlink" title="客户反馈"></a>客户反馈</h2><p>　　阿狗按照上面的模式运行后，缺少增加了不少客户，可是有的顾客却反应说，为什么一定要我选显卡啊，我又不玩游戏，而且我买的cpu有核显，可以不要我选显卡嘛？阿狗一听，这是个问题啊，遵照客户就是上帝的原则(<font color=orange>有钱就赚原则</font>)，于是他又改了他店铺的模式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 阿狗电脑店</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AGouShop</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *　显卡</span></span><br><span class="line"><span class="comment">     * ＂具体方法＂</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">xianKa</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;客户选了显卡&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否要显卡　　默认是要显卡的</span></span><br><span class="line"><span class="comment">     * ＂钩子方法＂</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isTrue</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *cpu</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">cpu</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *电源</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">dianYuan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *主板</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">zhuBan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *硬盘</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">yingPan</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *内存条</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">neiCun</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *机箱</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">jiXiang</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 阿狗帮客户装电脑</span></span><br><span class="line"><span class="comment">     * 模板方法</span></span><br><span class="line"><span class="comment">     * */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">zhuZHuang</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;阿狗开始组装电脑＝＝＝＝＝＝&quot;</span>);</span><br><span class="line">        <span class="built_in">this</span>.cpu();</span><br><span class="line">        <span class="built_in">this</span>.dianYuan();</span><br><span class="line">        <span class="built_in">this</span>.neiCun();</span><br><span class="line">        <span class="comment">//判断要不要显卡</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">this</span>.isTrue()) &#123;</span><br><span class="line">            <span class="built_in">this</span>.xianKa();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.yingPan();</span><br><span class="line">        <span class="built_in">this</span>.zhuBan();</span><br><span class="line">        <span class="built_in">this</span>.jiXiang();</span><br><span class="line">        System.out.println(<span class="string">&quot;阿狗电脑组装完成＝＝＝＝＝＝&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到上加了<font color=orange>具体方法</font>和<font color=orange>钩子方法</font></p>
+</blockquote>
+<p>上上次的阿猫和大牛，又双来买电脑了－－－－－有钱真好：</p>
+<p>阿猫默认要显卡：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234521-20211008162055559.png" alt="图片"></p>
+<p>大牛不要显卡：<img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234630.png" alt="图片"></p>
+<p>看看他们的电脑吧：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191219234803.png" alt="图片"></p>
+<h2 id="总结一下下"><a href="#总结一下下" class="headerlink" title="总结一下下"></a>总结一下下</h2><p>  上面对比了阿牛的三种买电脑模式</p>
+<ul>
+<li>普通模式：自己只提供最基础的东西，所有的由客户自己去完成</li>
+<li>自己帮客户完成组装电脑：这里就用到了<font color=orange>模板方法模式</font>，通过对自身方法的封装，使客户买电脑更轻松了</li>
+<li>客户有选择显卡的权利：这里用到了<font color=orange>模板方法模式</font>中的<font color=orange>钩子方法</font>，通过客户暴露钩子方法，使其可以控制阿狗在装电脑是要不要装显卡这个步骤方法，<font color=orange>钩子方法</font>是<font color=orange>模板方法模式</font>的灵魂，有了它，这个模式才有更大的意义；</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#设计模式" >
+    <span class="tag-code">设计模式</span>
+  </a>
+
+  <a href="/tags#模板方法模式" >
+    <span class="tag-code">模板方法模式</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/algorithm/array-vs-linked/">
+        <span class="nav-arrow">← </span>
+        
+          恍然大悟，数组和链表的区别
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/docker/docker-transfer-pit/">
+        
+          Docker迁移根目录导致mysql权限问题
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%96%87%E5%89%8D%E5%B8%B8%E8%A7%84%E5%8F%91%E8%A8%80"><span class="toc-nav-text">文前常规发言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%98%BF%E7%8B%97%E5%8D%96%E7%94%B5%E8%84%91"><span class="toc-nav-text">阿狗卖电脑</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9C%89%E6%83%B3%E6%B3%95%E7%9A%84%E9%98%BF%E7%8B%97"><span class="toc-nav-text">有想法的阿狗</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%A2%E6%88%B7%E5%8F%8D%E9%A6%88"><span class="toc-nav-text">客户反馈</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B%E4%B8%8B"><span class="toc-nav-text">总结一下下</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/gof/gof-taemplate-method/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

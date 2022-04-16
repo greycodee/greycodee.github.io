@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/tool/21324399FBDC41CBA815D2069BB62168/">免费全自动SEO优化</a>
+      </h2>
+      <p class="article-date">2021年6月20日</p>
+      
+      <div class="article-summary">
+        
+          0x1 简介怎么让各大站长快速收录你自己网站的链接？那就是主动的推送你自己网站的 URL 到各大站长上去。前几天我写了一个一键提交的工具，可以一键提交你的链接到各大站长上去。你也可以单独使用工具来推送你的 URL、批量 URL 文件、SiteMap 站点地图。工具的github地址是：htt ...
+        
+      </div>
+      <a class="more" href="/tool/21324399FBDC41CBA815D2069BB62168/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/tool/C334612CBDCE41E79F7EA6A2F3F4C10C/">百度、谷歌、必应三大站长API密钥申请流程</a>
+      </h2>
+      <p class="article-date">2021年6月17日</p>
+      
+        
+  <a href="/tags#SEO" >
+    <span class="tag-code">SEO</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Google 索引 API 开通步骤
+点击此链接，然后选择创建项目，点击继续。然后再点击转到“凭据”页面
+
+
+到凭据页面先点击左侧的凭据选项，然后再点击管理服务账号
+
+
+然后再点击创建服务账号
+
+
+然后再填写相关信息，最后点击完成（第三步可不填）
+
+
+
+
+点击图中的电子邮件，然后开始创建密钥 ...
+        
+      </div>
+      <a class="more" href="/tool/C334612CBDCE41E79F7EA6A2F3F4C10C/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/linux/9AFC3EFAEC15479BB5FBC6F670594A94/">后端服务器时间不一致问题解决手册</a>
+      </h2>
+      <p class="article-date">2021年6月15日</p>
+      
+        
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+  <a href="/tags#Time" >
+    <span class="tag-code">Time</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          时区问题一般快 8 小时，慢 8 小时的问题都是时区问题，直接把时区改成 CST 时区
+编辑系统环境变量文件 /etc/profile
+export TZ=&#x27;CST-8&#x27;
+
+Linux 系统时间不同步问题Linux 系统时间比正常时间快几分中或慢几分钟，但是时区是正确的  ...
+        
+      </div>
+      <a class="more" href="/linux/9AFC3EFAEC15479BB5FBC6F670594A94/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/tool/0D992236EC6B4E5EAD15886D992FF84B/">用Darabonba一键生成7种语言的代码</a>
+      </h2>
+      <p class="article-date">2021年6月5日</p>
+      
+        
+  <a href="/tags#Darabonba" >
+    <span class="tag-code">Darabonba</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+0x1 介绍最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。 ...
+        
+      </div>
+      <a class="more" href="/tool/0D992236EC6B4E5EAD15886D992FF84B/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/protocol/0143CD7666CD44389FE6F565E10EEE1A/">什么是HTTP协议？</a>
+      </h2>
+      <p class="article-date">2021年6月4日</p>
+      
+        
+  <a href="/tags#HTTP协议" >
+    <span class="tag-code">HTTP协议</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+版本介绍HTTP 协议不用我多说了吧，大家都知道，现在我 web 开发一般都是使用 HTTP 协议来进行通信的。到目前为止，HTTP 进行了几次版本更新，HTTP 1.1 就是表示HTTP 的 1.1 版本。1.1 版本也是目前大部分网站所用的版本。
+HTTP 0.9
+发布时间：1991  ...
+        
+      </div>
+      <a class="more" href="/protocol/0143CD7666CD44389FE6F565E10EEE1A/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/spring/EEF92888390B4E7C866FE7ADA6A0B42B/">使用Nacos实现网关动态路由</a>
+      </h2>
+      <p class="article-date">2021年5月8日</p>
+      
+        
+  <a href="/tags#Nacos" >
+    <span class="tag-code">Nacos</span>
+  </a>
+
+  <a href="/tags#Spring Cloud Gateway" >
+    <span class="tag-code">Spring Cloud Gateway</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          背景网关作为一个主要的外部流量入口，其重启的次数当然是越少越好，所以不能有时候为了修改一个路由就重启整个网关服务，这样的话网关就不是一个高可用的网关。当然，有时候要新增或修改代码层面的自定义的过滤器时还是要重启网关的，所以我们能做的就是尽可能减少不必要的重启。这里就可以引入阿里巴巴开源的 N ...
+        
+      </div>
+      <a class="more" href="/spring/EEF92888390B4E7C866FE7ADA6A0B42B/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/spring/C2E28AA517AA45768B679D93F248B5DE/">Dubbo项目双注册中心</a>
+      </h2>
+      <p class="article-date">2021年5月7日</p>
+      
+        
+  <a href="/tags#Dubbbo" >
+    <span class="tag-code">Dubbbo</span>
+  </a>
+
+  <a href="/tags#Spring" >
+    <span class="tag-code">Spring</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          🤔为什么要双注册中心？当前 Dubbo 版本注册粒度是以接口粒度来注册的，而 SpringBoot 是以服务为粒度来注册的。而且 Dubbo 有自己的注册中心（当然 Spring Cloud Alibaba Dubbo 的注册中心可以挂靠在 Spring 上）。所以当一个项目既要调用 Du ...
+        
+      </div>
+      <a class="more" href="/spring/C2E28AA517AA45768B679D93F248B5DE/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/spring/9944CC0FEBD34A3EBD04EAA1564F4C3A/">快速搭建一个SpringGateway网关</a>
+      </h2>
+      <p class="article-date">2021年5月7日</p>
+      
+        
+  <a href="/tags#SpringCloud" >
+    <span class="tag-code">SpringCloud</span>
+  </a>
+
+  <a href="/tags#Gateway" >
+    <span class="tag-code">Gateway</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          ☝️搭建脚手架我们可以去 Spring initializer 网站或者用 IDEA 来快速创建出一个 Spring Cloud Gateway 项目。
+这里我们选择的注册中心是 Zookeeper，你也可以自己选择其他的注册中心来注册你的项目，比如阿里巴巴的 Nacos 等。
+
+配置完相关 ...
+        
+      </div>
+      <a class="more" href="/spring/9944CC0FEBD34A3EBD04EAA1564F4C3A/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/protocol/4dd3868b-e23e-4446-b7ec-fd95e98612f4/">telnet使用smtp协议发送qq邮件</a>
+      </h2>
+      <p class="article-date">2021年3月23日</p>
+      
+        
+  <a href="/tags#smtp" >
+    <span class="tag-code">smtp</span>
+  </a>
+
+  <a href="/tags#telnet" >
+    <span class="tag-code">telnet</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          操作步骤
+telnet命令调试QQ邮箱的smtp服务器
+telnet smtp.qq.com 25# 响应Trying 183.3.225.42...Connected to smtp.qq.com.Escape character is &#x27;^]&#x27;.220 newxmes ...
+        
+      </div>
+      <a class="more" href="/protocol/4dd3868b-e23e-4446-b7ec-fd95e98612f4/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/golang/47ca1795-f020-44a6-9847-02ef3955f6c9/">【go库】钉钉机器人</a>
+      </h2>
+      <p class="article-date">2021年3月19日</p>
+      
+        
+  <a href="/tags#Go" >
+    <span class="tag-code">Go</span>
+  </a>
+
+  <a href="/tags#钉钉机器人" >
+    <span class="tag-code">钉钉机器人</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          钉钉机器人 go库
+github地址：https://github.com/greycodee/dingbot
+钉钉官方文档
+快速开始scriptgo get github.com/greycodee/dingbot
+示例程序：
+package mainimport (	&quot;fmt& ...
+        
+      </div>
+      <a class="more" href="/golang/47ca1795-f020-44a6-9847-02ef3955f6c9/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/2/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/4/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

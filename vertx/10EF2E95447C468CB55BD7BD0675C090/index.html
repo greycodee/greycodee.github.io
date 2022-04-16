@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      vertx的web开发学习笔记 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>vertx的web开发学习笔记</h2>
+  <p class="post-date">2021-07-05</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="创建一个-Http-服务"><a href="#创建一个-Http-服务" class="headerlink" title="创建一个 Http 服务"></a>创建一个 Http 服务</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建路由</span></span><br><span class="line"><span class="type">Router</span> <span class="variable">router</span> <span class="operator">=</span> Router.router(vertx);</span><br><span class="line"><span class="comment">// 创建 Http 服务</span></span><br><span class="line">vertx.createHttpServer()</span><br><span class="line">  <span class="comment">// 绑定路由</span></span><br><span class="line">  .requestHandler(router)</span><br><span class="line">  <span class="comment">// 监听端口</span></span><br><span class="line">  .listen(<span class="number">8888</span>)</span><br><span class="line">  <span class="comment">// Http 服务启动成功后调用</span></span><br><span class="line">  .onSuccess(server -&gt;</span><br><span class="line">   		System.out.println(<span class="string">&quot;HTTP server started on port &quot;</span> + server.actualPort())</span><br><span class="line">   );</span><br></pre></td></tr></table></figure>
+
+<h2 id="Router-使用"><a href="#Router-使用" class="headerlink" title="Router 使用"></a>Router 使用</h2><blockquote>
+<p>直接使用上面的路由实例</p>
+</blockquote>
+<h3 id="创建请求路由"><a href="#创建请求路由" class="headerlink" title="创建请求路由"></a>创建请求路由</h3><ul>
+<li><p>创建 Get 请求路由</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">router</span><br><span class="line">  .get(<span class="string">&quot;/test&quot;</span>)</span><br><span class="line">  .respond(</span><br><span class="line">    <span class="comment">// 响应逻辑</span></span><br><span class="line">  )</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">router</span><br><span class="line">  .route(HttpMethod.GET, <span class="string">&quot;/test&quot;</span>)</span><br><span class="line">  .respond(</span><br><span class="line">    <span class="comment">// 响应逻辑</span></span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建 Post 请求路由</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">router</span><br><span class="line">  .post(<span class="string">&quot;/test&quot;</span>)</span><br><span class="line">  .respond(</span><br><span class="line">		<span class="comment">// 响应逻辑</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">router</span><br><span class="line">  .post(HttpMethod.POST, <span class="string">&quot;/test&quot;</span>)</span><br><span class="line">  .respond(</span><br><span class="line">		<span class="comment">// 响应逻辑</span></span><br><span class="line">	)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="获取参数"><a href="#获取参数" class="headerlink" title="获取参数"></a>获取参数</h3><ul>
+<li><p>获取 URL 参数</p>
+<blockquote>
+<p>请求地址示例：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://localhost:8080/get?param=greycode">http://localhost:8080/get?param=greycode</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">router.get(<span class="string">&quot;/get&quot;</span>).handler(context-&gt; </span><br><span class="line">		&#123;</span><br><span class="line">				<span class="type">String</span> <span class="variable">param</span> <span class="operator">=</span> context.request().getParam(<span class="string">&quot;param&quot;</span>);</span><br><span class="line">				System.out.println(param);</span><br><span class="line">		&#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制台打印</span></span><br><span class="line">greycode</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取 REST 风格的地址参数</p>
+<blockquote>
+<p>请求地址示例：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://localhost:8080/get/greycode">http://localhost:8080/get/greycode</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">router.get(<span class="string">&quot;/get/:param&quot;</span>).handler(context-&gt; </span><br><span class="line">		&#123;</span><br><span class="line">				<span class="type">String</span> <span class="variable">param</span> <span class="operator">=</span> context.pathParam(<span class="string">&quot;param&quot;</span>);</span><br><span class="line">				System.out.println(param);</span><br><span class="line">		&#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制台打印</span></span><br><span class="line">greycode</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取  Body 数据</p>
+<blockquote>
+<p>请求地址示例：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://localhost:8080/post">http://localhost:8080/post</a>	</p>
+<p>请求数据：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"> <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;greycode&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在获取数据前，一定要执行这行代码</span></span><br><span class="line"><span class="comment">// 否则就会报：警告: BodyHandler in not enabled on this route: RoutingContext.getBodyAsJson() in always be NULL‘</span></span><br><span class="line">router.route().handler(BodyHandler.create());</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">&quot;/post&quot;</span>).handler(context-&gt;&#123;</span><br><span class="line">  	<span class="type">JsonObject</span> <span class="variable">body</span> <span class="operator">=</span> context.getBodyAsJson();</span><br><span class="line">  	System.out.println(body.toString());</span><br><span class="line">	&#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制台打印</span></span><br><span class="line">&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;greycode&quot;</span>&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">router.get(<span class="string">&quot;/get&quot;</span>).handler(context-&gt;</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;模拟错误&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line">.failureHandler(context-&gt; &#123;</span><br><span class="line">    <span class="comment">// 发生异常时执行的代码</span></span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Vert.x" >
+    <span class="tag-code">Vert.x</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/74CAAAFD610241A1B8ECDB5F3BB33EE4/">
+        <span class="nav-arrow">← </span>
+        
+          Java删除文件后电脑磁盘空间没有恢复
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/code/FFC3580D7E244B5282E3FDD7F3EB8E95/">
+        
+          开发SaaS应用的12条准则【转】
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-Http-%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">创建一个 Http 服务</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Router-%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">Router 使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%9B%E5%BB%BA%E8%AF%B7%E6%B1%82%E8%B7%AF%E7%94%B1"><span class="toc-nav-text">创建请求路由</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0"><span class="toc-nav-text">获取参数</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-nav-text">异常处理</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/vertx/10EF2E95447C468CB55BD7BD0675C090/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

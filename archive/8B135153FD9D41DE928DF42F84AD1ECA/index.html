@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Redis是怎样通讯的？ | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Redis是怎样通讯的？</h2>
+  <p class="post-date">2022-03-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>Redis 协议模型就是简单的请求-响应模型，和平常的 Http 协议有点类似。客户端发送 Redis 命令，然后服务端处理命令并返回结果给客户端。Redis 官方说这可能是最简单的网络协议模型了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2022/04/15/image-20220415110028732.png" alt="image-20220415110028732"></p>
+<p>有两种情况下不 不适用这个模型，一个是批量流水线命令，一个是发布&#x2F;订阅功能。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2022/04/15/image-20220415110051982.png" alt="image-20220415110051982"></p>
+<h2 id="协议描述"><a href="#协议描述" class="headerlink" title="协议描述"></a>协议描述</h2><p>Redis 协议一般简单的分为 5 类数据结构，简单字符串、错误信息、数值、大字符串、数组。每种数据类型在第一个字节用不同的符号来区分：</p>
+<ul>
+<li>**简单字符串(Simple Strings)**：开头第一个符号为 <code>+</code>，对应 HEX 值为：<code>0x2b</code></li>
+<li>**错误信息(Errors)**：第一个字节符号为 <code>-</code>，对应 HEX 值为：<code>0x2d</code></li>
+<li>**数值(Integers)**：第一个字节符号为 <code>:</code>，对应 HEX 值为：<code>0x3a</code></li>
+<li>**大字符串(Bulk Strings)**：第一个字节符号为 <code>$</code>，对应 HEX 值为：<code>0x24</code></li>
+<li>**数组(Arrays)**：第一个字节符号为 <code>*</code>，对应 HEX 值为：<code>0x2a</code></li>
+</ul>
+<p>这 5 种数据类型可以组合起来使用，每种数据类型通过 <strong>CRLF</strong> 结尾，就是平常的 <code>\r\n</code>，对应的 HEX 值为：<code>0x0d,0x0a</code>。一般我们判断一种数据类型是否结束时，只要判断是否有 <code>\r</code> 出现就可以了。Redis 客户端和服务端之间就是通过这些规则来进行通信的。</p>
+<h3 id="简单字符串"><a href="#简单字符串" class="headerlink" title="简单字符串"></a>简单字符串</h3><p>一般简单字符串用于返回 Redis 服务端的系统响应，如果要响应用户存储的数据时，一般会用大字符串(Bulk Strings)的数据类型来返回。</p>
+<p>比如说客户端发送 set 命令新增一个 Key 来存储字符串，此时客户端就会返回 <code>+OK</code>。这种方式返回的数据不能有空格和换行，因为空格和换行表示该类型的数据结尾。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;<span class="built_in">set</span> name 灰灰</span><br><span class="line"><span class="string">&quot;OK&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 服务端响应数据</span></span><br><span class="line">0000  2b 4f 4b 0d 0a                                     +OK··</span><br></pre></td></tr></table></figure>
+
+<h3 id="错误信息"><a href="#错误信息" class="headerlink" title="错误信息"></a>错误信息</h3><p>当我们执行的命令发生错误时，Redis 服务端就会返回错误信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;incr name</span><br><span class="line"><span class="string">&quot;ERR value is not an integer or out of range&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 服务端响应数据</span></span><br><span class="line">0000  2d 45 52 52 20 76 61 6c  75 65 20 69 73 20 6e 6f   -ERR val ue is no</span><br><span class="line">0010  74 20 61 6e 20 69 6e 74  65 67 65 72 20 6f 72 20   t an int eger or </span><br><span class="line">0020  6f 75 74 20 6f 66 20 72  61 6e 67 65 0d 0a         out of r ange··</span><br></pre></td></tr></table></figure>
+
+<h3 id="数值"><a href="#数值" class="headerlink" title="数值"></a>数值</h3><p>返回数值的其中一种情况就是执行 <code>exists</code> 命令来判断某个 Key 存不存在，返回 1 表示存在，返回 0 表示不存在</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;exists name</span><br><span class="line"><span class="string">&quot;1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 服务端响应数据</span></span><br><span class="line">0000  3a 31 0d 0a                                        :1··</span><br><span class="line">---------------------------------------------------------------</span><br><span class="line">redis:0&gt;exists hui</span><br><span class="line"><span class="string">&quot;0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 服务端响应数据</span></span><br><span class="line">0000   3a 30 0d 0a                                       :0..</span><br></pre></td></tr></table></figure>
+
+<h3 id="大字符串"><a href="#大字符串" class="headerlink" title="大字符串"></a>大字符串</h3><p>大字符串返回值有两部分组成，一部分是表示字符串长度的数据，一部分是字符串本身数据。它由 <code>$</code> 符号开头，后面跟着的是表示字符串长度的数据，<strong>该数值直接用字符串的形式表示</strong>，也就说读取该字节数据的时候，要用读取字符串数据的方式来读取。读取完后再转换为数值数据，然后再根据这个数值来读取相对应长度的字节数据。这样数据中就可以包含空格和换行了，因为是根据开头的长度数值来读取相对应的字节数据的，而不是通过判断 <code>\r\n</code> 符号来读取。</p>
+<p>比如客户端获取前面设置的 Key 为 name 的数据：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;get name</span><br><span class="line"><span class="string">&quot;灰灰&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 服务端响应数据</span></span><br><span class="line">0000   24 36 0d 0a e7 81 b0 e7 81 b0 0d 0a               <span class="variable">$6</span>..........</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>e7 81 b0 e7 81 b0</code> 就是 <code>灰灰</code> 字符的字节数据</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>当服务端返回数组数据时，它由 <code>*</code> 符号开头，后面紧跟着的是这个数值的长度，和大字符串的字节长度一样，该长度也是以字符串的形式返回。数组中的每个元素再通过相对应的数据类型来表示。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*2</span><br><span class="line">+value1</span><br><span class="line">+value2</span><br><span class="line"></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">*3</span><br><span class="line">:22</span><br><span class="line">:52</span><br><span class="line">:99</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当然也可以表示嵌套数组</span></span><br><span class="line">*2</span><br><span class="line">*1</span><br><span class="line">:123</span><br><span class="line">*2</span><br><span class="line">:433</span><br><span class="line">:92</span><br></pre></td></tr></table></figure>
+
+<p>比如客户端设置一个 list 数据，然后获取它</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;lpush mylist value1 value2</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 list</span></span><br><span class="line">redis:0&gt;lrange mylist 0 1</span><br><span class="line">[<span class="string">&quot;value2&quot;</span>,<span class="string">&quot;value1&quot;</span>]</span><br><span class="line"></span><br><span class="line">0000   2a 32 0d 0a 24 36 0d 0a 76 61 6c 75 65 32 0d 0a   *2..<span class="variable">$6</span>..value2..</span><br><span class="line">0010   24 36 0d 0a 76 61 6c 75 65 31 0d 0a               <span class="variable">$6</span>..value1..</span><br></pre></td></tr></table></figure>
+
+<h2 id="发送命令"><a href="#发送命令" class="headerlink" title="发送命令"></a>发送命令</h2><p>当客户端发送命令给服务端时，客户端一般会把命令组装成上面的<strong>数组</strong>加<strong>大字符串</strong>的数据格式再发送给服务端。比如上面的我们发送一个简单的新增一个 Key 命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;<span class="built_in">set</span> name 灰灰</span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户端发送给服务端端数据</span></span><br><span class="line">0000   2a 33 0d 0a 24 33 0d 0a 73 65 74 0d 0a 24 34 0d   *3..<span class="variable">$3</span>..<span class="built_in">set</span>..<span class="variable">$4</span>.</span><br><span class="line">0010   0a 6e 61 6d 65 0d 0a 24 36 0d 0a e7 81 b0 e7 81   .name..<span class="variable">$6</span>.......</span><br><span class="line">0020   b0 0d 0a                                          ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Redis-数据结构"><a href="#Redis-数据结构" class="headerlink" title="Redis 数据结构"></a>Redis 数据结构</h2><p>Redis 一般常用的有 5 种数据类型，下面看看 5 种数据类型对应的客户端和服务端之间的数据是怎么交互的。</p>
+<h3 id="字符串-String"><a href="#字符串-String" class="headerlink" title="字符串 String"></a>字符串 String</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;<span class="built_in">set</span> name greycode</span><br><span class="line"></span><br><span class="line">0000   2a 33 0d 0a 24 33 0d 0a 73 65 74 0d 0a 24 34 0d   *3..<span class="variable">$3</span>..<span class="built_in">set</span>..<span class="variable">$4</span>.</span><br><span class="line">0010   0a 6e 61 6d 65 0d 0a 24 38 0d 0a 67 72 65 79 63   .name..<span class="variable">$8</span>..greyc</span><br><span class="line">0020   6f 64 65 0d 0a                                    ode..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   2b 4f 4b 0d 0a                                    +OK..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;get name</span><br><span class="line"></span><br><span class="line">0000   2a 32 0d 0a 24 33 0d 0a 67 65 74 0d 0a 24 34 0d   *2..<span class="variable">$3</span>..get..<span class="variable">$4</span>.</span><br><span class="line">0010   0a 6e 61 6d 65 0d 0a                              .name..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   24 38 0d 0a 67 72 65 79 63 6f 64 65 0d 0a         <span class="variable">$8</span>..greycode..</span><br></pre></td></tr></table></figure>
+
+<h3 id="哈希表-Hash"><a href="#哈希表-Hash" class="headerlink" title="哈希表 Hash"></a>哈希表 Hash</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;hset myHash name huihui</span><br><span class="line"></span><br><span class="line">0000   2a 34 0d 0a 24 34 0d 0a 68 73 65 74 0d 0a 24 36   *4..<span class="variable">$4</span>..hset..<span class="variable">$6</span></span><br><span class="line">0010   0d 0a 6d 79 48 61 73 68 0d 0a 24 34 0d 0a 6e 61   ..myHash..<span class="variable">$4</span>..na</span><br><span class="line">0020   6d 65 0d 0a 24 36 0d 0a 68 75 69 68 75 69 0d 0a   me..<span class="variable">$6</span>..huihui..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   3a 31 0d 0a                                       :1..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;hget myHash name</span><br><span class="line"></span><br><span class="line">0000   2a 33 0d 0a 24 34 0d 0a 68 67 65 74 0d 0a 24 36   *3..<span class="variable">$4</span>..hget..<span class="variable">$6</span></span><br><span class="line">0010   0d 0a 6d 79 48 61 73 68 0d 0a 24 34 0d 0a 6e 61   ..myHash..<span class="variable">$4</span>..na</span><br><span class="line">0020   6d 65 0d 0a                                       me..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   24 36 0d 0a 68 75 69 68 75 69 0d 0a               <span class="variable">$6</span>..huihui..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;hgetall myHash</span><br><span class="line"></span><br><span class="line">0000   2a 32 0d 0a 24 37 0d 0a 68 67 65 74 61 6c 6c 0d   *2..<span class="variable">$7</span>..hgetall.</span><br><span class="line">0010   0a 24 36 0d 0a 6d 79 48 61 73 68 0d 0a            .<span class="variable">$6</span>..myHash..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   2a 32 0d 0a 24 34 0d 0a 6e 61 6d 65 0d 0a 24 36   *2..<span class="variable">$4</span>..name..<span class="variable">$6</span></span><br><span class="line">0010   0d 0a 68 75 69 68 75 69 0d 0a                     ..huihui..</span><br></pre></td></tr></table></figure>
+
+<h3 id="列表-List"><a href="#列表-List" class="headerlink" title="列表 List"></a>列表 List</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;lpush lists huihui greycode</span><br><span class="line"></span><br><span class="line">0000   2a 34 0d 0a 24 35 0d 0a 6c 70 75 73 68 0d 0a 24   *4..<span class="variable">$5</span>..lpush..$</span><br><span class="line">0010   35 0d 0a 6c 69 73 74 73 0d 0a 24 36 0d 0a 68 75   5..lists..<span class="variable">$6</span>..hu</span><br><span class="line">0020   69 68 75 69 0d 0a 24 38 0d 0a 67 72 65 79 63 6f   ihui..<span class="variable">$8</span>..greyco</span><br><span class="line">0030   64 65 0d 0a                                       de..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   3a 32 0d 0a                                       :2..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;lrange lists 0 1</span><br><span class="line"></span><br><span class="line">0000   2a 34 0d 0a 24 36 0d 0a 6c 72 61 6e 67 65 0d 0a   *4..<span class="variable">$6</span>..lrange..</span><br><span class="line">0010   24 35 0d 0a 6c 69 73 74 73 0d 0a 24 31 0d 0a 30   <span class="variable">$5</span>..lists..<span class="variable">$1</span>..0</span><br><span class="line">0020   0d 0a 24 31 0d 0a 31 0d 0a                        ..<span class="variable">$1</span>..1..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   2a 32 0d 0a 24 38 0d 0a 67 72 65 79 63 6f 64 65   *2..<span class="variable">$8</span>..greycode</span><br><span class="line">0010   0d 0a 24 36 0d 0a 68 75 69 68 75 69 0d 0a         ..<span class="variable">$6</span>..huihui..</span><br></pre></td></tr></table></figure>
+
+<h3 id="集合-Set"><a href="#集合-Set" class="headerlink" title="集合 Set"></a>集合 Set</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;sadd myset hello hi</span><br><span class="line"></span><br><span class="line">0000   2a 34 0d 0a 24 34 0d 0a 73 61 64 64 0d 0a 24 35   *4..<span class="variable">$4</span>..sadd..<span class="variable">$5</span></span><br><span class="line">0010   0d 0a 6d 79 73 65 74 0d 0a 24 35 0d 0a 68 65 6c   ..myset..<span class="variable">$5</span>..hel</span><br><span class="line">0020   6c 6f 0d 0a 24 32 0d 0a 68 69 0d 0a               lo..<span class="variable">$2</span>..hi..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   3a 32 0d 0a                                       :2..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;smembers myset</span><br><span class="line"></span><br><span class="line">0000   2a 32 0d 0a 24 38 0d 0a 73 6d 65 6d 62 65 72 73   *2..<span class="variable">$8</span>..smembers</span><br><span class="line">0010   0d 0a 24 35 0d 0a 6d 79 73 65 74 0d 0a            ..<span class="variable">$5</span>..myset..</span><br><span class="line"></span><br><span class="line"><span class="comment">#响应</span></span><br><span class="line">0000   2a 32 0d 0a 24 35 0d 0a 68 65 6c 6c 6f 0d 0a 24   *2..<span class="variable">$5</span>..hello..$</span><br><span class="line">0010   32 0d 0a 68 69 0d 0a                              2..hi..</span><br></pre></td></tr></table></figure>
+
+<h3 id="有序集合-ZSet"><a href="#有序集合-ZSet" class="headerlink" title="有序集合 ZSet"></a>有序集合 ZSet</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis:0&gt;zadd myZset 1 hello 2 world</span><br><span class="line"></span><br><span class="line">0000   2a 36 0d 0a 24 34 0d 0a 7a 61 64 64 0d 0a 24 36   *6..<span class="variable">$4</span>..zadd..<span class="variable">$6</span></span><br><span class="line">0010   0d 0a 6d 79 5a 73 65 74 0d 0a 24 31 0d 0a 31 0d   ..myZset..<span class="variable">$1</span>..1.</span><br><span class="line">0020   0a 24 35 0d 0a 68 65 6c 6c 6f 0d 0a 24 31 0d 0a   .<span class="variable">$5</span>..hello..<span class="variable">$1</span>..</span><br><span class="line">0030   32 0d 0a 24 35 0d 0a 77 6f 72 6c 64 0d 0a         2..<span class="variable">$5</span>..world..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   3a 32 0d 0a                                       :2..</span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line">redis:0&gt;zrange myset 0 -1</span><br><span class="line"></span><br><span class="line">0000   2a 34 0d 0a 24 36 0d 0a 7a 72 61 6e 67 65 0d 0a   *4..<span class="variable">$6</span>..zrange..</span><br><span class="line">0010   24 36 0d 0a 6d 79 5a 73 65 74 0d 0a 24 31 0d 0a   <span class="variable">$6</span>..myZset..<span class="variable">$1</span>..</span><br><span class="line">0020   30 0d 0a 24 32 0d 0a 2d 31 0d 0a                  0..<span class="variable">$2</span>..-1..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line">0000   2a 32 0d 0a 24 35 0d 0a 68 65 6c 6c 6f 0d 0a 24   *2..<span class="variable">$5</span>..hello..$</span><br><span class="line">0010   35 0d 0a 77 6f 72 6c 64 0d 0a                     5..world..</span><br></pre></td></tr></table></figure>
+
+<h2 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h2><p>Redis 执行 Pipeline 命令，可以一次用一个数据包发送多条命令，然后服务端在把所有命令的执行结果打包成一个数据包返回给客户端，这样在执行大量命令的时候可以减少系统开销。比如我们要执行 <code>set num 998</code> 和 <code>incr num</code> 这两条命令，那么我们就可以把这两条命令分别组装然后拼接在一起发送给服务端。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">0000   2a 33 0d 0a 24 33 0d 0a 73 65 74 0d 0a 24 33 0d   *3..<span class="variable">$3</span>..<span class="built_in">set</span>..<span class="variable">$3</span>.</span><br><span class="line">0010   0a 6e 75 6d 0d 0a 24 33 0d 0a 39 39 38 0d 0a 2a   .num..<span class="variable">$3</span>..998..*</span><br><span class="line">0020   32 0d 0a 24 34 0d 0a 69 6e 63 72 0d 0a 24 33 0d   2..<span class="variable">$4</span>..incr..<span class="variable">$3</span>.</span><br><span class="line">0030   0a 6e 75 6d 0d 0a                                 .num..</span><br></pre></td></tr></table></figure>
+
+<p>服务端接收到数据包后，处理每条命令，然后把结果打包返回。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">0000   2b 4f 4b 0d 0a 3a 39 39 39 0d 0a                  +OK..:999..</span><br></pre></td></tr></table></figure>
+
+<p>其中， <code>set num 998</code>  命令的结果为：OK</p>
+<p><code>incr num</code>  的结果为：999</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>了解了以上交互协议的规则后，我们就可以自己手写一个 Redis 客户端来与 Redis 服务器通讯了。</p>
+<p>完整代码地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://gist.github.com/greycodee/4a102aa9ae689aea1874b1fe06190192">https://gist.github.com/greycodee/4a102aa9ae689aea1874b1fe06190192</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Redis" >
+    <span class="tag-code">Redis</span>
+  </a>
+
+  <a href="/tags#协议" >
+    <span class="tag-code">协议</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/archive/2852F14D7D13471798CE28C544741E89/">
+        <span class="nav-arrow">← </span>
+        
+          MySQL是怎样通讯的？
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/7F482D9706354A288702DCCB66C81BF2/">
+        
+          【译】为什么 Web 3.0 很重要，你应该知道
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="toc-nav-text">模型</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8D%8F%E8%AE%AE%E6%8F%8F%E8%BF%B0"><span class="toc-nav-text">协议描述</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%AE%80%E5%8D%95%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-nav-text">简单字符串</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF"><span class="toc-nav-text">错误信息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E5%80%BC"><span class="toc-nav-text">数值</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%A4%A7%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-nav-text">大字符串</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-nav-text">数组</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81%E5%91%BD%E4%BB%A4"><span class="toc-nav-text">发送命令</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-nav-text">Redis 数据结构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-String"><span class="toc-nav-text">字符串 String</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8-Hash"><span class="toc-nav-text">哈希表 Hash</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%97%E8%A1%A8-List"><span class="toc-nav-text">列表 List</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%9B%86%E5%90%88-Set"><span class="toc-nav-text">集合 Set</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88-ZSet"><span class="toc-nav-text">有序集合 ZSet</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Pipeline"><span class="toc-nav-text">Pipeline</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">代码实现</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/8B135153FD9D41DE928DF42F84AD1ECA/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      递归算法-获取json中指定key的所有值 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>递归算法-获取json中指定key的所有值</h2>
+  <p class="post-date">2019-08-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>今天在工作中遇到要解析json并获取json里所有指定key的值，再把key的值插入对应的数据映射表。于是写了一个递归算法来取值。</p>
+<h2 id="1-首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包"><a href="#1-首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包" class="headerlink" title="1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包"></a>1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;<span class="number">1.2</span><span class="number">.58</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="2-创建两个工具类方法，用来判断传入的是不是json对象或json数组"><a href="#2-创建两个工具类方法，用来判断传入的是不是json对象或json数组" class="headerlink" title="2.创建两个工具类方法，用来判断传入的是不是json对象或json数组"></a>2.创建两个工具类方法，用来判断传入的是不是json对象或json数组</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isJSONObj</span><span class="params">(Object json)</span>&#123;</span><br><span class="line">   <span class="keyword">return</span> json <span class="keyword">instanceof</span> JSONObject;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isJSONArray</span><span class="params">(Object json)</span>&#123;</span><br><span class="line">   <span class="keyword">return</span> json <span class="keyword">instanceof</span> JSONArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>java中的instanceof也称为类型比较运算符，因为它将实例与类型进行比较。它返回true或false。</p>
+</blockquote>
+<h2 id="3-建立核心重载方法"><a href="#3-建立核心重载方法" class="headerlink" title="3.建立核心重载方法"></a>3.建立核心重载方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">getJSONValue</span><span class="params">(JSONObject json,String k,List&lt;String&gt; list)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Object j:json.keySet())&#123;</span><br><span class="line">        <span class="keyword">if</span>(isJSONObj(json.get(j)))&#123;</span><br><span class="line">            <span class="comment">//是对象</span></span><br><span class="line">            JSONObject j2= JSON.parseObject(json.get(j).toString());</span><br><span class="line">            getJSONValue(j2,k,list);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(isJSONArray(json.get(j)))&#123;</span><br><span class="line">            JSONArray j3=JSON.parseArray(json.get(j).toString());</span><br><span class="line">            <span class="comment">//是数组</span></span><br><span class="line">            getJSONValue(j3,k,list);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(j==k)&#123;</span><br><span class="line">            <span class="comment">//是字符串</span></span><br><span class="line">            list.add(json.get(j).toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">getJSONValue</span><span class="params">(JSONArray json,String k,List&lt;String&gt; list)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Object j:json)&#123;</span><br><span class="line">        <span class="keyword">if</span>(isJSONObj(j))&#123;</span><br><span class="line">            <span class="comment">//是对象</span></span><br><span class="line">            JSONObject j2= JSON.parseObject(j.toString());</span><br><span class="line">            getJSONValue(j2,k,list);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(isJSONArray(j))&#123;</span><br><span class="line">            <span class="comment">//是数组</span></span><br><span class="line">            JSONArray j3=JSON.parseArray(j.toString());</span><br><span class="line">            getJSONValue(j3,k,list);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"><a href="#4-接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的" class="headerlink" title="4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的"></a>4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的</h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://xhh.dengzii.com/blog/demojson.txt">示例json</a></p>
+<h2 id="5-调用方法"><a href="#5-调用方法" class="headerlink" title="5.调用方法"></a>5.调用方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    File file=<span class="keyword">new</span> <span class="title class_">File</span>(demo1.class.getResource(<span class="string">&quot;/2.json&quot;</span>).getPath());</span><br><span class="line">    FileInputStream fileInputStream=<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(file);</span><br><span class="line">    InputStreamReader inputStreamReader=<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(fileInputStream);</span><br><span class="line">    BufferedReader bufferedReader=<span class="keyword">new</span> <span class="title class_">BufferedReader</span>(inputStreamReader);</span><br><span class="line">    String line=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    StringBuffer json=<span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line">    <span class="keyword">while</span> ((line=bufferedReader.readLine())!=<span class="literal">null</span>)&#123;</span><br><span class="line">        json.append(line);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    JSONObject j3=JSON.parseObject(json.toString());</span><br><span class="line">    List&lt;String&gt; mid=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    getJSONValue(j3,<span class="string">&quot;interfaceId&quot;</span>,mid);</span><br><span class="line">    System.out.println(mid.toString());</span><br><span class="line">&#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">    System.out.println(e.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-成功获取"><a href="#6-成功获取" class="headerlink" title="6.成功获取"></a>6.成功获取</h2><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/vLZi5z5.png" alt="控制台返回"></p>
+<blockquote>
+<p>demo源码地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/z573419235/studyDemo">https://github.com/z573419235/studyDemo</a></p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Recursive" >
+    <span class="tag-code">Recursive</span>
+  </a>
+
+  <a href="/tags#Algorithm" >
+    <span class="tag-code">Algorithm</span>
+  </a>
+
+  <a href="/tags#Json" >
+    <span class="tag-code">Json</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/problem-java-base64/">
+        <span class="nav-arrow">← </span>
+        
+          Base64影响泰文字段取值问题
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/java/java-isnull-four/">
+        
+          Java中String判断为空的4大方法比较
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-%E9%A6%96%E5%85%88%E5%AF%BC%E5%85%A5alibaba%E7%9A%84fastjson%EF%BC%8C%E7%94%A8%E6%9D%A5%E8%A7%A3%E6%9E%90json%E3%80%82%E5%BD%93%E7%84%B6%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%85%B6%E4%BB%96%E7%9A%84%E8%A7%A3%E6%9E%90%E5%8C%85"><span class="toc-nav-text">1.首先导入alibaba的fastjson，用来解析json。当然也可以用其他的解析包</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%96%B9%E6%B3%95%EF%BC%8C%E7%94%A8%E6%9D%A5%E5%88%A4%E6%96%AD%E4%BC%A0%E5%85%A5%E7%9A%84%E6%98%AF%E4%B8%8D%E6%98%AFjson%E5%AF%B9%E8%B1%A1%E6%88%96json%E6%95%B0%E7%BB%84"><span class="toc-nav-text">2.创建两个工具类方法，用来判断传入的是不是json对象或json数组</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-%E5%BB%BA%E7%AB%8B%E6%A0%B8%E5%BF%83%E9%87%8D%E8%BD%BD%E6%96%B9%E6%B3%95"><span class="toc-nav-text">3.建立核心重载方法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-%E6%8E%A5%E4%B8%8B%E6%9D%A5%E5%86%99%E4%B8%80%E4%B8%AA%E6%AF%94%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84json%EF%BC%8C%E9%87%8C%E9%9D%A2%E6%9C%89%E5%AF%B9%E8%B1%A1%E5%B5%8C%E5%A5%97%E6%95%B0%E7%BB%84%E7%9A%84%EF%BC%8C%E6%95%B0%E7%BB%84%E5%B5%8C%E5%A5%97%E5%AF%B9%E8%B1%A1%E7%9A%84%EF%BC%8C%E6%95%B0%E7%BB%84%E5%B5%8C%E5%A5%97%E6%95%B0%E7%BB%84%E7%9A%84"><span class="toc-nav-text">4.接下来写一个比较复杂的json，里面有对象嵌套数组的，数组嵌套对象的，数组嵌套数组的</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-nav-text">5.调用方法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-%E6%88%90%E5%8A%9F%E8%8E%B7%E5%8F%96"><span class="toc-nav-text">6.成功获取</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/algorithm/algorithm-recursive-01/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

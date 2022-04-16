@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      【go库】钉钉机器人 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>【go库】钉钉机器人</h2>
+  <p class="post-date">2021-03-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>钉钉机器人 go库</p>
+<p>github地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/greycodee/dingbot">https://github.com/greycodee/dingbot</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://developers.dingtalk.com/document/app/custom-robot-access">钉钉官方文档</a></p>
+<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="code"><pre><span class="line">go get github.com/greycodee/dingbot</span><br></pre></td></tr></table></figure>
+<p>示例程序：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/greycodee/dingbot&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/greycodee/dingbot/message&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bot:= dingbot.DingBot&#123;</span><br><span class="line">		Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">		AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	msg := message.Message&#123;</span><br><span class="line">		MsgType: message.TextStr,</span><br><span class="line">		Text:    message.Text_&#123;</span><br><span class="line">			Content: <span class="string">&quot;go-钉钉机器人测试&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	bot.Send(msg)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="消息支持"><a href="#消息支持" class="headerlink" title="消息支持"></a>消息支持</h2><ul>
+<li><input checked="" disabled="" type="checkbox"> text类型</li>
+<li><input checked="" disabled="" type="checkbox"> link类型</li>
+<li><input checked="" disabled="" type="checkbox"> markdown类型</li>
+<li><input checked="" disabled="" type="checkbox"> 整体跳转ActionCard类型</li>
+<li><input checked="" disabled="" type="checkbox"> 独立跳转ActionCard类型</li>
+<li><input checked="" disabled="" type="checkbox"> FeedCard类型</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="发送Text消息"><a href="#发送Text消息" class="headerlink" title="发送Text消息"></a>发送Text消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bot:= dingbot.DingBot&#123;</span><br><span class="line">		Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">		AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	msg := message.Message&#123;</span><br><span class="line">        MsgType: message.TextStr,</span><br><span class="line">        Text:    message.Text_&#123;</span><br><span class="line">            Content: <span class="string">&quot;go-钉钉机器人测试&quot;</span>,</span><br><span class="line">            At: message.At_&#123;</span><br><span class="line">                AtMobiles: []<span class="type">string</span>&#123;<span class="string">&quot;188xxxxxxxx&quot;</span>&#125;,</span><br><span class="line">                IsAtAll:   <span class="literal">false</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">	bot.Send(msg)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送link类型消息"><a href="#发送link类型消息" class="headerlink" title="发送link类型消息"></a>发送link类型消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bot:= dingbot.DingBot&#123;</span><br><span class="line">		Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">		AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	msg := message.Message&#123;</span><br><span class="line">        MsgType: message.LinkStr,</span><br><span class="line">        Link: message.Link_&#123;</span><br><span class="line">            Text:       <span class="string">&quot;link测试123123&quot;</span>,</span><br><span class="line">            Title:      <span class="string">&quot;go钉钉机器人&quot;</span>,</span><br><span class="line">            PicUrl:     <span class="string">&quot;&quot;</span>,</span><br><span class="line">            MessageUrl: <span class="string">&quot;https://developers.dingtalk.com/document/app/custom-robot-access/title-72m-8ag-pqw&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    		</span><br><span class="line">    &#125;</span><br><span class="line">	bot.Send(msg)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送markdown类型消息"><a href="#发送markdown类型消息" class="headerlink" title="发送markdown类型消息"></a>发送markdown类型消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bot:= dingbot.DingBot&#123;</span><br><span class="line">		Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">		AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	msg := message.Message&#123;</span><br><span class="line">        MsgType: message.MarkdownStr,</span><br><span class="line">        Markdown: message.Markdown_&#123;</span><br><span class="line">            Title: <span class="string">&quot;go钉钉&quot;</span>,</span><br><span class="line">            Text:  <span class="string">&quot;## go钉钉测试 @188xxxxxxxx \n&gt;文本123&quot;</span>,</span><br><span class="line">            At:    message.At_&#123;</span><br><span class="line">                AtMobiles: []<span class="type">string</span>&#123;<span class="string">&quot;188xxxxxxxx&quot;</span>&#125;,</span><br><span class="line">                IsAtAll:   <span class="literal">false</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    		</span><br><span class="line">    &#125;</span><br><span class="line">	bot.Send(msg)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送整体跳转ActionCard类型消息"><a href="#发送整体跳转ActionCard类型消息" class="headerlink" title="发送整体跳转ActionCard类型消息"></a>发送整体跳转ActionCard类型消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bot:= dingbot.DingBot&#123;</span><br><span class="line">		Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">		AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	msg := message.Message&#123;</span><br><span class="line">        MsgType: message.ActionCardStr,</span><br><span class="line">        ActionCard: message.ActionCard_&#123;</span><br><span class="line">            Title:          <span class="string">&quot;ActionCard整体跳转11&quot;</span>,</span><br><span class="line">            Text:           <span class="string">&quot;ActionCardt整体跳转1223&quot;</span>,</span><br><span class="line">            SingleTitle:    <span class="string">&quot;阅读全文&quot;</span>,</span><br><span class="line">            SingleURL:      <span class="string">&quot;https://developers.dingtalk.com/document/app/custom-robot-access/title-72m-8ag-pqw&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">	bot.Send(msg)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送独立跳转ActionCard类型消息"><a href="#发送独立跳转ActionCard类型消息" class="headerlink" title="发送独立跳转ActionCard类型消息"></a>发送独立跳转ActionCard类型消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">    bot:= dingbot.DingBot&#123;</span><br><span class="line">        Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">        AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    msg := message.Message&#123;</span><br><span class="line">        MsgType: message.ActionCardStr,</span><br><span class="line">        ActionCard: message.ActionCard_&#123;</span><br><span class="line">            Title:          <span class="string">&quot;ActionCard跳转11&quot;</span>,</span><br><span class="line">            Text:           <span class="string">&quot;ActionCardt跳转1223&quot;</span>,</span><br><span class="line">            BtnOrientation: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">            HideAvatar:     <span class="string">&quot;0&quot;</span>,</span><br><span class="line">            BtnS:           []message.Btn_&#123;</span><br><span class="line">                &#123;</span><br><span class="line">                    Title:     <span class="string">&quot;按钮1&quot;</span>,</span><br><span class="line">                    ActionURL: <span class="string">&quot;https://developers.dingtalk.com/&quot;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    Title:     <span class="string">&quot;按钮2&quot;</span>,</span><br><span class="line">                    ActionURL: <span class="string">&quot;https://developers.dingtalk.com/&quot;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    bot.Send(msg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送FeedCard类型消息"><a href="#发送FeedCard类型消息" class="headerlink" title="发送FeedCard类型消息"></a>发送FeedCard类型消息</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">()</span></span> &#123;</span><br><span class="line">    bot:= dingbot.DingBot&#123;</span><br><span class="line">        Secret:      <span class="string">&quot;你的加签秘钥&quot;</span>,</span><br><span class="line">        AccessToken: <span class="string">&quot;你的AccessToken【从钉钉机器人的url上获取】&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    msg := message.Message&#123;</span><br><span class="line">        MsgType:  message.FeedCardStr,</span><br><span class="line">        FeedCard: message.FeedCard_&#123;[]message.Link_&#123;</span><br><span class="line">            &#123;</span><br><span class="line">                Title:      <span class="string">&quot;标题1&quot;</span>,</span><br><span class="line">                PicUrl:     <span class="string">&quot;&quot;</span>,</span><br><span class="line">                MessageUrl: <span class="string">&quot;https://developers.dingtalk.com/&quot;</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                Title:      <span class="string">&quot;标题2&quot;</span>,</span><br><span class="line">                PicUrl:     <span class="string">&quot;&quot;</span>,</span><br><span class="line">                MessageUrl: <span class="string">&quot;https://developers.dingtalk.com/&quot;</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;&#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    bot.Send(msg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Go" >
+    <span class="tag-code">Go</span>
+  </a>
+
+  <a href="/tags#钉钉机器人" >
+    <span class="tag-code">钉钉机器人</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/golang/e1273901-26b1-4cfb-a55c-a9f5047855a5/">
+        <span class="nav-arrow">← </span>
+        
+          go自定义库上传github下载不了问题
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/protocol/4dd3868b-e23e-4446-b7ec-fd95e98612f4/">
+        
+          telnet使用smtp协议发送qq邮件
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-nav-text">快速开始</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%B6%88%E6%81%AF%E6%94%AF%E6%8C%81"><span class="toc-nav-text">消息支持</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81Text%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送Text消息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81link%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送link类型消息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81markdown%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送markdown类型消息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81%E6%95%B4%E4%BD%93%E8%B7%B3%E8%BD%ACActionCard%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送整体跳转ActionCard类型消息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81%E7%8B%AC%E7%AB%8B%E8%B7%B3%E8%BD%ACActionCard%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送独立跳转ActionCard类型消息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E9%80%81FeedCard%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-nav-text">发送FeedCard类型消息</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/golang/47ca1795-f020-44a6-9847-02ef3955f6c9/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

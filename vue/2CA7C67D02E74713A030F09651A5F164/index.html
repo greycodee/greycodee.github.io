@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      小白学前端之TypeScript使用Vuex 4.0 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>小白学前端之TypeScript使用Vuex 4.0</h2>
+  <p class="post-date">2021-07-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的<strong>状态管理模式</strong>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。</p>
+<p>简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。</p>
+<p>Vuex 分为 5 个部分：</p>
+<ul>
+<li>State：是数据源，存放数据</li>
+<li>Getters：可以取得 State 的数据，然后自定义组装返回新的数据</li>
+<li>Mutations：可以改变 State 的数据，建议方法执行是同步的</li>
+<li>Actions：可以异步执行 Mutations 里的方法</li>
+<li>Modules：每个 Module 都有各自的 State、Getters、Mutations、Actions</li>
+</ul>
+<p>这 5 个部分相辅相成。</p>
+<h2 id="TypeScript-使用"><a href="#TypeScript-使用" class="headerlink" title="TypeScript 使用"></a>TypeScript 使用</h2><p>在 vue 项目根目录执行命令来进行 vuex 模块的安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install vuex@next --save</span><br></pre></td></tr></table></figure>
+
+<p>安装好后我们新建文件 <code>/src/store/store.ts</code> ,然后在里面定义 <code>InjectionKey</code> 和 <code>Store</code></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">InjectionKey</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore, useStore <span class="keyword">as</span> baseUseStore, <span class="title class_">Store</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义 State 数据类型的接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IState</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类型传递</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">key</span>: <span class="title class_">InjectionKey</span>&lt;<span class="title class_">Store</span>&lt;<span class="title class_">IState</span>&gt;&gt; = <span class="title class_">Symbol</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用于组合式API setup() 里，省的每次都传入 key </span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useStore</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">baseUseStore</span>(key)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>main.ts</code> 文件里使用上面定义的 vuex</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; store,key &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">createApp</span>(<span class="title class_">App</span>)</span><br><span class="line">.<span class="title function_">use</span>(store,key)</span><br><span class="line">.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>State 是存储数据源的地方，所以我们可以在这里存储我们的数据，比如我这边定义一个 <code>name</code> 字段，需要在接口 <code>IState</code> 添加定义数据类型</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">IState</span>&#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>createStore</code> 里添加数据</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>数据我们已经定义好了，接下来就是要在页面访问这个数据了，下面提供了两种方式来访问 vuex 里的数据</p>
+<h3 id="组合式-API-访问"><a href="#组合式-API-访问" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>在组合式 API 中，我们可以直接导入刚才在 <code>/src/store/store.ts</code>  里定义的 <code>useStore()</code> 方法来访问 vuex 里的数据</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="comment">// 访问 state 里的 name 数据</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="property">state</span>.<span class="property">name</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行代码的话就会在控制台打印 <strong>ooooooh灰灰</strong></p>
+<h3 id="…toRefs-访问所有字段"><a href="#…toRefs-访问所有字段" class="headerlink" title="…toRefs() 访问所有字段"></a>…toRefs() 访问所有字段</h3><p>如果要在页面访问的话，可以利用 <code>...toRefs()</code> 来直接展开 store.state 里的<strong>所有字段</strong>，然后在页面直接访问 vuex 的 state 里的字段</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// App.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; name &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, toRefs&#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    </span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">    </span><br><span class="line">      return &#123;</span><br><span class="line">        // 展开 state 所有的字段</span><br><span class="line">        ...toRefs(store.state)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="reactive-聚合单个字段"><a href="#reactive-聚合单个字段" class="headerlink" title="reactive 聚合单个字段"></a>reactive 聚合单个字段</h3><p>如果你想<strong>单个数据导入</strong>的话，可以直接和页面数据一起放在 <code>reactive</code></p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent, reactive, toRefs&#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line">  <span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    	<span class="comment">// 把 vuex 的 state 的数据放进 reactive 里</span></span><br><span class="line">      <span class="keyword">let</span> params = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">        <span class="attr">name</span>: store.<span class="property">state</span>.<span class="property">name</span></span><br><span class="line">      &#125;)</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...<span class="title function_">toRefs</span>(params),</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="computed-访问单个字段"><a href="#computed-访问单个字段" class="headerlink" title="computed 访问单个字段"></a>computed 访问单个字段</h3><p>也可以使用 <code>computed</code> 模块来访问数据，要先导入 vue 里的 <code>computed</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// App.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; name &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, computed&#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    </span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">      </span><br><span class="line">      return &#123;</span><br><span class="line">        name: computed(()=&gt;store.state.name)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Getters"><a href="#Getters" class="headerlink" title="Getters"></a>Getters</h2><p>getters 里的方法在 <code>vuex/types/index.d.ts</code> 中是这样定义的</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">Getter</span>&lt;S, R&gt; = <span class="function">(<span class="params">state: S, getters: <span class="built_in">any</span>, rootState: R, rootGetters: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>他有 4 个参数，分别是 state、getters、rootState、rootGetters</strong></p>
+<p>其中，<strong>state</strong> 可以取得同级中 state 里的数据，<strong>getters</strong> 可以取得同级中 getters 其他的方法返回的数据</p>
+<p>而 <strong>rootState</strong> 和 <strong>rootGetters</strong> 是在当当前 <strong>Getters</strong> 处于 <strong>module</strong> 中时，可以取得根部的 state 和 gatters 里的数据</p>
+<p>比如我们可以将 state 里的变量封装成一句话然后返回：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">getters</span>:&#123;</span><br><span class="line">        <span class="title function_">newName</span>(state):<span class="built_in">string</span>&#123;</span><br><span class="line">          	<span class="comment">// 通过 state 访问 name 字段</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;大家好！我是：&#x27;</span>+state.<span class="property">name</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>当我们要访问其他 getter 时，我们可以这样：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">        <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">getters</span>:&#123;</span><br><span class="line">        <span class="title function_">hello</span>(state,getters):<span class="built_in">string</span>&#123;</span><br><span class="line">          	<span class="comment">// 通过 getters 访问其他 getter</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;大家好！我是：&#x27;</span>+state.<span class="property">name</span>+<span class="string">&#x27;,&#x27;</span>+getters.<span class="property">ageInfo</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">ageInfo</span>(state):<span class="built_in">string</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;年龄：&#x27;</span>+state.<span class="property">age</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-1"><a href="#组合式-API-访问-1" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>我们可以在组合式 API 里像访问 state 的里数据一样访问 gatters 里的方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="comment">// 访问 getters 里的 hello 方法</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="property">getters</span>.<span class="property">hello</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>此外，getters 也可以使用 <code>...toRefs()</code>、<code>computed</code> 这些方法来访问：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#123; hello &#125;&#125;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script lang=&quot;ts&quot;&gt;</span><br><span class="line">  import &#123; defineComponent, computed, toRefs &#125; from &#x27;vue&#x27;;</span><br><span class="line">  import &#123; useStore &#125; from &#x27;./store/store&#x27;</span><br><span class="line"></span><br><span class="line">  export default defineComponent(&#123;</span><br><span class="line">    setup()&#123;</span><br><span class="line">      let store = useStore()</span><br><span class="line">      return &#123;</span><br><span class="line">        // 通过 computed 访问 getters 里的 hello </span><br><span class="line">        hello: computed(()=&gt;store.getters.hello),</span><br><span class="line">        </span><br><span class="line">        // 通过 ...toRefs() 访问</span><br><span class="line">        // ...toRefs(store.getters),</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Mutations"><a href="#Mutations" class="headerlink" title="Mutations"></a>Mutations</h2><p>如果你要改变 state 里的数据时，就要用到 Mutations 了，它可以提供改变 state 里数据的方法，它在 <code>vuex/types/index.d.ts</code> 中是这样定义的：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">Mutation</span>&lt;S&gt; = <span class="function">(<span class="params">state: S, payload?: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其中 state 可以拿到 state 里的数据，payload 是自定义传入的参数，后面有个问号，代表这是可选项</p>
+<p>所以当我们要改变 state 的字段的值时，我们可以在 store.ts 中这样写代码 ：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="title function_">changeName</span>(<span class="params">state</span>)&#123;</span><br><span class="line">            <span class="comment">// 改变 state 中 name 的值</span></span><br><span class="line">            state.<span class="property">name</span> = <span class="string">&#x27;greycode&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>如果要自定义传入参数的话，就可以这样写：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="title function_">changeName</span>(<span class="params">state,newName:<span class="built_in">string</span></span>)&#123;</span><br><span class="line">            <span class="comment">// 传入自定义字段并设置</span></span><br><span class="line">            state.<span class="property">name</span> = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-2"><a href="#组合式-API-访问-2" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>在组合式 API 中，我们可以用 <code>commit</code> 来提交执行这个方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="keyword">let</span> <span class="title function_">change</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 提交执行 mutations 中 changeName 方法</span></span><br><span class="line">      <span class="comment">// store.commit(&#x27;changeName&#x27;)</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 提交执行 mutations 中 changeName 方法,并传入自定义参数</span></span><br><span class="line">      store.<span class="title function_">commit</span>(<span class="string">&#x27;changeName&#x27;</span>,<span class="string">&#x27;自定义的&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      change</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="…mapMutations"><a href="#…mapMutations" class="headerlink" title="…mapMutations"></a>…mapMutations</h3><p>我们可以直接在组合式 API 中使用 <code>...mapMutations</code> 来获得 mutations 中的方法，然后直接在页面中调用这个方法</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; mapMutations &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="comment">// 使用 ...mapMutations 来获得 mutations 中的方法</span></span><br><span class="line">      ...<span class="title function_">mapMutations</span>([<span class="string">&#x27;changeName&#x27;</span>])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后直接在页面中使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;changeName&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 也可以传入函数自定义参数 --&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;changeName(’自定义名字‘)&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h2><p>当要异步改变 state 中的数据时，就要用到 Action 了，但是它不是直接改变 state 中的数据，而是通过异步执行 mutations 中的方法来间接改变 state 中的数据的 </p>
+<p>它在 <code>vuex/types/index.d.ts</code> 中是这样定义的：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">Action</span>&lt;S, R&gt; = <span class="title class_">ActionHandler</span>&lt;S, R&gt; | <span class="title class_">ActionObject</span>&lt;S, R&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>它支持两种类型的数据，一个是 ActionHandler&lt;S, R&gt; ，另一个是 ActionObject&lt;S, R&gt;。其中 ActionObject 一般用于 Module 中的命名空间，它们的定义如下：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">ActionHandler</span>&lt;S, R&gt; = <span class="function">(<span class="params"><span class="variable language_">this</span>: Store&lt;R&gt;, injectee: ActionContext&lt;S, R&gt;, payload?: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">ActionObject</span>&lt;S, R&gt; &#123;</span><br><span class="line">  root?: <span class="built_in">boolean</span>;</span><br><span class="line">  <span class="attr">handler</span>: <span class="title class_">ActionHandler</span>&lt;S, R&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里只讲下 ActionHandler ，另外一个等到 Module 模块中再讲。</p>
+<p>在 ActionHandler  中，它有 3 个参数，分别是 this、injectee、payload，其中 this 代表的是整个 Store 对象，injectee 是当前 Action 所在的上下文，payload 是可以自定义的传入参数</p>
+<p>所以我们可以这样使用它：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> store = createStore&lt;<span class="title class_">IState</span>&gt; (&#123; </span><br><span class="line">    <span class="attr">state</span>:&#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;ooooooh灰灰&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="attr">mutations</span>:&#123;</span><br><span class="line">        <span class="title function_">changeName</span>(<span class="params">state</span>)&#123;</span><br><span class="line">            state.<span class="property">name</span> = <span class="string">&#x27;异步改名&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">actions</span>:&#123;</span><br><span class="line">        <span class="title function_">asyncChange</span>(<span class="params">ctx</span>)&#123;</span><br><span class="line">          <span class="comment">// 两秒后更改名字</span></span><br><span class="line">          <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span>&#123;</span><br><span class="line">            ctx.<span class="title function_">commit</span>(<span class="string">&#x27;changeName&#x27;</span>)</span><br><span class="line">          &#125;,<span class="number">2000</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合式-API-访问-3"><a href="#组合式-API-访问-3" class="headerlink" title="组合式 API 访问"></a>组合式 API 访问</h3><p>定义好 actions 后，我们可以在组合式 API 中用 <code>dispatch</code> 来分发 action：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="keyword">let</span> <span class="title function_">syncChange</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">      <span class="comment">// 执行 actions 中的 asyncChange 方法</span></span><br><span class="line">      store.<span class="title function_">dispatch</span>(<span class="string">&#x27;asyncChange&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      syncChange</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="…mapActions"><a href="#…mapActions" class="headerlink" title="…mapActions"></a>…mapActions</h3><p>也可以用 <code>...mapActions</code> 来直接获得 actions 中的方法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; mapActions &#125; <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&#x27;./store/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> store = <span class="title function_">useStore</span>()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      ...<span class="title function_">mapActions</span>([<span class="string">&#x27;asyncChange&#x27;</span>])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>页面使用的话和 mutation 差不多，直接访问 actions 中的方法名就可以了：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button type=&quot;button&quot; @click=&quot;asyncChange&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>除此之外还有一个 Module 模块，不过一般小项目用不到而且内容也比较多，下次再学吧。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Vuex" >
+    <span class="tag-code">Vuex</span>
+  </a>
+
+  <a href="/tags#Vue" >
+    <span class="tag-code">Vue</span>
+  </a>
+
+  <a href="/tags#TypeScript" >
+    <span class="tag-code">TypeScript</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/tool/9ACF61395A77470CA029D24AEC2CA42F/">
+        <span class="nav-arrow">← </span>
+        
+          利用腾讯位置API进行的阿里云DDNS工具
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/">
+        
+          ZooKeeper客户端详解及可视化客户端
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-nav-text">简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#TypeScript-%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">TypeScript 使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#State"><span class="toc-nav-text">State</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE"><span class="toc-nav-text">组合式 API 访问</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E2%80%A6toRefs-%E8%AE%BF%E9%97%AE%E6%89%80%E6%9C%89%E5%AD%97%E6%AE%B5"><span class="toc-nav-text">…toRefs() 访问所有字段</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#reactive-%E8%81%9A%E5%90%88%E5%8D%95%E4%B8%AA%E5%AD%97%E6%AE%B5"><span class="toc-nav-text">reactive 聚合单个字段</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#computed-%E8%AE%BF%E9%97%AE%E5%8D%95%E4%B8%AA%E5%AD%97%E6%AE%B5"><span class="toc-nav-text">computed 访问单个字段</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Getters"><span class="toc-nav-text">Getters</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-1"><span class="toc-nav-text">组合式 API 访问</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Mutations"><span class="toc-nav-text">Mutations</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-2"><span class="toc-nav-text">组合式 API 访问</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E2%80%A6mapMutations"><span class="toc-nav-text">…mapMutations</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Action"><span class="toc-nav-text">Action</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E8%AE%BF%E9%97%AE-3"><span class="toc-nav-text">组合式 API 访问</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E2%80%A6mapActions"><span class="toc-nav-text">…mapActions</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-nav-text">最后</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/vue/2CA7C67D02E74713A030F09651A5F164/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

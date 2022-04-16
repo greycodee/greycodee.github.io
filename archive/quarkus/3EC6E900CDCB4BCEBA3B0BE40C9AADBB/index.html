@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Quarkus项目配置方式详解 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Quarkus项目配置方式详解</h2>
+  <p class="post-date">2021-07-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="配置加载流程"><a href="#配置加载流程" class="headerlink" title="配置加载流程"></a>配置加载流程</h2><p>Quarkus 可以从多个地方获取项目的配置，它读取配置优先级入下图，在下面的优先级中，一旦读取到某个配置，就不会再继续读取后面配置中的这个配置了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/XRTAgG7.png" alt="config-sources"></p>
+<h2 id="0x1-System-Properties"><a href="#0x1-System-Properties" class="headerlink" title="0x1 System Properties"></a>0x1 System Properties</h2><p>系统属性可以在启动期间通过 <code>-D</code> 标志传递给应用程序。</p>
+<p>比如要设置 http 服务的运行端口，各个运行方式传递系统参数的方式如下：</p>
+<ul>
+<li><strong>Quarkus dev</strong>模式：<code>mvn quarkus:dev -Dquarkus.http.port=8888</code></li>
+<li>运行 <strong>jar</strong> 包：<code>java -Dquarkus.http.port=8888 -jar quarkus-run.jar</code></li>
+<li>运行 <strong>native-image</strong>：<code>app-runner -Dquarkus.http.port=8888</code></li>
+</ul>
+<h2 id="0x2-Environment-variables"><a href="#0x2-Environment-variables" class="headerlink" title="0x2 Environment variables"></a>0x2 Environment variables</h2><blockquote>
+<p>环境变量的名字遵循 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/configsources.asciidoc#default-configsources">MicroProfile Config</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Environment Variables Mapping Rules</span><br><span class="line">Some operating systems allow only alphabetic characters or an underscore, _, in environment variables. Other characters such as ., /, etc may be disallowed. In order to set a value for a config property that has a name containing such disallowed characters from an environment variable, the following rules are used.</span><br><span class="line"></span><br><span class="line">The ConfigSource for the environment variables searches three environment variables for a given property name (e.g. com.ACME.size):</span><br><span class="line"></span><br><span class="line">1. Exact match (i.e. com.ACME.size)</span><br><span class="line"></span><br><span class="line">2. Replace each character that is neither alphanumeric nor _ with _ (i.e. com_ACME_size)</span><br><span class="line"></span><br><span class="line">3. Replace each character that is neither alphanumeric nor _ with _; then convert the name to upper case (i.e. COM_ACME_SIZE)</span><br><span class="line"></span><br><span class="line">The first environment variable that is found is returned by this ConfigSource.</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>环境变量的话各个系统设置的方式不一样，具体可以查一下自己系统设置环境变量的方式，一般 <strong>Unix</strong> 类的系统设置环境变量一般分为<strong>命令行设置</strong>和<strong>环境变量文件配置</strong></p>
+<ul>
+<li>命令行配置：<code>export QUARKUS_HTTP_PORT:8888</code></li>
+<li>配置文件配置：环境变量配置文件又分用户变量配置文件和系统变量配置文件，直接在对应的配置文件里加上这一样就可以了，但是一般不推荐这么用</li>
+</ul>
+<h2 id="0x3-env-文件"><a href="#0x3-env-文件" class="headerlink" title="0x3 .env 文件"></a>0x3 .env 文件</h2><blockquote>
+<p><strong>注意：.env 文件中的环境变量无法像普通的环境变量通过 System.getenv(String) API 获得。</strong></p>
+</blockquote>
+<p><code>.env</code> 文件的作用和环境变量类似，但是作用域更小，<strong>它只作用于当前项目，不像环境变量可以作用于所有项目</strong>。</p>
+<p>它的设置方式是在 <code>.env</code> 文件里配置键值对的方式来设置变量，键名称和设置环境变量一样遵守 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/configsources.asciidoc#default-configsources">MicroProfile Config</a> 规范</p>
+<p>使用方式：</p>
+<ul>
+<li>对于 <strong>dev</strong> 模式：可以放在项目的根目录下来使用，<strong>但是不要把它和代码一起打包</strong></li>
+<li>对于 <strong>jar</strong> 和 <strong>native-image</strong> 运行方式下：可以将 <code>.env</code> 文件放在和 jar 包或 native-image 同一目录下</li>
+</ul>
+<h2 id="0x4-Quarkus-Application配置文件"><a href="#0x4-Quarkus-Application配置文件" class="headerlink" title="0x4 Quarkus Application配置文件"></a>0x4 Quarkus Application配置文件</h2><p>Quarkus 和 Spring Boot 项目一样，支持 <code>application.properties</code> 配置文件。同时在 <strong>jar</strong> 包和 <strong>native-image</strong> 的运行模式下还支持当前 jar 文件和native-image 文件同目录下 <strong>config 文件夹</strong>里的 <code>application.properties</code> 配置文件，并且 <strong>config 文件夹</strong>里的配置文件优先级高于项目 <strong>resources 文件夹</strong>里的配置文件</p>
+<blockquote>
+<p>对于 dev 的运行模式下，项目也可以使用 config 文件里的配置文件，就是手动把 config 文件夹移到 <strong>target 文件夹</strong>里，但是在使用 <code>mvn clean</code> 命令时会把这个文件夹清理掉，到时候又要自己手动重新创建 config 文件夹和里面的配置文件，所以在 dev 模式下不推荐使用 <code>config/application.properties</code></p>
+</blockquote>
+<h2 id="0x5-MicroProfile-配置文件"><a href="#0x5-MicroProfile-配置文件" class="headerlink" title="0x5 MicroProfile 配置文件"></a>0x5 MicroProfile 配置文件</h2><p>它放在 <code>src/main/resources/META-INF/microprofile-config.properties</code> 里</p>
+<p>它的工作原理和项目的 resources 文件夹下的 application.properties 完全相同，建议使用 resources 文件夹下的配置文件</p>
+<h2 id="使用-yml-配置文件"><a href="#使用-yml-配置文件" class="headerlink" title="使用 yml 配置文件"></a>使用 yml 配置文件</h2><p>以上配置中，除了系统属性、环境变量、.env 文件外，配置文件都可以支持 yml 格式的配置，不过需要额外添加依赖</p>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><ol>
+<li>pom.xml 文件添加依赖</li>
+</ol>
+  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.quarkus<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quarkus-config-yaml<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>或者可以直接用 maven 命令来添加拓展依赖</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./mvnw quarkus:add-extension -Dextensions=&quot;io.quarkus:quarkus-config-yaml&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加yml文件"><a href="#添加yml文件" class="headerlink" title="添加yml文件"></a>添加yml文件</h3><p>移除<code>src/main/resources/application.properties</code> 文件，添加 <code>src/main/resources/application.yaml</code> 文件</p>
+<p>如果两个文件都存在，Quarkus 会优先使用来自 <code>yml</code> 的配置，然后再使用 <code>properties</code> 的配置，所以为了不搞混淆，建议删除 <code>properties</code> 文件。</p>
+<p>配置文件扩展名支持 <code>yml</code> 和 <code>yaml</code></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://quarkus.io/guides/config-yaml">https://quarkus.io/guides/config-yaml</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://quarkus.pro/guides/config.html">https://quarkus.pro/guides/config.html</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://quarkus.io/guides/config-reference">https://quarkus.io/guides/config-reference</a></li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Quarkus" >
+    <span class="tag-code">Quarkus</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/archive/quarkus/5756337C1CEA4B599E678A3380DCFE00/">
+        <span class="nav-arrow">← </span>
+        
+          Quarkus构建native-image遇到的问题及解决
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/archive/essay/8B40046C17644103BD2A256EB938884C/">
+        
+          记一次很久以前做的梦【加密】
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B"><span class="toc-nav-text">配置加载流程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x1-System-Properties"><span class="toc-nav-text">0x1 System Properties</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x2-Environment-variables"><span class="toc-nav-text">0x2 Environment variables</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x3-env-%E6%96%87%E4%BB%B6"><span class="toc-nav-text">0x3 .env 文件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x4-Quarkus-Application%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-nav-text">0x4 Quarkus Application配置文件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x5-MicroProfile-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-nav-text">0x5 MicroProfile 配置文件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8-yml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-nav-text">使用 yml 配置文件</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="toc-nav-text">添加依赖</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B7%BB%E5%8A%A0yml%E6%96%87%E4%BB%B6"><span class="toc-nav-text">添加yml文件</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-nav-text">参考资料</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/quarkus/3EC6E900CDCB4BCEBA3B0BE40C9AADBB/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

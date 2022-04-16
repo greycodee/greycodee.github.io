@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      记一次很久以前做的梦【加密】 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>记一次很久以前做的梦【加密】</h2>
+  <p class="post-date">2021-07-15</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="时间：2019-12-19-07-23"><a href="#时间：2019-12-19-07-23" class="headerlink" title="时间：2019-12-19 07:23"></a>时间：2019-12-19 07:23</h2><p>RGwc3OqLQr&#x2F;FK7bX9qFgbl1FD1WZLruNkeFBP4vHyDejXpJhzV309eABiP0e+YiX5wKAD0GaALo74u1B39tyIUFaMrQAVV5M60sGphzkL2hf0ad5&#x2F;0JAqGXgDy01ustT&#x2F;w+bAGA8As3jc+3CexZ8CfqJsrOp7vt0aE8zzqKV0IbSL3b5u4wpBfp4Rb7+4b7lES9sbZmD37mXP5bJ0X94Z6W38oSSUj6aiLpDI9kllGxSWavZK+hQk1eWuAThn833cjXVtaxq7Mruglvc+eo4ok2Fm56uCdnq2RiUi5nu9e0bkGXyv8ELwr3RcVjMQdHQB8CK&#x2F;OFuNXltCRWNKlH6G2fyrPO+D+Sg6zbolkLHl326Ja3co0fDuLm6MxbLLwubwjfci0&#x2F;ZXjGOCKodAfvEtrDmkd0l2HYaOTbH6nOu+3GwXr+3QwdoxhFrVPjpkvjWcs4VNieiqiynXeNBflPR66ZrscQtZRVX77DUXT3jZdQ5rV7a6ZyWDr9ZgET86YQlGFxcW62wsBnMBt9STCFCUhbhYdccrBOAMJuZXfccIDuBgqelngufQRinLHRJiv0ihN2QhNuJFKkkTxSgswrMjLWhMGgKs8fbfnK82myiWIgqRnF6geCydTX8UAS3dTR1f0XJKEJuUNzc87uzszP+EZIcZ+JnCLjLNnJXJG9XVlLKElLmiwXNi4zDnP6NHGa7ikvac7mHR2SsWGL3&#x2F;v4pZtSNiwoZW3pPaK6Id+eg+srKoB7GTQNKZIsDuJh8cMziJF7cr1KvH7LZRMpB4MpeyvLmgz8oo3soLiGFVhl5wMrcqbc8H4qtnC4mI9iT5Z1lPBtq13+bYyplOY+G0soMOvbtkei7nWxIz3fh17gqMZvlTikEGcMNHGTs+wwgtsbreqR54iWEVuOxfYD+eYArFujw+iJRCsUCYWepGeVGNpZwlsuKQ+EH0sIJ1c4srVN73BYyE9nHw34W9CHY1MkOhUmXflbaBxz7E+AWfiUiZEWpWwvXOfTtWRuJV0htuCPmA63XgHn6JAHadlf5OY4l1BNewOWXVDPYEChsONoPSmTFxjq&#x2F;Qop83AqoOtxoaPqfWLXM+s8AqMjfWDQkzDMuxUnMO9fxiEze7J+qMZw7y2W+37NgPQHZBcG3Q8Vd&#x2F;ArxjfMQaZO11cYsW+RQkhuXj6lvsbs31+j&#x2F;Od4mA0XPpJ2rKIVC&#x2F;ueVAP8BuTBAzMN8ndDHXkKctT17eCUXz7w+t9n4h4MZxQQPegz9d3ULLabcdCJ167fpJ+8&#x2F;iXQhcJXihJeNXefkPcVrkxF+Tfj&#x2F;r73rSbTgtK+LseIedY1u17&#x2F;8itWpPlPqlVDC6dzSECBofynwSHADsXl+CBFpkstT3JPiSRTnVmWcta4H9kHthp4yG8Hqc2O6fJnodDIjwa6uzS0N8o95wHz79dDtDHKSpGsjtjotT54qCeI9z3T9FMSwKrN2AJn&#x2F;1fQdRA56QjnGFLeE8EkYY5Ix6tsk9XFcqAeLC1UbWIoaEqUdILSo9e&#x2F;TAUizEf+01YBHrsec+o2lEGl8QjthfxhlEFDNgTD0Lt4Cb2ytqpMJZXxFrqqUYOOc2+Lq0&#x2F;xJPHCKHYf8vLZEfx7LzcLbwLk+BVnxm6JqQVXXWMM2BblrFCX2CAIuhd8m0lztKUrK5OVG0TyEeLrOpB6&#x2F;YfXm6MPIOttooJFzCBZAKpWt70Xwwfwxrr7r0qMZziWv8oTiFG4lSvGE0VvCwN9hZoLvFh6bMFpnz&#x2F;bv0L8HMSxBmOyanQm01HhX6KXcyNSbW9Ep2Qxkw+eC034r+HQzV2t+qFkbpNFMb0DatDetvdBZyvlTvlPNcxJCcxEqe&#x2F;gxb9DRzKNPyy8eM&#x2F;P4Wem+NW7GFZTfXZQ6uj712J&#x2F;vQddDF9ukf&#x2F;jXJkEShhLTs9+JFhR9zjnOljLfNhmB8UzIUBno1d+qqzlC+ZiHzkaRbMnATdOYqW0dBIf5f5wIq31M4GC5mkQzxBVQ8Zqxxu5LCLGRrm+2dro8O27&#x2F;B5D74h0s&#x2F;rUmbj8Qxxf32rNjj0+TAZIIFh&#x2F;3pQjdbwNiABQZUpLBtYWSiZSZ5ivKAgzK6H1uVAlrillqMWJDjLsU6yO1sGb6lMBgKiIuGD2MWHj6moa+JUygW+gWo9m7XVe0q6y6CveMERblK4nXsgurUqH4j91uqyu6c0kccGY8Oei6opdzG49&#x2F;53IJg8YQo6TnK+plLdg1ezfanf20QwHBV1IHNYFWiTUHVO88EJuvLSAPgDdiVCOzO0KjXxjqOiq7lDw+OFbYaYyUoE1nwywhgE1TbBJdR54em&#x2F;CC4lY+14GNDTTAaN9ATWLCSPJWQnsDR799HCBZcGumWHB303Zcti4&#x2F;hKKmUW1JH59XxL4dtLup7fER05tm7vtVJ5ZCd0r1+R7QOzPIszOqZ+B2OifcYLVAelM7OGtIZbOmIWQbU11K45P16Y6GVZicmSTPSKXrvAB6nhOD0&#x2F;we&#x2F;UbqpU6iNu5ZRTgcZcxyrgU2TzWaKgfcX5ynMjk0TAqvYKYHAXMhMIUE6tEMMithQ1WkasGcv0+r6Hu8jPrc9&#x2F;Gvlf4u+4fl9knAf7JCgONAi4ds&#x2F;p6rwGAGtZbvzcAvxF7p04RcX0MY6A53z0tsFIcE46Uu&#x2F;KuxhWVyufVwlrHfIek6k8hHTspNH8bztwUJLU6gBRP9SpRrZrZIhDPII19VXNFVWdujdwcu7dcNuuoXPofulrbbHSyYaSaxK&#x2F;RdHh7yjViodnoUp3WaTNDZtzRlICXyZm73kD7qqHyR6nyqnVFG43Zd+Xcic2HJzEhSMYG6Ddlyc6AzYSCJeoDCY9M6dpPFKplBpQRL8g4LjOLHwd7BMlXqqcvjAmJpfHSlByX5KEml7a3V4jVKoIhoq1B5EvoNELDwUah8nnJjh8CKJevnuNx2NRUr&#x2F;QNzIfHTRGKCYHua70wUQX7m+lcNMc&#x2F;EG3TLqr+qyXMFjXihPxRLL+Uc9LBDbCIMh1Zpirr&#x2F;0+6U4twTr&#x2F;ipWU5SmOxf0O+OFl2NjOH7u8MwkXT1yWTS09Nfu3tLHFA0EmqJxgceNea8uegh+KFo4Fnf4oTd1wwg6c3cE8RX7okJ5ZDMzWCifUEwzdturrhnaarzbZT&#x2F;aCIAn4Epu4&#x2F;G0wgJSZL5oos889CaEJcmGkkJ6XSTd87ArxLOu143GSoSxVj6dlMGYLfcnJIjX3NJ0kHJdSROY9f6Kd0Moh&#x2F;3fupqbLxtyP9bKQKPtpfw4pT2&#x2F;Kd2nmPeBhxMIqIap4b3zKL5PzBF&#x2F;t6faSIMANeUoU9+oD1LU5FVfkoz5Icd7aW73SNLnwFxvXXUkuR&#x2F;Dkcry3vJVOeKuxV6m6L6qqplQtCiyYzTc01Zllr4e34dYU0&#x2F;QOfId3TI4Ork17iAHGGu+JY8Kud55p2Ph3NZN9nLryFzyjAsgaRY5YJnrJ0&#x2F;vs+0yS3wLYvXWIy1rhJHytZRS7AzR+TjX+GRAFAajy5zkouA7owJbn1L8UFvzlbDTLFHzhxVMI+DsTddmNqU70wOP2Goh8c3HnOLf77Sn6l6qS+eL18+ZcTm8RhXN8+tT2&#x2F;id+GLg60kgFIQggJVgQV8qKOqfSnyE4v1szSmSnGxrlZHNSzBg18XppzmNxAbNHjPiauLVGw&#x2F;qPWvm4ZGvtYv23rLsA0cdLnjnmnlCg&#x2F;oh&#x2F;8juTf3GsX5VVS7sGIFZCJh&#x2F;RRzLmwvXq2LZgBhhdD607xq7AFhuazYpVXcP6axrAWl3ikqYYGzAtesSzc&#x2F;yK9hhhvPcO+UhhkfWrlLdubzSBP60ycIhCSMG+OhG2U5XZLaSpMZghnpf8tu2uFiH6xkiFHAunxseHecrBstXQZ4jzVL3aFv3TpyQG19dgKIlukZDpSFuLZLFW&#x2F;fe5So5mNfp&#x2F;zgezEXaZz&#x2F;TIkD&#x2F;HMpm18nov2oPuIOi2HFNwSZoExvORHzRCXcfci8&#x2F;+m8VH9aF31EwiapPfFmjBWTAtcUI6s+T5Xf55d245Mi0XYQtWkqxLhIXfN0uyJBekVBNCKS7A2J0qjR5weYpAz&#x2F;mnLX7xVfIGBanizxcag1GsOS70iPp4WuVTMrwVH9RvsCP+3n3wrMFkfrtQnjMx+GWJx3v3vl4fk1o5istwlrT3R3Z630OIgn6Wsdz43OWI4MIp8sJuKqQYntU7XkmSwxerSSOOr64+u9H3WKyUxzgQ8bEqH+i8xjRajjlrYQ8iZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvCZGr85c2JEE6HB7QcxbA6IpDz0WI7WdA2WBM&#x2F;c5lGWNE+gMg7abztKO9CPnQscEvP0OhWvdMO2k9oBXJJ5MV&#x2F;g&#x3D;</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#抒发情感" >
+    <span class="tag-code">抒发情感</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/archive/quarkus/3EC6E900CDCB4BCEBA3B0BE40C9AADBB/">
+        <span class="nav-arrow">← </span>
+        
+          Quarkus项目配置方式详解
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/gof/234C81B9931C44CB9B88E0E53210BB48/">
+        
+          UML箭头在Java中的含义
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%97%B6%E9%97%B4%EF%BC%9A2019-12-19-07-23"><span class="toc-nav-text">时间：2019-12-19 07:23</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/archive/essay/8B40046C17644103BD2A256EB938884C/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

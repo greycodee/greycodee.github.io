@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      AviatorScript轻量级高性能脚本语言 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>AviatorScript轻量级高性能脚本语言</h2>
+  <p class="post-date">2021-08-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在 <code>5.0</code> 版本以前，它的名字是叫 <strong>Aviator</strong> ，定位一直只是一个表达式引擎，不支持 if&#x2F;else 条件语句（仅有三元运算符支持 <code>?:</code> ），没有内置的 for&#x2F;while 循环支持（虽然你可以用 seq 库类似函数式的方式来处理集合），也没有赋值（后来在 4.0 引入），没有作用域的概念（也在 4.0 引入 lambda 函数后部分实现）等等一般语言常见的能力。在 <code>5.0</code> 版本后，它变成了一门脚本语言，叫：<strong>AviatorScript</strong> 。</p>
+<p>在 <code>5.0</code> ，新加了如下新特性：</p>
+<ul>
+<li><p><code>大括号 &#123; ... &#125;</code> 括起来的词法作用域。</p>
+</li>
+<li><p><code>let</code> 语句用于定义局部变量。</p>
+</li>
+<li><p>条件语句 <code>if/elsif/else</code> 。</p>
+</li>
+<li><p>循环语句 <code>for</code> 和 <code>while</code> ，以及相应的 <code>break</code> 和 <code>continue</code> 语句支持。</p>
+</li>
+<li><p><code>return</code> 语句用于从脚本或者函数中返回值。</p>
+</li>
+<li><p><code>fn hello() &#123; println(&quot;hello&quot;); &#125;</code> 新的 fn 语法用于定义命名函数。</p>
+</li>
+<li><p><code>## 单行注释</code> 注释支持</p>
+</li>
+<li><p>模块系统</p>
+</li>
+<li><p><code>new</code> 语法用于<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/boyan-avfmj/aviatorscript/hzm6lr">创建对象</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/boyan-avfmj/aviatorscript/sikgal">异常处理</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/boyan-avfmj/aviatorscript/ma3zs3">命令行工具 aviator</a></p>
+</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><strong>AviatorScript</strong> 可以单纯的作为脚本语言使用，也可以和 Java 配合使用。</p>
+<h2 id="单纯的作为脚本语言使用"><a href="#单纯的作为脚本语言使用" class="headerlink" title="单纯的作为脚本语言使用"></a>单纯的作为脚本语言使用</h2><p>作为脚本语言使用时，需要下载一个 <code>aviator</code>，然后用它去执行脚本文件。</p>
+<p><strong>下载：</strong></p>
+<p>执行下面命令下载，如果你电脑没有安装 <code>wget</code> 工具，你也可以直接打开 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://raw.githubusercontent.com/killme2008/aviator/master/bin/aviator%EF%BC%8C%E7%84%B6%E5%90%8E%E6%8A%8A%E9%87%8C%E9%9D%A2%E7%9A%84%E5%86%85%E5%AE%B9%E5%A4%8D%E5%88%B6%E4%B8%8B%E6%9D%A5%E4%BF%9D%E5%AD%98%E6%88%90%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E3%80%82**%E7%84%B6%E5%90%8E%E6%8A%8A%E5%AE%83%E6%94%BE%E5%9C%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%AD%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%85%A8%E5%B1%80%E8%AE%BF%E9%97%AE%E5%88%B0%E5%AE%83">https://raw.githubusercontent.com/killme2008/aviator/master/bin/aviator，然后把里面的内容复制下来保存成一个可执行文件。**然后把它放在环境变量中，可以全局访问到它</a>**</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget https://raw.githubusercontent.com/killme2008/aviator/master/bin/aviator</span><br><span class="line">$ <span class="built_in">chmod</span> u+x aviator</span><br></pre></td></tr></table></figure>
+
+<p><strong>初始化：</strong></p>
+<p>下载完后，需要执行一下命令，它会自动在 <code>~/.aviatorscrip</code> 下载所需要的依赖。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">╰─$ aviator</span><br><span class="line">Downloading AviatorScript now...</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   148  100   148    0     0    249      0 --:--:-- --:--:-- --:--:--   248</span><br><span class="line">100   159  100   159    0     0    158      0  0:00:01  0:00:01 --:--:--   158</span><br><span class="line">100  583k  100  583k    0     0  51321      0  0:00:11  0:00:11 --:--:-- 35877</span><br><span class="line">Usage: java com.googlecode.aviator.Main [file] [args]</span><br><span class="line">     : java com.googlecode.aviator.Main -e [script]</span><br><span class="line">     : java com.googlecode.aviator.Main -v</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行脚本文件：</strong></p>
+<p>下载好相关的环境后，就可以编写一个脚本文件了，文件名一般以 <code>.av</code> 结尾，这个不是必须的，你想以其他结尾也可以</p>
+<p><strong>test.av：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">println</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后执行该脚本文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">╰─$ aviator test.av</span><br><span class="line">Hello World!</span><br><span class="line">null</span><br></pre></td></tr></table></figure>
+
+<p>界面输出 <code>Hello World!</code>，最后一行的 <code>null</code> 表示是整个表达式的执行结果，就是返回值的意思，比如定义 <code>return</code> 时，这个 null 就会变成 return 的值，我们做如下更改：</p>
+<p><strong>test.av：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">println</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们添加了一个 <code>return</code> 数据，然后执行这个脚本文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">╰─$ aviator test.av</span><br><span class="line">Hello World!</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
+
+<p>执行结果就会变成我们定义的 return 数据。</p>
+<p>具体的可参考文档 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/boyan-avfmj/aviatorscript/ma3zs3"><strong>aviator 命令行</strong></a></p>
+<h2 id="配合-Java-使用"><a href="#配合-Java-使用" class="headerlink" title="配合 Java 使用"></a>配合 Java 使用</h2><p>配合 Java 使用时，需要导入 Aviator 的依赖，可以在 [search.maven.org](<a target="_blank" rel="noopener external nofollow noreferrer" href="https://search.maven.org/search?q=g:com.googlecode.aviator">https://search.maven.org/search?q=g:com.googlecode.aviator</a> AND a:aviator&amp;core&#x3D;gav) 查看可用的版本。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.googlecode.aviator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aviator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>&#123;version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>导入依赖后，我们先来演示执行一个 <code>1+1</code> 操作：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> (<span class="type">int</span>) AviatorEvaluator.execute(<span class="string">&quot;return 1+1;&quot;</span>);</span><br><span class="line">System.out.println(result);</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，我们直接返回 <code>1+1</code> 的结果，然后输出，但是当我们执行的时候，就回报如下错误：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Exception <span class="keyword">in</span> thread <span class="string">&quot;main&quot;</span> java.lang.ClassCastException: java.lang.Long cannot be cast to java.lang.Integer</span><br><span class="line">	at top.mjava.demo.AviatorDemo.demo5(AviatorDemo.java:19)</span><br><span class="line">	at top.mjava.demo.AviatorDemo.main(AviatorDemo.java:15)</span><br></pre></td></tr></table></figure>
+
+<p>这是因为<strong>在 Aviator 中任何整数都将被转换为 Long 类型</strong>，而 Long 类型是不能转换为 Integer 类型的，所以会报上面的错误。所以我们要将 int 改为 long 即可：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">result</span> <span class="operator">=</span> (<span class="type">long</span>) AviatorEvaluator.execute(<span class="string">&quot;return 1+1;&quot;</span>);</span><br><span class="line">System.out.println(result);</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<h3 id="挂载-Java-方法"><a href="#挂载-Java-方法" class="headerlink" title="挂载 Java 方法"></a>挂载 Java 方法</h3><p>在 Aviator 中，除了可以使用它提供的法来创建函数外，还可以挂载 Java 的自定义方法，然后在 Aviator 脚本中使用。</p>
+<p>定义自定义的 Java 方法时，需要继承 <code>AbstractFunction</code> 抽象类，然后重写 <code>call</code> 和 <code>getName</code> 这两个方法：</p>
+<ul>
+<li>call : 方法具体逻辑代码</li>
+<li>getName : 在 Aviator 中使用时的函数名</li>
+</ul>
+<p><strong>定义自定义函数：</strong></p>
+<p>这边自定义了一个加法运算的方法，传入两个参数然后计算它们的和</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AddFunction</span> <span class="keyword">extends</span> <span class="title class_">AbstractFunction</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> AviatorObject <span class="title function_">call</span><span class="params">(Map&lt;String, Object&gt; env, AviatorObject arg1, AviatorObject arg2)</span> &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">p1</span> <span class="operator">=</span> (<span class="type">long</span>) arg1.getValue(env);</span><br><span class="line">        <span class="type">long</span> <span class="variable">p2</span> <span class="operator">=</span> (<span class="type">long</span>) arg2.getValue(env);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">result</span> <span class="operator">=</span> p1+p2;</span><br><span class="line">        <span class="keyword">return</span> AviatorLong.valueOf(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;add&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用自定义函数：</strong></p>
+<p>如果要在 Aviator 脚本中使用这个自定义的函数时，需要先注册这个 Java 类，然后在 Aviator 脚本中使用 <code>getName()</code> 返回的方法名作为函数名来调用：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 注册自定义函数</span></span><br><span class="line">AviatorEvaluator.addFunction(<span class="keyword">new</span> <span class="title class_">AddFunction</span>());</span><br><span class="line"><span class="comment">// 使用自定义函数</span></span><br><span class="line"><span class="type">long</span> <span class="variable">result</span> <span class="operator">=</span> (<span class="type">long</span>) AviatorEvaluator.execute(<span class="string">&quot;return add(2,1);&quot;</span>);</span><br><span class="line">System.out.println(result);</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/boyan-avfmj/aviatorscript/cpow90">https://www.yuque.com/boyan-avfmj/aviatorscript/cpow90</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://code.google.com/archive/p/aviator/wikis/User_Guide_zh.wiki">https://code.google.com/archive/p/aviator/wikis/User_Guide_zh.wiki</a></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/killme2008/aviatorscript">https://github.com/killme2008/aviatorscript</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#表达式引擎" >
+    <span class="tag-code">表达式引擎</span>
+  </a>
+
+  <a href="/tags#Aviator" >
+    <span class="tag-code">Aviator</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/">
+        <span class="nav-arrow">← </span>
+        
+          ZooKeeper单机伪集群搭建
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/">
+        
+          用 Json-Schema 来验证你的请求参数
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-nav-text">简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8D%95%E7%BA%AF%E7%9A%84%E4%BD%9C%E4%B8%BA%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">单纯的作为脚本语言使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%85%8D%E5%90%88-Java-%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">配合 Java 使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%8C%82%E8%BD%BD-Java-%E6%96%B9%E6%B3%95"><span class="toc-nav-text">挂载 Java 方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-nav-text">参考资料</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

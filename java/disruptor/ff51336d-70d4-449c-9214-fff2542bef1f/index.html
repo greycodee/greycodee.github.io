@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      Disruptor-等待策略 | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Disruptor-等待策略</h2>
+  <p class="post-date">2021-03-01</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="BlockingWaitStrategy"><a href="#BlockingWaitStrategy" class="headerlink" title="BlockingWaitStrategy"></a>BlockingWaitStrategy</h2><p>Disruptor默认策略</p>
+<p>对<code>EventProcessor</code>使用等待条件的锁和条件变量的阻塞策略。</p>
+<p><strong>当吞吐量和低延迟不如CPU资源那么重要时，可以使用此策略。</strong></p>
+<h2 id="LiteBlockingWaitStrategy"><a href="#LiteBlockingWaitStrategy" class="headerlink" title="LiteBlockingWaitStrategy"></a>LiteBlockingWaitStrategy</h2><p><strong>BlockingWaitStrategy的变体</strong>，在无竞争的情况下尝试消除条件唤醒。 显示微基准测试的性能改进。</p>
+<p> 但是，由于我尚未完全证明锁省略码的正确性，因此应将这种等待策略视为实验性的。</p>
+<h2 id="BusySpinWaitStrategy"><a href="#BusySpinWaitStrategy" class="headerlink" title="BusySpinWaitStrategy"></a>BusySpinWaitStrategy</h2><p>繁忙旋转策略，该繁忙旋转策略对<code>EventProcessor</code>的障碍使用繁忙的旋转循环。</p>
+<p><strong>此策略将使用CPU资源来避免可能导致延迟抖动的系统调用。 最好当线程可以绑定到特定的CPU内核时使用。</strong></p>
+<h2 id="TimeoutBlockingWaitStrategy"><a href="#TimeoutBlockingWaitStrategy" class="headerlink" title="TimeoutBlockingWaitStrategy"></a>TimeoutBlockingWaitStrategy</h2><h2 id="LiteTimeoutBlockingWaitStrategy"><a href="#LiteTimeoutBlockingWaitStrategy" class="headerlink" title="LiteTimeoutBlockingWaitStrategy"></a>LiteTimeoutBlockingWaitStrategy</h2><p><strong>TimeoutBlockingWaitStrategy的变体</strong>，在无竞争的情况下尝试消除条件唤醒。</p>
+<h2 id="PhasedBackoffWaitStrategy"><a href="#PhasedBackoffWaitStrategy" class="headerlink" title="PhasedBackoffWaitStrategy"></a>PhasedBackoffWaitStrategy</h2><p>在屏障上等待EventProcessor的分阶段等待策略。</p>
+<p>当吞吐量和低延迟不如CPU资源那么重要时，可以使用此策略。<br>旋转，然后屈服，然后使用配置的后备WaitStrategy等待。</p>
+<h2 id="SleepingWaitStrategy"><a href="#SleepingWaitStrategy" class="headerlink" title="SleepingWaitStrategy"></a>SleepingWaitStrategy</h2><p>最初启动的休眠策略，然后使用Thread.yield（），最后在EventProcessor等待屏障时，休眠操作系统和JVM将允许的最小数量的nanos。</p>
+<p>此策略是性能和CPU资源之间的良好折衷。<br>安静时段后可能会出现延迟峰值。 这也将减少对生产线程的影响，因为它不需要发出信号通知任何条件变量来唤醒事件处理线程。</p>
+<h2 id="YieldingWaitStrategy"><a href="#YieldingWaitStrategy" class="headerlink" title="YieldingWaitStrategy"></a>YieldingWaitStrategy</h2><p>在初始旋转后，使用Thread.yield（）的EventProcessor在屏障上等待。</p>
+<p>如果其他线程需要CPU资源，则此策略将使用100％CPU，但比忙碌的自旋策略更容易放弃CPU。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/java/disruptor/9a1bdb74-8ed3-4905-88bc-7b3b4e0a4af2/">
+        <span class="nav-arrow">← </span>
+        
+          Disruptor-消费模式简介(单个实例)
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/java/disruptor/18e3fbd6-ff4b-4a0a-b82f-a547dbef8d0c/">
+        
+          Disruptor-缓存行填充
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#BlockingWaitStrategy"><span class="toc-nav-text">BlockingWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#LiteBlockingWaitStrategy"><span class="toc-nav-text">LiteBlockingWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#BusySpinWaitStrategy"><span class="toc-nav-text">BusySpinWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#TimeoutBlockingWaitStrategy"><span class="toc-nav-text">TimeoutBlockingWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#LiteTimeoutBlockingWaitStrategy"><span class="toc-nav-text">LiteTimeoutBlockingWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#PhasedBackoffWaitStrategy"><span class="toc-nav-text">PhasedBackoffWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SleepingWaitStrategy"><span class="toc-nav-text">SleepingWaitStrategy</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#YieldingWaitStrategy"><span class="toc-nav-text">YieldingWaitStrategy</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/java/disruptor/ff51336d-70d4-449c-9214-fff2542bef1f/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

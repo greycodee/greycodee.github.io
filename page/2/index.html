@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/tool/9ACF61395A77470CA029D24AEC2CA42F/">利用腾讯位置API进行的阿里云DDNS工具</a>
+      </h2>
+      <p class="article-date">2021年7月26日</p>
+      
+        
+  <a href="/tags#DDNS" >
+    <span class="tag-code">DDNS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          介绍
+本应用是基于阿里云SDK进行开发的，可以动态更新阿里云域名的DNS解析，运行环境是 Python 3
+利用腾讯位置提供的 API 进行公网 IP 的获取，可以查看如何获取腾讯位置的 API 密钥
+由于腾讯位置的 API 免费配额为每日 10000 次，请合理使用
+快速开始程序从环境变量 ...
+        
+      </div>
+      <a class="more" href="/tool/9ACF61395A77470CA029D24AEC2CA42F/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/gof/234C81B9931C44CB9B88E0E53210BB48/">UML箭头在Java中的含义</a>
+      </h2>
+      <p class="article-date">2021年7月18日</p>
+      
+        
+  <a href="/tags#UML" >
+    <span class="tag-code">UML</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          泛化
+在 Java 中表示继承关系，空心箭头指向父类
+
+
+示例：
+
+class Parent &#123;    &#125;class Son extends Parent &#123;    &#125;
+
+
+实现
+表示实现接口，箭头指向接口类
+
+
+示例：
+
+interface Iter ...
+        
+      </div>
+      <a class="more" href="/gof/234C81B9931C44CB9B88E0E53210BB48/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/essay/8B40046C17644103BD2A256EB938884C/">记一次很久以前做的梦【加密】</a>
+      </h2>
+      <p class="article-date">2021年7月15日</p>
+      
+        
+  <a href="/tags#抒发情感" >
+    <span class="tag-code">抒发情感</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          时间：2019-12-19 07:23RGwc3OqLQr&#x2F;FK7bX9qFgbl1FD1WZLruNkeFBP4vHyDejXpJhzV309eABiP0e+YiX5wKAD0GaALo74u1B39tyIUFaMrQAVV5M60sGphzkL2hf0ad5&#x2F;0JAq ...
+        
+      </div>
+      <a class="more" href="/archive/essay/8B40046C17644103BD2A256EB938884C/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/quarkus/3EC6E900CDCB4BCEBA3B0BE40C9AADBB/">Quarkus项目配置方式详解</a>
+      </h2>
+      <p class="article-date">2021年7月12日</p>
+      
+        
+  <a href="/tags#Quarkus" >
+    <span class="tag-code">Quarkus</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          配置加载流程Quarkus 可以从多个地方获取项目的配置，它读取配置优先级入下图，在下面的优先级中，一旦读取到某个配置，就不会再继续读取后面配置中的这个配置了。
+
+0x1 System Properties系统属性可以在启动期间通过 -D 标志传递给应用程序。
+比如要设置 http 服务的运 ...
+        
+      </div>
+      <a class="more" href="/archive/quarkus/3EC6E900CDCB4BCEBA3B0BE40C9AADBB/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/quarkus/5756337C1CEA4B599E678A3380DCFE00/">Quarkus构建native-image遇到的问题及解决</a>
+      </h2>
+      <p class="article-date">2021年7月9日</p>
+      
+        
+  <a href="/tags#Quarkus" >
+    <span class="tag-code">Quarkus</span>
+  </a>
+
+  <a href="/tags#Graal VM" >
+    <span class="tag-code">Graal VM</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          本机构建 native-image如果你本地安装了 Graal VM 的话，可以在项目目录下直接执行：
+mvn clean package -Pnative
+
+构建的时间比较长，构建完成后就会在 ./target 目录下生成一个二进制执行文件，一般名字是 quarkus-demo-1.0-r ...
+        
+      </div>
+      <a class="more" href="/archive/quarkus/5756337C1CEA4B599E678A3380DCFE00/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/quarkus/5870388109C640649633FA0BB2F5C9C1/">使用Maven工具创建Quarkus项目</a>
+      </h2>
+      <p class="article-date">2021年7月9日</p>
+      
+        
+  <a href="/tags#Quarkus" >
+    <span class="tag-code">Quarkus</span>
+  </a>
+
+  <a href="/tags#Maven" >
+    <span class="tag-code">Maven</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          环境我这边使用的是 Maven 3.8.1  版本，可以使用 Quarkus 官方提供的 io.quarkus:quarkus-maven-plugin:2.0.1.Final  插件来快速穿件 Quarkus 项目。
+创建项目使用以下 Maven 命令来创建一个新项目：
+mvn io.qu ...
+        
+      </div>
+      <a class="more" href="/archive/quarkus/5870388109C640649633FA0BB2F5C9C1/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/code/FFC3580D7E244B5282E3FDD7F3EB8E95/">开发SaaS应用的12条准则【转】</a>
+      </h2>
+      <p class="article-date">2021年7月7日</p>
+      
+        
+  <a href="/tags#SaaS" >
+    <span class="tag-code">SaaS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          开发SaaS应用的12条准则【转】
+原文地址：https://12factor.net/
+
+简介如今，软件通常会作为一种服务来交付，它们被称为网络应用程序，或软件即服务（SaaS）。12-Factor 为构建如下的 SaaS 应用提供了方法论：
+
+使用标准化流程自动配置，从而使新的开发者花费 ...
+        
+      </div>
+      <a class="more" href="/archive/code/FFC3580D7E244B5282E3FDD7F3EB8E95/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/vertx/10EF2E95447C468CB55BD7BD0675C090/">vertx的web开发学习笔记</a>
+      </h2>
+      <p class="article-date">2021年7月5日</p>
+      
+        
+  <a href="/tags#Vert.x" >
+    <span class="tag-code">Vert.x</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          创建一个 Http 服务// 创建路由Router router = Router.router(vertx);// 创建 Http 服务vertx.createHttpServer()  // 绑定路由  .requestHandler(router)  // 监听端口  .listen( ...
+        
+      </div>
+      <a class="more" href="/vertx/10EF2E95447C468CB55BD7BD0675C090/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/74CAAAFD610241A1B8ECDB5F3BB33EE4/">Java删除文件后电脑磁盘空间没有恢复</a>
+      </h2>
+      <p class="article-date">2021年7月3日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          问题当用一下命令删除文件后，电脑磁盘内存没有恢复，还是原来的大小
+File folder = new File(&quot;/tmp/file.mp4&quot;)file.delete();
+
+解决原来是 FileOutputStream 文件流忘了关了，导致一直占用这个资源。所以使用完后 ...
+        
+      </div>
+      <a class="more" href="/java/74CAAAFD610241A1B8ECDB5F3BB33EE4/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/essay/A98D5EC3509F483E80919CA2E09BDA1B/">程序员的酒后真言</a>
+      </h2>
+      <p class="article-date">2021年6月29日</p>
+      
+        
+  <a href="/tags#闲谈" >
+    <span class="tag-code">闲谈</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+转至：http://www.ruanyifeng.com/blog/2021/06/drunk-post-of-a-programmer.html
+出至：https://old.reddit.com/r/ExperiencedDevs/comments/nmodyl/drunk_post_ ...
+        
+      </div>
+      <a class="more" href="/archive/essay/A98D5EC3509F483E80919CA2E09BDA1B/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/3/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

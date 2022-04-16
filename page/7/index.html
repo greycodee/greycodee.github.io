@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/jvm/jvm-object-is-alive/">JVM判断对象是否还活着的两种方法</a>
+      </h2>
+      <p class="article-date">2020年5月29日</p>
+      
+        
+  <a href="/tags#JVM" >
+    <span class="tag-code">JVM</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          引用计数法
+Java虚拟机并不是通过引用计数算法来判断对象是否存活的。
+
+在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的。
+优点
+原理简单,判定效率高
+
+缺点
+不能用于复杂的环境中,比如对象的互相 ...
+        
+      </div>
+      <a class="more" href="/java/jvm/jvm-object-is-alive/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/jvm/jvm-running-data-area/">JVM运行时数据区域</a>
+      </h2>
+      <p class="article-date">2020年5月26日</p>
+      
+        
+  <a href="/tags#JVM" >
+    <span class="tag-code">JVM</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          JVM运行时数据区域
+程序计数器
+线程私有
+
+唯一一个没有规定 OutOfMemoryError 异常 的区域
+
+它可以看作是当前线程所执行的字节码的行号指示器
+
+如果线程正在执行的是一个Java方法，这个计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是本地（Native）方 ...
+        
+      </div>
+      <a class="more" href="/java/jvm/jvm-running-data-area/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/jvm/jvm-javastack-EscapeAnalysis/">JVM逃逸分析技术</a>
+      </h2>
+      <p class="article-date">2020年5月26日</p>
+      
+        
+  <a href="/tags#JVM" >
+    <span class="tag-code">JVM</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          逃逸分析技术的日渐成熟,促使所有的Java对象实例不一定都在Java堆上分配内存
+简单来讲就是，Java Hotspot 虚拟机可以分析新创建对象的使用范围，并决定是否在 Java 堆上分配内存的一项技术。
+使用
+开启逃逸分析：-XX:+DoEscapeAnalysis
+关闭逃逸分析：-XX ...
+        
+      </div>
+      <a class="more" href="/java/jvm/jvm-javastack-EscapeAnalysis/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/web-security/spring-security-oauth-server-demo/">基于SpringCloud搭建Spring-security-oauth认证服务器</a>
+      </h2>
+      <p class="article-date">2020年5月19日</p>
+      
+        
+  <a href="/tags#OAuth" >
+    <span class="tag-code">OAuth</span>
+  </a>
+
+  <a href="/tags#spring-security" >
+    <span class="tag-code">spring-security</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          准备阶段这里搭建一个用OAuth2.0密码模式认证的服务器，token存入redis，client存入Mysql；
+所以事先要准备好：
+
+Redis
+Mysql
+
+并且Mysql执行Spring-security-oauth初始化Sql这个SQL，初始化Spring-security-oau ...
+        
+      </div>
+      <a class="more" href="/archive/web-security/spring-security-oauth-server-demo/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/web-security/sso-and-cas/">SSO单点登录和CAS框架</a>
+      </h2>
+      <p class="article-date">2020年5月14日</p>
+      
+        
+  <a href="/tags#SSO" >
+    <span class="tag-code">SSO</span>
+  </a>
+
+  <a href="/tags#CAS框架" >
+    <span class="tag-code">CAS框架</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          SSO单点登录单点登录（英语：Single sign-on，缩写为 SSO），又译为单一签入，一种对于许多相互关连，但是又是各自独立的软件系统，提供访问控制的属性。当拥有这项属性时，当用户登录时，就可以获取所有系统的访问权限，不用对每个单一系统都逐一登录。这项功能通常是以轻型目录访问协议（L ...
+        
+      </div>
+      <a class="more" href="/archive/web-security/sso-and-cas/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/web-security/oauth-and-jwt/">OAuth2.0与JWT</a>
+      </h2>
+      <p class="article-date">2020年5月12日</p>
+      
+        
+  <a href="/tags#OAuth2.0" >
+    <span class="tag-code">OAuth2.0</span>
+  </a>
+
+  <a href="/tags#JWT" >
+    <span class="tag-code">JWT</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          OAuth2.0OAuth2.0是一个授权协议，它允许软件应用代表资源拥有者去访问资源拥有者的资源。应用向资源拥有者请求令牌，并用这个令牌来访问资源拥有者的资源。
+角色
+客户端：相当于访问受保护资源的软件
+授权服务器：授予客户端令牌的服务
+资源拥有者：受保护的资源拥有者，有权决定将不将令牌授 ...
+        
+      </div>
+      <a class="more" href="/archive/web-security/oauth-and-jwt/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/linux/linux-fastdfs-install/">fastDFS安装使用教程</a>
+      </h2>
+      <p class="article-date">2020年5月7日</p>
+      
+        
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+  <a href="/tags#fastDFS" >
+    <span class="tag-code">fastDFS</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          FastDFS简介FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &lt; file_size &lt;500MB）为载体的在线服务。
+Fas ...
+        
+      </div>
+      <a class="more" href="/linux/linux-fastdfs-install/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/mysql/mysql-utf8mb4-error/">插入emoji到mysql时提示了一个表里不存在的字段的错误</a>
+      </h2>
+      <p class="article-date">2020年4月29日</p>
+      
+        
+  <a href="/tags#Pit" >
+    <span class="tag-code">Pit</span>
+  </a>
+
+  <a href="/tags#MySQL" >
+    <span class="tag-code">MySQL</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          1.问题描述由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：
+[2020-04-29 15:57:25] [HY000][1366] In ...
+        
+      </div>
+      <a class="more" href="/mysql/mysql-utf8mb4-error/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/algorithm/algorithm-avltree-01/">【数据结构】手写平衡二叉树（AVL）</a>
+      </h2>
+      <p class="article-date">2020年2月1日</p>
+      
+        
+  <a href="/tags#AVL" >
+    <span class="tag-code">AVL</span>
+  </a>
+
+  <a href="/tags#数据结构" >
+    <span class="tag-code">数据结构</span>
+  </a>
+
+  <a href="/tags#平衡二叉树" >
+    <span class="tag-code">平衡二叉树</span>
+  </a>
+
+  <a href="/tags#二叉树" >
+    <span class="tag-code">二叉树</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          【数据结构】手写平衡二叉树（AVL）
+
+积千里跬步，汇万里江河。每天进步一点点，终有一天将成大佬
+本文源代码：手写AVL树
+
+什么是平衡二叉树？平衡二叉树，又称为AVL树，当树不是空树时，它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。AVL树查找的时间复杂度为 ...
+        
+      </div>
+      <a class="more" href="/algorithm/algorithm-avltree-01/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/recommend/recommend-tool-1/">【转】免费可商用，最值得收藏的10个插画素材网站</a>
+      </h2>
+      <p class="article-date">2020年1月16日</p>
+      
+        
+  <a href="/tags#UI" >
+    <span class="tag-code">UI</span>
+  </a>
+
+  <a href="/tags#推荐" >
+    <span class="tag-code">推荐</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+转自凯凯刘
+
+现在插画风格的界面越来越多，网上提供的免费插图也越来越丰富。这些插图优点是表达的内容更丰富，包括：人物、商业、运动、自然、工作、幽默等等。也更适合产品类的宣传网站或者落地页。另外，矢量图的不失真在不同尺寸的显示效果上更胜一筹。花时间整理了当前全网那些优秀的10个免费插图网站， ...
+        
+      </div>
+      <a class="more" href="/recommend/recommend-tool-1/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/6/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/8/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

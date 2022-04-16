@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/7F482D9706354A288702DCCB66C81BF2/">【译】为什么 Web 3.0 很重要，你应该知道</a>
+      </h2>
+      <p class="article-date">2022年4月16日</p>
+      
+        
+  <a href="/tags#web3.0" >
+    <span class="tag-code">web3.0</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          
+原文链接：https://medium.com/@essentia1/why-the-web-3-0-matters-and-you-should-know-about-it-a5851d63c949
+
+Web 3.0 及其将给行业带来的巨大变化引起了很多关注，但很少有人真正知道它为什么会 ...
+        
+      </div>
+      <a class="more" href="/archive/7F482D9706354A288702DCCB66C81BF2/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/8B135153FD9D41DE928DF42F84AD1ECA/">Redis是怎样通讯的？</a>
+      </h2>
+      <p class="article-date">2022年3月29日</p>
+      
+        
+  <a href="/tags#Redis" >
+    <span class="tag-code">Redis</span>
+  </a>
+
+  <a href="/tags#协议" >
+    <span class="tag-code">协议</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          模型Redis 协议模型就是简单的请求-响应模型，和平常的 Http 协议有点类似。客户端发送 Redis 命令，然后服务端处理命令并返回结果给客户端。Redis 官方说这可能是最简单的网络协议模型了。
+
+有两种情况下不 不适用这个模型，一个是批量流水线命令，一个是发布&#x2F;订阅功能。 ...
+        
+      </div>
+      <a class="more" href="/archive/8B135153FD9D41DE928DF42F84AD1ECA/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/2852F14D7D13471798CE28C544741E89/">MySQL是怎样通讯的？</a>
+      </h2>
+      <p class="article-date">2022年3月27日</p>
+      
+        
+  <a href="/tags#协议" >
+    <span class="tag-code">协议</span>
+  </a>
+
+  <a href="/tags#MySQL" >
+    <span class="tag-code">MySQL</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          前言我们平常使用数据库的场景一般是程序里面代码直接连接使用，然后进行 CRUD 操作。或者使用有 GUI 界面的数据库软件来手动操作数据库， 这类软件有 DataGrip、Navicat等等…。平常很少关心它们的底层数据交互是怎么样的，相信你看了这篇文章一定能有大概的了解。本篇文章的代码使用 ...
+        
+      </div>
+      <a class="more" href="/archive/2852F14D7D13471798CE28C544741E89/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/FA21243A47644D98B4380AE439D2A69F/">什么是P2P网络</a>
+      </h2>
+      <p class="article-date">2022年2月22日</p>
+      
+        
+  <a href="/tags#P2P" >
+    <span class="tag-code">P2P</span>
+  </a>
+
+  <a href="/tags#网络" >
+    <span class="tag-code">网络</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          NAT 类型Full Cone NAT全锥形 NAT 是将来自相同内部 IP 地址和端口的所有请求映射到相同的外部 IP 地址和端口。此外，任何外部主机都可以通过向映射的外部地址发送数据包来向内部主机发送数据包。
+Restricted Cone NAT受限锥形 NAT 是将来自相同内部 IP ...
+        
+      </div>
+      <a class="more" href="/archive/FA21243A47644D98B4380AE439D2A69F/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/linux/0A5A3927BAEA4155849C174E4C613913/">centos 多网卡配置优先级</a>
+      </h2>
+      <p class="article-date">2021年9月1日</p>
+      
+        
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+  <a href="/tags#Centos" >
+    <span class="tag-code">Centos</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          过程
+查看网卡配置
+[root@localhost ~]# ip addr1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000    link/loo ...
+        
+      </div>
+      <a class="more" href="/linux/0A5A3927BAEA4155849C174E4C613913/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/">用 Json-Schema 来验证你的请求参数</a>
+      </h2>
+      <p class="article-date">2021年8月19日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Json-Schema" >
+    <span class="tag-code">Json-Schema</span>
+  </a>
+
+  <a href="/tags#参数验证" >
+    <span class="tag-code">参数验证</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介Json-Schema 是一个用来验证、描述 Json 数据的一个标准，它可以用来验证你的请求数据是否和你定义的 Schema 是否一致。比如下面的 Json 数据中：
+&#123;  &quot;name&quot;:&quot;greycode&quot;,  &quot;desc& ...
+        
+      </div>
+      <a class="more" href="/tool/775FF9A0CE4940EBBB45FED3FAD7AB5B/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/">AviatorScript轻量级高性能脚本语言</a>
+      </h2>
+      <p class="article-date">2021年8月17日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#表达式引擎" >
+    <span class="tag-code">表达式引擎</span>
+  </a>
+
+  <a href="/tags#Aviator" >
+    <span class="tag-code">Aviator</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介在 5.0 版本以前，它的名字是叫 Aviator ，定位一直只是一个表达式引擎，不支持 if&#x2F;else 条件语句（仅有三元运算符支持 ?: ），没有内置的 for&#x2F;while 循环支持（虽然你可以用 seq 库类似函数式的方式来处理集合），也没有赋值（后来在 4.0 ...
+        
+      </div>
+      <a class="more" href="/java/CA3AB1D58EA74B76A5FD69F79DD5EC79/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/">ZooKeeper单机伪集群搭建</a>
+      </h2>
+      <p class="article-date">2021年8月11日</p>
+      
+        
+  <a href="/tags#集群" >
+    <span class="tag-code">集群</span>
+  </a>
+
+  <a href="/tags#分布式" >
+    <span class="tag-code">分布式</span>
+  </a>
+
+  <a href="/tags#ZooKeeper" >
+    <span class="tag-code">ZooKeeper</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          Error contacting service. It is probably not running.
+
+        
+      </div>
+      <a class="more" href="/archive/zookeeper/2B9475B258994C18BCC5FCFA4B6D81D2/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/">ZooKeeper客户端详解及可视化客户端</a>
+      </h2>
+      <p class="article-date">2021年8月9日</p>
+      
+        
+  <a href="/tags#分布式" >
+    <span class="tag-code">分布式</span>
+  </a>
+
+  <a href="/tags#ZooKeeper" >
+    <span class="tag-code">ZooKeeper</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          下载我们可以去 ZooKeeper 官网 下载，这里我下载了 ZooKeeper 3.7.0 版本
+下载解压后，进入 apache-zookeeper-3.7.0-bin/bin 目录，这里有客户端、服务端和一些工具。在 Windows 中可以执行.cmd 结尾的执行文件，在 Mac 或 L ...
+        
+      </div>
+      <a class="more" href="/archive/zookeeper/8B8235DEF437432C99C81E97D68D0644/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/vue/2CA7C67D02E74713A030F09651A5F164/">小白学前端之TypeScript使用Vuex 4.0</a>
+      </h2>
+      <p class="article-date">2021年7月29日</p>
+      
+        
+  <a href="/tags#Vuex" >
+    <span class="tag-code">Vuex</span>
+  </a>
+
+  <a href="/tags#Vue" >
+    <span class="tag-code">Vue</span>
+  </a>
+
+  <a href="/tags#TypeScript" >
+    <span class="tag-code">TypeScript</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          简介官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。
+Vuex 分为  ...
+        
+      </div>
+      <a class="more" href="/vue/2CA7C67D02E74713A030F09651A5F164/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a class="unvisible" href="/"><span class="page-arrow">←</span> Prev</a>
+  
+  
+    <a href="/page/2/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

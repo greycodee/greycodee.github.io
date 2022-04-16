@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/golang/e1273901-26b1-4cfb-a55c-a9f5047855a5/">go自定义库上传github下载不了问题</a>
+      </h2>
+      <p class="article-date">2021年3月19日</p>
+      
+        
+  <a href="/tags#Go" >
+    <span class="tag-code">Go</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          自定义库上传github标签规范当自己写的库要上传到github时,标签号要符合vX.Y.Z的格式，例如v1.0.0
+如果定义其他的标签格式，则go会下载不到，例如v1.0,此时如果用go get命令下载的话，则下载不到此版本
+
+        
+      </div>
+      <a class="more" href="/golang/e1273901-26b1-4cfb-a55c-a9f5047855a5/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/archive/33f09b03-a5a7-4d66-93d3-7063905f9b81/">gitalk更换自定义代理</a>
+      </h2>
+      <p class="article-date">2021年3月11日</p>
+      
+        
+  <a href="/tags#gitalk" >
+    <span class="tag-code">gitalk</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          首先注册一个https://dash.cloudflare.com/ 的账号
+然后创建一个Workers。
+然后将代码复制到输入框里：
+/*CORS Anywhere as a Cloudflare Worker!(c) 2019 by Zibri (www.zibri.org)email: ...
+        
+      </div>
+      <a class="more" href="/archive/33f09b03-a5a7-4d66-93d3-7063905f9b81/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/nio/534d0985-a4a0-4239-ae81-d76378f64552/">Java的NIO编程-Channel</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Nio" >
+    <span class="tag-code">Nio</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          0x1 主要类型在Java中有许多NIO Channel实现，本文只选最主要的四种Channel：
+
+FileChannel：文件通道，用于文件的数据读写
+SocketChannel：套接字通道，用于Socket套接字TCP连接的数据读写。
+ServerSocketChannel：服务器嵌套 ...
+        
+      </div>
+      <a class="more" href="/java/nio/534d0985-a4a0-4239-ae81-d76378f64552/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/nio/2571330c-67ef-4d4c-8717-6c96768009c7/">Java的NIO编程-Selector</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Nio" >
+    <span class="tag-code">Nio</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          0x1 监控通道和选择器之间的关系，通过register（注册）的方式完成。调用通道的Channel.register（Selector sel, int ops）方法，可以将通道实例注册到一个选择器中。register方法有两个参数：第一个参数，指定通道注册到的选择器实例；第二个参数，指定 ...
+        
+      </div>
+      <a class="more" href="/java/nio/2571330c-67ef-4d4c-8717-6c96768009c7/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/nio/8d2049e3-3eb1-46ed-a44b-57398964eb21/">Java的NIO编程-Buffer</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Nio" >
+    <span class="tag-code">Nio</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          0x1 子类Buffer是一个抽象类，所以一般使用他的子类来进行编程，常用的子类有：
+
+ByteBuffer
+
+IntBuffer
+
+LongBuffer
+
+CharBuffer
+
+DoubleBufffer
+
+FloatBuffer
+
+ShortBuffer
+
+MappedByteBuff ...
+        
+      </div>
+      <a class="more" href="/java/nio/8d2049e3-3eb1-46ed-a44b-57398964eb21/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/nio/0702ff46-16cd-4520-9d33-0794cfda4b09/">Java的NIO编程-Reactor模式</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Nio" >
+    <span class="tag-code">Nio</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          0x1 Reactor模型0x1 单Reactor单线程
+        
+      </div>
+      <a class="more" href="/java/nio/0702ff46-16cd-4520-9d33-0794cfda4b09/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/disruptor/c16646bf-1474-42a7-a5cd-84b99669062c/">Disruptor-消费模式简介(池化)</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          并行模式(池化)每个消费端有两个线程实例
+disruptor.handleEventsWithWorkerPool(new A1Handler(),new A1Handler());disruptor.handleEventsWithWorkerPool(new A2Handler(),ne ...
+        
+      </div>
+      <a class="more" href="/java/disruptor/c16646bf-1474-42a7-a5cd-84b99669062c/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/disruptor/18e3fbd6-ff4b-4a0a-b82f-a547dbef8d0c/">Disruptor-缓存行填充</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          伪共享概念CPU架构常见的CPU架构如下图：
+
+在某个CPU核心上运行一个线程时，他获取数据是先从L1缓存上面找，没有命中数据时，再从L2缓存上面找、还是没有命中时再从L3缓存上找，如果还没有的话就再从主内存里面找。找到后再一层一层的传递数据。
+所以查找数据的顺序为：
+ L1 》L2 》 L ...
+        
+      </div>
+      <a class="more" href="/java/disruptor/18e3fbd6-ff4b-4a0a-b82f-a547dbef8d0c/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/disruptor/ff51336d-70d4-449c-9214-fff2542bef1f/">Disruptor-等待策略</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          BlockingWaitStrategyDisruptor默认策略
+对EventProcessor使用等待条件的锁和条件变量的阻塞策略。
+当吞吐量和低延迟不如CPU资源那么重要时，可以使用此策略。
+LiteBlockingWaitStrategyBlockingWaitStrategy的变体 ...
+        
+      </div>
+      <a class="more" href="/java/disruptor/ff51336d-70d4-449c-9214-fff2542bef1f/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/java/disruptor/9a1bdb74-8ed3-4905-88bc-7b3b4e0a4af2/">Disruptor-消费模式简介(单个实例)</a>
+      </h2>
+      <p class="article-date">2021年3月1日</p>
+      
+        
+  <a href="/tags#Java" >
+    <span class="tag-code">Java</span>
+  </a>
+
+  <a href="/tags#Disruptor" >
+    <span class="tag-code">Disruptor</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          并行模式并行模式下两个Handler同时执行，互不影响
+disruptor.handleEventsWith(new A1Handler(),new B1Handler());
+
+
+结果示例++++++++++1605084168915+B1Handler:51605084168915+A1 ...
+        
+      </div>
+      <a class="more" href="/java/disruptor/9a1bdb74-8ed3-4905-88bc-7b3b4e0a4af2/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/3/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a href="/page/5/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="浅水是喧哗的，深水是沉默的">
+  <meta name="keyword" content="java、go、native-cloud">
+  
+    <link rel="shortcut icon" href="/css/images/favicon.ico">
+  
+  <title>
+    
+      什么是HTTP协议？ | 打工纪实
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="打工纪实" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<div class="wechat-share">
+  <!-- <img src="/css/images/logo.png" /> -->
+</div>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>打工纪实</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/wikis/" class="item-link">Wiki</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/wikis/" class="menu-link">Wiki</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>什么是HTTP协议？</h2>
+  <p class="post-date">2021-06-04</p>
+  <div class="arrow-down">
+    <a href="javascript:;" rel="external nofollow noreferrer"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/jdFFPmbCNQCyhttp%E5%8D%8F%E8%AE%AE.png" alt="http协议"></p>
+<h2 id="版本介绍"><a href="#版本介绍" class="headerlink" title="版本介绍"></a>版本介绍</h2><p>HTTP 协议不用我多说了吧，大家都知道，现在我 web 开发一般都是使用 HTTP 协议来进行通信的。到目前为止，HTTP 进行了几次版本更新，HTTP 1.1 就是表示HTTP 的 1.1 版本。1.1 版本也是目前大部分网站所用的版本。</p>
+<h3 id="HTTP-0-9"><a href="#HTTP-0-9" class="headerlink" title="HTTP 0.9"></a>HTTP 0.9</h3><ul>
+<li>发布时间：1991 年</li>
+<li>简介：梦开始的地方，只接受GET一种请求方法，没有在通讯中指定版本号，且不支持请求头。由于该版本不支持POST方法，因此客户端无法向服务器传递太多信息。</li>
+</ul>
+<h3 id="HTTP-1-0"><a href="#HTTP-1-0" class="headerlink" title="HTTP 1.0"></a>HTTP 1.0</h3><ul>
+<li>发布时间：1996 年 5 月</li>
+<li>简介：这是第一个在通讯中指定版本号的HTTP协议版本。同时比 0.9 版本增加大量新特性。非持续连接，每次都要重新与服务器建立连接。</li>
+</ul>
+<h3 id="HTTP-1-1"><a href="#HTTP-1-1" class="headerlink" title="HTTP 1.1"></a>HTTP 1.1</h3><ul>
+<li>发布时间：1997 年1月</li>
+<li>简介：默认采用持续连接（Connection: keep-alive），能很好地配合代理服务器工作。还支持以<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zh.wikipedia.org/wiki/HTTP%E7%AE%A1%E7%BA%BF%E5%8C%96">管道方式</a>在同时发送多个请求，以便降低线路负载，提高传输速度。同时这也是目前最流行的版本。</li>
+</ul>
+<p>HTTP&#x2F;1.1相较于HTTP&#x2F;1.0协议的区别主要体现在：</p>
+<ul>
+<li>缓存处理</li>
+<li>带宽优化及网络连接的使用</li>
+<li>错误通知的管理</li>
+<li>消息在网络中的发送</li>
+<li>互联网地址的维护</li>
+<li>安全性及完整性</li>
+</ul>
+<h3 id="HTTP-2-0"><a href="#HTTP-2-0" class="headerlink" title="HTTP 2.0"></a>HTTP 2.0</h3><ul>
+<li>发布时间：2015 年 5 月</li>
+<li>简介：HTTP&#x2F;2 是 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://zh.wikipedia.org/wiki/HTTP">HTTP</a> 协议自 1999 年 HTTP 1.1 的改进版 RFC 2616 发布后的首个更新，主要基于 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://zh.wikipedia.org/wiki/SPDY">SPDY</a> 协议。它由<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E5%B7%A5%E7%A8%8B%E4%BB%BB%E5%8A%A1%E7%BB%84">互联网工程任务组</a>（IETF）的Hypertext Transfer Protocol Bis（httpbis）工作小组进行开发。该组织于 2014 年 12 月将 HTTP&#x2F;2 标准提议递交至 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://zh.wikipedia.org/w/index.php?title=IESG&action=edit&redlink=1">IESG</a> 进行讨论，于 2015 年 2 月 17 日被批准。</li>
+</ul>
+<h2 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h2><h3 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h3><p>请求报文分为 4 个部分，分别是请求行、请求头、换行行、请求数据，每个部分的末尾都会带上回车符（CR，ASCII：0d）和换行符（LF，ASCII：0a）</p>
+<p>其中请求行分为请求方法、请求的 URL 地址、HTTP 版本号，每个字段用<strong>空格</strong>（ASCII：20）来分隔</p>
+<p>请求头部分可以有多行，每行用回车符和换行符区分</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/dmhMuYZ.png" alt="HTTP1.1_请求报文"></p>
+<p>为了方便理解，我们可以用 Wireshark 来抓取一个 HTTP 请求来看看，并把它和上图进行关联</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/KziYgTc.png" alt="HTTP报文格式"></p>
+<h3 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h3><p>响应报文和请求报文基本差不多，唯一有区别就第一行状态行和请求报文的第一行请求行有区别。</p>
+<p>状态行也分为三个部分，分别是 HTTP 版本、状态码、状态码描述，每个部分用空格进行分隔。</p>
+<p>响应头和请求头一样，可以有多行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/TIHv2ArvWDqDHTTP%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87%20(1).jpg" alt="HTTP响应报文 (1)"></p>
+<p>同样，用 Wireshark 抓取一个响应报文，来和上图进行一一对应。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/QP0vZ8wcnVZnHTTP%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87%20(2).png" alt="HTTP响应报文 (2)"></p>
+<h2 id="持续连接和非持续连接"><a href="#持续连接和非持续连接" class="headerlink" title="持续连接和非持续连接"></a>持续连接和非持续连接</h2><p>上面说了，HTTP 1.1 的连接由原来的非持续连接变为了持续连接（Connection: keep-alive）。那么这两个有什么区别呢？</p>
+<p><strong>非持续连接</strong>指的是当向服务器多次请求资源时，每次都需要单独的进行 TCP 的连接和断开。</p>
+<p><strong>持续连接</strong>指的是当向服务器请求资源时，可以共用一个 TCP 连接来进行资源的传输。</p>
+<blockquote>
+<p>尽管 HTTP 1.1 默认使用持续连接，但是也可以配置为非持续连接，设置方法：Connection 字段设置为 close</p>
+</blockquote>
+<p>为了好理解，为画了一张图，图中省略了 TCP 建立连接和断开连接的细致步骤。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/BmuEgd8fnYPUHTTP%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5%E5%92%8C%E9%9D%9E%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5.jpg" alt="HTTP持续连接和非持续连接"></p>
+<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><blockquote>
+<p>一般我们常用的只有 GET 和 POST 两个请求方法，但是如果遵循 REST 风格来进行 API 接口的设计，就可以用到下面的一些请求方法了。</p>
+</blockquote>
+<ul>
+<li>OPTIONS：这个方法会请求服务器返回该资源所支持的所有HTTP<strong>请求方法</strong>。</li>
+<li>GET：获取指定资源地址的数据，不推荐进行上传数据等操作。</li>
+<li>HEAD：服务器在响应 HEAD 请求时不会回传 Body 资源的内容部分，这样，我们可以不传输全部内容的情况下，就可以获取服务器的响应头信息。</li>
+<li>POST：POST 请求会 向指定资源提交数据，请求服务器进行处理，请求数据会被包含在请求体中。</li>
+<li>PUT：可以将指定资源的最新数据传送给服务器取代指定的资源的内容。</li>
+<li>DELETE：删除指定资源的数据。</li>
+<li>TRACE：TRACE 请求服务器回显其收到的请求信息，该方法主要用于 HTTP 请求的测试或诊断。</li>
+<li>……</li>
+</ul>
+<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><h3 id="1xx"><a href="#1xx" class="headerlink" title="1xx"></a>1xx</h3><p>Informational（信息性状态码），表示接收的请求正在处理，具体可以查看 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://datatracker.ietf.org/doc/html/rfc2616#page-57">RFC 文档</a></p>
+<h3 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h3><p>Success（成功状态码），请求正常处理完毕，具体可以查看 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://datatracker.ietf.org/doc/html/rfc2616#page-58">RFC 文档</a></p>
+<h3 id="3xx"><a href="#3xx" class="headerlink" title="3xx"></a>3xx</h3><p>Redirection（重定向状态码），需要进行附加操作以完成请求，具体可以查看 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://datatracker.ietf.org/doc/html/rfc2616#page-61">RFC 文档</a></p>
+<h3 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h3><p>Client Error（客户端错误状态码），服务器无法处理请求，具体可以查看 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://datatracker.ietf.org/doc/html/rfc2616#page-65">RFC 文档</a></p>
+<h3 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h3><p>Server Error（服务器错误状态码），服务器处理请求出错，具体可以查看 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://datatracker.ietf.org/doc/html/rfc2616#page-70">RFC 文档</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#HTTP协议" >
+    <span class="tag-code">HTTP协议</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/spring/EEF92888390B4E7C866FE7ADA6A0B42B/">
+        <span class="nav-arrow">← </span>
+        
+          使用Nacos实现网关动态路由
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/tool/0D992236EC6B4E5EAD15886D992FF84B/">
+        
+          用Darabonba一键生成7种语言的代码
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">版本介绍</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#HTTP-0-9"><span class="toc-nav-text">HTTP 0.9</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#HTTP-1-0"><span class="toc-nav-text">HTTP 1.0</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#HTTP-1-1"><span class="toc-nav-text">HTTP 1.1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#HTTP-2-0"><span class="toc-nav-text">HTTP 2.0</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="toc-nav-text">报文格式</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87"><span class="toc-nav-text">请求报文</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87"><span class="toc-nav-text">响应报文</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5%E5%92%8C%E9%9D%9E%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5"><span class="toc-nav-text">持续连接和非持续连接</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="toc-nav-text">请求方法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%93%8D%E5%BA%94%E7%A0%81"><span class="toc-nav-text">响应码</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1xx"><span class="toc-nav-text">1xx</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2xx"><span class="toc-nav-text">2xx</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3xx"><span class="toc-nav-text">3xx</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4xx"><span class="toc-nav-text">4xx</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5xx"><span class="toc-nav-text">5xx</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://greycode.top/protocol/0143CD7666CD44389FE6F565E10EEE1A/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" rel="external nofollow noreferrer" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'false';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+  </body>
+</html>
