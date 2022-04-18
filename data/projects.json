@@ -1,0 +1,21 @@
+{
+  "list": [
+      {
+        "name":"Go笔记",
+        "url":"https://greycode.top/golang-wiki/",
+        "desc":"学习Go中记的一些笔记"
+      },
+      {
+        "name":"TypeScript笔记",
+        "url":"https://greycode.top/ts-wiki/",
+        "desc":"在学习TypeScript时的笔记"
+      }
+      ,
+      {
+        "name":"设计模式笔记",
+        "url":"https://greycode.top/design-patterns-wiki/",
+        "desc":"设计模式学习笔记"
+      }
+  ]
+}
+ 

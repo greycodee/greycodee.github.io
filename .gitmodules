@@ -1,6 +1,4 @@
-# [submodule "themes/pure"]
-# 	path = themes/pure
-# 	url = https://github.com/greycodee/hexo-theme-pure.git
-[submodule "themes/vexo"]
-	path = themes/vexo
-	url = https://github.com/greycodee/hexo-theme-vexo.git 
+
+[submodule "themes/cactus"]
+	path = themes/cactus
+	url = git@github.com:greycodee/hugo-theme-cactus.git

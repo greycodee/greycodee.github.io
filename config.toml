@@ -1,0 +1,50 @@
+baseURL = "https://greycode.top/"
+languageCode = "en-us"
+title = "Hello,I am Greycode!"
+theme = "cactus"
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "All posts"
+    url = "/posts"
+    weight = 2
+
+[[menu.main]]
+    name = "Categories"
+    url = "/categories"
+    weight = 3
+
+[[menu.main]]
+    name = "Tags"
+    url = "/tags"
+    weight = 4
+
+
+
+[params]
+    mainSection = "golang"
+    showAllPostsOnHomePage = true
+
+    showProjectsList = true
+
+    copyright = "greycode"
+
+    rss = true
+    showAllPostsArchive = true
+
+[markup]
+# 代码高亮
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4
