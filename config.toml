@@ -1,6 +1,6 @@
 baseURL = "https://greycode.top/"
 languageCode = "en-us"
-title = "Hello,I‘m Greycode!"
+title = "Greycode'Blog"
 theme = "cactus"
 googleAnalytics = "G-JVLPYZM5G1"
 
@@ -37,7 +37,7 @@ googleAnalytics = "G-JVLPYZM5G1"
     rss = true
     showAllPostsArchive = true
 
-    description = "Please use Chrome to browse this site for a better experience."
+    description = "Hello,I‘m Greycode. Please use Chrome to browse this site for a better experience."
 
     colortheme = "white" # dark, light, white, or classic
 
