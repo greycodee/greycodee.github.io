@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SonarQube on Hello,I am Greycode!</title><link>https://greycode.top/tags/sonarqube/</link><description>Recent content in SonarQube on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 13 Dec 2019 15:38:02 +0000</lastBuildDate><atom:link href="https://greycode.top/tags/sonarqube/index.xml" rel="self" type="application/rss+xml"/><item><title>Jenkins教程-集成SonarQube</title><link>https://greycode.top/posts/build-jenkins-sonarqube/</link><pubDate>Fri, 13 Dec 2019 15:38:02 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-sonarqube/</guid><description>什么是SonarQube? 看看维基百科的说明： SonarQube与CI/CD架构图 Docker运行SonarQube 简单了解之后，开始安装SonarQube.这里用Docker安装
+注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL
+SonarQube 6.7.7 Docker-CE 19.03.1 Mysql 5.7 安装 直接运行这个docker命令来安装，网上其他的教程有什么挂载文件什么的，我试了都会安装失败，原因还是因为权限原因，因为SonarQube不是以root用户运行的，导致没权限读写挂载出来的文件夹．
+注意：创建容器前一定要先保证你连的容器有对应的数据库
+docker run -d --name sonarqube -p 9099:9000 -p 9092:9092 --link=dev_mysql:mysql -e SONARQUBE_JDBC_USERNAME=app -e SONARQUBE_JDBC_PASSWORD=app -e SONARQUBE_JDBC_URL=&amp;#34;jdbc:mysql://mysql:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8&amp;amp;rewriteBatchedStatements=true&amp;amp;useConfigs=maxPerformance&amp;amp;useSSL=false&amp;#34; --restart=always sonarqube:6.7.7-community &amp;ndash;link=dev_mysql:mysql 这个命令我链接到了我的mysql容器，dev_mysql是容器的名字，mysql是在SonarQube容器里的别名，所以链接数据库时直接用mysql这个别名就可了．
+SONARQUBE_JDBC_USERNAME ：数据库的账户
+SONARQUBE_JDBC_PASSWORD ：数据库密码
+访问 安装好后直接访问9099端口，登录的账户和密码默认都是admin．首页就是这个样子的．
+Jenkins集成SonarQube Jenkins和SonarQube都是运行在Docker容器里的
+下载和安装插件 直接下载最新版的，然后导入，导入的方法可以看插件导入方法
+插件下载地址：https://updates.jenkins.io/download/plugins/sonar/ SonarQube生成Token 进入SonarQube管理界面
+Administration-&amp;gt;Security-&amp;gt;Users
+然后随便输入一个名字，点击生成，记下Token
+添加全局凭证 类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token
+设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口</description></item></channel></rss>

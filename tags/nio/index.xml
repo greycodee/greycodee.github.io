@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nio on Hello,I am Greycode!</title><link>https://greycode.top/tags/nio/</link><description>Recent content in Nio on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 01 Mar 2021 10:07:09 +0000</lastBuildDate><atom:link href="https://greycode.top/tags/nio/index.xml" rel="self" type="application/rss+xml"/><item><title>Java的NIO编程-Channel</title><link>https://greycode.top/posts/534d0985-a4a0-4239-ae81-d76378f64552/</link><pubDate>Mon, 01 Mar 2021 10:07:09 +0000</pubDate><guid>https://greycode.top/posts/534d0985-a4a0-4239-ae81-d76378f64552/</guid><description>0x1 主要类型 在Java中有许多NIO Channel实现，本文只选最主要的四种Channel：
+FileChannel：文件通道，用于文件的数据读写 SocketChannel：套接字通道，用于Socket套接字TCP连接的数据读写。 ServerSocketChannel：服务器嵌套字通道（或服务器监听通道），允许我们监听TCP连接请求，为每个监听到的请求，创建一个SocketChannel套接字通道。 DatagramChannel：数据报通道，用于UDP协议的数据读写。 0x2 使用 FileChannel 读取通道数据 首先在本地创建文件/home/zheng/channeltest，在里面编写内容：hello,world!
+public class ChannelTest { public static void main(String[] args) throws IOException { // 创建输入流 File file = new File(&amp;#34;/home/zheng/channeltest&amp;#34;); FileInputStream fis = new FileInputStream(file); // 获取通道 FileChannel fileChannel = fis.getChannel(); // 创建缓冲区 ByteBuffer byteBuffer = ByteBuffer.allocate(1024); int length = -1; // 读取通道数据到缓冲区 while ((length=fileChannel.</description></item><item><title>Java的NIO编程-Selector</title><link>https://greycode.top/posts/2571330c-67ef-4d4c-8717-6c96768009c7/</link><pubDate>Mon, 01 Mar 2021 10:07:07 +0000</pubDate><guid>https://greycode.top/posts/2571330c-67ef-4d4c-8717-6c96768009c7/</guid><description>0x1 监控 通道和选择器之间的关系，通过register（注册）的方式完成。调用通道的Channel.register（Selector sel, int ops）方法，可以将通道实例注册到一个选择器中。register方法有两个参数：第一个参数，指定通道注册到的选择器实例；第二个参数，指定选择器要监控的IO事件类型。
+IO事件类型有：
+可读：SelectionKey.OP_READ 可写：SelectionKey.OP_WRITE 连接：SelectionKey.OP_CONNECT 接收：SelectionKey.OP_ACCEPT 如果一下要监控多个事件的话可以用位或运算符来实现
+int key = SelectionKey.OP_READ | SelectionKey.OP_WRITE; 0x2 SelectionKey选择键 选择键的功能是很强大的。通过SelectionKey选择键，不仅仅可以获得通道的IO事件类型，比方说SelectionKey.OP_READ；还可以获得发生IO事件所在的通道；另外，也可以获得选出选择键的选择器实例。
+常用方法 isAcceptable()：判断IO事件类型是否是SelectionKey.OP_ACCEPT isReadable()：判断IO事件是否是SelectionKey.OP_READ isConnectable():判断IO事件是否是SelectionKey.OP_CONNECT isWritable()：判断IO事件是否是SelectionKey.OP_WRITE 0x3 使用条件 并不是所有的Channel都可以使用Selector，判断一个通道能否被选择器监控或选择，有一个前提：判断它是否继承了抽象类SelectableChannel（可选择通道）。如果继承了SelectableChannel，则可以被选择，否则不能。
+简单地说，一条通道若能被选择，必须继承SelectableChannel类。
+FileChannel就没有继承SelectableChannel类，所以不能使用Selector
+0x4 使用流程 使用选择器，主要有以下三步：
+获取选择器实例； 将通道注册到选择器中； 轮询感兴趣的IO就绪事件（选择键集合）。 0x5 Demo 源码地址： https://github.com/GreyCode9/nio-demo/tree/main/src/io/selector</description></item><item><title>Java的NIO编程-Buffer</title><link>https://greycode.top/posts/8d2049e3-3eb1-46ed-a44b-57398964eb21/</link><pubDate>Mon, 01 Mar 2021 10:07:05 +0000</pubDate><guid>https://greycode.top/posts/8d2049e3-3eb1-46ed-a44b-57398964eb21/</guid><description>0x1 子类 Buffer是一个抽象类，所以一般使用他的子类来进行编程，常用的子类有：
+ByteBuffer
+IntBuffer
+LongBuffer
+CharBuffer
+DoubleBufffer
+FloatBuffer
+ShortBuffer
+MappedByteBuffer
+0x2 属性 Buffer中有四个重要的属性，分别是：
+capacity：Buffer类的capacity属性，表示内部容量的大小 position：Buffer类的position属性，表示当前的位置 limit：Buffer类的limit属性，表示读写的最大上限。 mark：暂存属性，暂时保存position的值，方便后面的重复使用position值。 0x3 方法 Buffer中几个重要的方法有：
+allocate()：创建缓存区（BUffer创建缓存区不是用new，而是用这个方法来创建) put()：向缓冲器插入数据 filp()：翻转模式，将缓冲区改为读模式（缓冲区默认模式为写模式）。其实就改变了limit，position，mark属性的值。 get()：从缓冲区读取数据，从position位置开始读 rewind()：倒带（重复读取），就是将position的位置重置为0 mark()：mark()方法的作用就是将当前position的位置暂存起来，放在mark属性中。 reset()：将position重置为mark属性的位置。 clean()：清空缓存区，重置position，limit，mark属性为初始值</description></item><item><title>Java的NIO编程-Reactor模式</title><link>https://greycode.top/posts/0702ff46-16cd-4520-9d33-0794cfda4b09/</link><pubDate>Mon, 01 Mar 2021 10:07:04 +0000</pubDate><guid>https://greycode.top/posts/0702ff46-16cd-4520-9d33-0794cfda4b09/</guid><description>0x1 Reactor模型 0x1 单Reactor单线程</description></item></channel></rss>

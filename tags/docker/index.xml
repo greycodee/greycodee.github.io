@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on Hello,I am Greycode!</title><link>https://greycode.top/tags/docker/</link><description>Recent content in Docker on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Dec 2019 15:04:16 +0000</lastBuildDate><atom:link href="https://greycode.top/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker迁移根目录导致mysql权限问题</title><link>https://greycode.top/posts/docker-transfer-pit/</link><pubDate>Fri, 20 Dec 2019 15:04:16 +0000</pubDate><guid>https://greycode.top/posts/docker-transfer-pit/</guid><description>问题描述 　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：
+迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;
+文件复制过去后，按照教程，重新启动docker服务，可是其中mysql容器跑不起来了，报mysqld: Can&amp;rsquo;t create/write to file &amp;lsquo;/tmp/ibTCv7Rw&amp;rsquo; (Errcode: 13 - Permission denied)
+期间按照网上的方法：说docker容器启动是添加&amp;ndash;privileged=true,设置/tmp目录的权限，关闭selinux，这些方法都没用！！！！！！ 其中设置/tmp文件权限这个方法，我把里面的/tmp文件挂载出来后，设置了权限，报这个的问题是解决了，可是又出现了新的问题，又报Version: &amp;lsquo;5.7.27&amp;rsquo; socket: &amp;lsquo;/var/run/mysqld/mysqld.sock&amp;rsquo;
+看来还是得从根源上解决问题啊！
+我的解决办法 我想，既然是权限问题，那肯定是复制文件的时候权限丢失了，于是查了下cp命令保持权限的命令（cp -p）: 于是我又重新关闭的docker服务，然后删除了所有复制到home文件的目录，重新用cp -p -R /var/lib/docker /home/docker/lib/来重新复制了文件；
+复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．</description></item><item><title>Jenkins教程-集成SonarQube</title><link>https://greycode.top/posts/build-jenkins-sonarqube/</link><pubDate>Fri, 13 Dec 2019 15:38:02 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-sonarqube/</guid><description>什么是SonarQube? 看看维基百科的说明： SonarQube与CI/CD架构图 Docker运行SonarQube 简单了解之后，开始安装SonarQube.这里用Docker安装
+注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL
+SonarQube 6.7.7 Docker-CE 19.03.1 Mysql 5.7 安装 直接运行这个docker命令来安装，网上其他的教程有什么挂载文件什么的，我试了都会安装失败，原因还是因为权限原因，因为SonarQube不是以root用户运行的，导致没权限读写挂载出来的文件夹．
+注意：创建容器前一定要先保证你连的容器有对应的数据库
+docker run -d --name sonarqube -p 9099:9000 -p 9092:9092 --link=dev_mysql:mysql -e SONARQUBE_JDBC_USERNAME=app -e SONARQUBE_JDBC_PASSWORD=app -e SONARQUBE_JDBC_URL=&amp;#34;jdbc:mysql://mysql:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8&amp;amp;rewriteBatchedStatements=true&amp;amp;useConfigs=maxPerformance&amp;amp;useSSL=false&amp;#34; --restart=always sonarqube:6.7.7-community &amp;ndash;link=dev_mysql:mysql 这个命令我链接到了我的mysql容器，dev_mysql是容器的名字，mysql是在SonarQube容器里的别名，所以链接数据库时直接用mysql这个别名就可了．
+SONARQUBE_JDBC_USERNAME ：数据库的账户
+SONARQUBE_JDBC_PASSWORD ：数据库密码
+访问 安装好后直接访问9099端口，登录的账户和密码默认都是admin．首页就是这个样子的．
+Jenkins集成SonarQube Jenkins和SonarQube都是运行在Docker容器里的
+下载和安装插件 直接下载最新版的，然后导入，导入的方法可以看插件导入方法
+插件下载地址：https://updates.jenkins.io/download/plugins/sonar/ SonarQube生成Token 进入SonarQube管理界面
+Administration-&amp;gt;Security-&amp;gt;Users
+然后随便输入一个名字，点击生成，记下Token
+添加全局凭证 类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token
+设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口</description></item><item><title>Jenkins教程-搭建(Docker版)</title><link>https://greycode.top/posts/build-jenkins-docker/</link><pubDate>Thu, 07 Nov 2019 17:19:34 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-docker/</guid><description>目录 Jenkins教程-搭建(Docker版)
+Jenkins教程-创建Maven项目
+Jenkins教程-Docker+GitLab持续部署持续集成
+环境 主机：172.16.54.131
+系统：Cnetos 7
+安装Docker-CE 检查Docker 首先检查本机是否安装Docker，如果安装了直接跳过安装Docker步骤
+docker -v 如果出现Docker version 19.03.4, build 9013bf583a类似的信息，则说明已安装Docker
+安装 本教程以centos7安装方式说明，其他系统安装方式会有不同 执行以下命令，安装Docker
+yum install -y yum-utils device-mapper-persistent-data lvm2 yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo yum install docker-ce service docker start systemctl enable docker 第一条命令：为添加源做准备 使其支持存储 第二条命令：添加docker-ce软件源 第三条命令：安装docker-ce 第四条命令：启动docker服务 第五条命令：设置开启自启 安装Jenkins的Docker容器 创建文件夹 在创建容器前先在宿主机创建一个Jenkins的工作文件夹，用于持久化</description></item><item><title>Docker下安装mysql并设置用户权限</title><link>https://greycode.top/posts/docker-mysql/</link><pubDate>Tue, 03 Sep 2019 15:58:46 +0000</pubDate><guid>https://greycode.top/posts/docker-mysql/</guid><description>环境 Ubuntu18.04
+Docker19.03.1
+Mysql5.7
+Docker 拉取镜像 Docker拉取镜像默认是从DockerHub上面拉取，上面有各厂商提供的优质官方镜像，可以直接拉取使用。或者也可以用DockerFile自定义构建你自己的镜像。
+sudo docker pull mysql:5.7 //拉取镜像到本地 注：上面mysql:5.7指的是拉取5.7版本的mysql，如果不加直接写mysql的话默认是拉取mysql的最新版本。
+如果显示上面这样，说明已经拉取好了。
+查看镜像 sudo docker images //查看本地镜像 创建容器 创建 sudo docker run -d -p 3306:3306 --name mysql5.7 -e MYSQL_ROOT_PASSWORD=root mysql:5.7 -d 指定容器运行于后台 -p 端口映射 主机端口:容器端口 &amp;ndash;name 自定义容器名字，方便记忆，不设置的话会随机生产 -e 容器环境变量 创建好的话会显示一串随机生产的id
+查看创建好的容器 sudo docker ps -a -a 显示所有创建好的容器，如果不加只显示正在运行的容器 Mysql 进入容器 sudo docker exec -it mysql5.7 bash -i 打开STDIN，用于控制台交互 -t 分配tty设备，该可以支持终端登录 登录mysql mysql -uroot -p 注：然后输入刚才创建容器时的密码，就是MYSQL_ROOT_PASSWORD这个参数</description></item><item><title>树莓派安装docker</title><link>https://greycode.top/posts/build-docker-pi/</link><pubDate>Fri, 30 Aug 2019 18:33:03 +0000</pubDate><guid>https://greycode.top/posts/build-docker-pi/</guid><description>前言 和平常x86_64架构的电脑安装docker不同，树莓派是ARM架构的，所以安装步骤比较繁琐一点。
+使用APT源安装docker 更新apt软件源及安装必备组件。为了确认所下载软件包的合法性，还需要添加软件源的 GPG 密钥。
+$sudo apt-get update $sudo apt-get install \ apt-transport-https \ ca-certificates \ curl \ gnupg2 \ lsb-release \ software-properties-common $curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/raspbian/gpg | sudo apt-key add - 添加docker ce 软件源 首先执行以下一行命令，然后记一下输出的结果
+$ echo $(lsb_release -cs) stretch 在/etc/apt/sources.list.d目录下新建文件docker.list
+$ sudo vi /etc/apt/sources.list.d/docker.list 在文件里添加下面这行
+deb [arch=armhf] https://download.docker.com/linux/raspbian $(lsb_release -cs) stable 把$(lsb_release -cs)改为刚才第一行输出的结果，比如我的输出的是stretch，改完后如下
+deb [arch=armhf] https://download.</description></item></channel></rss>

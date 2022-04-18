@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pit on Hello,I am Greycode!</title><link>https://greycode.top/tags/pit/</link><description>Recent content in Pit on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 29 Apr 2020 17:16:27 +0000</lastBuildDate><atom:link href="https://greycode.top/tags/pit/index.xml" rel="self" type="application/rss+xml"/><item><title>插入emoji到mysql时提示了一个表里不存在的字段的错误</title><link>https://greycode.top/posts/mysql-utf8mb4-error/</link><pubDate>Wed, 29 Apr 2020 17:16:27 +0000</pubDate><guid>https://greycode.top/posts/mysql-utf8mb4-error/</guid><description>1.问题描述 由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：
+[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &amp;#39;\xF0\x9F\x98\x98&amp;#39; for column &amp;#39;user_name&amp;#39; at row 14 当时我就傻了，我这个表里也没有user_name这个字段啊，怎么会报这个字段错误,我明明修改的是nickname这个字段啊。于是google和百度搜了一圈，无解。
+２.解决方案 试了好几种方法，删字段，重新建。删表，重新建。都不行。。。。。静下心来，于是打算从mysql服务器入手。进入到mysql对应库的文件夹，发现tiny_user_info这个表有三个文件
+和常见的多了一个TRG文件。这是一个触发器文件，打开一看，发现了user_name字段。。。。。。
+原来是同事在这个表里加了个触发器，当tiny_user_info里新增数据时，会触发新增到另一张表里，nickname的值同时会插入到另一张表的user_name字段，而他那张表的字段没有设置utf8mb4编码,所以导致插入失败。于是叫同事把他那张表设置一下utf8mb4编码后，就可以正常插入了。</description></item><item><title>更新驱动到mysql-connector-java-8遇到的一些问题</title><link>https://greycode.top/posts/mysql-update-driver-connector-8/</link><pubDate>Wed, 25 Dec 2019 17:07:12 +0000</pubDate><guid>https://greycode.top/posts/mysql-update-driver-connector-8/</guid><description>更新驱动到mysql-connector-java-8遇到的一些问题 问题 POM &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.16&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; application.properties spring.datasource.driver-class-name=com.mysql.jdbc.Driver 项目是SpringBoot构建的,数据库版本是:MySQL5.7,用了mysql-connector-java-8来链接数据库,application.properties也配置成spring.datasource.driver-class-name=com.mysql.jdbc.Driver,中间遇到了几个问题;
+问题一 描述 如上配置后,控制台报了一下错误:
+Loading class `com.mysql.jdbc.Driver&amp;#39;. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver&amp;#39;. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary. 翻译过来后就是:
+加载类 com.mysql.jdbc.Driver。 不推荐使用。 新的驱动程序类为 com.mysql.cj.jdbc.Driver。 通过SPI自动注册驱动程序，通常不需要手动加载驱动程序类。
+解决 根据提示,解决方法有两种:
+更改application.properties文件 spring.datasource.driver-class-name=com.mysql.jdbc.Driver //改成下面这样 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver 去掉application.properties文件中的spring.datasource.driver-class-name,因为它说会通过SPI自动注册的; 问题二 描述 数据库的数据时间总是和实际时间差8个小时
+解决 在数据库url添加serverTimezone=GMT%2B8</description></item><item><title>Docker迁移根目录导致mysql权限问题</title><link>https://greycode.top/posts/docker-transfer-pit/</link><pubDate>Fri, 20 Dec 2019 15:04:16 +0000</pubDate><guid>https://greycode.top/posts/docker-transfer-pit/</guid><description>问题描述 　最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：
+迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;
+文件复制过去后，按照教程，重新启动docker服务，可是其中mysql容器跑不起来了，报mysqld: Can&amp;rsquo;t create/write to file &amp;lsquo;/tmp/ibTCv7Rw&amp;rsquo; (Errcode: 13 - Permission denied)
+期间按照网上的方法：说docker容器启动是添加&amp;ndash;privileged=true,设置/tmp目录的权限，关闭selinux，这些方法都没用！！！！！！ 其中设置/tmp文件权限这个方法，我把里面的/tmp文件挂载出来后，设置了权限，报这个的问题是解决了，可是又出现了新的问题，又报Version: &amp;lsquo;5.7.27&amp;rsquo; socket: &amp;lsquo;/var/run/mysqld/mysqld.sock&amp;rsquo;
+看来还是得从根源上解决问题啊！
+我的解决办法 我想，既然是权限问题，那肯定是复制文件的时候权限丢失了，于是查了下cp命令保持权限的命令（cp -p）: 于是我又重新关闭的docker服务，然后删除了所有复制到home文件的目录，重新用cp -p -R /var/lib/docker /home/docker/lib/来重新复制了文件；
+复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．</description></item><item><title>Vue Cli3-11创建项目慢的问题</title><link>https://greycode.top/posts/vue-cli3-11-problem/</link><pubDate>Thu, 05 Sep 2019 16:33:23 +0000</pubDate><guid>https://greycode.top/posts/vue-cli3-11-problem/</guid><description>前言 这几天刚学习vue，于是下载了最新的vue cli3.11来搭建项目，可是搭建的时候一直卡在下载插件见面，就是下面这张图。
+网上查了说不能用国内的镜像，WTF，不是说国内的更快吗？好吧，我换！！！
+下载nrm 看清楚哦，是nrm部署npm！！！nrm 是一个 npm 源管理器，允许你快速地在 npm 源间切换。执行以下命令安装。
+sudo npm install -g nrm 测试nrm是否安装成功 nrm -V 如果输出版本号，则说明安装成功。
+切换npm源 nrm ls 此命令会列出npm的所有源
+可以看到我现在使用的是淘宝的源，现在把他切换到npm的源。
+nrm use npm 再次创建vue项目 vue create rrr2 项目成功创建！！！</description></item><item><title>Base64影响泰文字段取值问题</title><link>https://greycode.top/posts/problem-java-base64/</link><pubDate>Wed, 14 Aug 2019 10:39:23 +0000</pubDate><guid>https://greycode.top/posts/problem-java-base64/</guid><description>今天在工作中，图片要用base64上传，上传数据中还有泰文，然后和前端app联调时发现他们传的泰文这边竟然没存到库里，怀疑是app没有传值过来，于是一番操作 查看日志 what,日志里面竟然有他们传过来的泰文的值
+对比ios和android的数据 发现日志里的数据都是一样的，但是android上传的数据全部传入了mysql数据库，ios的除了泰文，其他的也都传到了库里
+确定问题 最后对比发现，android的泰文字段三放在base64字段前面的然后传上来的，ios是放在base64字段后面传上来的，怀疑问题在此处
+修复bug 于是叫ios也和android一样，把上传字段的顺序调整了以下，把泰文的字段放在base64字段前面，然后上传。改了之后试了以下，，竟然解决了，2222333333
+总结：暂时不知道具体什么原因，有可能是因为base64数据太长了，影响到泰文的字段存储了。</description></item></channel></rss>

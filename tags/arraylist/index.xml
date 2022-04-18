@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ArrayList on Hello,I am Greycode!</title><link>https://greycode.top/tags/arraylist/</link><description>Recent content in ArrayList on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 03 Jan 2020 19:13:31 +0000</lastBuildDate><atom:link href="https://greycode.top/tags/arraylist/index.xml" rel="self" type="application/rss+xml"/><item><title>【源码解析】扒开ArrayList的外衣</title><link>https://greycode.top/posts/java-arraylist-source-1/</link><pubDate>Fri, 03 Jan 2020 19:13:31 +0000</pubDate><guid>https://greycode.top/posts/java-arraylist-source-1/</guid><description>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬。
+本文内容 当然ArrayList里的方法不止这些，本文主要讲一些常用的方法
+方法变量 Arraylist里的方法变量主要有以下几个
+构造方法 有参构造 传入数组的大小 代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(5); 源码解析 传入一个list对象 其实这个就相当于把传入的list对象里的数据复制到新的ArrayList对象
+代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(Arrays.asList(&amp;#34;z&amp;#34;,&amp;#34;m&amp;#34;,&amp;#34;h&amp;#34;)); 这里用来Arrays工具类里的asList方法，它的源码里是直接返回一个List，有兴趣的可以去看看，这里就不介绍了
+源码解析 无参构造 这个比较简单，直接赋值一个空数组
+代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(); 源码解析 add方法 add一般常用的有两个方法，一个就是add(E e)在尾部添加数据，一个就是add(int index,E element)在指定位置插入元素
+add(E e) 这个是Arrayist的主要方法，平时用的也是最多的方法之一，所以源码比较复杂，比较长
+代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(); list.add(&amp;#34;灰灰HK&amp;#34;); 源码解析 ensureCapacityInternal(int minCapacity)确保数组容量充足 calculateCapacity(Object[] elementData, int minCapacity) 再回到ensureExplicitCapacity(int minCapacity)这个方法，这个方法先修改次数加1，然后判断size+1是不是比当前的数组容量大，如果比当前的数组容量大，则进行扩容操作，扩大容量为原数组的1.5倍 比如第二次调用add方法，此时size+1=2, elementData.length=10,为什么等于10呢？因为第一次默认把数组容量从0扩大到了10,这时size+1比elementData.length小，就不会进行扩容操作
+grow(int minCapacity)扩容 这里调用Arrays.</description></item></channel></rss>

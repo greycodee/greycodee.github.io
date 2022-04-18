@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tool on Hello,I am Greycode!</title><link>https://greycode.top/categories/tool/</link><description>Recent content in Tool on Hello,I am Greycode!</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 19 Aug 2021 16:40:05 +0000</lastBuildDate><atom:link href="https://greycode.top/categories/tool/index.xml" rel="self" type="application/rss+xml"/><item><title>用 Json-Schema 来验证你的请求参数</title><link>https://greycode.top/posts/775ff9a0ce4940ebbb45fed3fad7ab5b/</link><pubDate>Thu, 19 Aug 2021 16:40:05 +0000</pubDate><guid>https://greycode.top/posts/775ff9a0ce4940ebbb45fed3fad7ab5b/</guid><description>简介 Json-Schema 是一个用来验证、描述 Json 数据的一个标准，它可以用来验证你的请求数据是否和你定义的 Schema 是否一致。比如下面的 Json 数据中：
+{ &amp;#34;name&amp;#34;:&amp;#34;greycode&amp;#34;, &amp;#34;desc&amp;#34;:&amp;#34;coder&amp;#34; } 如果不预先告诉你字段的含义，你知道 name 是什么意思吗？它到底是指人名还是一个物品的名字还是其他？desc 又是什么意思呢？
+这时候，就可以用 Json-Schema 来描述它了
+{ &amp;#34;$schema&amp;#34;: &amp;#34;http://json-schema.org/draft-07/schema&amp;#34;, &amp;#34;$id&amp;#34;: &amp;#34;http://example.com/example.json&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;object&amp;#34;, &amp;#34;title&amp;#34;: &amp;#34;这是一个Json数据&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;描述个人信息的数据&amp;#34;, &amp;#34;required&amp;#34;: [ &amp;#34;name&amp;#34;, &amp;#34;desc&amp;#34; ], &amp;#34;properties&amp;#34;: { &amp;#34;name&amp;#34;: { &amp;#34;type&amp;#34;: &amp;#34;string&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;人的姓名&amp;#34;, }, &amp;#34;desc&amp;#34;: { &amp;#34;type&amp;#34;: &amp;#34;string&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;个人简介&amp;#34;, } } } 上面我们用 Json-Schema 来描述了刚开始的 Json 数据，这样就可以清楚的知道 name 是人的姓名，desc 是个人简介，在也不用自己去猜了。</description></item><item><title>利用腾讯位置API进行的阿里云DDNS工具</title><link>https://greycode.top/posts/9acf61395a77470ca029d24aec2ca42f/</link><pubDate>Mon, 26 Jul 2021 16:08:12 +0000</pubDate><guid>https://greycode.top/posts/9acf61395a77470ca029d24aec2ca42f/</guid><description>介绍
+本应用是基于阿里云SDK进行开发的，可以动态更新阿里云域名的DNS解析，运行环境是 Python 3
+利用腾讯位置提供的 API 进行公网 IP 的获取，可以查看如何获取腾讯位置的 API 密钥
+由于腾讯位置的 API 免费配额为每日 10000 次，请合理使用
+快速开始 程序从环境变量中获取配置，运行前先设置环境变量
+环境变量 说明 ALI_ACCESS_KEY_ID 阿里云 ACCESS_KEY_ID（必填） ALI_ACCESS_KEY_SECRET 阿里云 ACCESS_KEY_SECRET（必填） ALI_REGION_ID 阿里云区域 ID（默认：cn-hangzhou） DNS_TYPE 解析类型（默认：A） DNS_DOMAIN 域名（必填） DNS_SUB_DOMAIN 二级域名（默认：@） TENCENT_LBS_KEY 腾讯位置应用 KEY TENCENT_LBS_SK 腾讯位置应用签名加密 SK 环境字段说明 DNS_TYPE 支持的解析类型：
+点击查看官方详细说明</description></item><item><title>百度、谷歌、必应三大站长API密钥申请流程</title><link>https://greycode.top/posts/c334612cbdce41e79f7ea6a2f3f4c10c/</link><pubDate>Thu, 17 Jun 2021 21:40:11 +0000</pubDate><guid>https://greycode.top/posts/c334612cbdce41e79f7ea6a2f3f4c10c/</guid><description>Google 索引 API 开通步骤 点击此链接，然后选择创建项目，点击继续。然后再点击转到“凭据”页面
+到凭据页面先点击左侧的凭据选项，然后再点击管理服务账号
+然后再点击创建服务账号
+然后再填写相关信息，最后点击完成（第三步可不填）
+点击图中的电子邮件，然后开始创建密钥，选择JSON格式，此时就会下载密钥文件到你电脑了
+打开Google Search Console，依次点击设置-&amp;gt;用户和权限-&amp;gt;拥有者账户右边三个点-&amp;gt;管理资源所有者-&amp;gt;添加所有者-&amp;gt;填入上面密钥中的client_email 的值
+现在可以用作为服务帐号进行身份验证的步骤来使用密钥了
+Bing 索引 API 开通步骤 点击导航栏的齿轮图标
+点击 API 访问，然后点击 API 密钥，就可以得到 API 密钥了
+然后就可以按照必应文档来进行API的调用了
+Baidu 索引 API 开通步骤 百度就比较简单粗暴了，直接点击这个链接就可以直接得到 Token 了，这个页面下也有对应的 API 调用方法示例，这边就不再重复叙述了</description></item><item><title>用Darabonba一键生成7种语言的代码</title><link>https://greycode.top/posts/0d992236ec6b4e5ead15886d992ff84b/</link><pubDate>Sat, 05 Jun 2021 18:08:19 +0000</pubDate><guid>https://greycode.top/posts/0d992236ec6b4e5ead15886d992ff84b/</guid><description>0x1 介绍 最近在看阿里的SDK的时候，突然看到了一个好玩的东西，这玩意叫 Darabonba。是一种 OpenAPI 应用的领域特定语言。可以利用它为任意风格的接口生成多语言的 SDK、代码示例、测试用例、接口编排等。现在阿里云的多语言 SDK 就是用这个生成的。下面是官方的介绍流程图。
+0x2 安装 我们按照官方的步骤来安装它，因为是用 Nodejs 写的，所以可以用 npm 来安装它
+sudo npm install -g @darabonba/cli 安装完成后可以在终端输入 dara ，如果输出版本号就是说明安装成功了
+➜ dara The CLI for Darabonba 1.1.8 0x3 使用 安装完成后就可以使用了，首先创建一个文件夹来存放这个项目
+mkdir demo &amp;amp;&amp;amp; cd demo 然后用 dara 命令来进行初始化模块，然后依次输入包名等信息。
+➜ dara init package scope: demo package name: demo package version: 1.0.0 main entry: ./demo.dara 初始化完成后，我们就可以在 demo.dara 文件里进行 Darabonba DSL 表达式的编写里
+比如我们编写一个经典的输出 hello world！
+编写 Darabonba DSL 表达式 在 demo.</description></item><item><title>吐血整理Git常用命令</title><link>https://greycode.top/posts/git-tool-command/</link><pubDate>Mon, 22 Jun 2020 16:27:25 +0000</pubDate><guid>https://greycode.top/posts/git-tool-command/</guid><description>Git常用命令 Git简介 Git 是用于 Linux内核开发的版本控制工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使源代码的发布和交流极其方便。 Git 的速度很快，这对于诸如 Linux kernel 这样的大项目来说自然很重要。 Git 最为出色的是它的合并跟踪（merge tracing）能力。
+git对于很多人来说,真的是又爱又恨,用的好可以提示开发效率;用不好,解决各种冲突就要累的你半死
+git结构 网上有 我就不画了
+workspace 相当于就是我们的本地电脑上的文件
+Index 缓存区
+Repository 本地仓库
+Remote 远程仓库(github/gitlab/gitee)
+git命令 git官方提供的命令多达几百个,可是我们日常却用不到这么多
+所以我就整理了一下日常使用的命令
+现在关注微信公招:灰色Code
+回复关键字:git
+就可以获取思维导图高清图片及导图源地址</description></item></channel></rss>
