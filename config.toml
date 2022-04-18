@@ -2,6 +2,7 @@ baseURL = "https://greycode.top/"
 languageCode = "en-us"
 title = "Hello,I‘m Greycode!"
 theme = "cactus"
+googleAnalytics = "G-JVLPYZM5G1"
 
 [[menu.main]]
     name = "Home"
@@ -38,7 +39,6 @@ theme = "cactus"
 
     description = "Please use Chrome to browse this site for a better experience."
 
-    googleAnalytics = "G-JVLPYZM5G1"
     colortheme = "white" # dark, light, white, or classic
 
 [[params.social]]
