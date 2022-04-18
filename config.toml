@@ -1,6 +1,6 @@
 baseURL = "https://greycode.top/"
 languageCode = "en-us"
-title = "Hello,I am Greycode!"
+title = "Hello,I‘m Greycode!"
 theme = "cactus"
 
 [[menu.main]]
@@ -36,6 +36,21 @@ theme = "cactus"
     rss = true
     showAllPostsArchive = true
 
+    description = "Please use Chrome to browse this site for a better experience."
+
+    googleAnalytics = "G-JVLPYZM5G1"
+    colortheme = "white" # dark, light, white, or classic
+
+[[params.social]]
+  name = "rss"
+  link = "/sitemap.xml"
+[[params.social]]
+  name = "email"
+  link = "zhengminghui99@gmail.com"
+[[params.social]]
+  name = "github"
+  link = "https://github.com/greycodee"
+
 [markup]
 # 代码高亮
   [markup.highlight]
@@ -46,5 +61,6 @@ theme = "cactus"
     lineNos = false
     lineNumbersInTable = true
     noClasses = true
-    style = "monokai"
+    style = "paraiso-light"
+    #style = "github"
     tabWidth = 4
