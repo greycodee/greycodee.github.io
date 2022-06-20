@@ -12,4 +12,7 @@ Jenkins集成SonarQube Jenkins和SonarQube都是运行在Docker容器里的
 Administration-&amp;gt;Security-&amp;gt;Users
 然后随便输入一个名字，点击生成，记下Token
 添加全局凭证 类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token
-设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口</description></item></channel></rss>
+设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存
+因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口
+安装SonarQube Scanner 下载压缩包 下载SonarQube Scanner压缩包：SonarQube Scanner 解压到Jenkins挂载出来的目录里 只有解压到挂载出来的Jenkins的目录里，Docker容器安装的Jenkins才能读取到,我这里是宿主机的/opt/jenkins挂载到了Jenkins容器里的/var/jenkins_home目录上，所以我只要解压到宿主机的/opt/jenkins目录中就可以了
+Jenkins配置全局工具 进入　系统管理-&amp;gt;全局工具配置-&amp;gt;SonarQube Scanner 找到模块后点击新增SonarQube Scanner</description></item></channel></rss>

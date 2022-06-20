@@ -4,4 +4,6 @@ $sudo apt-get update $sudo apt-get install \ apt-transport-https \ ca-certificat
 $ echo $(lsb_release -cs) stretch 在/etc/apt/sources.list.d目录下新建文件docker.list
 $ sudo vi /etc/apt/sources.list.d/docker.list 在文件里添加下面这行
 deb [arch=armhf] https://download.docker.com/linux/raspbian $(lsb_release -cs) stable 把$(lsb_release -cs)改为刚才第一行输出的结果，比如我的输出的是stretch，改完后如下
-deb [arch=armhf] https://download.</description></item></channel></rss>
+deb [arch=armhf] https://download.docker.com/linux/raspbian stretch stable 保存，退出
+安装docker ce 依次执行以下两行命令，即可完成安装
+$ sudo apt-get update $ sudo apt-get install docker-ce 启动 $ service docker start 启动 $ service docker stop 停止 $ service docker status 状态 $ service docker restart 重启</description></item></channel></rss>

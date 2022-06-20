@@ -3,4 +3,8 @@ FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务�
 Tracker Server：跟踪服务器，主要做调度工作，起到均衡的作用；负责管理所有的 storage server和 group，每个 storage 在启动后会连接 Tracker，告知自己所属 group 等信息，并保持周期性心跳。
 Storage Server：存储服务器，主要提供容量和备份服务；以 group 为单位，每个 group 内可以有多台 storage server，数据互为备份。
 Client：客户端，上传下载数据的服务器，也就是我们自己的项目所部署在的服务器。
-结构图 上传文件流程 安装环境 系统及软件版本 Git开源地址 Centos 7 # libfastcommon V1.0.43 https://github.com/happyfish100/fastdfs fastdfs V6.06 https://github.com/happyfish100/libfastcommon 我虚拟机装的Centos7的ip地址是172.16.54.137</description></item></channel></rss>
+结构图
+上传文件流程
+安装环境 系统及软件版本 Git开源地址 Centos 7 # libfastcommon V1.0.43 https://github.com/happyfish100/fastdfs fastdfs V6.06 https://github.com/happyfish100/libfastcommon 我虚拟机装的Centos7的ip地址是172.16.54.137
+安装前工作 关闭防火墙 为了方便，先关闭防火墙。线上环境安装可安装后开放对应端口。
+service firewalld stop 下载所需安装包 libfastcommon wget https://github.com/happyfish100/libfastcommon/archive/V1.0.43.tar.gz -O libfastcommon.tar.gz fastDFS wget https://github.com/happyfish100/fastdfs/archive/V6.06.tar.gz -O fastdfs.tar.gz 安装fastDFS环境 解压安装libfastcommon tar -zxvf libfastcommon.tar.gz &amp;amp;&amp;amp; cd libfastcommon-1.0.43/ &amp;amp;&amp;amp; .</description></item></channel></rss>

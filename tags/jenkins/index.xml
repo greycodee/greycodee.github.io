@@ -12,7 +12,10 @@ Jenkins集成SonarQube Jenkins和SonarQube都是运行在Docker容器里的
 Administration-&amp;gt;Security-&amp;gt;Users
 然后随便输入一个名字，点击生成，记下Token
 添加全局凭证 类型选Secret text,然后Secret和ID输入框都填入刚才生成的Token
-设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口</description></item><item><title>Jenkins插件版本太旧的更新方法</title><link>https://greycode.top/posts/problem-jenkins-01/</link><pubDate>Tue, 12 Nov 2019 17:27:27 +0000</pubDate><guid>https://greycode.top/posts/problem-jenkins-01/</guid><description>前言 Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况： Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.
+设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存
+因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口
+安装SonarQube Scanner 下载压缩包 下载SonarQube Scanner压缩包：SonarQube Scanner 解压到Jenkins挂载出来的目录里 只有解压到挂载出来的Jenkins的目录里，Docker容器安装的Jenkins才能读取到,我这里是宿主机的/opt/jenkins挂载到了Jenkins容器里的/var/jenkins_home目录上，所以我只要解压到宿主机的/opt/jenkins目录中就可以了
+Jenkins配置全局工具 进入　系统管理-&amp;gt;全局工具配置-&amp;gt;SonarQube Scanner 找到模块后点击新增SonarQube Scanner</description></item><item><title>Jenkins插件版本太旧的更新方法</title><link>https://greycode.top/posts/problem-jenkins-01/</link><pubDate>Tue, 12 Nov 2019 17:27:27 +0000</pubDate><guid>https://greycode.top/posts/problem-jenkins-01/</guid><description>前言 Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况： Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.
 查看本地已安装版本 可以看到，本地安装的版本和刚才提示的一样，是1.29版本的，刚才提示说太旧了，要更新到1.33版本。
 搜索插件 当你理所应当的去这个界面准备搜索这个插件并更新时。。。。你傻了，，怎么搜不到？？？WTF
 不要慌，天无绝人之路，这里找不到，可以去另外的地方找。浏览器打开这个网站
@@ -26,7 +29,10 @@ SSH
 创建ssh登录凭据 这边选择Username with password,用账户密码来设置；然后在Username和Password输入框中分别输入10.25.0.50服务器的账号和密码。点击OK保存；
 添加SSH配置 找到SSH remote hosts
 设置你远程机器的ip和端口，然后选择刚配置好的凭证，点击save保存
-配置Job 进入上篇文章创建好的Job,在此基础上进行改造</description></item><item><title>Jenkins教程-创建Maven项目</title><link>https://greycode.top/posts/build-jenkins-mavne/</link><pubDate>Tue, 12 Nov 2019 17:26:19 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-mavne/</guid><description>目录 Jenkins教程-搭建(Docker版)
+配置Job 进入上篇文章创建好的Job,在此基础上进行改造
+配置Git Parameter,来获取gitlab的Tag数据 配置触发器 点击最下面的Generate,生成秘钥。然后记下URL:http://172.16.54.131:8080/project/JenkinsTest 和生成的秘钥：60327d68d10f1f7621696edd42719d1c
+添加构建完成后的动作 添加Execute shell 和Execute shell script on remote host using ssh Execute shell ： 执行Jenkins所在服务器的脚本 Execute shell script on remote host using ssh：登录远程服务器执行脚本 编写你要执行的脚本 由于是自定义的，内容我就不粘贴出来了.编写好后点击保存
+开始构建 手动构建 选择你要构建的tag标签，点击Build开始构建并自动部署 自动构建 自动构建是当你push或打tag上传代码的时候，Jenkins就会自动构建部署</description></item><item><title>Jenkins教程-创建Maven项目</title><link>https://greycode.top/posts/build-jenkins-mavne/</link><pubDate>Tue, 12 Nov 2019 17:26:19 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-mavne/</guid><description>目录 Jenkins教程-搭建(Docker版)
 Jenkins教程-创建Maven项目
 Jenkins教程-Docker+GitLab持续部署持续集成
 前期准备 本教程是和gitlab集成,所以要有gitlab仓库。注意：如果后期要弄自动部署的话,你Jenkins的地址gitlab必须能访问到。不然gitlab监听到事件就通知不了Jenkins了；
@@ -46,4 +52,6 @@ Jenkins教程-Docker+GitLab持续部署持续集成
 安装Docker-CE 检查Docker 首先检查本机是否安装Docker，如果安装了直接跳过安装Docker步骤
 docker -v 如果出现Docker version 19.03.4, build 9013bf583a类似的信息，则说明已安装Docker
 安装 本教程以centos7安装方式说明，其他系统安装方式会有不同 执行以下命令，安装Docker
-yum install -y yum-utils device-mapper-persistent-data lvm2 yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo yum install docker-ce service docker start systemctl enable docker 第一条命令：为添加源做准备 使其支持存储 第二条命令：添加docker-ce软件源 第三条命令：安装docker-ce 第四条命令：启动docker服务 第五条命令：设置开启自启 安装Jenkins的Docker容器 创建文件夹 在创建容器前先在宿主机创建一个Jenkins的工作文件夹，用于持久化</description></item></channel></rss>
+yum install -y yum-utils device-mapper-persistent-data lvm2 yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo yum install docker-ce service docker start systemctl enable docker 第一条命令：为添加源做准备 使其支持存储 第二条命令：添加docker-ce软件源 第三条命令：安装docker-ce 第四条命令：启动docker服务 第五条命令：设置开启自启 安装Jenkins的Docker容器 创建文件夹 在创建容器前先在宿主机创建一个Jenkins的工作文件夹，用于持久化
+mkdir /opt/jenkins //创建文件夹 chmod 7777 /opt/jenkins //授予权限 该文件夹一定要给权限，不然docker容器访问不了，容器会创建失败。
+拉取官方镜像 docker pull jenkins/jenkins:lts 启动容器 docker run -d -p 8080:8080 -p 50000:50000 -u root -v /var/run/docker.</description></item></channel></rss>

@@ -7,4 +7,11 @@
 代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(); 源码解析 add方法 add一般常用的有两个方法，一个就是add(E e)在尾部添加数据，一个就是add(int index,E element)在指定位置插入元素
 add(E e) 这个是Arrayist的主要方法，平时用的也是最多的方法之一，所以源码比较复杂，比较长
 代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(); list.add(&amp;#34;灰灰HK&amp;#34;); 源码解析 ensureCapacityInternal(int minCapacity)确保数组容量充足 calculateCapacity(Object[] elementData, int minCapacity) 再回到ensureExplicitCapacity(int minCapacity)这个方法，这个方法先修改次数加1，然后判断size+1是不是比当前的数组容量大，如果比当前的数组容量大，则进行扩容操作，扩大容量为原数组的1.5倍 比如第二次调用add方法，此时size+1=2, elementData.length=10,为什么等于10呢？因为第一次默认把数组容量从0扩大到了10,这时size+1比elementData.length小，就不会进行扩容操作
-grow(int minCapacity)扩容 这里调用Arrays.</description></item></channel></rss>
+grow(int minCapacity)扩容 这里调用Arrays.copyOf()方法进行复制操作，当进一步深入这个方法时，发现是由System.arraycopy()这个方法实现复制功能的，这个方法由native关键字修饰，表示不是由Java语言实现的，一般是c/cpp实现
+小结 到这里，add的方法流程就走完了，其核心步骤：
+每次添加元素时判断数组容量是否充足
+第一次添加元素，把数组容量扩容到10
+扩容时，除第一次，以后的每次扩容为原大小的1.5倍
+扩容后调用System.arraycopy()方法把原数组的元素复制到扩容后的新数组
+add(int index, E element) 该方法为在指定位置插入元素，该位置及后面所有元素后移
+代码实现 List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;(); list.</description></item></channel></rss>

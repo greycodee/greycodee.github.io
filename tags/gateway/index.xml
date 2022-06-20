@@ -7,4 +7,4 @@
 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.com predicates: - Path=/** 在配置中，我加来一个谓词 Path ，表示所有当请求都会匹配到这个路由下，然后转发到 uri 配置到网址里。所以当我们打开浏览器访问 [http://localhost:8080/](http://localhost:8080/) 是就会自动跳转到百度到首页。
 Java 代码方式配置 除了用配置文件配置路由外，我们还可以用代码的方式来配置路由。
 下面来展示一下代码方式配置的路由：
-@Bean public RouteLocator routesConfig(RouteLocatorBuilder builder){ return builder.routes() .</description></item></channel></rss>
+@Bean public RouteLocator routesConfig(RouteLocatorBuilder builder){ return builder.routes() .route(&amp;#34;route-demo&amp;#34;,r -&amp;gt; r.path(&amp;#34;/**&amp;#34;).uri(&amp;#34;https://baidu.com&amp;#34;)) .build(); } 这几行代码实现的是和上面配置一样的功能，当访问 [http://localhost:8080/](http://localhost:8080/) 时也会跳转到百度首页。</description></item></channel></rss>

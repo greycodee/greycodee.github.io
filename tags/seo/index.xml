@@ -3,7 +3,7 @@
 然后再点击创建服务账号
 然后再填写相关信息，最后点击完成（第三步可不填）
 点击图中的电子邮件，然后开始创建密钥，选择JSON格式，此时就会下载密钥文件到你电脑了
-打开Google Search Console，依次点击设置-&amp;gt;用户和权限-&amp;gt;拥有者账户右边三个点-&amp;gt;管理资源所有者-&amp;gt;添加所有者-&amp;gt;填入上面密钥中的client_email 的值
+打开 Google Search Console，依次点击设置-&amp;gt;用户和权限-&amp;gt;拥有者账户右边三个点-&amp;gt;管理资源所有者-&amp;gt;添加所有者-&amp;gt;填入上面密钥中的client_email 的值
 现在可以用作为服务帐号进行身份验证的步骤来使用密钥了
 Bing 索引 API 开通步骤 点击导航栏的齿轮图标
 点击 API 访问，然后点击 API 密钥，就可以得到 API 密钥了

@@ -2,4 +2,4 @@
 创建项目 使用以下 Maven 命令来创建一个新项目：
 mvn io.quarkus:quarkus-maven-plugin:2.0.1.Final:create \ -DprojectGroupId=top.mjava \ -DprojectArtifactId=quarkus-demo \ -DprojectVersion=1.0 \ -DclassName=&amp;#34;top.mjava.demo.Application&amp;#34; 在执行命令的当前目录下会为项目生成和 ArtifactId 同名的文件夹，如果已存在该同名文件夹，则项目会创建失败。
 在 src/main/docker 目录下还生成了 native 和 jvm 模式的 Dockerfile，构建镜像和运行容器的指令写在这些 Dockerfile 中。
-命令描述 属性 默认值 描述 projectGroupId org.acme.sample 项目的 GroupId projectArtifactId 没有默认值，但是必填 项目的 ArtifactId projectVersion 1.0.0-SNAPSHOT 项目版本 platformGroupId io.</description></item></channel></rss>
+命令描述 属性 默认值 描述 projectGroupId org.acme.sample 项目的 GroupId projectArtifactId 没有默认值，但是必填 项目的 ArtifactId projectVersion 1.0.0-SNAPSHOT 项目版本 platformGroupId io.quarkus 目标平台的组 ID。鉴于所有现有平台都来自 io.quarkus，实际上不会明确使用这一平台。但它仍然是一个选择。 platformArtifactId quarkus-universe-bom 目标平台 BOM 的工件 ID。为了使用本地构建的 Quarkus，它应该是 quarkus-bom。 platformVersion 如果未指定，将解析最新的。 您希望项目使用的平台版本。它还可以接受版本范围，在这种情况下，将使用指定范围中的最新版本。 className 如果省略则不创建 生成的资源的完全限定名称 path /hello 资源路径，仅在设置了 className 时生效。 extensions [] 要添加到项目的扩展列表（逗号分隔） 管理扩展 创建项目后就可以进入到项目文件夹，可以使用简短的命令来操作项目了，例如：mvn quarkus:[command]</description></item></channel></rss>

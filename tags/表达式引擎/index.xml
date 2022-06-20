@@ -6,4 +6,10 @@ let 语句用于定义局部变量。
 循环语句 for 和 while ，以及相应的 break 和 continue 语句支持。
 return 语句用于从脚本或者函数中返回值。
 fn hello() { println(&amp;quot;hello&amp;quot;); } 新的 fn 语法用于定义命名函数。
-## 单行注释 注释支持</description></item></channel></rss>
+## 单行注释 注释支持
+模块系统
+new 语法用于创建对象
+异常处理
+命令行工具 aviator
+使用 AviatorScript 可以单纯的作为脚本语言使用，也可以和 Java 配合使用。
+单纯的作为脚本语言使用 作为脚本语言使用时，需要下载一个 aviator，然后用它去执行脚本文件。</description></item></channel></rss>

@@ -5,4 +5,4 @@
 待启动完成后，就可以用浏览器打开 http://localhost:8848/nacos 进入 Nacos的管理台了。默认的登陆账号密码都是 nacos
 网关使用 Nacos 我这边 Spring Cloud 使用的版本号是 2020.0.2
 Nacos 创建配置 在开始配置网关项目前，我们先在 Nacos 里创建一个配置，等下网关启动的时候就用这个配置。
-server: port: 8989 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.</description></item></channel></rss>
+server: port: 8989 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.com predicates: - Path=/** 在上面配置中，我们定义了项目启动端口为 8989，然后创建了一个路由，这个路由接收所有请求，然后转发到百度。</description></item></channel></rss>

@@ -4,4 +4,8 @@ class Parent { } class Son extends Parent { } 实现 表示实现接口，箭头
 示例：
 interface Iter { } class TerImpl implements Iter { } 依赖 表示依赖关系，某个类的方法必须依赖另一个类才可以执行，箭头指向被依赖的类
 示例：
-class A { public void testA(){ System.out.println(&amp;#34;这是 A 类&amp;#34;); } } class B { public void testB(A a){ a.testA(); } } 关联关系 关联 表示关联关系，两个类的关系是平等的</description></item></channel></rss>
+class A { public void testA(){ System.out.println(&amp;#34;这是 A 类&amp;#34;); } } class B { public void testB(A a){ a.testA(); } } 关联关系 关联 表示关联关系，两个类的关系是平等的
+可以双向关联，A 可以关联 B，B 也可以关联 A
+箭头指向被关联的类
+示例：
+class A { public void testA(){ System.out.println(&amp;#34;这是 A 类&amp;#34;); } } class B { private A a; public B(A a) { this.</description></item></channel></rss>

@@ -5,8 +5,8 @@
 待启动完成后，就可以用浏览器打开 http://localhost:8848/nacos 进入 Nacos的管理台了。默认的登陆账号密码都是 nacos
 网关使用 Nacos 我这边 Spring Cloud 使用的版本号是 2020.0.2
 Nacos 创建配置 在开始配置网关项目前，我们先在 Nacos 里创建一个配置，等下网关启动的时候就用这个配置。
-server: port: 8989 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.</description></item><item><title>Nacos报[NACOS HTTP-POST]</title><link>https://greycode.top/posts/nacos-post-error/</link><pubDate>Thu, 14 Nov 2019 23:50:58 +0000</pubDate><guid>https://greycode.top/posts/nacos-post-error/</guid><description>问题 　由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。
-解决方法 　查阅资料后说是连接超过了最大重试次数。Nacos有个maxRetry这个配置参数，默认是3;可是和SpringCloud整合后在application文件中找不到这个参数，只好另寻方法；
-　由于项目都是Docker容器化的，先前出现过连接不到Nacos的问题,于是就查看了各个Docker容器的IP。
-修正Nacos的地址 　查阅后发现，是因为同事吧服务器重启了一遍，导致Docker服务也重启了，然后Docker容器里的IP全部都变了。因为同一台服务器上我们各个容器间的访问是通过Docker容器内部IP的，也就是172.16.x.x这个IP段。所以导致访问不到报错。
+server: port: 8989 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.com predicates: - Path=/** 在上面配置中，我们定义了项目启动端口为 8989，然后创建了一个路由，这个路由接收所有请求，然后转发到百度。</description></item><item><title>Nacos报[NACOS HTTP-POST]</title><link>https://greycode.top/posts/nacos-post-error/</link><pubDate>Thu, 14 Nov 2019 23:50:58 +0000</pubDate><guid>https://greycode.top/posts/nacos-post-error/</guid><description>问题 由于项目使用阿里的Nacos来管理项目的配置文件，今天所有使用Nacos的项目的日志都报[NACOS HTTP-POST] The maximum number of tolerable server reconnection errors has been reached这个错误。
+解决方法 查阅资料后说是连接超过了最大重试次数。Nacos有个maxRetry这个配置参数，默认是3;可是和SpringCloud整合后在application文件中找不到这个参数，只好另寻方法；
+由于项目都是Docker容器化的，先前出现过连接不到Nacos的问题,于是就查看了各个Docker容器的IP。
+修正Nacos的地址 查阅后发现，是因为同事吧服务器重启了一遍，导致Docker服务也重启了，然后Docker容器里的IP全部都变了。因为同一台服务器上我们各个容器间的访问是通过Docker容器内部IP的，也就是172.16.x.x这个IP段。所以导致访问不到报错。
 spring.cloud.nacos.config.server-addr=172.16.X.X //更改到最新nacos的地址</description></item></channel></rss>
