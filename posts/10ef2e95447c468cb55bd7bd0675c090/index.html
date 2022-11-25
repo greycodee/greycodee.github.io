@@ -22,7 +22,7 @@ router .post(&#34;/test&#34;) .respond( // 响应逻辑 ) // 或者 router .post
 </span></span><span style=display:flex><span>  <span style=color:#8d8687>// 绑定路由
 </span></span></span><span style=display:flex><span><span style=color:#8d8687></span>  <span style=color:#5bc4bf>.</span><span style=color:#06b6ef>requestHandler</span><span style=color:#5bc4bf>(</span>router<span style=color:#5bc4bf>)</span>
 </span></span><span style=display:flex><span>  <span style=color:#8d8687>// 监听端口
-</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>  <span style=color:#5bc4bf>.</span><span style=color:#06b6ef>listen</span><span style=color:#5bc4bf>(</span>8888<span style=color:#5bc4bf>)</span>
+</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>  <span style=color:#5bc4bf>.</span><span style=color:#06b6ef>listen</span><span style=color:#5bc4bf>(</span><span style=color:#f99b15>8888</span><span style=color:#5bc4bf>)</span>
 </span></span><span style=display:flex><span>  <span style=color:#8d8687>// Http 服务启动成功后调用
 </span></span></span><span style=display:flex><span><span style=color:#8d8687></span>  <span style=color:#5bc4bf>.</span><span style=color:#06b6ef>onSuccess</span><span style=color:#5bc4bf>(</span>server <span style=color:#5bc4bf>-&gt;</span>
 </span></span><span style=display:flex><span>   		System<span style=color:#5bc4bf>.</span><span style=color:#06b6ef>out</span><span style=color:#5bc4bf>.</span><span style=color:#06b6ef>println</span><span style=color:#5bc4bf>(</span><span style=color:#48b685>&#34;HTTP server started on port &#34;</span> <span style=color:#5bc4bf>+</span> server<span style=color:#5bc4bf>.</span><span style=color:#06b6ef>actualPort</span><span style=color:#5bc4bf>())</span>

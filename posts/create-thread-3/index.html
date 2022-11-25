@@ -32,7 +32,7 @@ Thread常见参数及设置方法:
 </span></span></span></code></pre></div></li><li><div class=highlight><pre tabindex=0 style=color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8d8687>//线程优先级  是否起作用和操作系统及虚拟机版本相关
 </span></span></span><span style=display:flex><span><span style=color:#8d8687></span><span style=color:#815ba4>private</span> <span style=color:#fec418>int</span> priority<span style=color:#5bc4bf>;</span>																
 </span></span><span style=display:flex><span><span style=color:#8d8687>//设置方法  范围:1-10  默认5
-</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>myThread<span style=color:#5bc4bf>.</span><span style=color:#06b6ef>setPriority</span><span style=color:#5bc4bf>(</span>1<span style=color:#5bc4bf>);</span>
+</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>myThread<span style=color:#5bc4bf>.</span><span style=color:#06b6ef>setPriority</span><span style=color:#5bc4bf>(</span><span style=color:#f99b15>1</span><span style=color:#5bc4bf>);</span>
 </span></span></code></pre></div></li></ul><h3 id=thread源码构造方法>Thread源码构造方法</h3><p>在Thread源码中,一共提供了<code>9种</code>构造方法.</p><p><img src=https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200602151437.png alt=图片></p><p>从这些构造方法中,大致可以分为<code>有Runnable构造参数</code>的,和<code>无Runnable构造参数</code>两大类,无Runnable构造参数的就需要去继承<code>Thread</code>来重写<code>run()</code>方法(注:<code>Thread</code>也实现了Runnable接口),有Runnable构造参数的,就实现Runnable接口的run方法,然后通过构造参数,把实现Runnable接口的实例传入Thread.</p><h3 id=无返回值的线程>无返回值的线程</h3><p>可以看到,通过集成<code>Thread</code>类和实现<code>Runnable</code>接口的<code>run()</code>方法返回值都是<code>void</code>.这类是没有返回值的</p><h4 id=方法一继承thread类创建一个线程>方法一:继承Thread类创建一个线程</h4><div class=highlight><pre tabindex=0 style=color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8d8687>//继承Thread类,重写run方法
 </span></span></span><span style=display:flex><span><span style=color:#8d8687></span><span style=color:#815ba4>class</span> <span style=color:#fec418>MyThread</span> <span style=color:#815ba4>extends</span> Thread<span style=color:#5bc4bf>{</span>
 </span></span><span style=display:flex><span>    <span style=color:#5bc4bf>@Override</span>
@@ -67,7 +67,7 @@ Thread常见参数及设置方法:
 </span></span><span style=display:flex><span>    <span style=color:#5bc4bf>@Override</span>
 </span></span><span style=display:flex><span>    <span style=color:#815ba4>public</span> Integer <span style=color:#06b6ef>call</span><span style=color:#5bc4bf>()</span> <span style=color:#815ba4>throws</span> Exception <span style=color:#5bc4bf>{</span>
 </span></span><span style=display:flex><span>        <span style=color:#8d8687>//计算1+1
-</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>        <span style=color:#815ba4>return</span> 1<span style=color:#5bc4bf>+</span>1<span style=color:#5bc4bf>;</span>
+</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>        <span style=color:#815ba4>return</span> <span style=color:#f99b15>1</span><span style=color:#5bc4bf>+</span><span style=color:#f99b15>1</span><span style=color:#5bc4bf>;</span>
 </span></span><span style=display:flex><span>    <span style=color:#5bc4bf>}</span>
 </span></span><span style=display:flex><span><span style=color:#5bc4bf>}</span>
 </span></span><span style=display:flex><span>

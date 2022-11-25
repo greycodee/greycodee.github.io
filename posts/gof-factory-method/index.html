@@ -51,7 +51,7 @@
 </span></span><span style=display:flex><span>    <span style=color:#5bc4bf>}</span>
 </span></span><span style=display:flex><span><span style=color:#5bc4bf>}</span>
 </span></span></code></pre></div><p>选是选好了，可是要怎么得到呢？是不是下意识的new一个出来？</p><div class=highlight><pre tabindex=0 style=color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8d8687>//我要奔驰车
-</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>Benz　myCar<span style=color:#5bc4bf>=</span><span style=color:#815ba4>new</span> Benz<span style=color:#5bc4bf>();</span>
+</span></span></span><span style=display:flex><span><span style=color:#8d8687></span>Benz<span style=color:#ef6155>　</span>myCar<span style=color:#5bc4bf>=</span><span style=color:#815ba4>new</span> Benz<span style=color:#5bc4bf>();</span>
 </span></span></code></pre></div><p>如果是这样的话，就相当于自己亲手造了一辆奔驰车出来，因为是你自己new出来的嘛！！！！！</p><p><img src=https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20191215162632-20211008153952135.gif alt=图片></p><p>这种事情当然是交给工厂去做嘛，叫工厂去new就可以了，我只要交钱给工厂就可以了．诶，有钱真好！</p><div class=highlight><pre tabindex=0 style=color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8d8687>/**
 </span></span></span><span style=display:flex><span><span style=color:#8d8687> * 汽车工厂
 </span></span></span><span style=display:flex><span><span style=color:#8d8687> *
