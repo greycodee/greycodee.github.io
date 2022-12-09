@@ -43,7 +43,7 @@ googleAnalytics = "G-JVLPYZM5G1"
 
 [[params.social]]
   name = "rss"
-  link = "/sitemap.xml"
+  link = "/index.xml"
 [[params.social]]
   name = "email"
   link = "zhengminghui99@gmail.com"
