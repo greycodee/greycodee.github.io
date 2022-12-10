@@ -1,7 +1,8 @@
 ---
 title: "Video Testqwe"
 date: 2022-05-17T11:11:45+08:00
-draft: true
+draft: false
+asciinema: true
 ---
 
 ## bilibili视频dd
@@ -11,3 +12,6 @@ draft: true
 ## youtube123
 
 {{< youtube WNeLUngb-Xg >}}
+
+## asciinema
+{{< asciinema "http://localhost:1313/casts/544493.cast" >}}

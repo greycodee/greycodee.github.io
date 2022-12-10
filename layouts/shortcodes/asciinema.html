@@ -1,45 +1,6 @@
-<!-- <p>
-    <asciinema-player
-        {{- with .Get "src" }} src="{{ . }}" {{ end -}}
-        {{- with .Get "key" }} src="/casts/{{ . }}.cast"{{ end -}}
-        cols="{{ if .Get "cols" }}{{ .Get "cols" }}{{ else }}640{{ end }}"
-        rows="{{ if .Get "rows" }}{{ .Get "rows" }}{{ else }}10{{ end }}"
-        {{- with .Get "autoplay" }}autoplay="{{ . }}"{{ end -}}
-        {{- with .Get "preload" }}preload="{{ . }}"{{ end -}}
-        {{- with .Get "loop" }}loop="{{ . }}"{{ end -}}
-        start-at="{{ if .Get "start-at" }}{{ .Get "start-at" }}{{ else }}0{{ end }}"
-        speed="{{ if .Get "speed" }}{{ .Get "speed" }}{{ else }}1{{ end }}"
-        {{- with .Get "idle-time-limit" }}idle-time-limit="{{ . }}"{{ end -}}
-        {{- with .Get "poster" }} poster="{{ . | safeURL }}"{{ end -}}
-        {{- with .Get "font-size" }}font-size="{{ . }}"{{ end -}}
-        {{- with .Get "theme" }}theme="{{ . }}"{{ end -}}
-        {{- with .Get "title" }}title="{{ . }}"{{ end -}}
-        {{- with .Get "author" }}author="{{ . }}"{{ end -}}
-        {{- with .Get "author-url" }}author-url="{{ . }}"{{ end }}
-        {{- with .Get "author-img-url" }}author-img-url="{{ . }}"{{ end -}}
-        fit="{{ if .Get "fit" }}{{ .Get "fit" }}{{ else }}width{{ end }}"
-    ></asciinema-player>
-    {{- .Page.Scratch.SetInMap "this" "asciinema" true -}}
-</p> -->
-
-
-<p>
-    <asciinema-player
-        src="/casts/{{ with .Get "key" }}{{ . }}{{ end }}.cast"
-        cols="{{ if .Get "cols" }}{{ .Get "cols" }}{{ else }}640{{ end }}"
-        rows="{{ if .Get "rows" }}{{ .Get "rows" }}{{ else }}10{{ end }}"
-        {{ if .Get "autoplay" }}autoplay="{{ .Get "autoplay" }}"{{ end }}
-        {{ if .Get "preload" }}preload="{{ .Get "preload" }}"{{ end }}
-        {{ if .Get "loop" }}loop="{{ .Get "loop" }}"{{ end }}
-        start-at="{{ if .Get "start-at" }}{{ .Get "start-at" }}{{ else }}0{{ end }}"
-        speed="{{ if .Get "speed" }}{{ .Get "speed" }}{{ else }}1{{ end }}"
-        {{ if .Get "idle-time-limit" }}idle-time-limit="{{ .Get "idle-time-limit" }}"{{ end }}
-        {{ if .Get "poster" }}poster="{{ .Get "poster" }}"{{ end }}
-        {{ if .Get "font-size" }}font-size="{{ .Get "font-size" }}"{{ end }}
-        {{ if .Get "theme" }}theme="{{ .Get "theme" }}"{{ end }}
-        {{ if .Get "title" }}title="{{ .Get "title" }}"{{ end }}
-        {{ if .Get "author" }}author="{{ .Get "author" }}"{{ end }}
-        {{ if .Get "author-url" }}author-url="{{ .Get "author-url" }}"{{ end }}
-        {{ if .Get "author-img-url" }}author-img-url="{{ .Get "author-img-url" }}"{{ end }}
-    ></asciinema-player>
-</p>
+  <div>
+    <div id="asciinemaPlayer"></div>
+    <script>
+        AsciinemaPlayer.create('{{ index .Params 0 }}', document.getElementById('asciinemaPlayer'),{cols:200,rows:200});
+    </script>
+  </div>

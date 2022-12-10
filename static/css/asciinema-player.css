@@ -120,7 +120,7 @@
   border-style: solid;
   cursor: text;
   border-width: 0.75em;
-  font-family: Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols';
+  font-family: Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols', 'Terminal Glyphs';
 }
 .asciinema-terminal .line {
   letter-spacing: normal;
