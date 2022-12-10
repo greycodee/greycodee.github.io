@@ -1,4 +1,6 @@
-baseURL = "https://greycode.top/"
+# baseURL = "https://greycode.top/"
+
+baseURL = "http://localhost:1313/"
 languageCode = "en-us"
 title = "Greycode's Blog"
 theme = "cactus"
