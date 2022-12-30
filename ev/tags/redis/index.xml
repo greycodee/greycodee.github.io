@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/redis/</link>
+    <description>Recent content in Redis on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 Mar 2022 13:41:40 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis是怎样通讯的？</title>
+      <link>http://localhost:1313/posts/8b135153fd9d41de928df42f84ad1eca/</link>
+      <pubDate>Tue, 29 Mar 2022 13:41:40 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/8b135153fd9d41de928df42f84ad1eca/</guid>
+      <description>模型 Redis 协议模型就是简单的请求-响应模型，和平常的 Http 协议有点类似。客户端发送 Redis 命令，然后服务端处理命令并返回结果给客户端。Redis 官方说这可能是最简单的网络协议模型了。
+有两种情况下不 不适用这个模型，一个是批量流水线命令，一个是发布/订阅功能。
+协议描述 Redis 协议一般简单的分为 5 类数据结构，简单字符串、错误信息、数值、大字符串、数组。每种数据类型在第一个字节用不同的符号来区分：
+简单字符串(Simple Strings)：开头第一个符号为 +，对应 HEX 值为：0x2b 错误信息(Errors)：第一个字节符号为 -，对应 HEX 值为：0x2d 数值(Integers)：第一个字节符号为 :，对应 HEX 值为：0x3a 大字符串(Bulk Strings)：第一个字节符号为 $，对应 HEX 值为：0x24 数组(Arrays)：第一个字节符号为 *，对应 HEX 值为：0x2a 这 5 种数据类型可以组合起来使用，每种数据类型通过 CRLF 结尾，就是平常的 \r\n，对应的 HEX 值为：0x0d,0x0a。一般我们判断一种数据类型是否结束时，只要判断是否有 \r 出现就可以了。Redis 客户端和服务端之间就是通过这些规则来进行通信的。
+简单字符串 一般简单字符串用于返回 Redis 服务端的系统响应，如果要响应用户存储的数据时，一般会用大字符串(Bulk Strings)的数据类型来返回。
+比如说客户端发送 set 命令新增一个 Key 来存储字符串，此时客户端就会返回 +OK。这种方式返回的数据不能有空格和换行，因为空格和换行表示该类型的数据结尾。
+redis:0&amp;gt;set name 灰灰 &amp;#34;OK&amp;#34; # Redis 服务端响应数据 0000 2b 4f 4b 0d 0a +OK·· 错误信息 当我们执行的命令发生错误时，Redis 服务端就会返回错误信息</description>
+    </item>
+    
+  </channel>
+</rss>

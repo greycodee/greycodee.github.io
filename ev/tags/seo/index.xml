@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SEO on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/seo/</link>
+    <description>Recent content in SEO on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 17 Jun 2021 21:40:11 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/seo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>百度、谷歌、必应三大站长API密钥申请流程</title>
+      <link>http://localhost:1313/posts/c334612cbdce41e79f7ea6a2f3f4c10c/</link>
+      <pubDate>Thu, 17 Jun 2021 21:40:11 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/c334612cbdce41e79f7ea6a2f3f4c10c/</guid>
+      <description>Google 索引 API 开通步骤 点击此链接，然后选择创建项目，点击继续。然后再点击转到“凭据”页面
+到凭据页面先点击左侧的凭据选项，然后再点击管理服务账号
+然后再点击创建服务账号
+然后再填写相关信息，最后点击完成（第三步可不填）
+点击图中的电子邮件，然后开始创建密钥，选择JSON格式，此时就会下载密钥文件到你电脑了
+打开 Google Search Console，依次点击设置-&amp;gt;用户和权限-&amp;gt;拥有者账户右边三个点-&amp;gt;管理资源所有者-&amp;gt;添加所有者-&amp;gt;填入上面密钥中的client_email 的值
+现在可以用作为服务帐号进行身份验证的步骤来使用密钥了
+Bing 索引 API 开通步骤 点击导航栏的齿轮图标
+点击 API 访问，然后点击 API 密钥，就可以得到 API 密钥了
+然后就可以按照必应文档来进行API的调用了
+Baidu 索引 API 开通步骤 百度就比较简单粗暴了，直接点击这个链接就可以直接得到 Token 了，这个页面下也有对应的 API 调用方法示例，这边就不再重复叙述了</description>
+    </item>
+    
+  </channel>
+</rss>

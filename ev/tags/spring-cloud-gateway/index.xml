@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Cloud Gateway on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/spring-cloud-gateway/</link>
+    <description>Recent content in Spring Cloud Gateway on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 May 2021 22:47:54 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/spring-cloud-gateway/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用Nacos实现网关动态路由</title>
+      <link>http://localhost:1313/posts/eef92888390b4e7c866fe7ada6a0b42b/</link>
+      <pubDate>Sat, 08 May 2021 22:47:54 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/eef92888390b4e7c866fe7ada6a0b42b/</guid>
+      <description>背景 网关作为一个主要的外部流量入口，其重启的次数当然是越少越好，所以不能有时候为了修改一个路由就重启整个网关服务，这样的话网关就不是一个高可用的网关。当然，有时候要新增或修改代码层面的自定义的过滤器时还是要重启网关的，所以我们能做的就是尽可能减少不必要的重启。这里就可以引入阿里巴巴开源的 Nacos 了。
+什么是 Nacos？ Naocs 是阿里巴巴开源的一款微服务组件，它提供注册中心和配置中心来供我们使用。并且 Nacos 同时支持 AP 模式和 CP 模式来供我们选择使用。具体可以查看官方文档来进一步了解。
+安装 Nacos 本地的话我这边建议直接用 Docker 来安装Nacos，省心省力。按照官方提供的方法，我们可以直接下载官方提供的 docker-compose 文件来启动 Nacos。
+# 克隆项目 git clone https://github.com/nacos-group/nacos-docker.git ## 进入项目目录 然后启动 cd nacos-docker docker-compose -f example/standalone-mysql-5.7.yaml up 我这边是启动了一个使用 MySQL 5.7 的单机 Nacos，如果你想使用其他的数据库或者启动集群的话可以参照一下官方文档
+待启动完成后，就可以用浏览器打开 http://localhost:8848/nacos 进入 Nacos的管理台了。默认的登陆账号密码都是 nacos
+网关使用 Nacos 我这边 Spring Cloud 使用的版本号是 2020.0.2
+Nacos 创建配置 在开始配置网关项目前，我们先在 Nacos 里创建一个配置，等下网关启动的时候就用这个配置。
+server: port: 8989 spring: cloud: gateway: routes: - id: route-demo uri: https://baidu.com predicates: - Path=/** 在上面配置中，我们定义了项目启动端口为 8989，然后创建了一个路由，这个路由接收所有请求，然后转发到百度。</description>
+    </item>
+    
+  </channel>
+</rss>

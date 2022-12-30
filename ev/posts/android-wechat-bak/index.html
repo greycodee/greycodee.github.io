@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 解密安卓微信聊天信息存储 | Greycode&#39;s Blog</title>
+  <link rel = 'canonical' href = 'http://localhost:1313/posts/android-wechat-bak/'>
+  <meta name="description" content="Hello,I‘m Greycode. Please use Chrome to browse this site for a better experience.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="解密安卓微信聊天信息存储" />
+<meta property="og:description" content="准备工作 （当前微信版本是：8.0.18）
+一台 Root 的手机（手机不能 Root 的话用安卓模拟器，然后安卓模拟器获取 Root 应该也是可以的，不过我没试过） DB Browser for SQLite SQLCipher silk-v3-decoder 收集数据 需要收集的数据有：
+image2 文件夹：里面存放着所有的微信聊天图片，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/image2 voice2 文件夹：里面存放着所有的微信语音，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voice2 voide 文件夹：里面存放着所有的微信视频，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voide avatar 文件夹：里面存放着所有的微信头像，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/avatar Download 文件夹: 微信的聊天发送的文件存放在这里，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/Download EnMicroMsg.db: 微信的数据库文件，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/EnMicroMsg.db WxFileIndex.db: 微信的文件索引数据库文件，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/WxFileIndex.db 在上面的这些文件中，需要注意的是路径中有个 32 位字母的路径，这个是微信通过某种算法生成的，每个号的路径都不一样。 其中 voice2、voide、Download 这三个文件夹在 /sdcard 目录下，其他的在系统目录 /data 下。 Download 文件夹存放着当前手机上所有微信聊天时发送的文件，这里文件例如：文档，安装包、压缩包等。需要通过 WxFileIndex.db 来索引到这个文件夹。
+把上面收集的所有文件放在电脑的同一个文件夹中，接下来对这些数据进行处理。
+获取 DB 访问密码 在上面获取到的 EnMicroMsg.db、WxFileIndex.db 是经过加密的，所以我们需要获得这个的访问密码，通过这个密码来解密数据库。
+方法一 可以直接通过 MD5(IMEI&#43;uin) 取前 7 位即是访问密码，如果是大写的要转换成小写字母。(注意：拼接两个数据时不需要用 &#43; 号) 其中IMEI 是手机的 IMEI 码，可以查询手机的设置，在设置中可以查看到。如果你手机刷过机，那么 IMEI 有可能是空白的。或者像 MIUI 系统一样，应用无法真正获取到手机的 IMEI。这时就可以用 1234567890ABCDEF 这个字符串来代替 IMEI。 uin 可以通过 adb 来查看当前登陆微信的 uin 数据：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/android-wechat-bak/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-20T14:19:48+08:00" />
+<meta property="article:modified_time" content="2022-06-20T14:19:48+08:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="解密安卓微信聊天信息存储"/>
+<meta name="twitter:description" content="准备工作 （当前微信版本是：8.0.18）
+一台 Root 的手机（手机不能 Root 的话用安卓模拟器，然后安卓模拟器获取 Root 应该也是可以的，不过我没试过） DB Browser for SQLite SQLCipher silk-v3-decoder 收集数据 需要收集的数据有：
+image2 文件夹：里面存放着所有的微信聊天图片，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/image2 voice2 文件夹：里面存放着所有的微信语音，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voice2 voide 文件夹：里面存放着所有的微信视频，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voide avatar 文件夹：里面存放着所有的微信头像，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/avatar Download 文件夹: 微信的聊天发送的文件存放在这里，位置在：/sdcard/Android/data/com.tencent.mm/MicroMsg/Download EnMicroMsg.db: 微信的数据库文件，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/EnMicroMsg.db WxFileIndex.db: 微信的文件索引数据库文件，位置在：/data/data/com.tencent.mm/MicroMsg/[32位字母]/WxFileIndex.db 在上面的这些文件中，需要注意的是路径中有个 32 位字母的路径，这个是微信通过某种算法生成的，每个号的路径都不一样。 其中 voice2、voide、Download 这三个文件夹在 /sdcard 目录下，其他的在系统目录 /data 下。 Download 文件夹存放着当前手机上所有微信聊天时发送的文件，这里文件例如：文档，安装包、压缩包等。需要通过 WxFileIndex.db 来索引到这个文件夹。
+把上面收集的所有文件放在电脑的同一个文件夹中，接下来对这些数据进行处理。
+获取 DB 访问密码 在上面获取到的 EnMicroMsg.db、WxFileIndex.db 是经过加密的，所以我们需要获得这个的访问密码，通过这个密码来解密数据库。
+方法一 可以直接通过 MD5(IMEI&#43;uin) 取前 7 位即是访问密码，如果是大写的要转换成小写字母。(注意：拼接两个数据时不需要用 &#43; 号) 其中IMEI 是手机的 IMEI 码，可以查询手机的设置，在设置中可以查看到。如果你手机刷过机，那么 IMEI 有可能是空白的。或者像 MIUI 系统一样，应用无法真正获取到手机的 IMEI。这时就可以用 1234567890ABCDEF 这个字符串来代替 IMEI。 uin 可以通过 adb 来查看当前登陆微信的 uin 数据："/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/styles.ead642cb02ef83a72aed45f47face7d935f86a1601a35f7040ef3e010f1b7ec550ba4743998f203e4545116b293fbe7405e126c9753c036cb2db3d49e9fbc81d.css" integrity="sha512-6tZCywLvg6cq7UX0f6zn2TX4ahYBo19wQO8&#43;AQ8bfsVQukdDmY8gPkVFEWspP750BeEmyXU8A2yy2z1J6fvIHQ=="> 
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="http://localhost:1313/images/favicon.ico" />
+
+  
+  
+  
+  
+  
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVLPYZM5G1"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JVLPYZM5G1', { 'anonymize_ip': false });
+}
+</script>
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" http://localhost:1313/posts/7f482d9706354a288702dccb66c81bf2/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="http://localhost:1313/posts/76cbbd57-2cb7-4934-ba99-a7773ec05759/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&text=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&is_video=false&description=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&name=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8&description=%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c%20%ef%bc%88%e5%bd%93%e5%89%8d%e5%be%ae%e4%bf%a1%e7%89%88%e6%9c%ac%e6%98%af%ef%bc%9a8.0.18%ef%bc%89%0a%e4%b8%80%e5%8f%b0%20Root%20%e7%9a%84%e6%89%8b%e6%9c%ba%ef%bc%88%e6%89%8b%e6%9c%ba%e4%b8%8d%e8%83%bd%20Root%20%e7%9a%84%e8%af%9d%e7%94%a8%e5%ae%89%e5%8d%93%e6%a8%a1%e6%8b%9f%e5%99%a8%ef%bc%8c%e7%84%b6%e5%90%8e%e5%ae%89%e5%8d%93%e6%a8%a1%e6%8b%9f%e5%99%a8%e8%8e%b7%e5%8f%96%20Root%20%e5%ba%94%e8%af%a5%e4%b9%9f%e6%98%af%e5%8f%af%e4%bb%a5%e7%9a%84%ef%bc%8c%e4%b8%8d%e8%bf%87%e6%88%91%e6%b2%a1%e8%af%95%e8%bf%87%ef%bc%89%20DB%20Browser%20for%20SQLite%20SQLCipher%20silk-v3-decoder%20%e6%94%b6%e9%9b%86%e6%95%b0%e6%8d%ae%20%e9%9c%80%e8%a6%81%e6%94%b6%e9%9b%86%e7%9a%84%e6%95%b0%e6%8d%ae%e6%9c%89%ef%bc%9a%0aimage2%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fimage2%20voice2%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%af%ad%e9%9f%b3%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fvoice2%20voide%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%a7%86%e9%a2%91%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fvoide%20avatar%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e5%a4%b4%e5%83%8f%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2favatar%20Download%20%e6%96%87%e4%bb%b6%e5%a4%b9%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e8%81%8a%e5%a4%a9%e5%8f%91%e9%80%81%e7%9a%84%e6%96%87%e4%bb%b6%e5%ad%98%e6%94%be%e5%9c%a8%e8%bf%99%e9%87%8c%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2fDownload%20EnMicroMsg.db%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e6%96%87%e4%bb%b6%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fEnMicroMsg.db%20WxFileIndex.db%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e6%96%87%e4%bb%b6%e7%b4%a2%e5%bc%95%e6%95%b0%e6%8d%ae%e5%ba%93%e6%96%87%e4%bb%b6%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fWxFileIndex.db%20%e5%9c%a8%e4%b8%8a%e9%9d%a2%e7%9a%84%e8%bf%99%e4%ba%9b%e6%96%87%e4%bb%b6%e4%b8%ad%ef%bc%8c%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f%e7%9a%84%e6%98%af%e8%b7%af%e5%be%84%e4%b8%ad%e6%9c%89%e4%b8%aa%2032%20%e4%bd%8d%e5%ad%97%e6%af%8d%e7%9a%84%e8%b7%af%e5%be%84%ef%bc%8c%e8%bf%99%e4%b8%aa%e6%98%af%e5%be%ae%e4%bf%a1%e9%80%9a%e8%bf%87%e6%9f%90%e7%a7%8d%e7%ae%97%e6%b3%95%e7%94%9f%e6%88%90%e7%9a%84%ef%bc%8c%e6%af%8f%e4%b8%aa%e5%8f%b7%e7%9a%84%e8%b7%af%e5%be%84%e9%83%bd%e4%b8%8d%e4%b8%80%e6%a0%b7%e3%80%82%20%e5%85%b6%e4%b8%ad%20voice2%e3%80%81voide%e3%80%81Download%20%e8%bf%99%e4%b8%89%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e5%9c%a8%20%2fsdcard%20%e7%9b%ae%e5%bd%95%e4%b8%8b%ef%bc%8c%e5%85%b6%e4%bb%96%e7%9a%84%e5%9c%a8%e7%b3%bb%e7%bb%9f%e7%9b%ae%e5%bd%95%20%2fdata%20%e4%b8%8b%e3%80%82%20Download%20%e6%96%87%e4%bb%b6%e5%a4%b9%e5%ad%98%e6%94%be%e7%9d%80%e5%bd%93%e5%89%8d%e6%89%8b%e6%9c%ba%e4%b8%8a%e6%89%80%e6%9c%89%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e6%97%b6%e5%8f%91%e9%80%81%e7%9a%84%e6%96%87%e4%bb%b6%ef%bc%8c%e8%bf%99%e9%87%8c%e6%96%87%e4%bb%b6%e4%be%8b%e5%a6%82%ef%bc%9a%e6%96%87%e6%a1%a3%ef%bc%8c%e5%ae%89%e8%a3%85%e5%8c%85%e3%80%81%e5%8e%8b%e7%bc%a9%e5%8c%85%e7%ad%89%e3%80%82%e9%9c%80%e8%a6%81%e9%80%9a%e8%bf%87%20WxFileIndex.db%20%e6%9d%a5%e7%b4%a2%e5%bc%95%e5%88%b0%e8%bf%99%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e3%80%82%0a%e6%8a%8a%e4%b8%8a%e9%9d%a2%e6%94%b6%e9%9b%86%e7%9a%84%e6%89%80%e6%9c%89%e6%96%87%e4%bb%b6%e6%94%be%e5%9c%a8%e7%94%b5%e8%84%91%e7%9a%84%e5%90%8c%e4%b8%80%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e4%b8%ad%ef%bc%8c%e6%8e%a5%e4%b8%8b%e6%9d%a5%e5%af%b9%e8%bf%99%e4%ba%9b%e6%95%b0%e6%8d%ae%e8%bf%9b%e8%a1%8c%e5%a4%84%e7%90%86%e3%80%82%0a%e8%8e%b7%e5%8f%96%20DB%20%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%20%e5%9c%a8%e4%b8%8a%e9%9d%a2%e8%8e%b7%e5%8f%96%e5%88%b0%e7%9a%84%20EnMicroMsg.db%e3%80%81WxFileIndex.db%20%e6%98%af%e7%bb%8f%e8%bf%87%e5%8a%a0%e5%af%86%e7%9a%84%ef%bc%8c%e6%89%80%e4%bb%a5%e6%88%91%e4%bb%ac%e9%9c%80%e8%a6%81%e8%8e%b7%e5%be%97%e8%bf%99%e4%b8%aa%e7%9a%84%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%ef%bc%8c%e9%80%9a%e8%bf%87%e8%bf%99%e4%b8%aa%e5%af%86%e7%a0%81%e6%9d%a5%e8%a7%a3%e5%af%86%e6%95%b0%e6%8d%ae%e5%ba%93%e3%80%82%0a%e6%96%b9%e6%b3%95%e4%b8%80%20%e5%8f%af%e4%bb%a5%e7%9b%b4%e6%8e%a5%e9%80%9a%e8%bf%87%20MD5%28IMEI%2buin%29%20%e5%8f%96%e5%89%8d%207%20%e4%bd%8d%e5%8d%b3%e6%98%af%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%ef%bc%8c%e5%a6%82%e6%9e%9c%e6%98%af%e5%a4%a7%e5%86%99%e7%9a%84%e8%a6%81%e8%bd%ac%e6%8d%a2%e6%88%90%e5%b0%8f%e5%86%99%e5%ad%97%e6%af%8d%e3%80%82%28%e6%b3%a8%e6%84%8f%ef%bc%9a%e6%8b%bc%e6%8e%a5%e4%b8%a4%e4%b8%aa%e6%95%b0%e6%8d%ae%e6%97%b6%e4%b8%8d%e9%9c%80%e8%a6%81%e7%94%a8%20%2b%20%e5%8f%b7%29%20%e5%85%b6%e4%b8%adIMEI%20%e6%98%af%e6%89%8b%e6%9c%ba%e7%9a%84%20IMEI%20%e7%a0%81%ef%bc%8c%e5%8f%af%e4%bb%a5%e6%9f%a5%e8%af%a2%e6%89%8b%e6%9c%ba%e7%9a%84%e8%ae%be%e7%bd%ae%ef%bc%8c%e5%9c%a8%e8%ae%be%e7%bd%ae%e4%b8%ad%e5%8f%af%e4%bb%a5%e6%9f%a5%e7%9c%8b%e5%88%b0%e3%80%82%e5%a6%82%e6%9e%9c%e4%bd%a0%e6%89%8b%e6%9c%ba%e5%88%b7%e8%bf%87%e6%9c%ba%ef%bc%8c%e9%82%a3%e4%b9%88%20IMEI%20%e6%9c%89%e5%8f%af%e8%83%bd%e6%98%af%e7%a9%ba%e7%99%bd%e7%9a%84%e3%80%82%e6%88%96%e8%80%85%e5%83%8f%20MIUI%20%e7%b3%bb%e7%bb%9f%e4%b8%80%e6%a0%b7%ef%bc%8c%e5%ba%94%e7%94%a8%e6%97%a0%e6%b3%95%e7%9c%9f%e6%ad%a3%e8%8e%b7%e5%8f%96%e5%88%b0%e6%89%8b%e6%9c%ba%e7%9a%84%20IMEI%e3%80%82%e8%bf%99%e6%97%b6%e5%b0%b1%e5%8f%af%e4%bb%a5%e7%94%a8%201234567890ABCDEF%20%e8%bf%99%e4%b8%aa%e5%ad%97%e7%ac%a6%e4%b8%b2%e6%9d%a5%e4%bb%a3%e6%9b%bf%20IMEI%e3%80%82%20uin%20%e5%8f%af%e4%bb%a5%e9%80%9a%e8%bf%87%20adb%20%e6%9d%a5%e6%9f%a5%e7%9c%8b%e5%bd%93%e5%89%8d%e7%99%bb%e9%99%86%e5%be%ae%e4%bf%a1%e7%9a%84%20uin%20%e6%95%b0%e6%8d%ae%ef%bc%9a" aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&t=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备工作">准备工作</a></li>
+    <li><a href="#收集数据">收集数据</a></li>
+    <li><a href="#获取-db-访问密码">获取 DB 访问密码</a>
+      <ul>
+        <li><a href="#方法一">方法一</a></li>
+        <li><a href="#方法二">方法二</a></li>
+      </ul>
+    </li>
+    <li><a href="#解密-db">解密 DB</a></li>
+    <li><a href="#enmicromsgdb-解析">EnMicroMsg.db 解析</a>
+      <ul>
+        <li><a href="#数据表">数据表</a></li>
+        <li><a href="#消息内容解析">消息内容解析</a></li>
+      </ul>
+    </li>
+    <li><a href="#语音文件处理">语音文件处理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        解密安卓微信聊天信息存储
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2022-06-20 14:19:48 &#43;0800 CST" itemprop="datePublished">2022-06-20</time>
+          
+        </div>
+        
+        
+        
+        
+      </div>
+    </header>
+
+  
+    
+    <div class="content" itemprop="articleBody">
+      <h2 id="准备工作">准备工作</h2>
+<p>（当前微信版本是：8.0.18）</p>
+<ul>
+<li>一台 Root 的手机（手机不能 Root 的话用安卓模拟器，然后安卓模拟器获取 Root 应该也是可以的，不过我没试过）</li>
+<li><a href="https://sqlitebrowser.org/">DB Browser for SQLite</a></li>
+<li><a href="https://github.com/sqlcipher/sqlcipher">SQLCipher</a></li>
+<li><a href="https://github.com/kn007/silk-v3-decoder">silk-v3-decoder</a></li>
+</ul>
+<h2 id="收集数据">收集数据</h2>
+<p>需要收集的数据有：</p>
+<ul>
+<li><strong>image2 文件夹</strong>：里面存放着所有的微信聊天图片，位置在：<code>/data/data/com.tencent.mm/MicroMsg/[32位字母]/image2</code></li>
+<li><strong>voice2 文件夹</strong>：里面存放着所有的微信语音，位置在：<code>/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voice2</code></li>
+<li><strong>voide 文件夹</strong>：里面存放着所有的微信视频，位置在：<code>/sdcard/Android/data/com.tencent.mm/MicroMsg/[32位字母]/voide</code></li>
+<li><strong>avatar 文件夹</strong>：里面存放着所有的微信头像，位置在：<code>/data/data/com.tencent.mm/MicroMsg/[32位字母]/avatar</code></li>
+<li><strong>Download 文件夹</strong>: 微信的聊天发送的文件存放在这里，位置在：<code>/sdcard/Android/data/com.tencent.mm/MicroMsg/Download</code></li>
+<li><strong>EnMicroMsg.db</strong>: 微信的数据库文件，位置在：<code>/data/data/com.tencent.mm/MicroMsg/[32位字母]/EnMicroMsg.db</code></li>
+<li><strong>WxFileIndex.db</strong>: 微信的文件索引数据库文件，位置在：<code>/data/data/com.tencent.mm/MicroMsg/[32位字母]/WxFileIndex.db</code></li>
+</ul>
+<p>在上面的这些文件中，需要注意的是路径中有个 32 位字母的路径，这个是微信通过某种算法生成的，每个号的路径都不一样。
+其中 <strong>voice2</strong>、<strong>voide</strong>、<strong>Download</strong> 这三个文件夹在 <code>/sdcard</code> 目录下，其他的在系统目录 <code>/data</code> 下。
+Download 文件夹存放着当前手机上所有微信聊天时发送的文件，这里文件例如：文档，安装包、压缩包等。需要通过 <strong>WxFileIndex.db</strong> 来索引到这个文件夹。</p>
+<p><strong>把上面收集的所有文件放在电脑的同一个文件夹中，接下来对这些数据进行处理。</strong></p>
+<h2 id="获取-db-访问密码">获取 DB 访问密码</h2>
+<p>在上面获取到的 <strong>EnMicroMsg.db</strong>、<strong>WxFileIndex.db</strong> 是经过加密的，所以我们需要获得这个的访问密码，通过这个密码来解密数据库。</p>
+<h3 id="方法一">方法一</h3>
+<p>可以直接通过 <strong>MD5(IMEI+uin)</strong> 取前 7 位即是访问密码，如果是大写的要转换成小写字母。(注意：拼接两个数据时不需要用 <code>+</code> 号)
+其中IMEI 是手机的 IMEI 码，可以查询手机的设置，在设置中可以查看到。如果你手机刷过机，那么 IMEI 有可能是空白的。或者像 MIUI 系统一样，应用无法真正获取到手机的 IMEI。这时就可以用 <strong>1234567890ABCDEF</strong> 这个字符串来代替 IMEI。
+uin 可以通过 adb 来查看当前登陆微信的 uin 数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#8d8687">## 进入 adb</span>
+</span></span><span style="display:flex;"><span>$ adb shell
+</span></span><span style="display:flex;"><span><span style="color:#8d8687"># 进入 root 用户</span>
+</span></span><span style="display:flex;"><span>$ su
+</span></span><span style="display:flex;"><span><span style="color:#8d8687"># 查看文件</span>
+</span></span><span style="display:flex;"><span>$ cat /data/data/com.tencent.mm/shared_prefs/auth_info_key_prefs.xml
+</span></span></code></pre></div><p>文件内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#8d8687">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39; standalone=&#39;yes&#39; ?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">&lt;map&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;boolean</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;auth_info_prefs_use_new_ecdh&#34;</span> <span style="color:#06b6ef">value=</span><span style="color:#48b685">&#34;true&#34;</span> <span style="color:#5bc4bf">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;int</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;_auth_uin&#34;</span> <span style="color:#06b6ef">value=</span><span style="color:#48b685">&#34;272136722&#34;</span> <span style="color:#5bc4bf">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;boolean</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;key_auth_info_prefs_created&#34;</span> <span style="color:#06b6ef">value=</span><span style="color:#48b685">&#34;true&#34;</span> <span style="color:#5bc4bf">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;int</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;key_auth_update_version&#34;</span> <span style="color:#06b6ef">value=</span><span style="color:#48b685">&#34;xxx&#34;</span> <span style="color:#5bc4bf">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;string</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;server_id&#34;</span><span style="color:#5bc4bf">&gt;</span>xxxx<span style="color:#5bc4bf">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">&lt;string</span> <span style="color:#06b6ef">name=</span><span style="color:#48b685">&#34;_auth_key&#34;</span><span style="color:#5bc4bf">&gt;</span>xxxxx<span style="color:#5bc4bf">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">&lt;/map&gt;</span>
+</span></span></code></pre></div><p>其中 <strong>_auth_uin</strong> 的 value 值就是 uin。</p>
+<h3 id="方法二">方法二</h3>
+<p>还可以通过 Frida 来获取访问密码，如果你电脑上有 python 环境的话，建议用这个方法，因为这个方法可以直接得到密码，而不用一个一个的去试拼接出来的密码，并且绝对正确。
+首先电脑通过下面命令安装 Frida 包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ pip install frida
+</span></span><span style="display:flex;"><span>$ pip install frida-tools
+</span></span></code></pre></div><p>然后使用 adb 查看手机架构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ adb shell getprop ro.product.cpu.abi
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>arm64-v8a 
+</span></span></code></pre></div><p>得到的是 arm64-v8a，然后去 <a href="https://github.com/frida/frida/releases">https://github.com/frida/frida/releases</a> 页面下载对应的 frida-server-&lt;版本号&gt;-arm64.xz 包，然后解压。
+注意：这边的 frida-server 版本号要和上面电脑安装的 frrida 的版本号一致，否则可能会出现额外的错误。
+通过 adb 把 frida-server 传到手机：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ adb push  frida-server-&lt;版本号&gt;-android-arm /data/local/tmp
+</span></span></code></pre></div><p>然后在手机上运行 frida-server：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ adb shell
+</span></span><span style="display:flex;"><span>$ su
+</span></span><span style="display:flex;"><span>$ cd /data/local/tmp
+</span></span><span style="display:flex;"><span>$ chmod <span style="color:#f99b15">777</span> frida-server-&lt;版本号&gt;-android-arm
+</span></span><span style="display:flex;"><span>$ ./frida-server-&lt;版本号&gt;-android-arm
+</span></span></code></pre></div><p>运行后，这个终端界面不要关闭，另外在启动一个终端，然后在终端中输入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ adb forward tcp:27042 tcp:27042
+</span></span><span style="display:flex;"><span>$ adb forward tcp:27043 tcp:27043
+</span></span><span style="display:flex;"><span>$ frida-ps -U
+</span></span></code></pre></div><p>如果终端输出了一些进程，那么就表示环境搭建成功了。搭建成功后，在电脑运行下面的 Python 脚本：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">frida</span> 
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">sys</span>   
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>jscode <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">    Java.perform(function(){ 
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">        var utils = Java.use(&#34;com.tencent.wcdb.database.SQLiteDatabase&#34;); // 类的加载路径
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">         
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">        utils.openDatabase.overload(&#39;java.lang.String&#39;, &#39;[B&#39;, &#39;com.tencent.wcdb.database.SQLiteCipherSpec&#39;, &#39;com.tencent.wcdb.database.SQLiteDatabase$CursorFactory&#39;, &#39;int&#39;, &#39;com.tencent.wcdb.DatabaseErrorHandler&#39;, &#39;int&#39;).implementation = function(a,b,c,d,e,f,g){  
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            console.log(&#34;Hook start......&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            var JavaString = Java.use(&#34;java.lang.String&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            var database = this.openDatabase(a,b,c,d,e,f,g);
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            send(a);
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            console.log(JavaString.$new(b));
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            send(&#34;Hook ending......&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">            return database;
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">        };
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">         
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">    });
+</span></span></span><span style="display:flex;"><span><span style="color:#48b685">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">def</span> <span style="color:#06b6ef">on_message</span>(message,data): 
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> message[<span style="color:#48b685">&#34;type&#34;</span>] <span style="color:#5bc4bf">==</span> <span style="color:#48b685">&#34;send&#34;</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#34;[*] </span><span style="color:#f99b15">{0}</span><span style="color:#48b685">&#34;</span><span style="color:#5bc4bf">.</span>format(message[<span style="color:#48b685">&#34;payload&#34;</span>]))
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">else</span>:
+</span></span><span style="display:flex;"><span>        print(message)
+</span></span><span style="display:flex;"><span>     
+</span></span><span style="display:flex;"><span>process <span style="color:#5bc4bf">=</span> frida<span style="color:#5bc4bf">.</span>get_remote_device()
+</span></span><span style="display:flex;"><span>pid <span style="color:#5bc4bf">=</span> process<span style="color:#5bc4bf">.</span>spawn([<span style="color:#48b685">&#39;com.tencent.mm&#39;</span>]) 
+</span></span><span style="display:flex;"><span>session <span style="color:#5bc4bf">=</span> process<span style="color:#5bc4bf">.</span>attach(pid)  
+</span></span><span style="display:flex;"><span>script <span style="color:#5bc4bf">=</span> session<span style="color:#5bc4bf">.</span>create_script(jscode) 
+</span></span><span style="display:flex;"><span>script<span style="color:#5bc4bf">.</span>on(<span style="color:#48b685">&#39;message&#39;</span>,on_message) 
+</span></span><span style="display:flex;"><span>script<span style="color:#5bc4bf">.</span>load()
+</span></span><span style="display:flex;"><span>process<span style="color:#5bc4bf">.</span>resume(pid)
+</span></span><span style="display:flex;"><span>sys<span style="color:#5bc4bf">.</span>stdin<span style="color:#5bc4bf">.</span>read()
+</span></span></code></pre></div><p>脚本运行后，然后在手机直接打开微信，这时电脑控制台会输出一个 7 位字母，这个就是访问密码。</p>
+<h2 id="解密-db">解密 DB</h2>
+<p>微信加密使用的是开源的 <strong>SqlCipher</strong>，所以我用这个工具加上上面得到的密码来进行解密。
+在 <a href="https://github.com/sqlcipher/sqlcipher/tags">https://github.com/sqlcipher/sqlcipher/tags</a> 这个页面上，可以找到最新的版本，然后下载。
+下载后进行解压，解压后进入文件夹进行编译，编译前先检查本地有没有安装 <strong>GCC</strong> 和 <strong>OpenSSL</strong>，如果没有安装，需要先安装。</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#8d8687"># 进行编译</span>
+</span></span><span style="display:flex;"><span>$ ./configure --enable-tempstore<span style="color:#5bc4bf">=</span>yes <span style="color:#ef6155">CFLAGS</span><span style="color:#5bc4bf">=</span><span style="color:#48b685">&#34;-DSQLITE_HAS_CODEC&#34;</span> <span style="color:#f99b15">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f99b15"></span>	<span style="color:#ef6155">LDFLAGS</span><span style="color:#5bc4bf">=</span><span style="color:#48b685">&#34;-lcrypto&#34;</span>
+</span></span><span style="display:flex;"><span>$ make
+</span></span></code></pre></div><p>Mac 电脑可以直接通过 brew 来进行直接安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ brew install sqlcipher
+</span></span></code></pre></div><p>Windows 建议使用 WSL 来进行编译。
+测试有没有安装成功，在终端输入 sqlcipher,如果出现以下信息，则表示安装成功了。（注意：如果后面括号中没有出现 SQLCipher 4.5.1 community，那么表示只安装了 SQLite，没有安装 SQLCipher，那么就不能进行解密操作了）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sqlcipher                                                                                                                                                            <span style="color:#f99b15">127</span> ↵
+</span></span><span style="display:flex;"><span>SQLite version 3.37.2 2022-01-06 13:25:41 <span style="color:#5bc4bf">(</span>SQLCipher 4.5.1 community<span style="color:#5bc4bf">)</span>
+</span></span><span style="display:flex;"><span>Enter <span style="color:#48b685">&#34;.help&#34;</span> <span style="color:#815ba4">for</span> usage hints.
+</span></span><span style="display:flex;"><span>Connected to a transient in-memory database.
+</span></span><span style="display:flex;"><span>Use <span style="color:#48b685">&#34;.open FILENAME&#34;</span> to reopen on a persistent database.
+</span></span><span style="display:flex;"><span>sqlite&gt;
+</span></span></code></pre></div><p>安装完成后，打开一个终端，进入 EnMicroMsg.db 文件存放的位置，然后在终端进行数据库的解密：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sqlcipher EnMicroMsg.db
+</span></span><span style="display:flex;"><span>SQLite version 3.37.2 2022-01-06 13:25:41 <span style="color:#5bc4bf">(</span>SQLCipher 4.5.1 community<span style="color:#5bc4bf">)</span>
+</span></span><span style="display:flex;"><span>Enter <span style="color:#48b685">&#34;.help&#34;</span> <span style="color:#815ba4">for</span> usage hints.
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">key</span> <span style="color:#5bc4bf">=</span> <span style="color:#48b685">&#39;上面得到的密码&#39;</span>;
+</span></span><span style="display:flex;"><span>ok
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">cipher_use_hmac</span> <span style="color:#5bc4bf">=</span> off;
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">kdf_iter</span> <span style="color:#5bc4bf">=</span> 4000;
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">cipher_page_size</span> <span style="color:#5bc4bf">=</span> 1024;
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">cipher_hmac_algorithm</span> <span style="color:#5bc4bf">=</span> HMAC_SHA1;
+</span></span><span style="display:flex;"><span>sqlite&gt; PRAGMA <span style="color:#ef6155">cipher_kdf_algorithm</span> <span style="color:#5bc4bf">=</span> PBKDF2_HMAC_SHA1;
+</span></span><span style="display:flex;"><span>sqlite&gt; ATTACH DATABASE <span style="color:#48b685">&#39;plaintext.db&#39;</span> AS plaintext KEY <span style="color:#48b685">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>sqlite&gt; SELECT sqlcipher_export<span style="color:#5bc4bf">(</span><span style="color:#48b685">&#39;plaintext&#39;</span><span style="color:#5bc4bf">)</span>;
+</span></span><span style="display:flex;"><span>sqlite&gt; DETACH DATABASE plaintext;
+</span></span></code></pre></div><p>执行完上面这些命令后，会在终端输出一个 <strong>plaintext.db</strong>，这个文件就是解密后的数据库文件。对 <strong>WxFileIndex.db</strong> 进行同样的操作来进行解密。(进行第二次解密时，注意 plaintext.db 文件名冲突，所以建议使用一个新的文件名)</p>
+<h2 id="enmicromsgdb-解析">EnMicroMsg.db 解析</h2>
+<h3 id="数据表">数据表</h3>
+<p>这个数据库中有许多的表，但是真正有用的就下面这几张表：</p>
+<ul>
+<li><strong>userinfo 表</strong>：存储个人信息，其中 id 为 2 的 value 是个人的微信 id。</li>
+<li><strong>message 表</strong>：存储所有的聊天记录。</li>
+<li><strong>chatroom 表</strong>：存储所有群聊信息。</li>
+<li><strong>img_flag 表</strong>：存储所有用户的在线头像的信息。如果本地 avatar 文件夹没有头像时，可以用这个表的地址来访问用户的头像，其中 reserved2 是缩略图，reserved1 是高清图。</li>
+<li><strong>rcontact 表</strong>：存放所有的好友信息。</li>
+</ul>
+<h3 id="消息内容解析">消息内容解析</h3>
+<p>在 <strong>message</strong> 表中，<strong>type</strong> 字段表示着当前消息的类型，一般有如下类型：</p>
+<ul>
+<li><strong>1</strong>：文本消息</li>
+<li><strong>3</strong>：图片消息</li>
+<li><strong>34</strong>：语音消息</li>
+<li><strong>43</strong>：视频消息</li>
+<li><strong>47</strong>：大表情消息</li>
+<li><strong>49</strong>：分享卡片信息</li>
+<li><strong>1000</strong>：撤回消息提醒</li>
+<li><strong>436207665</strong>：微信红包</li>
+<li><strong>419430449</strong>：微信转账</li>
+<li><strong>1090519089</strong>：文件消息
+上面的一些媒体类型的消息，例如图片、语音、视频等，都会可以用 <strong>msgId</strong> 字段去 <strong>WxFileIndex.db</strong> 数据库中的 <strong>WxFileIndex2</strong> 表中查找到对应的文件路径。
+除了通过去 <strong>WxFileIndex2</strong> 表查询媒体文件的路径，还可以通过某些字段的拼接和加密直接获取媒体文件的路径。</li>
+</ul>
+<h4 id="图片地址获取">图片地址获取</h4>
+<p>图片消息的地址有两个，一个是图片缩略图，一个是图片原图。</p>
+<ul>
+<li><strong>缩略图获取</strong>:
+在 <strong>message</strong> 表中，如果当前消息为图片消息时，<strong>imgPath</strong> 字段会有值，值类似于：<code>THUMBNAIL_DIRPATH://th_5a24c5d362dae72b0ad52d78767ba883</code>，其中 <strong>5a24</strong> 代表 <code>/5a/24</code> 文件夹下的，<strong>th_5a24c5d362dae72b0ad52d78767ba883</strong> 是图片文件名。图片的父目录就是一开始的 <code>/image2</code> 文件夹。</li>
+<li><strong>原图获取</strong>:
+如果要获取原图，则是通过另外一种拼接规则来得到图片地址的。一般有两种情况：
+<ol>
+<li>发送的图片：文件名是：<code>自己的wxid+_+当前的talker值+_+当前msgSvrid+_backup</code>，路径是文件名的前两个字母，每两个字母代表一个文件夹层级。</li>
+<li>接收的图片：文件名是：<code>当前的talker值+_+自己的wxid_+当前msgSvrid+_backup</code>，路径是文件名的前两个字母，每两个字母代表一个文件夹层级。</li>
+</ol>
+</li>
+</ul>
+<h4 id="视频地址获取">视频地址获取</h4>
+<p>直接通过 <strong>message</strong> 表后的 <strong>imgPath</strong> 查找到 <strong>video</strong> 文件夹查找对应的视频，封面图后缀为 <code>.jpg</code>，视频后缀为：<code>.mp4</code>。</p>
+<h4 id="语音地址获取">语音地址获取</h4>
+<p><strong>message</strong> 的 <strong>imgPath</strong> 字段通过 <strong>MD5 加密</strong>后，前 4 个字母代表两级文件夹名，然后最终文件名是：<code>msg_imgPath的值.amr</code></p>
+<h4 id="文件地址获取">文件地址获取</h4>
+<p>在微信聊天时发送的文件都存放在 <code>/sdcard/Android/data/com.tencent.mm/MicroMsg/Download</code> 文件夹下，只能通过当前的 <strong>msgId</strong> 字段去 <strong>WxFileIndex.db</strong> 数据库中的 <strong>WxFileIndex2</strong> 表中查找到对应的文件路径。</p>
+<h4 id="本地头像获取">本地头像获取</h4>
+<p>微信的头像都存放在 <code>/data/data/com.tencent.mm/MicroMsg/[32位字母]/avatar</code> 文件夹下，微信 ID 通过 <strong>MD5 加密</strong>后，前 4 个字母代表两级文件夹名，每两位代表一个文件夹名，文件名格式：<code>user_md5字符串.png</code></p>
+<blockquote>
+<p>例如微信id：weixin 经过 MD5 加密后是：C196266F837D14E0B693F961BEE37B66，那么这个微信的头像地址是：avatar/c1/96/user_c196266f837d14e0b693f961bee37b66.png</p>
+</blockquote>
+<h2 id="语音文件处理">语音文件处理</h2>
+<p>由于微信语音使用了 <strong>SILK v3 编码</strong>，一般播放器都不放不了，所以需要进行手动解码。这里直接使用开源的 <a href="https://github.com/kn007/silk-v3-decoder">silk-v3-decoder</a> 工具来进行解码。需要先安装 GCC、ffmpeg 等工具，具体查看开源工具说明。
+转码后，在获取语音文件地址时，记得把后缀改为你转码后的后缀，例如转码成 <code>mp3</code> 格式，后缀就是 <code>mp3</code>，不是 <code>amr</code>。</p>
+
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">All posts</a></li>
+         
+          <li><a href="/categories">Categories</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </div>
+
+    
+    <div id="toc-footer" style="display: none">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备工作">准备工作</a></li>
+    <li><a href="#收集数据">收集数据</a></li>
+    <li><a href="#获取-db-访问密码">获取 DB 访问密码</a>
+      <ul>
+        <li><a href="#方法一">方法一</a></li>
+        <li><a href="#方法二">方法二</a></li>
+      </ul>
+    </li>
+    <li><a href="#解密-db">解密 DB</a></li>
+    <li><a href="#enmicromsgdb-解析">EnMicroMsg.db 解析</a>
+      <ul>
+        <li><a href="#数据表">数据表</a></li>
+        <li><a href="#消息内容解析">消息内容解析</a></li>
+      </ul>
+    </li>
+    <li><a href="#语音文件处理">语音文件处理</a></li>
+  </ul>
+</nav>
+    </div>
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&text=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&is_video=false&description=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&title=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&name=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8&description=%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c%20%ef%bc%88%e5%bd%93%e5%89%8d%e5%be%ae%e4%bf%a1%e7%89%88%e6%9c%ac%e6%98%af%ef%bc%9a8.0.18%ef%bc%89%0a%e4%b8%80%e5%8f%b0%20Root%20%e7%9a%84%e6%89%8b%e6%9c%ba%ef%bc%88%e6%89%8b%e6%9c%ba%e4%b8%8d%e8%83%bd%20Root%20%e7%9a%84%e8%af%9d%e7%94%a8%e5%ae%89%e5%8d%93%e6%a8%a1%e6%8b%9f%e5%99%a8%ef%bc%8c%e7%84%b6%e5%90%8e%e5%ae%89%e5%8d%93%e6%a8%a1%e6%8b%9f%e5%99%a8%e8%8e%b7%e5%8f%96%20Root%20%e5%ba%94%e8%af%a5%e4%b9%9f%e6%98%af%e5%8f%af%e4%bb%a5%e7%9a%84%ef%bc%8c%e4%b8%8d%e8%bf%87%e6%88%91%e6%b2%a1%e8%af%95%e8%bf%87%ef%bc%89%20DB%20Browser%20for%20SQLite%20SQLCipher%20silk-v3-decoder%20%e6%94%b6%e9%9b%86%e6%95%b0%e6%8d%ae%20%e9%9c%80%e8%a6%81%e6%94%b6%e9%9b%86%e7%9a%84%e6%95%b0%e6%8d%ae%e6%9c%89%ef%bc%9a%0aimage2%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e5%9b%be%e7%89%87%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fimage2%20voice2%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%af%ad%e9%9f%b3%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fvoice2%20voide%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e8%a7%86%e9%a2%91%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fvoide%20avatar%20%e6%96%87%e4%bb%b6%e5%a4%b9%ef%bc%9a%e9%87%8c%e9%9d%a2%e5%ad%98%e6%94%be%e7%9d%80%e6%89%80%e6%9c%89%e7%9a%84%e5%be%ae%e4%bf%a1%e5%a4%b4%e5%83%8f%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2favatar%20Download%20%e6%96%87%e4%bb%b6%e5%a4%b9%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e8%81%8a%e5%a4%a9%e5%8f%91%e9%80%81%e7%9a%84%e6%96%87%e4%bb%b6%e5%ad%98%e6%94%be%e5%9c%a8%e8%bf%99%e9%87%8c%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fsdcard%2fAndroid%2fdata%2fcom.tencent.mm%2fMicroMsg%2fDownload%20EnMicroMsg.db%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e6%96%87%e4%bb%b6%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fEnMicroMsg.db%20WxFileIndex.db%3a%20%e5%be%ae%e4%bf%a1%e7%9a%84%e6%96%87%e4%bb%b6%e7%b4%a2%e5%bc%95%e6%95%b0%e6%8d%ae%e5%ba%93%e6%96%87%e4%bb%b6%ef%bc%8c%e4%bd%8d%e7%bd%ae%e5%9c%a8%ef%bc%9a%2fdata%2fdata%2fcom.tencent.mm%2fMicroMsg%2f%5b32%e4%bd%8d%e5%ad%97%e6%af%8d%5d%2fWxFileIndex.db%20%e5%9c%a8%e4%b8%8a%e9%9d%a2%e7%9a%84%e8%bf%99%e4%ba%9b%e6%96%87%e4%bb%b6%e4%b8%ad%ef%bc%8c%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f%e7%9a%84%e6%98%af%e8%b7%af%e5%be%84%e4%b8%ad%e6%9c%89%e4%b8%aa%2032%20%e4%bd%8d%e5%ad%97%e6%af%8d%e7%9a%84%e8%b7%af%e5%be%84%ef%bc%8c%e8%bf%99%e4%b8%aa%e6%98%af%e5%be%ae%e4%bf%a1%e9%80%9a%e8%bf%87%e6%9f%90%e7%a7%8d%e7%ae%97%e6%b3%95%e7%94%9f%e6%88%90%e7%9a%84%ef%bc%8c%e6%af%8f%e4%b8%aa%e5%8f%b7%e7%9a%84%e8%b7%af%e5%be%84%e9%83%bd%e4%b8%8d%e4%b8%80%e6%a0%b7%e3%80%82%20%e5%85%b6%e4%b8%ad%20voice2%e3%80%81voide%e3%80%81Download%20%e8%bf%99%e4%b8%89%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e5%9c%a8%20%2fsdcard%20%e7%9b%ae%e5%bd%95%e4%b8%8b%ef%bc%8c%e5%85%b6%e4%bb%96%e7%9a%84%e5%9c%a8%e7%b3%bb%e7%bb%9f%e7%9b%ae%e5%bd%95%20%2fdata%20%e4%b8%8b%e3%80%82%20Download%20%e6%96%87%e4%bb%b6%e5%a4%b9%e5%ad%98%e6%94%be%e7%9d%80%e5%bd%93%e5%89%8d%e6%89%8b%e6%9c%ba%e4%b8%8a%e6%89%80%e6%9c%89%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e6%97%b6%e5%8f%91%e9%80%81%e7%9a%84%e6%96%87%e4%bb%b6%ef%bc%8c%e8%bf%99%e9%87%8c%e6%96%87%e4%bb%b6%e4%be%8b%e5%a6%82%ef%bc%9a%e6%96%87%e6%a1%a3%ef%bc%8c%e5%ae%89%e8%a3%85%e5%8c%85%e3%80%81%e5%8e%8b%e7%bc%a9%e5%8c%85%e7%ad%89%e3%80%82%e9%9c%80%e8%a6%81%e9%80%9a%e8%bf%87%20WxFileIndex.db%20%e6%9d%a5%e7%b4%a2%e5%bc%95%e5%88%b0%e8%bf%99%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e3%80%82%0a%e6%8a%8a%e4%b8%8a%e9%9d%a2%e6%94%b6%e9%9b%86%e7%9a%84%e6%89%80%e6%9c%89%e6%96%87%e4%bb%b6%e6%94%be%e5%9c%a8%e7%94%b5%e8%84%91%e7%9a%84%e5%90%8c%e4%b8%80%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9%e4%b8%ad%ef%bc%8c%e6%8e%a5%e4%b8%8b%e6%9d%a5%e5%af%b9%e8%bf%99%e4%ba%9b%e6%95%b0%e6%8d%ae%e8%bf%9b%e8%a1%8c%e5%a4%84%e7%90%86%e3%80%82%0a%e8%8e%b7%e5%8f%96%20DB%20%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%20%e5%9c%a8%e4%b8%8a%e9%9d%a2%e8%8e%b7%e5%8f%96%e5%88%b0%e7%9a%84%20EnMicroMsg.db%e3%80%81WxFileIndex.db%20%e6%98%af%e7%bb%8f%e8%bf%87%e5%8a%a0%e5%af%86%e7%9a%84%ef%bc%8c%e6%89%80%e4%bb%a5%e6%88%91%e4%bb%ac%e9%9c%80%e8%a6%81%e8%8e%b7%e5%be%97%e8%bf%99%e4%b8%aa%e7%9a%84%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%ef%bc%8c%e9%80%9a%e8%bf%87%e8%bf%99%e4%b8%aa%e5%af%86%e7%a0%81%e6%9d%a5%e8%a7%a3%e5%af%86%e6%95%b0%e6%8d%ae%e5%ba%93%e3%80%82%0a%e6%96%b9%e6%b3%95%e4%b8%80%20%e5%8f%af%e4%bb%a5%e7%9b%b4%e6%8e%a5%e9%80%9a%e8%bf%87%20MD5%28IMEI%2buin%29%20%e5%8f%96%e5%89%8d%207%20%e4%bd%8d%e5%8d%b3%e6%98%af%e8%ae%bf%e9%97%ae%e5%af%86%e7%a0%81%ef%bc%8c%e5%a6%82%e6%9e%9c%e6%98%af%e5%a4%a7%e5%86%99%e7%9a%84%e8%a6%81%e8%bd%ac%e6%8d%a2%e6%88%90%e5%b0%8f%e5%86%99%e5%ad%97%e6%af%8d%e3%80%82%28%e6%b3%a8%e6%84%8f%ef%bc%9a%e6%8b%bc%e6%8e%a5%e4%b8%a4%e4%b8%aa%e6%95%b0%e6%8d%ae%e6%97%b6%e4%b8%8d%e9%9c%80%e8%a6%81%e7%94%a8%20%2b%20%e5%8f%b7%29%20%e5%85%b6%e4%b8%adIMEI%20%e6%98%af%e6%89%8b%e6%9c%ba%e7%9a%84%20IMEI%20%e7%a0%81%ef%bc%8c%e5%8f%af%e4%bb%a5%e6%9f%a5%e8%af%a2%e6%89%8b%e6%9c%ba%e7%9a%84%e8%ae%be%e7%bd%ae%ef%bc%8c%e5%9c%a8%e8%ae%be%e7%bd%ae%e4%b8%ad%e5%8f%af%e4%bb%a5%e6%9f%a5%e7%9c%8b%e5%88%b0%e3%80%82%e5%a6%82%e6%9e%9c%e4%bd%a0%e6%89%8b%e6%9c%ba%e5%88%b7%e8%bf%87%e6%9c%ba%ef%bc%8c%e9%82%a3%e4%b9%88%20IMEI%20%e6%9c%89%e5%8f%af%e8%83%bd%e6%98%af%e7%a9%ba%e7%99%bd%e7%9a%84%e3%80%82%e6%88%96%e8%80%85%e5%83%8f%20MIUI%20%e7%b3%bb%e7%bb%9f%e4%b8%80%e6%a0%b7%ef%bc%8c%e5%ba%94%e7%94%a8%e6%97%a0%e6%b3%95%e7%9c%9f%e6%ad%a3%e8%8e%b7%e5%8f%96%e5%88%b0%e6%89%8b%e6%9c%ba%e7%9a%84%20IMEI%e3%80%82%e8%bf%99%e6%97%b6%e5%b0%b1%e5%8f%af%e4%bb%a5%e7%94%a8%201234567890ABCDEF%20%e8%bf%99%e4%b8%aa%e5%ad%97%e7%ac%a6%e4%b8%b2%e6%9d%a5%e4%bb%a3%e6%9b%bf%20IMEI%e3%80%82%20uin%20%e5%8f%af%e4%bb%a5%e9%80%9a%e8%bf%87%20adb%20%e6%9d%a5%e6%9f%a5%e7%9c%8b%e5%bd%93%e5%89%8d%e7%99%bb%e9%99%86%e5%be%ae%e4%bf%a1%e7%9a%84%20uin%20%e6%95%b0%e6%8d%ae%ef%bc%9a" aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fandroid-wechat-bak%2f&t=%e8%a7%a3%e5%af%86%e5%ae%89%e5%8d%93%e5%be%ae%e4%bf%a1%e8%81%8a%e5%a4%a9%e4%bf%a1%e6%81%af%e5%ad%98%e5%82%a8" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="toc-toggle" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;" aria-label="TOC">
+          <i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2022  Greycode&#39;s Blog 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+
+</html>

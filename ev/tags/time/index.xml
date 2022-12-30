@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Time on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/time/</link>
+    <description>Recent content in Time on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 15 Jun 2021 10:32:50 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/time/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>后端服务器时间不一致问题解决手册</title>
+      <link>http://localhost:1313/posts/9afc3efaec15479bb5fbc6f670594a94/</link>
+      <pubDate>Tue, 15 Jun 2021 10:32:50 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/9afc3efaec15479bb5fbc6f670594a94/</guid>
+      <description>时区问题 一般快 8 小时，慢 8 小时的问题都是时区问题，直接把时区改成 CST 时区
+编辑系统环境变量文件 /etc/profile
+export TZ=&amp;#39;CST-8&amp;#39; Linux 系统时间不同步问题 Linux 系统时间比正常时间快几分中或慢几分钟，但是时区是正确的 CST 时区，这是就要用到 ntpdate 这个命令了
+安装 #centos,redhat系列 yum install ntpdate #debian,ubuntu系列 apt install ntpdate #archlinux系列 pacman -S ntpdate 2、通过ntpdate命令从时钟服务器同步
+我们这里选用中国ntp服务器cn.pool.ntp.org来作为时钟同步的来源。为能正常访问到cn.pool.ntp.org，你的Linux系统应该能访问外网才行。
+执行命令如下：
+ntpdate cn.pool.ntp.org 3、配置crontab自动执行同步
+如果每次手动执行，显然是很麻烦的。这里，我们使用crontab定时任务来定期执行ntpdate同步命令，例如我们每10分钟或一小时执行一次，可以通过以下方式实现。
+首先在命令终端中输入crontab -e命令，然后输入如下命令保存即可。
+crontab -e 开始编辑文件内容，输入定时执行命令：
+#每10分钟执行一次 */10 * * * * /usr/sbin/ntpdate cn.pool.ntp.org 或者
+#每一个小时执行一次 0 * * * * /usr/sbin/ntpdate cn.pool.ntp.org 参考资料 https://linux265.com/news/6009.html </description>
+    </item>
+    
+  </channel>
+</rss>

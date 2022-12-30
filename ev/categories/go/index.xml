@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/categories/go/</link>
+    <description>Recent content in Go on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 Mar 2021 14:18:58 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【go库】钉钉机器人</title>
+      <link>http://localhost:1313/posts/47ca1795-f020-44a6-9847-02ef3955f6c9/</link>
+      <pubDate>Fri, 19 Mar 2021 14:18:58 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/47ca1795-f020-44a6-9847-02ef3955f6c9/</guid>
+      <description>钉钉机器人 go库
+github地址：https://github.com/greycodee/dingbot
+钉钉官方文档
+快速开始 go get github.com/greycodee/dingbot 示例程序：
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/greycodee/dingbot&amp;#34; &amp;#34;github.com/greycodee/dingbot/message&amp;#34; &amp;#34;time&amp;#34; ) func main() { bot:= dingbot.DingBot{ Secret: &amp;#34;你的加签秘钥&amp;#34;, AccessToken: &amp;#34;你的AccessToken【从钉钉机器人的url上获取】&amp;#34;, } msg := message.Message{ MsgType: message.TextStr, Text: message.Text_{ Content: &amp;#34;go-钉钉机器人测试&amp;#34;, }, } bot.Send(msg) } 消息支持 text类型 link类型 markdown类型 整体跳转ActionCard类型 独立跳转ActionCard类型 FeedCard类型 使用 发送Text消息 func send() { bot:= dingbot.DingBot{ Secret: &amp;#34;你的加签秘钥&amp;#34;, AccessToken: &amp;#34;你的AccessToken【从钉钉机器人的url上获取】&amp;#34;, } msg := message.Message{ MsgType: message.TextStr, Text: message.Text_{ Content: &amp;#34;go-钉钉机器人测试&amp;#34;, At: message.</description>
+    </item>
+    
+    <item>
+      <title>go自定义库上传github下载不了问题</title>
+      <link>http://localhost:1313/posts/e1273901-26b1-4cfb-a55c-a9f5047855a5/</link>
+      <pubDate>Fri, 19 Mar 2021 11:39:50 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/e1273901-26b1-4cfb-a55c-a9f5047855a5/</guid>
+      <description>自定义库上传github标签规范 当自己写的库要上传到github时,标签号要符合vX.Y.Z的格式，例如v1.0.0
+如果定义其他的标签格式，则go会下载不到，例如v1.0,此时如果用go get命令下载的话，则下载不到此版本</description>
+    </item>
+    
+  </channel>
+</rss>

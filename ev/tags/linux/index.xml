@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/linux/</link>
+    <description>Recent content in Linux on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 01 Sep 2021 15:47:14 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>centos 多网卡配置优先级</title>
+      <link>http://localhost:1313/posts/0a5a3927baea4155849c174e4c613913/</link>
+      <pubDate>Wed, 01 Sep 2021 15:47:14 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/0a5a3927baea4155849c174e4c613913/</guid>
+      <description>过程 查看网卡配置
+[root@localhost ~]# ip addr 1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000 link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 inet 127.0.0.1/8 scope host lo valid_lft forever preferred_lft forever inet6 ::1/128 scope host valid_lft forever preferred_lft forever 2: em1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc mq state UP group default qlen 1000 link/ether 34:17:eb:f0:18:8f brd ff:ff:ff:ff:ff:ff inet 192.168.0.84/24 brd 192.168.0.255 scope global noprefixroute em1 valid_lft forever preferred_lft forever inet6 240e:390:c6a:c3a0:3617:ebff:fef0:188f/64 scope global noprefixroute dynamic valid_lft 259182sec preferred_lft 172782sec inet6 fe80::3617:ebff:fef0:188f/64 scope link noprefixroute valid_lft forever preferred_lft forever 3: em2: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc mq state UP group default qlen 1000 link/ether 34:17:eb:f0:18:90 brd ff:ff:ff:ff:ff:ff inet 192.</description>
+    </item>
+    
+    <item>
+      <title>Java删除文件后电脑磁盘空间没有恢复</title>
+      <link>http://localhost:1313/posts/74caaafd610241a1b8ecdb5f3bb33ee4/</link>
+      <pubDate>Sat, 03 Jul 2021 17:12:41 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/74caaafd610241a1b8ecdb5f3bb33ee4/</guid>
+      <description>问题 当用一下命令删除文件后，电脑磁盘内存没有恢复，还是原来的大小
+File folder = new File(&amp;#34;/tmp/file.mp4&amp;#34;) file.delete(); 解决 原来是 FileOutputStream 文件流忘了关了，导致一直占用这个资源。所以使用完后一定记得关文件流，使用下面的代码关闭文件流：
+FileOutputStream fileOutputStream = new FileOutputStream(new File()); fileOutputStream.close(); Linux 里的文件被删除后，空间没有被释放是因为在 Linux 系统中，通过 rm 或者文件管理器删除文件将会从文件系统的目录结构上解除链接(unlink).然而如果文件是被打开的(有一个进程正在使用)，那么进程将仍然可以读取该文件，磁盘空间也一直被占用。
+可以使用 lsof +L1 |grep delete 命令来查看状态为 deleted 的文件，状态为 deleted 为标记被删除，其实该文件并没有从磁盘中删除，类似windows下的回收站状态。
+所以当进程结束后，磁盘空间就会被释放。
+参考资料 http://www.cxyzjd.com/article/su4416160/78212934 https://www.jianshu.com/p/fcb80c878d04 </description>
+    </item>
+    
+    <item>
+      <title>后端服务器时间不一致问题解决手册</title>
+      <link>http://localhost:1313/posts/9afc3efaec15479bb5fbc6f670594a94/</link>
+      <pubDate>Tue, 15 Jun 2021 10:32:50 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/9afc3efaec15479bb5fbc6f670594a94/</guid>
+      <description>时区问题 一般快 8 小时，慢 8 小时的问题都是时区问题，直接把时区改成 CST 时区
+编辑系统环境变量文件 /etc/profile
+export TZ=&amp;#39;CST-8&amp;#39; Linux 系统时间不同步问题 Linux 系统时间比正常时间快几分中或慢几分钟，但是时区是正确的 CST 时区，这是就要用到 ntpdate 这个命令了
+安装 #centos,redhat系列 yum install ntpdate #debian,ubuntu系列 apt install ntpdate #archlinux系列 pacman -S ntpdate 2、通过ntpdate命令从时钟服务器同步
+我们这里选用中国ntp服务器cn.pool.ntp.org来作为时钟同步的来源。为能正常访问到cn.pool.ntp.org，你的Linux系统应该能访问外网才行。
+执行命令如下：
+ntpdate cn.pool.ntp.org 3、配置crontab自动执行同步
+如果每次手动执行，显然是很麻烦的。这里，我们使用crontab定时任务来定期执行ntpdate同步命令，例如我们每10分钟或一小时执行一次，可以通过以下方式实现。
+首先在命令终端中输入crontab -e命令，然后输入如下命令保存即可。
+crontab -e 开始编辑文件内容，输入定时执行命令：
+#每10分钟执行一次 */10 * * * * /usr/sbin/ntpdate cn.pool.ntp.org 或者
+#每一个小时执行一次 0 * * * * /usr/sbin/ntpdate cn.pool.ntp.org 参考资料 https://linux265.com/news/6009.html </description>
+    </item>
+    
+    <item>
+      <title>Hexo使用UUID生成文章路径</title>
+      <link>http://localhost:1313/posts/79b5fe12-9c60-4b93-be92-dffb00fa39c7/</link>
+      <pubDate>Wed, 27 Jan 2021 17:51:05 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/79b5fe12-9c60-4b93-be92-dffb00fa39c7/</guid>
+      <description>教程 编写一个名为hexoN的脚本文件 #!/bin/bash uuid=$(sudo cat /proc/sys/kernel/random/uuid) echo $uuid hexo new $uuid 添加执行权限 chmod +x hexoN 在用户根目录的.zshrc(因为我用的是ohmyzsh，所以是这个文件，一般是.bashrc，也可直接加载系统文件/etc/profile中)追加一条 # 后面地址是存放这个脚本的文件夹路径 根据实际更改 export PATH=$PATH:/home/zheng/software/shell 执行命令是刚才追加的内容生效 source .zshrc 使用 到Hexo博客的根目录执行</description>
+    </item>
+    
+    <item>
+      <title>使用GitHub Actions编译树莓派内核</title>
+      <link>http://localhost:1313/posts/github-actions-build-pi-kernerl/</link>
+      <pubDate>Tue, 26 Jan 2021 15:56:07 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/github-actions-build-pi-kernerl/</guid>
+      <description>仓库地址 仓库地址：https://github.com/GreyCode9/make-raspberrypi-kernel
+创建秘钥 点击Github右上角头像 -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Generate new token 或者直接点这个链接进入： https://github.com/settings/tokens
+创建后保存这个秘钥(秘钥只显示一次)
+创建仓库 创建仓库**make-raspberrypi-kernel**
+然后点击仓库的Settings -&amp;gt; Secrets -&amp;gt;New repository secret
+然后填入刚才生成的秘钥
+创建Actions 接着点击Actions ,创建一个Actions，然后填入如下内容
+name: Make RaspberryPi Kernel on: push: tags: - &amp;#39;v*&amp;#39; # 当推送的Tag为v开头的，就会触发构建 env: USE_SSH_CONFIG: true # 是否使用ssh连接进行 true:使用 false:不使用 jobs: build: runs-on: ubuntu-18.04 steps: - uses: actions/checkout@v2 - name: pull RaspberryPi Kernel linux run: | cd ../ git clone https://github.</description>
+    </item>
+    
+    <item>
+      <title>fastDFS安装使用教程</title>
+      <link>http://localhost:1313/posts/linux-fastdfs-install/</link>
+      <pubDate>Thu, 07 May 2020 13:34:10 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/linux-fastdfs-install/</guid>
+      <description>FastDFS简介 FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &amp;lt; file_size &amp;lt;500MB）为载体的在线服务。
+FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。
+Tracker Server：跟踪服务器，主要做调度工作，起到均衡的作用；负责管理所有的 storage server和 group，每个 storage 在启动后会连接 Tracker，告知自己所属 group 等信息，并保持周期性心跳。
+Storage Server：存储服务器，主要提供容量和备份服务；以 group 为单位，每个 group 内可以有多台 storage server，数据互为备份。
+Client：客户端，上传下载数据的服务器，也就是我们自己的项目所部署在的服务器。
+结构图
+上传文件流程
+安装环境 系统及软件版本 Git开源地址 Centos 7 # libfastcommon V1.0.43 https://github.com/happyfish100/fastdfs fastdfs V6.06 https://github.com/happyfish100/libfastcommon 我虚拟机装的Centos7的ip地址是172.16.54.137
+安装前工作 关闭防火墙 为了方便，先关闭防火墙。线上环境安装可安装后开放对应端口。
+service firewalld stop 下载所需安装包 libfastcommon wget https://github.com/happyfish100/libfastcommon/archive/V1.0.43.tar.gz -O libfastcommon.tar.gz fastDFS wget https://github.com/happyfish100/fastdfs/archive/V6.06.tar.gz -O fastdfs.tar.gz 安装fastDFS环境 解压安装libfastcommon tar -zxvf libfastcommon.tar.gz &amp;amp;&amp;amp; cd libfastcommon-1.0.43/ &amp;amp;&amp;amp; .</description>
+    </item>
+    
+    <item>
+      <title>Docker迁移根目录导致mysql权限问题</title>
+      <link>http://localhost:1313/posts/docker-transfer-pit/</link>
+      <pubDate>Fri, 20 Dec 2019 15:04:16 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/docker-transfer-pit/</guid>
+      <description>问题描述 最近由于公司服务器硬盘老是爆满，导致经常要清硬盘空间．最后发现/var/lib/docker目录占了25G,以前分kvm分区的时候，他们分了两个区：根目录＂/＂,和＂/home＂目录，发现home目录使用几乎为零，于是准备迁移Docker的根目录：
+迁移根目录我看的是这个文章：docker的存储目录迁移,　不过迁移的时候我没有使用rsync这个命令，而是使用cp -R;
+文件复制过去后，按照教程，重新启动docker服务，可是其中mysql容器跑不起来了，报mysqld: Can&amp;rsquo;t create/write to file &amp;lsquo;/tmp/ibTCv7Rw&amp;rsquo; (Errcode: 13 - Permission denied)
+期间按照网上的方法：说docker容器启动是添加&amp;ndash;privileged=true,设置/tmp目录的权限，关闭selinux，这些方法都没用！！！！！！
+其中设置/tmp文件权限这个方法，我把里面的/tmp文件挂载出来后，设置了权限，报这个的问题是解决了，可是又出现了新的问题，又报Version: &amp;lsquo;5.7.27&amp;rsquo; socket: &amp;lsquo;/var/run/mysqld/mysqld.sock&amp;rsquo;
+看来还是得从根源上解决问题啊！
+我的解决办法 我想，既然是权限问题，那肯定是复制文件的时候权限丢失了，于是查了下cp命令保持权限的命令（cp -p）: 于是我又重新关闭的docker服务，然后删除了所有复制到home文件的目录，重新用cp -p -R /var/lib/docker /home/docker/lib/来重新复制了文件；
+复制后，重启docker服务，启动docker容器，ok,一切正常；用docker info查看，看到已成功转移到/home下．</description>
+    </item>
+    
+    <item>
+      <title>Jenkins教程-搭建(Docker版)</title>
+      <link>http://localhost:1313/posts/build-jenkins-docker/</link>
+      <pubDate>Thu, 07 Nov 2019 17:19:34 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/build-jenkins-docker/</guid>
+      <description>目录 Jenkins教程-搭建(Docker版)
+Jenkins教程-创建Maven项目
+Jenkins教程-Docker+GitLab持续部署持续集成
+环境 主机：172.16.54.131
+系统：Cnetos 7
+安装Docker-CE 检查Docker 首先检查本机是否安装Docker，如果安装了直接跳过安装Docker步骤
+docker -v 如果出现Docker version 19.03.4, build 9013bf583a类似的信息，则说明已安装Docker
+安装 本教程以centos7安装方式说明，其他系统安装方式会有不同 执行以下命令，安装Docker
+yum install -y yum-utils device-mapper-persistent-data lvm2 yum-config-manager \ --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo yum install docker-ce service docker start systemctl enable docker 第一条命令：为添加源做准备 使其支持存储 第二条命令：添加docker-ce软件源 第三条命令：安装docker-ce 第四条命令：启动docker服务 第五条命令：设置开启自启 安装Jenkins的Docker容器 创建文件夹 在创建容器前先在宿主机创建一个Jenkins的工作文件夹，用于持久化
+mkdir /opt/jenkins //创建文件夹 chmod 7777 /opt/jenkins	//授予权限 该文件夹一定要给权限，不然docker容器访问不了，容器会创建失败。
+拉取官方镜像 docker pull jenkins/jenkins:lts 启动容器 docker run -d -p 8080:8080 -p 50000:50000 -u root -v /var/run/docker.</description>
+    </item>
+    
+    <item>
+      <title>RocketMQ集群搭建</title>
+      <link>http://localhost:1313/posts/rocketmq-cluster-build/</link>
+      <pubDate>Wed, 09 Oct 2019 20:55:36 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/rocketmq-cluster-build/</guid>
+      <description>本文只讲RocketMQ集群的搭建(异步复制)，具体理论知识后续会在写新文章详细介绍;
+环境 JDK1.8 Centos7 主机-两台 centos7_1 :172.16.54.130 centos7_2 :172.16.54.128 软件资源 JDK1.8 :https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html RocketMQ4.5.2 :http://mirrors.tuna.tsinghua.edu.cn/apache/rocketmq/4.5.2/rocketmq-all-4.5.2-bin-release.zip 安装JDK 首先分别在两台主机上安装JDK1.8，具体安装方法这里就不说了，网上随便搜一搜都有；
+配置RocketMQ 把下载的RocketMQ包分别上传到两台服务器上，然后用命令解压:
+# unzip rocketmq-all-4.5.2-bin-release.zip 编写配置文件 这一步很重要，集群的搭建关键在于配置文件的编写，首先看看RocketMQ配置文件的解析:
+#所属集群名字 brokerClusterName=rocketmq-cluster #broker名字，每队master和slave保持一致 brokerName=broker-a #0 表示 Master，&amp;gt;0 表示 Slave brokerId=0 #指定主机ip brokerIP1 = 主机IP #nameServer地址，分号分割 namesrvAddr=主机IP:9876;主机IP:9876 #在发送消息时，自动创建服务器不存在的topic，默认创建的队列数 defaultTopicQueueNums=4 #是否允许 Broker 自动创建Topic，建议线下开启，线上关闭 autoCreateTopicEnable=true #是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭 autoCreateSubscriptionGroup=true #Broker 对外服务的监听端口 listenPort=10911 #删除文件时间点，默认凌晨 4点 deleteWhen=04 #文件保留时间，默认 48 小时 fileReservedTime=120 #commitLog每个文件的大小默认1G mapedFileSizeCommitLog=1073741824 #ConsumeQueue每个文件默认存30W条，根据业务情况调整 mapedFileSizeConsumeQueue=300000 #检测物理文件磁盘空间 diskMaxUsedSpaceRatio=88 #存储路径 storePathRootDir=/usr/local/rocketmq/store #commitLog 存储路径 storePathCommitLog=/usr/local/rocketmq/store/commitlog #消费队列存储路径存储路径 storePathConsumeQueue=/usr/local/rocketmq/store/consumequeue #消息索引存储路径 storePathIndex=/usr/local/rocketmq/store/index #checkpoint 文件存储路径 storeCheckpoint=/usr/local/rocketmq/store/checkpoint #Broker 的角色 #- ASYNC_MASTER 异步复制Master #- SYNC_MASTER 同步双写Master #- SLAVE brokerRole=ASYNC_MASTER #刷盘方式 #- ASYNC_FLUSH 异步刷盘 #- SYNC_FLUSH 同步刷盘 flushDiskType=ASYNC_FLUSH #checkTransactionMessageEnable=false #abort 文件存储路径 abortFile=/usr/javawork/apache-rocketmq/store/abort #限制的消息大小 maxMessageSize=65536 以上配置可根据个人需求加入到自己的配置文件中；RocketMQ官方已经为我们创建好了简单的集群配置文件，进去解压后的文件夹，在进入到conf文件夹，可以看到里面有三个文件夹：</description>
+    </item>
+    
+    <item>
+      <title>Docker下安装mysql并设置用户权限</title>
+      <link>http://localhost:1313/posts/docker-mysql/</link>
+      <pubDate>Tue, 03 Sep 2019 15:58:46 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/docker-mysql/</guid>
+      <description>环境 Ubuntu18.04
+Docker19.03.1
+Mysql5.7
+Docker 拉取镜像 Docker拉取镜像默认是从DockerHub上面拉取，上面有各厂商提供的优质官方镜像，可以直接拉取使用。或者也可以用DockerFile自定义构建你自己的镜像。
+sudo docker pull mysql:5.7	//拉取镜像到本地 注：上面mysql:5.7指的是拉取5.7版本的mysql，如果不加直接写mysql的话默认是拉取mysql的最新版本。
+如果显示上面这样，说明已经拉取好了。
+查看镜像 sudo docker images	//查看本地镜像 创建容器 创建 sudo docker run -d -p 3306:3306 --name mysql5.7 -e MYSQL_ROOT_PASSWORD=root mysql:5.7 -d 指定容器运行于后台 -p 端口映射 主机端口:容器端口 &amp;ndash;name 自定义容器名字，方便记忆，不设置的话会随机生产 -e 容器环境变量 创建好的话会显示一串随机生产的id
+查看创建好的容器 sudo docker ps -a -a 显示所有创建好的容器，如果不加只显示正在运行的容器 Mysql 进入容器 sudo docker exec -it mysql5.7 bash -i 打开STDIN，用于控制台交互 -t 分配tty设备，该可以支持终端登录 登录mysql mysql -uroot -p 注：然后输入刚才创建容器时的密码，就是MYSQL_ROOT_PASSWORD这个参数
+创建测试数据库 create database test; 创建mysql用户 create user &amp;#39;zmh&amp;#39;@&amp;#39;%&amp;#39; identified by &amp;#39;zmh&amp;#39;; 注：&amp;quot;%&amp;ldquo;表示可以任意ip访问</description>
+    </item>
+    
+    <item>
+      <title>树莓派安装docker</title>
+      <link>http://localhost:1313/posts/build-docker-pi/</link>
+      <pubDate>Fri, 30 Aug 2019 18:33:03 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/build-docker-pi/</guid>
+      <description>前言 和平常x86_64架构的电脑安装docker不同，树莓派是ARM架构的，所以安装步骤比较繁琐一点。
+使用APT源安装docker 更新apt软件源及安装必备组件。为了确认所下载软件包的合法性，还需要添加软件源的 GPG 密钥。
+$sudo apt-get update $sudo apt-get install \ apt-transport-https \ ca-certificates \ curl \ gnupg2 \ lsb-release \ software-properties-common $curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/raspbian/gpg | sudo apt-key add - 添加docker ce 软件源 首先执行以下一行命令，然后记一下输出的结果
+$ echo $(lsb_release -cs) stretch 在/etc/apt/sources.list.d目录下新建文件docker.list
+$ sudo vi /etc/apt/sources.list.d/docker.list 在文件里添加下面这行
+deb [arch=armhf] https://download.docker.com/linux/raspbian $(lsb_release -cs) stable 把$(lsb_release -cs)改为刚才第一行输出的结果，比如我的输出的是stretch，改完后如下
+deb [arch=armhf] https://download.docker.com/linux/raspbian stretch stable 保存，退出
+安装docker ce 依次执行以下两行命令，即可完成安装
+$ sudo apt-get update $ sudo apt-get install docker-ce 启动 $ service docker start 启动 $ service docker stop 停止 $ service docker status 状态 $ service docker restart 重启 </description>
+    </item>
+    
+    <item>
+      <title>JDK时区问题</title>
+      <link>http://localhost:1313/posts/problem-jdk-timezone/</link>
+      <pubDate>Tue, 27 Aug 2019 15:26:30 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/problem-jdk-timezone/</guid>
+      <description>今天碰到一个大坑，弄了快一个小时才解决掉；
+一个管理台后端服务，用docker隔离了三个容器，oracle,nginx,tomcat;后发现管理台查出来的时间和现实时间相差8个小时，一查是linux时区问题；
+于是改之,三台容器都输入一下代码 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 测试了一下，发现问题docker容器的时区是正确了，可是问题并未得到解决，数据库时间还是慢了8个小时。
+于是又查资料，换另外一种设置时区的方法； vi /etc/sysconfig/clock 在里面输入如下内容
+ZONE=&amp;#34;Asia/Shanghai&amp;#34; UTC=false ARC=false 保存，重启，测试。。。。。发现还是一样,快疯了
+第三种方法，设置TZ环境变量 设置环境变量可以在设置系统级别的/etc/profile ,也可以设置用户级别的home目录的.bashrc。由于用的是docker，防止变量重启失效，只能在.bashrc里设置。在.bashrc加入如下内容：
+export TZ=&amp;#39;CST-8&amp;#39; 保存：然后执行
+source .bashrc 使设置立即生效。
+重启容器，测试，发现时间正常了。。。。哈哈哈哈
+总结 上面问题出在jdk的new Date()方法，所以只要设置jdk所在的那个docker容器的变量就可以，不用每个都设置。jdk的new Date()方法每次调用都会去取环境变量TZ的时区，TZ是TimeZone的缩写，容器内部操作系统并未指定时区（TimeZone）信息，系统默认使用世界标准时（UTC+0),所以导致new Date()出来的数据存库会比当前时间慢8个小时；</description>
+    </item>
+    
+  </channel>
+</rss>

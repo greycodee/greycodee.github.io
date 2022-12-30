@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>建造者模式 on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</link>
+    <description>Recent content in 建造者模式 on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Dec 2019 06:50:31 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式之建造者模式【用好玩的故事讲清楚设计模式】</title>
+      <link>http://localhost:1313/posts/gof-builder/</link>
+      <pubDate>Fri, 27 Dec 2019 06:50:31 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/gof-builder/</guid>
+      <description>积千里跬步,汇万里江河;每天进步一点点,终有一天将成大佬
+所有源代码都在这:https://github.com/z573419235/GofDemo
+各位大佬记得点个星星哦
+前言 建造者模式用于实例化一个比较复杂的实体类,当你实例化一个类时,它的构造参数比较多时,就可以用建造者模式来简化实例化过程;前几篇工厂模式的文章我们说道买车,那只是简单的区工厂买车,我们不关系工厂是怎么造出来的.可是实际工厂造一辆车需要有方向盘、发动机、车架、轮胎等部件,而且不同品牌的车的部件都是不同的,部件虽然不同,但是造车的方式基本都是差不多的步骤,这时候就可以用建造者模式来造一辆车了;
+建造者（Builder）模式由产品、抽象建造者、具体建造者、指挥者等 4 个要素构成
+土豪朋友开车厂 土豪朋友上次买了车之后,发现造车卖还挺赚钱,于是决定涉足汽车领域,真是很有商业头脑啊,不愧是我的玉树临风,疯言疯语,语速惊人,人模狗样的土豪朋友啊. 一天,前去向他讨教汽车的知识,他给我讲了汽车的大致构成:
+/** * 汽车 产品类 定义汽车的构成 * */ @Data public class Car { /** * 方向盘 * */ private String steering; /** * 发动机 * */ private String engine; /** * 车架 * */ private String frame; /** * 轮胎 * */ private String tire; /** * 展示一下汽车配置 * */ public String show() { return &amp;#34;{&amp;#34; + &amp;#34;steering=&amp;#39;&amp;#34; + steering + &amp;#39;\&amp;#39;&amp;#39; + &amp;#34;, engine=&amp;#39;&amp;#34; + engine + &amp;#39;\&amp;#39;&amp;#39; + &amp;#34;, frame=&amp;#39;&amp;#34; + frame + &amp;#39;\&amp;#39;&amp;#39; + &amp;#34;, tire=&amp;#39;&amp;#34; + tire + &amp;#39;\&amp;#39;&amp;#39; + &amp;#39;}&amp;#39;; } } 果真是大致啊,忽悠我不懂车是吧,就给我讲4个东西,这谁不知道啊,哼!</description>
+    </item>
+    
+  </channel>
+</rss>

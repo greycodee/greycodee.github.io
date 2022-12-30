@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vert.x on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/categories/vert.x/</link>
+    <description>Recent content in Vert.x on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 05 Jul 2021 15:31:02 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/vert.x/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>vertx的web开发学习笔记</title>
+      <link>http://localhost:1313/posts/10ef2e95447c468cb55bd7bd0675c090/</link>
+      <pubDate>Mon, 05 Jul 2021 15:31:02 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/10ef2e95447c468cb55bd7bd0675c090/</guid>
+      <description>创建一个 Http 服务 // 创建路由 Router router = Router.router(vertx); // 创建 Http 服务 vertx.createHttpServer() // 绑定路由 .requestHandler(router) // 监听端口 .listen(8888) // Http 服务启动成功后调用 .onSuccess(server -&amp;gt; System.out.println(&amp;#34;HTTP server started on port &amp;#34; + server.actualPort()) ); Router 使用 直接使用上面的路由实例
+创建请求路由 创建 Get 请求路由
+router .get(&amp;#34;/test&amp;#34;) .respond( // 响应逻辑 ) // 或者 router .route(HttpMethod.GET, &amp;#34;/test&amp;#34;) .respond( // 响应逻辑 ) 创建 Post 请求路由
+router .post(&amp;#34;/test&amp;#34;) .respond( // 响应逻辑 ) // 或者 router .post(HttpMethod.POST, &amp;#34;/test&amp;#34;) .</description>
+    </item>
+    
+  </channel>
+</rss>

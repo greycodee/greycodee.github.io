@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vuex on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/vuex/</link>
+    <description>Recent content in Vuex on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 29 Jul 2021 16:45:15 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/vuex/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>小白学前端之TypeScript使用Vuex 4.0</title>
+      <link>http://localhost:1313/posts/2ca7c67d02e74713a030f09651a5f164/</link>
+      <pubDate>Thu, 29 Jul 2021 16:45:15 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/2ca7c67d02e74713a030f09651a5f164/</guid>
+      <description>简介 官方介绍：Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+简单来说，Vuex 就像是前端的数据库或缓存，不管什么页面，只要 Vuex 里面有的数据，都可以去拿。
+Vuex 分为 5 个部分：
+State：是数据源，存放数据 Getters：可以取得 State 的数据，然后自定义组装返回新的数据 Mutations：可以改变 State 的数据，建议方法执行是同步的 Actions：可以异步执行 Mutations 里的方法 Modules：每个 Module 都有各自的 State、Getters、Mutations、Actions 这 5 个部分相辅相成。
+TypeScript 使用 在 vue 项目根目录执行命令来进行 vuex 模块的安装
+npm install vuex@next --save 安装好后我们新建文件 /src/store/store.ts ,然后在里面定义 InjectionKey 和 Store
+import { InjectionKey } from &amp;#39;vue&amp;#39; import { createStore, useStore as baseUseStore, Store } from &amp;#39;vuex&amp;#39; // 定义 State 数据类型的接口 interface IState{ } // 类型传递 export const key: InjectionKey&amp;lt;Store&amp;lt;IState&amp;gt;&amp;gt; = Symbol() export const store = createStore&amp;lt;IState&amp;gt; ({ }) // 用于组合式API setup() 里，省的每次都传入 key export function useStore() { return baseUseStore(key) } 然后在 main.</description>
+    </item>
+    
+  </channel>
+</rss>

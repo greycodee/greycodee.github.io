@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>抽象工厂模式 on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link>
+    <description>Recent content in 抽象工厂模式 on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 16 Dec 2019 21:17:23 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式系列-抽象工厂模式</title>
+      <link>http://localhost:1313/posts/gof-abstract-factory/</link>
+      <pubDate>Mon, 16 Dec 2019 21:17:23 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/gof-abstract-factory/</guid>
+      <description>积千里跬步，汇万里江河；每天进步一点点，终有一天将成大佬
+突然开始的正文 紧接着上一章的工厂方法模式，其实抽象工厂的概念和工厂方法的概念都是差不多的，抽象工厂模式是对工厂方法模式的更高级，比如上次我们说的那个汽车工厂总部类AllCarFactory，本来他只定义了生产汽车这个方法，下面的各个品牌的汽车厂也只能生产这个汽车，现在由于市场需求，需要生产摩托车，然后AllCarFactory定义了一个生产摩托车的接口，这样这个接口下面的汽车厂就可以生产摩托车了．就在这时他们的生产模式也从工厂方法模式升级到了抽象工厂模式；
+话不多说，看两个模式的类图你就明白了：
+原本的工厂方法模式类图： 升级后的抽象工厂模式： 可以看到，抽象工厂只是比工厂方法模式多生产了一个产品，当抽象工厂模式的产品减到只有一个的时候，他就又回到了工厂方法模式；
+好色的朋友买车了 上次我朋友看见我买车之后，得知是个小姐姐带我区买车的，于是他叫我联系了下那个小姐姐，说他也要买车，点名要叫小姐姐带他去，由于资金有限，他只卖了奔驰和五菱系列的产品，没有买莱斯莱斯的；看看他是怎么买的吧：
+可以看到，由于要在一个工厂买两个东西，他是先找到了工厂，然后再一件一件的从工厂买．我们上次是一个工厂买一件东西，所以是直接去工厂买的；
+措不及防的结束了 不是我不想讲，而是抽象工厂就是这样的东西．从上面可以看出，抽象工厂每当增加一个产品时，后面相关的的品牌工厂也全部要实现他这个产品，这就违背了开闭原则了．所以，在实际设计中，一个业务场景是稳定的,用抽象工厂是比较好的，因为一次设计,后面就不用改了,这样就不会违反开闭原则了．但是如果一个业务场景是稳定的是不稳定的，那么就不适合使用这个模式了，因为后期需要多次修改，这就违反了开闭原则，同时也及其难维护，应为你不知道修改了代码，到底会影响哪些功能；</description>
+    </item>
+    
+  </channel>
+</rss>

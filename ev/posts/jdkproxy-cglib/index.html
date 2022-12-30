@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> JDKproxy和Cglib初探 | Greycode&#39;s Blog</title>
+  <link rel = 'canonical' href = 'http://localhost:1313/posts/jdkproxy-cglib/'>
+  <meta name="description" content="Hello,I‘m Greycode. Please use Chrome to browse this site for a better experience.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="JDKproxy和Cglib初探" />
+<meta property="og:description" content="JDKproxy和Cglib初探 简介 在Java中，动态代理机制的出现，使得Java开发人员不用手工编写代理类，只要简单地制定一组接口及委托类对象，便能动态地获得代理类。动态代理在Java中有着广泛的应用，比如Spring AOP，Hibernate数据查询、测试框架的后端mock、RPC，Java注解对象获取等。
+JDK原生动态代理(JDKProxy) JDKProxy只能对实现了接口的类生成代理，而不能针对普通类 。JDKProxy原生的反射API进行操作，在生成类上比较高效。
+使用 interface TestInterface{ void test(); } class TestClass implements TestInterface{ @Override public void test(){ System.out.println(&#34;JDK动态代理&#34;); } } //主方法 public class JDKProxy { public static void main(String[] args) { TestClass testClass=new TestClass(); ProxyHandle proxyHandle=new ProxyHandle(testClass); //使用接口 TestInterface testClass1= (TestInterface) Proxy.newProxyInstance( testClass.getClass().getClassLoader(), testClass.getClass().getInterfaces(),proxyHandle); testClass1.test(); System.out.println(&#34;代理类名称：&#34;&#43;testClass1.getClass()); } } //代理 class ProxyHandle implements InvocationHandler{ private Object originaObj; public ProxyHandle(Object o){ this.originaObj=o; } @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable { System." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/jdkproxy-cglib/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-09-16T15:09:47+00:00" />
+<meta property="article:modified_time" content="2020-09-16T15:09:47+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JDKproxy和Cglib初探"/>
+<meta name="twitter:description" content="JDKproxy和Cglib初探 简介 在Java中，动态代理机制的出现，使得Java开发人员不用手工编写代理类，只要简单地制定一组接口及委托类对象，便能动态地获得代理类。动态代理在Java中有着广泛的应用，比如Spring AOP，Hibernate数据查询、测试框架的后端mock、RPC，Java注解对象获取等。
+JDK原生动态代理(JDKProxy) JDKProxy只能对实现了接口的类生成代理，而不能针对普通类 。JDKProxy原生的反射API进行操作，在生成类上比较高效。
+使用 interface TestInterface{ void test(); } class TestClass implements TestInterface{ @Override public void test(){ System.out.println(&#34;JDK动态代理&#34;); } } //主方法 public class JDKProxy { public static void main(String[] args) { TestClass testClass=new TestClass(); ProxyHandle proxyHandle=new ProxyHandle(testClass); //使用接口 TestInterface testClass1= (TestInterface) Proxy.newProxyInstance( testClass.getClass().getClassLoader(), testClass.getClass().getInterfaces(),proxyHandle); testClass1.test(); System.out.println(&#34;代理类名称：&#34;&#43;testClass1.getClass()); } } //代理 class ProxyHandle implements InvocationHandler{ private Object originaObj; public ProxyHandle(Object o){ this.originaObj=o; } @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable { System."/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/styles.ead642cb02ef83a72aed45f47face7d935f86a1601a35f7040ef3e010f1b7ec550ba4743998f203e4545116b293fbe7405e126c9753c036cb2db3d49e9fbc81d.css" integrity="sha512-6tZCywLvg6cq7UX0f6zn2TX4ahYBo19wQO8&#43;AQ8bfsVQukdDmY8gPkVFEWspP750BeEmyXU8A2yy2z1J6fvIHQ=="> 
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="http://localhost:1313/images/favicon.ico" />
+
+  
+  
+  
+  
+  
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVLPYZM5G1"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JVLPYZM5G1', { 'anonymize_ip': false });
+}
+</script>
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" http://localhost:1313/posts/java-base-data-pack/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="http://localhost:1313/posts/mdc-test/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&text=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&is_video=false&description=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&name=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2&description=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2%20%e7%ae%80%e4%bb%8b%20%e5%9c%a8Java%e4%b8%ad%ef%bc%8c%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e6%9c%ba%e5%88%b6%e7%9a%84%e5%87%ba%e7%8e%b0%ef%bc%8c%e4%bd%bf%e5%be%97Java%e5%bc%80%e5%8f%91%e4%ba%ba%e5%91%98%e4%b8%8d%e7%94%a8%e6%89%8b%e5%b7%a5%e7%bc%96%e5%86%99%e4%bb%a3%e7%90%86%e7%b1%bb%ef%bc%8c%e5%8f%aa%e8%a6%81%e7%ae%80%e5%8d%95%e5%9c%b0%e5%88%b6%e5%ae%9a%e4%b8%80%e7%bb%84%e6%8e%a5%e5%8f%a3%e5%8f%8a%e5%a7%94%e6%89%98%e7%b1%bb%e5%af%b9%e8%b1%a1%ef%bc%8c%e4%be%bf%e8%83%bd%e5%8a%a8%e6%80%81%e5%9c%b0%e8%8e%b7%e5%be%97%e4%bb%a3%e7%90%86%e7%b1%bb%e3%80%82%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e5%9c%a8Java%e4%b8%ad%e6%9c%89%e7%9d%80%e5%b9%bf%e6%b3%9b%e7%9a%84%e5%ba%94%e7%94%a8%ef%bc%8c%e6%af%94%e5%a6%82Spring%20AOP%ef%bc%8cHibernate%e6%95%b0%e6%8d%ae%e6%9f%a5%e8%af%a2%e3%80%81%e6%b5%8b%e8%af%95%e6%a1%86%e6%9e%b6%e7%9a%84%e5%90%8e%e7%ab%afmock%e3%80%81RPC%ef%bc%8cJava%e6%b3%a8%e8%a7%a3%e5%af%b9%e8%b1%a1%e8%8e%b7%e5%8f%96%e7%ad%89%e3%80%82%0aJDK%e5%8e%9f%e7%94%9f%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%28JDKProxy%29%20JDKProxy%e5%8f%aa%e8%83%bd%e5%af%b9%e5%ae%9e%e7%8e%b0%e4%ba%86%e6%8e%a5%e5%8f%a3%e7%9a%84%e7%b1%bb%e7%94%9f%e6%88%90%e4%bb%a3%e7%90%86%ef%bc%8c%e8%80%8c%e4%b8%8d%e8%83%bd%e9%92%88%e5%af%b9%e6%99%ae%e9%80%9a%e7%b1%bb%20%e3%80%82JDKProxy%e5%8e%9f%e7%94%9f%e7%9a%84%e5%8f%8d%e5%b0%84API%e8%bf%9b%e8%a1%8c%e6%93%8d%e4%bd%9c%ef%bc%8c%e5%9c%a8%e7%94%9f%e6%88%90%e7%b1%bb%e4%b8%8a%e6%af%94%e8%be%83%e9%ab%98%e6%95%88%e3%80%82%0a%e4%bd%bf%e7%94%a8%20interface%20TestInterface%7b%20void%20test%28%29%3b%20%7d%20class%20TestClass%20implements%20TestInterface%7b%20%40Override%20public%20void%20test%28%29%7b%20System.out.println%28%26%2334%3bJDK%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%26%2334%3b%29%3b%20%7d%20%7d%20%2f%2f%e4%b8%bb%e6%96%b9%e6%b3%95%20public%20class%20JDKProxy%20%7b%20public%20static%20void%20main%28String%5b%5d%20args%29%20%7b%20TestClass%20testClass%3dnew%20TestClass%28%29%3b%20ProxyHandle%20proxyHandle%3dnew%20ProxyHandle%28testClass%29%3b%20%2f%2f%e4%bd%bf%e7%94%a8%e6%8e%a5%e5%8f%a3%20TestInterface%20testClass1%3d%20%28TestInterface%29%20Proxy.newProxyInstance%28%20testClass.getClass%28%29.getClassLoader%28%29%2c%20testClass.getClass%28%29.getInterfaces%28%29%2cproxyHandle%29%3b%20testClass1.test%28%29%3b%20System.out.println%28%26%2334%3b%e4%bb%a3%e7%90%86%e7%b1%bb%e5%90%8d%e7%a7%b0%ef%bc%9a%26%2334%3b%2btestClass1.getClass%28%29%29%3b%20%7d%20%7d%20%2f%2f%e4%bb%a3%e7%90%86%20class%20ProxyHandle%20implements%20InvocationHandler%7b%20private%20Object%20originaObj%3b%20public%20ProxyHandle%28Object%20o%29%7b%20this.originaObj%3do%3b%20%7d%20%40Override%20public%20Object%20invoke%28Object%20proxy%2c%20Method%20method%2c%20Object%5b%5d%20args%29%20throws%20Throwable%20%7b%20System." aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&t=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#jdk原生动态代理jdkproxy">JDK原生动态代理(JDKProxy)</a>
+      <ul>
+        <li><a href="#使用">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#cglib">Cglib</a>
+      <ul>
+        <li><a href="#使用-1">使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        JDKproxy和Cglib初探
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2020-09-16 15:09:47 &#43;0000 UTC" itemprop="datePublished">2020-09-16</time>
+          
+        </div>
+        
+        
+        
+        <div class="article-category">
+            <i class="fas fa-archive"></i>
+            
+            
+            <a class="category-link" href="/categories/java">Java</a>
+            
+        </div>
+        
+        
+        <div class="article-tag">
+            <i class="fas fa-tag"></i>
+            
+            
+            <a class="tag-link" href="/tags/java" rel="tag">Java</a>
+            
+        </div>
+        
+      </div>
+    </header>
+
+  
+    
+    <div class="content" itemprop="articleBody">
+      <h1 id="jdkproxy和cglib初探">JDKproxy和Cglib初探</h1>
+<h2 id="简介">简介</h2>
+<p>在Java中，动态代理机制的出现，使得Java开发人员不用手工编写代理类，只要简单地制定一组接口及委托类对象，便能动态地获得代理类。动态代理在Java中有着广泛的应用，比如Spring AOP，Hibernate数据查询、测试框架的后端mock、RPC，Java注解对象获取等。</p>
+<h2 id="jdk原生动态代理jdkproxy">JDK原生动态代理(JDKProxy)</h2>
+<p><code>JDKProxy</code>只能对<code>实现了接口的类</code>生成代理，而不能针对<code>普通类</code> 。<code>JDKProxy</code>原生的<code>反射API</code>进行操作，在生成类上比较高效。</p>
+<h3 id="使用">使用</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200729000830.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#815ba4">interface</span> <span style="color:#fec418">TestInterface</span><span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">void</span> <span style="color:#06b6ef">test</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">class</span> <span style="color:#fec418">TestClass</span> <span style="color:#815ba4">implements</span> TestInterface<span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">test</span><span style="color:#5bc4bf">(){</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;JDK动态代理&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8d8687">//主方法
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">JDKProxy</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">static</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">main</span><span style="color:#5bc4bf">(</span>String<span style="color:#5bc4bf">[]</span> args<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        TestClass testClass<span style="color:#5bc4bf">=</span><span style="color:#815ba4">new</span> TestClass<span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        ProxyHandle proxyHandle<span style="color:#5bc4bf">=</span><span style="color:#815ba4">new</span> ProxyHandle<span style="color:#5bc4bf">(</span>testClass<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8d8687">//使用接口
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>        TestInterface testClass1<span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>TestInterface<span style="color:#5bc4bf">)</span> Proxy<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">newProxyInstance</span><span style="color:#5bc4bf">(</span>
+</span></span><span style="display:flex;"><span>                testClass<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getClass</span><span style="color:#5bc4bf">().</span><span style="color:#06b6ef">getClassLoader</span><span style="color:#5bc4bf">(),</span>
+</span></span><span style="display:flex;"><span>                testClass<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getClass</span><span style="color:#5bc4bf">().</span><span style="color:#06b6ef">getInterfaces</span><span style="color:#5bc4bf">(),</span>proxyHandle<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        testClass1<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">test</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;代理类名称：&#34;</span><span style="color:#5bc4bf">+</span>testClass1<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getClass</span><span style="color:#5bc4bf">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8d8687">//代理
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span><span style="color:#815ba4">class</span> <span style="color:#fec418">ProxyHandle</span> <span style="color:#815ba4">implements</span> InvocationHandler<span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">private</span> Object originaObj<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#06b6ef">ProxyHandle</span><span style="color:#5bc4bf">(</span>Object o<span style="color:#5bc4bf">){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">this</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">originaObj</span><span style="color:#5bc4bf">=</span>o<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> Object <span style="color:#06b6ef">invoke</span><span style="color:#5bc4bf">(</span>Object proxy<span style="color:#5bc4bf">,</span> Method method<span style="color:#5bc4bf">,</span> Object<span style="color:#5bc4bf">[]</span> args<span style="color:#5bc4bf">)</span> <span style="color:#815ba4">throws</span> Throwable <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;前置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        Object object<span style="color:#5bc4bf">=</span>method<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">invoke</span><span style="color:#5bc4bf">(</span>originaObj<span style="color:#5bc4bf">,</span>args<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;后置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">return</span> object<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><pre tabindex="0"><code>输出结果：
+	前置
+    JDK动态代理
+    后置
+    代理类名称：class com.example.demo.aop.$Proxy0
+</code></pre><h2 id="cglib">Cglib</h2>
+<p><code>Cglib</code>代理是针对<code>所有类</code>（包括实现接口的类和普通的类）实现代理，主要是对指定的类<strong>生成一个子类</strong>，覆盖其中的方法(<strong>所以该类或方法不能声明称final的</strong>) 。<code>Cglib</code>使用<code>ASM框架</code>直接对字节码进行操作，在类的执行过程中比较高效</p>
+<h3 id="使用-1">使用</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2021/10/08/20200729001250.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#815ba4">interface</span> <span style="color:#fec418">InterTest</span><span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">void</span> <span style="color:#06b6ef">t1</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">class</span> <span style="color:#fec418">InterClass</span> <span style="color:#815ba4">implements</span> InterTest<span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">t1</span><span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;我是接口测试方法&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">public</span> <span style="color:#815ba4">class</span> <span style="color:#fec418">CglibTest</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#815ba4">static</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">main</span><span style="color:#5bc4bf">(</span>String<span style="color:#5bc4bf">[]</span> args<span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8d8687">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">         * 普通类
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">         * */</span>
+</span></span><span style="display:flex;"><span>        Enhancer enhancer<span style="color:#5bc4bf">=</span><span style="color:#815ba4">new</span> Enhancer<span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        enhancer<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setSuperclass</span><span style="color:#5bc4bf">(</span>CG<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        enhancer<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setCallback</span><span style="color:#5bc4bf">(</span><span style="color:#815ba4">new</span> MethodInterceptor<span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">public</span> Object <span style="color:#06b6ef">intercept</span><span style="color:#5bc4bf">(</span>Object o<span style="color:#5bc4bf">,</span> Method method<span style="color:#5bc4bf">,</span>
+</span></span><span style="display:flex;"><span>                                    Object<span style="color:#5bc4bf">[]</span> objects<span style="color:#5bc4bf">,</span>
+</span></span><span style="display:flex;"><span>                                    MethodProxy methodProxy<span style="color:#5bc4bf">)</span> <span style="color:#815ba4">throws</span> Throwable <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;前置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                Object object<span style="color:#5bc4bf">=</span>methodProxy<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">invokeSuper</span><span style="color:#5bc4bf">(</span>o<span style="color:#5bc4bf">,</span>objects<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;后置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">return</span> object<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">});</span>
+</span></span><span style="display:flex;"><span>        CG cglibTest<span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>CG<span style="color:#5bc4bf">)</span> enhancer<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">create</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        cglibTest<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">test</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;代理类名称1：&#34;</span><span style="color:#5bc4bf">+</span>cglibTest<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getClass</span><span style="color:#5bc4bf">());</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">         * 实现了接口的类
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">         * */</span>
+</span></span><span style="display:flex;"><span>        Enhancer enhancer2<span style="color:#5bc4bf">=</span><span style="color:#815ba4">new</span> Enhancer<span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        enhancer2<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setSuperclass</span><span style="color:#5bc4bf">(</span>InterClass<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">class</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>        enhancer2<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">setCallback</span><span style="color:#5bc4bf">(</span><span style="color:#815ba4">new</span> MethodInterceptor<span style="color:#5bc4bf">()</span> <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">public</span> Object <span style="color:#06b6ef">intercept</span><span style="color:#5bc4bf">(</span>Object o<span style="color:#5bc4bf">,</span> Method method<span style="color:#5bc4bf">,</span>
+</span></span><span style="display:flex;"><span>                                    Object<span style="color:#5bc4bf">[]</span> objects<span style="color:#5bc4bf">,</span>
+</span></span><span style="display:flex;"><span>                                    MethodProxy methodProxy<span style="color:#5bc4bf">)</span> <span style="color:#815ba4">throws</span> Throwable <span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;接口类前置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                Object object<span style="color:#5bc4bf">=</span>methodProxy<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">invokeSuper</span><span style="color:#5bc4bf">(</span>o<span style="color:#5bc4bf">,</span>objects<span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;接口类后置&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#815ba4">return</span> object<span style="color:#5bc4bf">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#5bc4bf">});</span>
+</span></span><span style="display:flex;"><span>        InterClass interClass<span style="color:#5bc4bf">=</span> <span style="color:#5bc4bf">(</span>InterClass<span style="color:#5bc4bf">)</span> enhancer2<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">create</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        interClass<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">t1</span><span style="color:#5bc4bf">();</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;代理类名称2：&#34;</span><span style="color:#5bc4bf">+</span>interClass<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">getClass</span><span style="color:#5bc4bf">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">class</span> <span style="color:#fec418">CG</span><span style="color:#5bc4bf">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">public</span> <span style="color:#fec418">void</span> <span style="color:#06b6ef">test</span><span style="color:#5bc4bf">(){</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#5bc4bf">.</span><span style="color:#06b6ef">out</span><span style="color:#5bc4bf">.</span><span style="color:#06b6ef">println</span><span style="color:#5bc4bf">(</span><span style="color:#48b685">&#34;代理类测试&#34;</span><span style="color:#5bc4bf">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#5bc4bf">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">}</span>
+</span></span></code></pre></div><pre tabindex="0"><code>输出结果：
+	前置
+    代理类测试
+    后置
+    代理类名称1：class com.example.demo.aop.CG$$EnhancerByCGLIB$$5c6cbf31
+    
+    接口类前置
+    我是接口测试方法
+    接口类后置
+    代理类名称2：class com.example.demo.aop.InterClass$$EnhancerByCGLIB$$80c75859
+</code></pre>
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">All posts</a></li>
+         
+          <li><a href="/categories">Categories</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </div>
+
+    
+    <div id="toc-footer" style="display: none">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#jdk原生动态代理jdkproxy">JDK原生动态代理(JDKProxy)</a>
+      <ul>
+        <li><a href="#使用">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#cglib">Cglib</a>
+      <ul>
+        <li><a href="#使用-1">使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&text=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&is_video=false&description=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&title=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&name=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2&description=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2%20%e7%ae%80%e4%bb%8b%20%e5%9c%a8Java%e4%b8%ad%ef%bc%8c%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e6%9c%ba%e5%88%b6%e7%9a%84%e5%87%ba%e7%8e%b0%ef%bc%8c%e4%bd%bf%e5%be%97Java%e5%bc%80%e5%8f%91%e4%ba%ba%e5%91%98%e4%b8%8d%e7%94%a8%e6%89%8b%e5%b7%a5%e7%bc%96%e5%86%99%e4%bb%a3%e7%90%86%e7%b1%bb%ef%bc%8c%e5%8f%aa%e8%a6%81%e7%ae%80%e5%8d%95%e5%9c%b0%e5%88%b6%e5%ae%9a%e4%b8%80%e7%bb%84%e6%8e%a5%e5%8f%a3%e5%8f%8a%e5%a7%94%e6%89%98%e7%b1%bb%e5%af%b9%e8%b1%a1%ef%bc%8c%e4%be%bf%e8%83%bd%e5%8a%a8%e6%80%81%e5%9c%b0%e8%8e%b7%e5%be%97%e4%bb%a3%e7%90%86%e7%b1%bb%e3%80%82%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e5%9c%a8Java%e4%b8%ad%e6%9c%89%e7%9d%80%e5%b9%bf%e6%b3%9b%e7%9a%84%e5%ba%94%e7%94%a8%ef%bc%8c%e6%af%94%e5%a6%82Spring%20AOP%ef%bc%8cHibernate%e6%95%b0%e6%8d%ae%e6%9f%a5%e8%af%a2%e3%80%81%e6%b5%8b%e8%af%95%e6%a1%86%e6%9e%b6%e7%9a%84%e5%90%8e%e7%ab%afmock%e3%80%81RPC%ef%bc%8cJava%e6%b3%a8%e8%a7%a3%e5%af%b9%e8%b1%a1%e8%8e%b7%e5%8f%96%e7%ad%89%e3%80%82%0aJDK%e5%8e%9f%e7%94%9f%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%28JDKProxy%29%20JDKProxy%e5%8f%aa%e8%83%bd%e5%af%b9%e5%ae%9e%e7%8e%b0%e4%ba%86%e6%8e%a5%e5%8f%a3%e7%9a%84%e7%b1%bb%e7%94%9f%e6%88%90%e4%bb%a3%e7%90%86%ef%bc%8c%e8%80%8c%e4%b8%8d%e8%83%bd%e9%92%88%e5%af%b9%e6%99%ae%e9%80%9a%e7%b1%bb%20%e3%80%82JDKProxy%e5%8e%9f%e7%94%9f%e7%9a%84%e5%8f%8d%e5%b0%84API%e8%bf%9b%e8%a1%8c%e6%93%8d%e4%bd%9c%ef%bc%8c%e5%9c%a8%e7%94%9f%e6%88%90%e7%b1%bb%e4%b8%8a%e6%af%94%e8%be%83%e9%ab%98%e6%95%88%e3%80%82%0a%e4%bd%bf%e7%94%a8%20interface%20TestInterface%7b%20void%20test%28%29%3b%20%7d%20class%20TestClass%20implements%20TestInterface%7b%20%40Override%20public%20void%20test%28%29%7b%20System.out.println%28%26%2334%3bJDK%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%26%2334%3b%29%3b%20%7d%20%7d%20%2f%2f%e4%b8%bb%e6%96%b9%e6%b3%95%20public%20class%20JDKProxy%20%7b%20public%20static%20void%20main%28String%5b%5d%20args%29%20%7b%20TestClass%20testClass%3dnew%20TestClass%28%29%3b%20ProxyHandle%20proxyHandle%3dnew%20ProxyHandle%28testClass%29%3b%20%2f%2f%e4%bd%bf%e7%94%a8%e6%8e%a5%e5%8f%a3%20TestInterface%20testClass1%3d%20%28TestInterface%29%20Proxy.newProxyInstance%28%20testClass.getClass%28%29.getClassLoader%28%29%2c%20testClass.getClass%28%29.getInterfaces%28%29%2cproxyHandle%29%3b%20testClass1.test%28%29%3b%20System.out.println%28%26%2334%3b%e4%bb%a3%e7%90%86%e7%b1%bb%e5%90%8d%e7%a7%b0%ef%bc%9a%26%2334%3b%2btestClass1.getClass%28%29%29%3b%20%7d%20%7d%20%2f%2f%e4%bb%a3%e7%90%86%20class%20ProxyHandle%20implements%20InvocationHandler%7b%20private%20Object%20originaObj%3b%20public%20ProxyHandle%28Object%20o%29%7b%20this.originaObj%3do%3b%20%7d%20%40Override%20public%20Object%20invoke%28Object%20proxy%2c%20Method%20method%2c%20Object%5b%5d%20args%29%20throws%20Throwable%20%7b%20System." aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fjdkproxy-cglib%2f&t=JDKproxy%e5%92%8cCglib%e5%88%9d%e6%8e%a2" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="toc-toggle" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;" aria-label="TOC">
+          <i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2022  Greycode&#39;s Blog 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+  
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+</html>

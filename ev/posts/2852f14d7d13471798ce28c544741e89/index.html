@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> MySQL是怎样通讯的？ | Greycode&#39;s Blog</title>
+  <link rel = 'canonical' href = 'http://localhost:1313/posts/2852f14d7d13471798ce28c544741e89/'>
+  <meta name="description" content="Hello,I‘m Greycode. Please use Chrome to browse this site for a better experience.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="MySQL是怎样通讯的？" />
+<meta property="og:description" content="前言 我们平常使用数据库的场景一般是程序里面代码直接连接使用，然后进行 CRUD 操作。或者使用有 GUI 界面的数据库软件来手动操作数据库， 这类软件有 DataGrip、Navicat等等&hellip;。平常很少关心它们的底层数据交互是怎么样的，相信你看了这篇文章一定能有大概的了解。本篇文章的代码使用 Go 语言来实现 MySQL 的协议。
+协议简介 MySQL 协议一般分为两个阶段，一个是连接阶段，一个是命令阶段。 连接阶段主要是客户端和服务端进行相互认证的阶段，就像我们平常登陆某个网站的一个操作。 命令阶段主要是客户端向服务端进行的一些指令的发送，然后服务端处理指令并返回结果的一个过程。 在客户端和服务端发送的数据包中，前 3 个字节表示这个数据包的大小，所以这里就有一个问题，就是它有一个大小的限制，数据包大小不能超过16777215 ($2^{24}-1$) bytes，也就是 16M 大小（16进制表示：ff ff ff，刚刚 3 个字节）。这就会有三种情况出现，一种是数据包小于 16M，一种是等于，一种是大于。所以在 MySQL 协议中是这样处理的：
+小于 16M：发送一个数据包就可以了 等于 16M：发送两个数据包，第二个包为空包 大于 16M：发送多个数据包，每个数据包大小最大为 16M，当最后一个数据包等于 16M 时，再多发送一个空数据包 每个数据包中的第 4 个字节表示这个数据包的序号ID，这个 ID 在不同阶段会递增，比如在连接阶段，这个 ID 会随着包的数量而递增，当连接阶段完成后进入命令阶段，这个 ID 又会从 0 开始递增，直到这个命令的生命周期结束。
+初始握手包 当客户端进行尝试使用 TCP 连接 MySQL 服务端时，服务端就会响应一个初始的握手包，这个握手包有 V9、V10 两个版本。不过现在一般用的都是 V10 版本，如果 MySQL 的版本在 3.21.0 之前，那么服务端响应的是 V9 版本的初始握手包。本篇文章就讲讲现在常用的 V10 版本的初始握手包。
+我们可以使用以下代码来尝试连接我们本地的 MySQL 服务:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/2852f14d7d13471798ce28c544741e89/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-27T23:51:51+00:00" />
+<meta property="article:modified_time" content="2022-03-27T23:51:51+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL是怎样通讯的？"/>
+<meta name="twitter:description" content="前言 我们平常使用数据库的场景一般是程序里面代码直接连接使用，然后进行 CRUD 操作。或者使用有 GUI 界面的数据库软件来手动操作数据库， 这类软件有 DataGrip、Navicat等等&hellip;。平常很少关心它们的底层数据交互是怎么样的，相信你看了这篇文章一定能有大概的了解。本篇文章的代码使用 Go 语言来实现 MySQL 的协议。
+协议简介 MySQL 协议一般分为两个阶段，一个是连接阶段，一个是命令阶段。 连接阶段主要是客户端和服务端进行相互认证的阶段，就像我们平常登陆某个网站的一个操作。 命令阶段主要是客户端向服务端进行的一些指令的发送，然后服务端处理指令并返回结果的一个过程。 在客户端和服务端发送的数据包中，前 3 个字节表示这个数据包的大小，所以这里就有一个问题，就是它有一个大小的限制，数据包大小不能超过16777215 ($2^{24}-1$) bytes，也就是 16M 大小（16进制表示：ff ff ff，刚刚 3 个字节）。这就会有三种情况出现，一种是数据包小于 16M，一种是等于，一种是大于。所以在 MySQL 协议中是这样处理的：
+小于 16M：发送一个数据包就可以了 等于 16M：发送两个数据包，第二个包为空包 大于 16M：发送多个数据包，每个数据包大小最大为 16M，当最后一个数据包等于 16M 时，再多发送一个空数据包 每个数据包中的第 4 个字节表示这个数据包的序号ID，这个 ID 在不同阶段会递增，比如在连接阶段，这个 ID 会随着包的数量而递增，当连接阶段完成后进入命令阶段，这个 ID 又会从 0 开始递增，直到这个命令的生命周期结束。
+初始握手包 当客户端进行尝试使用 TCP 连接 MySQL 服务端时，服务端就会响应一个初始的握手包，这个握手包有 V9、V10 两个版本。不过现在一般用的都是 V10 版本，如果 MySQL 的版本在 3.21.0 之前，那么服务端响应的是 V9 版本的初始握手包。本篇文章就讲讲现在常用的 V10 版本的初始握手包。
+我们可以使用以下代码来尝试连接我们本地的 MySQL 服务:"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/styles.ead642cb02ef83a72aed45f47face7d935f86a1601a35f7040ef3e010f1b7ec550ba4743998f203e4545116b293fbe7405e126c9753c036cb2db3d49e9fbc81d.css" integrity="sha512-6tZCywLvg6cq7UX0f6zn2TX4ahYBo19wQO8&#43;AQ8bfsVQukdDmY8gPkVFEWspP750BeEmyXU8A2yy2z1J6fvIHQ=="> 
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="http://localhost:1313/images/favicon.ico" />
+
+  
+  
+  
+  
+  
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVLPYZM5G1"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JVLPYZM5G1', { 'anonymize_ip': false });
+}
+</script>
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" http://localhost:1313/posts/0a5a3927baea4155849c174e4c613913/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="http://localhost:1313/posts/8b135153fd9d41de928df42f84ad1eca/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&text=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&is_video=false&description=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&name=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f&description=%e5%89%8d%e8%a8%80%20%e6%88%91%e4%bb%ac%e5%b9%b3%e5%b8%b8%e4%bd%bf%e7%94%a8%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%9c%ba%e6%99%af%e4%b8%80%e8%88%ac%e6%98%af%e7%a8%8b%e5%ba%8f%e9%87%8c%e9%9d%a2%e4%bb%a3%e7%a0%81%e7%9b%b4%e6%8e%a5%e8%bf%9e%e6%8e%a5%e4%bd%bf%e7%94%a8%ef%bc%8c%e7%84%b6%e5%90%8e%e8%bf%9b%e8%a1%8c%20CRUD%20%e6%93%8d%e4%bd%9c%e3%80%82%e6%88%96%e8%80%85%e4%bd%bf%e7%94%a8%e6%9c%89%20GUI%20%e7%95%8c%e9%9d%a2%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e8%bd%af%e4%bb%b6%e6%9d%a5%e6%89%8b%e5%8a%a8%e6%93%8d%e4%bd%9c%e6%95%b0%e6%8d%ae%e5%ba%93%ef%bc%8c%20%e8%bf%99%e7%b1%bb%e8%bd%af%e4%bb%b6%e6%9c%89%20DataGrip%e3%80%81Navicat%e7%ad%89%e7%ad%89%26hellip%3b%e3%80%82%e5%b9%b3%e5%b8%b8%e5%be%88%e5%b0%91%e5%85%b3%e5%bf%83%e5%ae%83%e4%bb%ac%e7%9a%84%e5%ba%95%e5%b1%82%e6%95%b0%e6%8d%ae%e4%ba%a4%e4%ba%92%e6%98%af%e6%80%8e%e4%b9%88%e6%a0%b7%e7%9a%84%ef%bc%8c%e7%9b%b8%e4%bf%a1%e4%bd%a0%e7%9c%8b%e4%ba%86%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0%e4%b8%80%e5%ae%9a%e8%83%bd%e6%9c%89%e5%a4%a7%e6%a6%82%e7%9a%84%e4%ba%86%e8%a7%a3%e3%80%82%e6%9c%ac%e7%af%87%e6%96%87%e7%ab%a0%e7%9a%84%e4%bb%a3%e7%a0%81%e4%bd%bf%e7%94%a8%20Go%20%e8%af%ad%e8%a8%80%e6%9d%a5%e5%ae%9e%e7%8e%b0%20MySQL%20%e7%9a%84%e5%8d%8f%e8%ae%ae%e3%80%82%0a%e5%8d%8f%e8%ae%ae%e7%ae%80%e4%bb%8b%20MySQL%20%e5%8d%8f%e8%ae%ae%e4%b8%80%e8%88%ac%e5%88%86%e4%b8%ba%e4%b8%a4%e4%b8%aa%e9%98%b6%e6%ae%b5%ef%bc%8c%e4%b8%80%e4%b8%aa%e6%98%af%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%ef%bc%8c%e4%b8%80%e4%b8%aa%e6%98%af%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%e3%80%82%20%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%e4%b8%bb%e8%a6%81%e6%98%af%e5%ae%a2%e6%88%b7%e7%ab%af%e5%92%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%bf%9b%e8%a1%8c%e7%9b%b8%e4%ba%92%e8%ae%a4%e8%af%81%e7%9a%84%e9%98%b6%e6%ae%b5%ef%bc%8c%e5%b0%b1%e5%83%8f%e6%88%91%e4%bb%ac%e5%b9%b3%e5%b8%b8%e7%99%bb%e9%99%86%e6%9f%90%e4%b8%aa%e7%bd%91%e7%ab%99%e7%9a%84%e4%b8%80%e4%b8%aa%e6%93%8d%e4%bd%9c%e3%80%82%20%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%e4%b8%bb%e8%a6%81%e6%98%af%e5%ae%a2%e6%88%b7%e7%ab%af%e5%90%91%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%bf%9b%e8%a1%8c%e7%9a%84%e4%b8%80%e4%ba%9b%e6%8c%87%e4%bb%a4%e7%9a%84%e5%8f%91%e9%80%81%ef%bc%8c%e7%84%b6%e5%90%8e%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%a4%84%e7%90%86%e6%8c%87%e4%bb%a4%e5%b9%b6%e8%bf%94%e5%9b%9e%e7%bb%93%e6%9e%9c%e7%9a%84%e4%b8%80%e4%b8%aa%e8%bf%87%e7%a8%8b%e3%80%82%20%e5%9c%a8%e5%ae%a2%e6%88%b7%e7%ab%af%e5%92%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%8f%91%e9%80%81%e7%9a%84%e6%95%b0%e6%8d%ae%e5%8c%85%e4%b8%ad%ef%bc%8c%e5%89%8d%203%20%e4%b8%aa%e5%ad%97%e8%8a%82%e8%a1%a8%e7%a4%ba%e8%bf%99%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%9a%84%e5%a4%a7%e5%b0%8f%ef%bc%8c%e6%89%80%e4%bb%a5%e8%bf%99%e9%87%8c%e5%b0%b1%e6%9c%89%e4%b8%80%e4%b8%aa%e9%97%ae%e9%a2%98%ef%bc%8c%e5%b0%b1%e6%98%af%e5%ae%83%e6%9c%89%e4%b8%80%e4%b8%aa%e5%a4%a7%e5%b0%8f%e7%9a%84%e9%99%90%e5%88%b6%ef%bc%8c%e6%95%b0%e6%8d%ae%e5%8c%85%e5%a4%a7%e5%b0%8f%e4%b8%8d%e8%83%bd%e8%b6%85%e8%bf%8716777215%20%28%242%5e%7b24%7d-1%24%29%20bytes%ef%bc%8c%e4%b9%9f%e5%b0%b1%e6%98%af%2016M%20%e5%a4%a7%e5%b0%8f%ef%bc%8816%e8%bf%9b%e5%88%b6%e8%a1%a8%e7%a4%ba%ef%bc%9aff%20ff%20ff%ef%bc%8c%e5%88%9a%e5%88%9a%203%20%e4%b8%aa%e5%ad%97%e8%8a%82%ef%bc%89%e3%80%82%e8%bf%99%e5%b0%b1%e4%bc%9a%e6%9c%89%e4%b8%89%e7%a7%8d%e6%83%85%e5%86%b5%e5%87%ba%e7%8e%b0%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e6%95%b0%e6%8d%ae%e5%8c%85%e5%b0%8f%e4%ba%8e%2016M%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e7%ad%89%e4%ba%8e%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e5%a4%a7%e4%ba%8e%e3%80%82%e6%89%80%e4%bb%a5%e5%9c%a8%20MySQL%20%e5%8d%8f%e8%ae%ae%e4%b8%ad%e6%98%af%e8%bf%99%e6%a0%b7%e5%a4%84%e7%90%86%e7%9a%84%ef%bc%9a%0a%e5%b0%8f%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e4%b8%80%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%20%e7%ad%89%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e4%b8%a4%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%ef%bc%8c%e7%ac%ac%e4%ba%8c%e4%b8%aa%e5%8c%85%e4%b8%ba%e7%a9%ba%e5%8c%85%20%e5%a4%a7%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e5%a4%9a%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%ef%bc%8c%e6%af%8f%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e5%a4%a7%e5%b0%8f%e6%9c%80%e5%a4%a7%e4%b8%ba%2016M%ef%bc%8c%e5%bd%93%e6%9c%80%e5%90%8e%e4%b8%80%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%ad%89%e4%ba%8e%2016M%20%e6%97%b6%ef%bc%8c%e5%86%8d%e5%a4%9a%e5%8f%91%e9%80%81%e4%b8%80%e4%b8%aa%e7%a9%ba%e6%95%b0%e6%8d%ae%e5%8c%85%20%e6%af%8f%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e4%b8%ad%e7%9a%84%e7%ac%ac%204%20%e4%b8%aa%e5%ad%97%e8%8a%82%e8%a1%a8%e7%a4%ba%e8%bf%99%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%9a%84%e5%ba%8f%e5%8f%b7ID%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e5%9c%a8%e4%b8%8d%e5%90%8c%e9%98%b6%e6%ae%b5%e4%bc%9a%e9%80%92%e5%a2%9e%ef%bc%8c%e6%af%94%e5%a6%82%e5%9c%a8%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e4%bc%9a%e9%9a%8f%e7%9d%80%e5%8c%85%e7%9a%84%e6%95%b0%e9%87%8f%e8%80%8c%e9%80%92%e5%a2%9e%ef%bc%8c%e5%bd%93%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%e5%ae%8c%e6%88%90%e5%90%8e%e8%bf%9b%e5%85%a5%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e5%8f%88%e4%bc%9a%e4%bb%8e%200%20%e5%bc%80%e5%a7%8b%e9%80%92%e5%a2%9e%ef%bc%8c%e7%9b%b4%e5%88%b0%e8%bf%99%e4%b8%aa%e5%91%bd%e4%bb%a4%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f%e7%bb%93%e6%9d%9f%e3%80%82%0a%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%20%e5%bd%93%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bf%9b%e8%a1%8c%e5%b0%9d%e8%af%95%e4%bd%bf%e7%94%a8%20TCP%20%e8%bf%9e%e6%8e%a5%20MySQL%20%e6%9c%8d%e5%8a%a1%e7%ab%af%e6%97%b6%ef%bc%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%b0%b1%e4%bc%9a%e5%93%8d%e5%ba%94%e4%b8%80%e4%b8%aa%e5%88%9d%e5%a7%8b%e7%9a%84%e6%8f%a1%e6%89%8b%e5%8c%85%ef%bc%8c%e8%bf%99%e4%b8%aa%e6%8f%a1%e6%89%8b%e5%8c%85%e6%9c%89%20V9%e3%80%81V10%20%e4%b8%a4%e4%b8%aa%e7%89%88%e6%9c%ac%e3%80%82%e4%b8%8d%e8%bf%87%e7%8e%b0%e5%9c%a8%e4%b8%80%e8%88%ac%e7%94%a8%e7%9a%84%e9%83%bd%e6%98%af%20V10%20%e7%89%88%e6%9c%ac%ef%bc%8c%e5%a6%82%e6%9e%9c%20MySQL%20%e7%9a%84%e7%89%88%e6%9c%ac%e5%9c%a8%203.21.0%20%e4%b9%8b%e5%89%8d%ef%bc%8c%e9%82%a3%e4%b9%88%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%93%8d%e5%ba%94%e7%9a%84%e6%98%af%20V9%20%e7%89%88%e6%9c%ac%e7%9a%84%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%e3%80%82%e6%9c%ac%e7%af%87%e6%96%87%e7%ab%a0%e5%b0%b1%e8%ae%b2%e8%ae%b2%e7%8e%b0%e5%9c%a8%e5%b8%b8%e7%94%a8%e7%9a%84%20V10%20%e7%89%88%e6%9c%ac%e7%9a%84%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%e3%80%82%0a%e6%88%91%e4%bb%ac%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%e4%bb%a5%e4%b8%8b%e4%bb%a3%e7%a0%81%e6%9d%a5%e5%b0%9d%e8%af%95%e8%bf%9e%e6%8e%a5%e6%88%91%e4%bb%ac%e6%9c%ac%e5%9c%b0%e7%9a%84%20MySQL%20%e6%9c%8d%e5%8a%a1%3a" aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&t=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#协议简介">协议简介</a></li>
+    <li><a href="#初始握手包">初始握手包</a></li>
+    <li><a href="#能力标志">能力标志</a></li>
+    <li><a href="#字符编码">字符编码</a></li>
+    <li><a href="#客户端握手响应包handshakeresponse">客户端握手响应包（HandshakeResponse）</a>
+      <ul>
+        <li><a href="#handshakeresponse41">HandshakeResponse41</a></li>
+        <li><a href="#密码加密方式">密码加密方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#响应数据包">响应数据包</a>
+      <ul>
+        <li><a href="#ok_packet-格式">OK_Packet 格式</a></li>
+        <li><a href="#err_packet-格式">ERR_Packet 格式</a></li>
+        <li><a href="#eof_packet-格式">EOF_Packet 格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据包数据类型介绍">数据包数据类型介绍</a>
+      <ul>
+        <li><a href="#intlenenc">int&lt;lenenc&gt;</a></li>
+        <li><a href="#stringlenenc">string&lt;lenenc&gt;</a></li>
+      </ul>
+    </li>
+    <li><a href="#发送命令">发送命令</a></li>
+    <li><a href="#结果集">结果集</a>
+      <ul>
+        <li><a href="#com_query_response-格式">COM_QUERY_Response 格式</a></li>
+        <li><a href="#列数据包格式">列数据包格式</a></li>
+        <li><a href="#行数据包格式">行数据包格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#代码实现">代码实现</a>
+      <ul>
+        <li><a href="#连接-mysql-服务器">连接 MySQL 服务器</a></li>
+        <li><a href="#解析初始握手数据包">解析初始握手数据包</a></li>
+        <li><a href="#发送初始响应数据包">发送初始响应数据包</a></li>
+        <li><a href="#判断连接结果">判断连接结果</a></li>
+        <li><a href="#发送命令-1">发送命令</a></li>
+        <li><a href="#解析结果集">解析结果集</a></li>
+        <li><a href="#控制台结果输出">控制台结果输出</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        MySQL是怎样通讯的？
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2022-03-27 23:51:51 &#43;0000 UTC" itemprop="datePublished">2022-03-27</time>
+          
+        </div>
+        
+        
+        
+        <div class="article-category">
+            <i class="fas fa-archive"></i>
+            
+            
+            <a class="category-link" href="/categories/%E5%8D%8F%E8%AE%AE">协议</a>
+            
+        </div>
+        
+        
+        <div class="article-tag">
+            <i class="fas fa-tag"></i>
+            
+            
+            <a class="tag-link" href="/tags/mysql" rel="tag">MySQL</a>
+            
+             ,  
+            <a class="tag-link" href="/tags/%E5%8D%8F%E8%AE%AE" rel="tag">协议</a>
+            
+        </div>
+        
+      </div>
+    </header>
+
+  
+    
+    <div class="content" itemprop="articleBody">
+      <h2 id="前言">前言</h2>
+<p>我们平常使用数据库的场景一般是程序里面代码直接连接使用，然后进行 CRUD 操作。或者使用有 GUI 界面的数据库软件来手动操作数据库， 这类软件有 DataGrip、Navicat等等&hellip;。平常很少关心它们的底层数据交互是怎么样的，相信你看了这篇文章一定能有大概的了解。本篇文章的代码使用 Go 语言来实现 MySQL 的协议。</p>
+<h2 id="协议简介">协议简介</h2>
+<p>MySQL 协议一般分为两个阶段，一个是连接阶段，一个是命令阶段。
+连接阶段主要是客户端和服务端进行相互认证的阶段，就像我们平常登陆某个网站的一个操作。
+命令阶段主要是客户端向服务端进行的一些指令的发送，然后服务端处理指令并返回结果的一个过程。
+在客户端和服务端发送的数据包中，前 3 个字节表示这个数据包的大小，所以这里就有一个问题，就是它有一个大小的限制，数据包大小不能超过16777215 ($2^{24}-1$) bytes，也就是 16M 大小（16进制表示：ff ff ff，刚刚 3 个字节）。这就会有三种情况出现，一种是数据包小于 16M，一种是等于，一种是大于。所以在 MySQL 协议中是这样处理的：</p>
+<ul>
+<li>小于 16M：发送一个数据包就可以了</li>
+<li>等于 16M：发送两个数据包，第二个包为空包</li>
+<li>大于 16M：发送多个数据包，每个数据包大小最大为 16M，当最后一个数据包等于 16M 时，再多发送一个空数据包</li>
+</ul>
+<p>每个数据包中的第 4 个字节表示这个数据包的序号ID，这个 ID 在不同阶段会递增，比如在连接阶段，这个 ID 会随着包的数量而递增，当连接阶段完成后进入命令阶段，这个 ID 又会从 0 开始递增，直到这个命令的生命周期结束。</p>
+<h2 id="初始握手包">初始握手包</h2>
+<p>当客户端进行尝试使用 TCP 连接 MySQL 服务端时，服务端就会响应一个初始的握手包，这个握手包有 V9、V10 两个版本。不过现在一般用的都是 V10 版本，如果 MySQL 的版本在 3.21.0 之前，那么服务端响应的是 V9 版本的初始握手包。本篇文章就讲讲现在常用的 V10 版本的初始握手包。</p>
+<p>我们可以使用以下代码来尝试连接我们本地的 MySQL 服务:</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#5bc4bf">package</span> <span style="color:#06b6ef">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#48b685">&#34;net&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> <span style="color:#06b6ef">main</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">conn</span>, <span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">net</span>.<span style="color:#06b6ef">Dial</span>(<span style="color:#48b685">&#34;tcp&#34;</span>,<span style="color:#48b685">&#34;127.0.0.1:3306&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">defer</span> <span style="color:#815ba4">func</span>(<span style="color:#06b6ef">conn</span> <span style="color:#06b6ef">net</span>.<span style="color:#06b6ef">Conn</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">conn</span>.<span style="color:#06b6ef">Close</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">if</span> <span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">nil</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}(<span style="color:#06b6ef">conn</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运作程序后，服务端就会响应一个初始握手包给我们，那么怎么清楚明了的查看这个数据包呢？此时我们可以用 Wireshark 这个软件来查看 MySQL 服务端返回的数据包
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e9eef1979e07465bb18236a94b2e3ba8~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png">
+可以看到前 4 个字节为 16 进制的数据: 4e 00 00 00 ，表示了这个数据包大小为 78 字节，序号 ID 为 0。具体的字段字节大小和描述如下表示：</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>字节数据长度(byte)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol</td>
+<td>1</td>
+<td>初始握手包协议版本，可以根据这个字节数据来判断握手包的协议版本，然后按不同版本来处理接下来的数据</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>直到遇到字节数据为 0 的时候停止</td>
+<td>MySQL 服务端版本描述字符串</td>
+</tr>
+<tr>
+<td>Thread ID</td>
+<td>4</td>
+<td>连接 ID</td>
+</tr>
+<tr>
+<td>Slat（第一段）</td>
+<td>8</td>
+<td>用于处理后续客户端的密码加密</td>
+</tr>
+<tr>
+<td>filler</td>
+<td>1</td>
+<td>填充一个字节，默认为 0</td>
+</tr>
+<tr>
+<td>Service Capability（Low）</td>
+<td>2</td>
+<td>服务端能力标志，一共有 4 个字节，这里表示的是低 2 位字节的数据</td>
+</tr>
+<tr>
+<td>Server Language</td>
+<td>1</td>
+<td>服务端字符编码</td>
+</tr>
+<tr>
+<td>Server Status</td>
+<td>2</td>
+<td>服务端状态</td>
+</tr>
+<tr>
+<td>Service Capability（Upper）</td>
+<td>2</td>
+<td>服务端能力标志，这里表示的是高 2 位字节的数据</td>
+</tr>
+<tr>
+<td>Authentication Plugin Length</td>
+<td>1</td>
+<td>身份验证插件长度</td>
+</tr>
+<tr>
+<td>Unused</td>
+<td>10</td>
+<td>预留的 10 个字节数据，默认全部为 0</td>
+</tr>
+<tr>
+<td>Slat（第二段）</td>
+<td>计算公式：MAX(13, 身份验证插件长度 - 8)</td>
+<td>用于处理后续客户端的密码加密</td>
+</tr>
+<tr>
+<td>Authentication Plugin</td>
+<td>直到遇到字节数据为 0 的时候停止</td>
+<td>身份验证插件</td>
+</tr>
+</tbody>
+</table>
+<p>这个初始握手包里包含了很多的数据，在后续的整个连接阶段需要用到里面的大部分数据。</p>
+<h2 id="能力标志">能力标志</h2>
+<p>上面服务端响应端初始握手包中包含了一个能力标志，这个能力标志一共有 4 个字节来表示，我们知道 1 个字节有 8 个 bit，所以 4 个字节一共有 32 个 bit，其中除了最高的 7 个 bit，另外的每一个 bit 都代表着一个能力标志的状态（0 为不支持，1 为支持）,就像下面这样表示</p>
+<pre tabindex="0"><code># Capabilities 字节数据中的低 2 位
+Server Capabilities: 0xffff
+.... .... .... ...1 = Long Password: Set
+.... .... .... ..1. = Found Rows: Set
+.... .... .... .1.. = Long Column Flags: Set
+.... .... .... 1... = Connect With Database: Set
+.... .... ...1 .... = Don&#39;t Allow database.table.column: Set
+.... .... ..1. .... = Can use compression protocol: Set
+.... .... .1.. .... = ODBC Client: Set
+.... .... 1... .... = Can Use LOAD DATA LOCAL: Set
+.... ...1 .... .... = Ignore Spaces before &#39;(&#39;: Set
+.... ..1. .... .... = Speaks 4.1 protocol (new flag): Set
+.... .1.. .... .... = Interactive Client: Set
+.... 1... .... .... = Switch to SSL after handshake: Set
+...1 .... .... .... = Ignore sigpipes: Set
+..1. .... .... .... = Knows about transactions: Set
+.1.. .... .... .... = Speaks 4.1 protocol (old flag): Set
+1... .... .... .... = Can do 4.1 authentication: Set
+
+# Capabilities 字节数据中的高 2 位
+Extended Server Capabilities: 0xc1ff
+.... .... .... ...1 = Multiple statements: Set
+.... .... .... ..1. = Multiple results: Set
+.... .... .... .1.. = PS Multiple results: Set
+.... .... .... 1... = Plugin Auth: Set
+.... .... ...1 .... = Connect attrs: Set
+.... .... ..1. .... = Plugin Auth LENENC Client Data: Set
+.... .... .1.. .... = Client can handle expired passwords: Set
+.... .... 1... .... = Session variable tracking: Set
+.... ...1 .... .... = Deprecate EOF: Set
+1100 000. .... .... = Unused: 0x60
+</code></pre><p>除了服务端响应的初始握手包会返回这个能力标志，后续我们发送给服务端的 <strong>HandshakeResponse</strong> 数据包中也包含这个能力标志数据，那么我们该怎么发送这个能力标志数据呢？官方给出力各个能力的值，如下表：</p>
+<table>
+<thead>
+<tr>
+<th><strong>序号</strong></th>
+<th><strong>Capability Flags</strong></th>
+<th><strong>值【16进制】</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>CLIENT_LONG_PASSWORD</td>
+<td>0x1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CLIENT_FOUND_ROWS</td>
+<td>0x2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CLIENT_LONG_FLAG</td>
+<td>0x4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CLIENT_CONNECT_WITH_DB</td>
+<td>0x8</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CLIENT_NO_SCHEMA</td>
+<td>0x10</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CLIENT_COMPRESS</td>
+<td>0x20</td>
+</tr>
+<tr>
+<td>7</td>
+<td>CLIENT_ODBC</td>
+<td>0x40</td>
+</tr>
+<tr>
+<td>8</td>
+<td>CLIENT_LOCAL_FILES</td>
+<td>0x80</td>
+</tr>
+<tr>
+<td>9</td>
+<td>CLIENT_IGNORE_SPACE</td>
+<td>0x100</td>
+</tr>
+<tr>
+<td>10</td>
+<td>CLIENT_PROTOCOL_41</td>
+<td>0x200</td>
+</tr>
+<tr>
+<td>11</td>
+<td>CLIENT_INTERACTIVE</td>
+<td>0x400</td>
+</tr>
+<tr>
+<td>12</td>
+<td>CLIENT_SSL</td>
+<td>0x800</td>
+</tr>
+<tr>
+<td>13</td>
+<td>CLIENT_IGNORE_SIGPIPE</td>
+<td>0x1000</td>
+</tr>
+<tr>
+<td>14</td>
+<td>CLIENT_TRANSACTIONS</td>
+<td>0x2000</td>
+</tr>
+<tr>
+<td>15</td>
+<td>CLIENT_RESERVED</td>
+<td>0x4000</td>
+</tr>
+<tr>
+<td>16</td>
+<td>CLIENT_SECURE_CONNECTION</td>
+<td>0x8000</td>
+</tr>
+<tr>
+<td>17</td>
+<td>CLIENT_MULTI_STATEMENTS</td>
+<td>0x10000</td>
+</tr>
+<tr>
+<td>18</td>
+<td>CLIENT_MULTI_RESULTS</td>
+<td>0x20000</td>
+</tr>
+<tr>
+<td>19</td>
+<td>CLIENT_PS_MULTI_RESULTS</td>
+<td>0x40000</td>
+</tr>
+<tr>
+<td>20</td>
+<td>CLIENT_PLUGIN_AUTH</td>
+<td>0x80000</td>
+</tr>
+<tr>
+<td>21</td>
+<td>CLIENT_CONNECT_ATTRS</td>
+<td>0x100000</td>
+</tr>
+<tr>
+<td>22</td>
+<td>CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA</td>
+<td>0x200000</td>
+</tr>
+<tr>
+<td>23</td>
+<td>CLIENT_CAN_HANDLE_EXPIRED_PASSWORDS</td>
+<td>0x400000</td>
+</tr>
+<tr>
+<td>24</td>
+<td>CLIENT_SESSION_TRACK</td>
+<td>0x800000</td>
+</tr>
+<tr>
+<td>25</td>
+<td>CLIENT_DEPRECATE_EOF</td>
+<td>0x1000000</td>
+</tr>
+</tbody>
+</table>
+<p>当我们要发送客户端支持的能力标志时，只要把所有支持的能力标志的值相加，然后转换为 4 字节大小的数据。
+例如我们要发送个给服务端说明我们支持 <strong>CLIENT_PROTOCOL_41</strong> 这个能力，那么我们就可以把这个 16 进制的值转换为 4 个字节的数据来表示，转换后的数据为：[0 0 16 0]。HEX 表示法为：[00 00 10 00]</p>
+<blockquote>
+<p>注意：上面转换的字节数据为小端数据，这方面端知识具体可以查询字节序的大小端</p>
+</blockquote>
+<h2 id="字符编码">字符编码</h2>
+<p>初始握手包还有一个字节表示了支持的字符编码，后续我们响应的 <strong>HandshakeResponse</strong> 数据包中也要发送客户端支持的字符编码，相对应的字符编码对应的 ID 如下表，当我们支持什么字符编码时，只要发送对应编码的 ID
+就可以了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#5bc4bf">+--------------------+---------------------+-----+</span>
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">CHARACTER_SET_NAME</span> | <span style="color:#06b6ef">COLLATION_NAME</span>      | <span style="color:#06b6ef">ID</span>  |
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">+--------------------+---------------------+-----+</span>
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">big5</span>               | <span style="color:#06b6ef">big5_chinese_ci</span>     |   <span style="color:#f99b15">1</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">dec8</span>               | <span style="color:#06b6ef">dec8_swedish_ci</span>     |   <span style="color:#f99b15">3</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp850</span>              | <span style="color:#06b6ef">cp850_general_ci</span>    |   <span style="color:#f99b15">4</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">hp8</span>                | <span style="color:#06b6ef">hp8_english_ci</span>      |   <span style="color:#f99b15">6</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">koi8r</span>              | <span style="color:#06b6ef">koi8r_general_ci</span>    |   <span style="color:#f99b15">7</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">latin1</span>             | <span style="color:#06b6ef">latin1_swedish_ci</span>   |   <span style="color:#f99b15">8</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">latin2</span>             | <span style="color:#06b6ef">latin2_general_ci</span>   |   <span style="color:#f99b15">9</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">swe7</span>               | <span style="color:#06b6ef">swe7_swedish_ci</span>     |  <span style="color:#f99b15">10</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">ascii</span>              | <span style="color:#06b6ef">ascii_general_ci</span>    |  <span style="color:#f99b15">11</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">ujis</span>               | <span style="color:#06b6ef">ujis_japanese_ci</span>    |  <span style="color:#f99b15">12</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">sjis</span>               | <span style="color:#06b6ef">sjis_japanese_ci</span>    |  <span style="color:#f99b15">13</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">hebrew</span>             | <span style="color:#06b6ef">hebrew_general_ci</span>   |  <span style="color:#f99b15">16</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">tis620</span>             | <span style="color:#06b6ef">tis620_thai_ci</span>      |  <span style="color:#f99b15">18</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">euckr</span>              | <span style="color:#06b6ef">euckr_korean_ci</span>     |  <span style="color:#f99b15">19</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">koi8u</span>              | <span style="color:#06b6ef">koi8u_general_ci</span>    |  <span style="color:#f99b15">22</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">gb2312</span>             | <span style="color:#06b6ef">gb2312_chinese_ci</span>   |  <span style="color:#f99b15">24</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">greek</span>              | <span style="color:#06b6ef">greek_general_ci</span>    |  <span style="color:#f99b15">25</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp1250</span>             | <span style="color:#06b6ef">cp1250_general_ci</span>   |  <span style="color:#f99b15">26</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">gbk</span>                | <span style="color:#06b6ef">gbk_chinese_ci</span>      |  <span style="color:#f99b15">28</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">latin5</span>             | <span style="color:#06b6ef">latin5_turkish_ci</span>   |  <span style="color:#f99b15">30</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">armscii8</span>           | <span style="color:#06b6ef">armscii8_general_ci</span> |  <span style="color:#f99b15">32</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">utf8</span>               | <span style="color:#06b6ef">utf8_general_ci</span>     |  <span style="color:#f99b15">33</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">ucs2</span>               | <span style="color:#06b6ef">ucs2_general_ci</span>     |  <span style="color:#f99b15">35</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp866</span>              | <span style="color:#06b6ef">cp866_general_ci</span>    |  <span style="color:#f99b15">36</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">keybcs2</span>            | <span style="color:#06b6ef">keybcs2_general_ci</span>  |  <span style="color:#f99b15">37</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">macce</span>              | <span style="color:#06b6ef">macce_general_ci</span>    |  <span style="color:#f99b15">38</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">macroman</span>           | <span style="color:#06b6ef">macroman_general_ci</span> |  <span style="color:#f99b15">39</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp852</span>              | <span style="color:#06b6ef">cp852_general_ci</span>    |  <span style="color:#f99b15">40</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">latin7</span>             | <span style="color:#06b6ef">latin7_general_ci</span>   |  <span style="color:#f99b15">41</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp1251</span>             | <span style="color:#06b6ef">cp1251_general_ci</span>   |  <span style="color:#f99b15">51</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">utf16</span>              | <span style="color:#06b6ef">utf16_general_ci</span>    |  <span style="color:#f99b15">54</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">utf16le</span>            | <span style="color:#06b6ef">utf16le_general_ci</span>  |  <span style="color:#f99b15">56</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp1256</span>             | <span style="color:#06b6ef">cp1256_general_ci</span>   |  <span style="color:#f99b15">57</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp1257</span>             | <span style="color:#06b6ef">cp1257_general_ci</span>   |  <span style="color:#f99b15">59</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">utf32</span>              | <span style="color:#06b6ef">utf32_general_ci</span>    |  <span style="color:#f99b15">60</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">binary</span>             | <span style="color:#06b6ef">binary</span>              |  <span style="color:#f99b15">63</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">geostd8</span>            | <span style="color:#06b6ef">geostd8_general_ci</span>  |  <span style="color:#f99b15">92</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">cp932</span>              | <span style="color:#06b6ef">cp932_japanese_ci</span>   |  <span style="color:#f99b15">95</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">eucjpms</span>            | <span style="color:#06b6ef">eucjpms_japanese_ci</span> |  <span style="color:#f99b15">97</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">gb18030</span>            | <span style="color:#06b6ef">gb18030_chinese_ci</span>  | <span style="color:#f99b15">248</span> |
+</span></span><span style="display:flex;"><span>| <span style="color:#06b6ef">utf8mb4</span>            | <span style="color:#06b6ef">utf8mb4_0900_ai_ci</span>  | <span style="color:#f99b15">255</span> |
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">+--------------------+---------------------+-----+</span>
+</span></span></code></pre></div><h2 id="客户端握手响应包handshakeresponse">客户端握手响应包（HandshakeResponse）</h2>
+<p>客户端和 MySQL 服务端进行数据交互时，有明文数据交互和SSL加密数据交互，这里贴一张 MySQL 官网给出的一张图，这张图大致的描述了客户端和服务端连接的流程
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e65f83b1bcc4b5296d913bf0ac830b1~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png">
+本篇文章就讲下简单的明文连接，不管是明文连接和加密连接，客户端都必须返回 <strong>HandshakeResponse</strong> 这个数据包给服务端。
+这个数据包也有两个版本，一个是 <strong>HandshakeResponse41</strong>，另一个是 <strong>HandshakeResponse320</strong>。现在一般都是用 <strong>HandshakeResponse41</strong> 这个版本的数据包。那么服务端要怎么知道客户端发送的数据包到底是什么版本呢？
+这个就要用到上面的 <strong>CLIENT_PROTOCOL_41</strong> 这个能力标志了，服务端只要解析客户端发来的 <strong>HandshakeResponse</strong> 数据包中的 Capability Flags 数据中是否支持 <strong>CLIENT_PROTOCOL_41</strong> 这个能力，来判断客户端握手响应包的版本。当 <strong>CLIENT_PROTOCOL_41</strong> 这个能力为支持状态，说明版本是 <strong>HandshakeResponse41</strong>，否则就是 <strong>HandshakeResponse320</strong>。</p>
+<h3 id="handshakeresponse41">HandshakeResponse41</h3>
+<p>现在常用的就是 <strong>HandshakeResponse41</strong> 这个握手响应包，本篇文章就讲一讲这个握手响应包吧。这个包的描述如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f99b15">4</span>              capability flags, CLIENT_PROTOCOL_41 always set
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">4</span>              max<span style="color:#5bc4bf">-</span>packet size
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">1</span>              character set
+</span></span><span style="display:flex;"><span>string[<span style="color:#f99b15">23</span>]	   reserved (all [<span style="color:#f99b15">0</span>])
+</span></span><span style="display:flex;"><span>string[NUL]    username
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 如果支持 CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA 标志就返回这些数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  lenenc<span style="color:#5bc4bf">-</span><span style="color:#fec418">int</span>     length of auth<span style="color:#5bc4bf">-</span>response
+</span></span><span style="display:flex;"><span>  string[n]      auth<span style="color:#5bc4bf">-</span>response
+</span></span><span style="display:flex;"><span>} <span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_SECURE_CONNECTION {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 如果支持 CLIENT_SECURE_CONNECTION 标志就返回这些数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  <span style="color:#f99b15">1</span>              length of auth<span style="color:#5bc4bf">-</span>response
+</span></span><span style="display:flex;"><span>  string[n]      auth<span style="color:#5bc4bf">-</span>response
+</span></span><span style="display:flex;"><span>} <span style="color:#815ba4">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 否则就返回这个数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  string[NUL]    auth<span style="color:#5bc4bf">-</span>response
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_CONNECT_WITH_DB {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 如果支持 CLIENT_CONNECT_WITH_DB 标志就返回这些数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  string[NUL]    database
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_PLUGIN_AUTH {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 如果支持 CLIENT_PLUGIN_AUTH 标志就返回这些数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  string[NUL]    auth plugin name
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_CONNECT_ATTRS {
+</span></span><span style="display:flex;"><span>  <span style="color:#8d8687">// 如果支持 CLIENT_CONNECT_ATTRS 标志就返回这些数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>  lenenc<span style="color:#5bc4bf">-</span><span style="color:#fec418">int</span>     length of all key<span style="color:#5bc4bf">-</span>values
+</span></span><span style="display:flex;"><span>  lenenc<span style="color:#5bc4bf">-</span>str     key
+</span></span><span style="display:flex;"><span>  lenenc<span style="color:#5bc4bf">-</span>str     value
+</span></span><span style="display:flex;"><span>  <span style="color:#815ba4">if</span><span style="color:#5bc4bf">-</span>more data in <span style="color:#ef6155">&#39;</span>length of all key<span style="color:#5bc4bf">-</span>values<span style="color:#ef6155">&#39;</span>, more keys and value pairs
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><ul>
+<li><strong>capability_flags</strong> &ndash; 客户端的能力标志，占用 4 个字节</li>
+<li><strong>max_packet_size</strong>  &ndash; 客户端要发送到服务器的命令包的最大大小，占用 4 个字节</li>
+<li><strong>character_set</strong> - 连接的默认字符集，占用 1 个字节</li>
+<li>username &ndash; 客户端要登录的 SQL 帐户的名称 &ndash; 此字符串应使用character set字段指示的字符集进行编码。</li>
+<li><strong>auth-response</strong>  &ndash;由 auth plugin name 字段指示的 <a href="https://dev.mysql.com/doc/internals/en/authentication-method.html">Authentication Method</a> 生成的加密的身份验证响应数据。</li>
+<li><strong>database</strong>  &ndash; 用于连接的初始数据库 &ndash; 此字符串应使用 character set字段指示的字符集进行编码。</li>
+<li>auth plugin name  &ndash; 客户端用此加密方法加密密码然后赋值给 auth-response 返回给服务端</li>
+</ul>
+<h3 id="密码加密方式">密码加密方式</h3>
+<p>客户端传输给服务端的 MySQL 账户的密码加密方式采用插件的形式，就是 auth plugin name 这个字段的数据，一般支持以下几种加密方式</p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>Auth Plugin Name</strong></th>
+<th><strong>能力标志</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>旧密码认证</td>
+<td>mysql_old_password</td>
+<td>不能使用，无能力标志</td>
+</tr>
+<tr>
+<td>安全密码认证</td>
+<td>mysql_native_password</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_SECURE_CONNECTION">CLIENT_SECURE_CONNECTION</a></td>
+</tr>
+<tr>
+<td>明文认证</td>
+<td>mysql_clear_password</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PLUGIN_AUTH">CLIENT_PLUGIN_AUTH</a></td>
+</tr>
+<tr>
+<td>Windows 原生身份验证</td>
+<td>authentication_windows_client</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PLUGIN_AUTH">CLIENT_PLUGIN_AUTH</a></td>
+</tr>
+<tr>
+<td>SHA256</td>
+<td>sha256_password</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PLUGIN_AUTH">CLIENT_PLUGIN_AUTH</a></td>
+</tr>
+</tbody>
+</table>
+<p>现在一般常用的是安全密码认证，就是 <strong>Auth Plugin Name</strong> 为 mysql_native_password 的认证加密方式。这个方法的加密方式如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SHA1<span style="color:#5bc4bf">(</span> password <span style="color:#5bc4bf">)</span> XOR SHA1<span style="color:#5bc4bf">(</span> <span style="color:#48b685">&#34;20-bytes random data from server&#34;</span> &lt;concat&gt; SHA1<span style="color:#5bc4bf">(</span> SHA1<span style="color:#5bc4bf">(</span> password <span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">)</span> <span style="color:#5bc4bf">)</span>
+</span></span></code></pre></div><p>它先对明文密码进行一次 SHA1 的散列运算生成密码 1，然后再将服务端初始握手包中的 20 位 Slat 数据和对明文密码进行两次 SHA1 散列的结果进行连接，然后对连接的结果再进行一次散列运算生成密码 2，最后密码 1 和密码 2 进行异或运算，得到来最终发送给服务端的数据。</p>
+<h2 id="响应数据包">响应数据包</h2>
+<p>当我们发送响应握手包 <strong>HandshakeResponse</strong> 后，服务端就会返回一个通用的响应包给我们，这个响应包可以是以下其中一个：</p>
+<ul>
+<li>OK_Packet</li>
+<li>ERR_Packet</li>
+<li>EOF_Packet</li>
+</ul>
+<p>那么我们要怎么区分这三个包呢？区分的关键在于包的第一个字节的数据，如果第一个字节数据为 0x00，则代表这是一个 OK_Packet 。如果第一个字节数据为 0xff，则表示这是一个 ERR_Packet。如果第一个字节为 0xfe，则代表这是一个 EOF_Packet。
+从 MySQL 5.7.5 开始，OK_Packet 包也用于指示 EOF_Packet，并且不推荐使用 EOF_Packet 包。为了确保 MySQL 的旧版本（5.7.5 之前）和新版本（5.7.5 及更高版本）之间的向后兼容性，新客户端会向服务端该送 <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_DEPRECATE_EOF">CLIENT_DEPRECATE_EOF</a> 能力标志。如果没有传送这个能力标志，服务端返回端数据结果集中还是会以 EOF_Packet 包结尾，如果传送了这个能力标志的话，服务端返回端结果集中会以 OK_Packet 包结尾，并且第一个字节数据会是 0xfe。
+那么我们怎么区分新版 OK_Packet 包在什么时候代表 OK_Packet，在什么时候代表 EOF_Packet 呢？主要可以通过以下几点来判断：</p>
+<ul>
+<li>一个是判断客户端刚才是否传送了 <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_DEPRECATE_EOF">CLIENT_DEPRECATE_EOF</a> 能力标志</li>
+<li>OK_Packet: 第一个字节数据为 0x00，且数据包长度 &gt; 7</li>
+<li>EOF_Packet: 第一个字节数据为 0xfe，且数据包长度 &lt; 9</li>
+</ul>
+<h3 id="ok_packet-格式">OK_Packet 格式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">1</span><span style="color:#5bc4bf">&gt;</span>			header				[<span style="color:#f99b15">00</span>] or [fe] the OK packet header
+</span></span><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>	affected_rows		<span style="color:#ef6155">受影响行数</span>
+</span></span><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>	last_insert_id		<span style="color:#ef6155">最后插入</span> ID
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_PROTOCOL_41 {
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>		status_flags	<span style="color:#ef6155">状态标志</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>		warnings		<span style="color:#ef6155">警告数</span>
+</span></span><span style="display:flex;"><span>} elseif capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_TRANSACTIONS {
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>		status_flags	Status Flags
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_SESSION_TRACK {
+</span></span><span style="display:flex;"><span>    string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>	info	<span style="color:#ef6155">人类可读的状态信息</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> status_flags <span style="color:#5bc4bf">&amp;</span> SERVER_SESSION_STATE_CHANGED {
+</span></span><span style="display:flex;"><span>        string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>	session_state_changes	<span style="color:#ef6155">会话状态信息</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>} <span style="color:#815ba4">else</span> {
+</span></span><span style="display:flex;"><span>    string<span style="color:#5bc4bf">&lt;</span>EOF<span style="color:#5bc4bf">&gt;</span>	info		<span style="color:#ef6155">人类可读的状态信息</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="err_packet-格式">ERR_Packet 格式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">1</span><span style="color:#5bc4bf">&gt;</span>		header				[ff] header of the ERR packet
+</span></span><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>		error_code			<span style="color:#ef6155">错误代码</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_PROTOCOL_41 {
+</span></span><span style="display:flex;"><span>  string<span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">1</span><span style="color:#5bc4bf">&gt;</span>	sql_state_marker	SQL <span style="color:#ef6155">状态的标记</span>
+</span></span><span style="display:flex;"><span>  string<span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">5</span><span style="color:#5bc4bf">&gt;</span>	sql_state			SQL <span style="color:#ef6155">状态</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>EOF<span style="color:#5bc4bf">&gt;</span>	error_message		<span style="color:#ef6155">人类可读的错误信息</span>
+</span></span></code></pre></div><h3 id="eof_packet-格式">EOF_Packet 格式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">1</span><span style="color:#5bc4bf">&gt;</span>		header				[fe] EOF header
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> capabilities <span style="color:#5bc4bf">&amp;</span> CLIENT_PROTOCOL_41 {
+</span></span><span style="display:flex;"><span>  <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>	warnings			<span style="color:#ef6155">警告数</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span><span style="color:#f99b15">2</span><span style="color:#5bc4bf">&gt;</span>	status_flags		<span style="color:#ef6155">状态标志</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="数据包数据类型介绍">数据包数据类型介绍</h2>
+<p>在上面的数据包格式中，你是不是看到例如 int&lt;1&gt;、string<!-- raw HTML omitted -->、int<!-- raw HTML omitted --> 等等这些一头雾水？这个是 MySQL 官网文档中表示协议数据类型和长度的。主要数据类型如下表：</p>
+<table>
+<thead>
+<tr>
+<th><strong>数据类型</strong></th>
+<th><strong>字节长度</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int&lt;1&gt;</td>
+<td>1 字节</td>
+</tr>
+<tr>
+<td>int&lt;2&gt;</td>
+<td>2 字节</td>
+</tr>
+<tr>
+<td>int&lt;3&gt;</td>
+<td>3 字节</td>
+</tr>
+<tr>
+<td>int&lt;4&gt;</td>
+<td>4 字节</td>
+</tr>
+<tr>
+<td>int&lt;6&gt;</td>
+<td>6 字节</td>
+</tr>
+<tr>
+<td>int&lt;8&gt;</td>
+<td>8 字节</td>
+</tr>
+<tr>
+<td>int&lt;lenenc&gt;</td>
+<td>见下文详细介绍</td>
+</tr>
+<tr>
+<td>string&lt;lenenc&gt;</td>
+<td>见下文详细介绍</td>
+</tr>
+<tr>
+<td>string&lt;fix&gt;</td>
+<td>固定字节长度的字符串，其中 fix 代表一个指定的数值，例如 string&lt;5&gt;，其中 fix 就等于 5</td>
+</tr>
+<tr>
+<td>string&lt;var&gt;</td>
+<td>字符串的长度由另一个字段确定或在运行时计算</td>
+</tr>
+<tr>
+<td>string&lt;EOF&gt;</td>
+<td>如果字符串是数据包的最后一个组成部分，则它的长度可以从整个数据包长度减去当前位置来计算。</td>
+</tr>
+<tr>
+<td>string&lt;NUL&gt;</td>
+<td>以 [00] 字节结尾的字符串。</td>
+</tr>
+</tbody>
+</table>
+<p>在上面的表格中，大部分的数据类型的长度基本上都可以直接得知，但是其中 int&lt;lenenc&gt;、string&lt;lenenc&gt; 这两个类型的长度需要通过稍微复杂一点的计算来得到最终的数据长度。</p>
+<h3 id="intlenenc">int&lt;lenenc&gt;</h3>
+<p>当要解析这个长度的数据时，它一般开头的第一个字节有 4 中表现形式</p>
+<ul>
+<li>第一个字节的值小于 0xfb：代表这个数据就是这一个字节长度，并且第一个字节的值就是对应字段的值</li>
+<li>第一个字节的值等于 0xfc：代表这个字节往后的两个字节就是这个字段的数据，就是说这个字段一个占用 3 个字节长度，其中第 1 个字节表示该字段占用的字节长度数据，第 2 和第 3 个字节表示的是这个字段的数据</li>
+<li>第一个字节的值等于 0xfd：和上面类似，只是字段数据字节一共占用 4 个字节，其中后 3 个字节表示这个字段的数据</li>
+<li>第一个字节的值等于 0xfe：字段数据字节一共占用 9 个字节，其中后 8 个字节表示这个字段的数据</li>
+</ul>
+<blockquote>
+<p>注意：在 MySQL 3.22 版本以前，0xfe 表示的这个字段只有 4 个字节长度。
+如果数据包的第一个字节是长度编码的整数并且其字节值为 0xfe，则必须检查数据包的长度以验证它是否有足够的空间容纳 8 字节整数。
+如果不是，它可能是一个 <a href="https://dev.mysql.com/doc/internals/en/packet-EOF_Packet.html">EOF_Packet</a> 替代。</p>
+</blockquote>
+<p>所以要得到这个字段对应的字节长度时，只要判断第一个字节的数据，然后就可以轻松获得这个字段的长度了</p>
+<h3 id="stringlenenc">string&lt;lenenc&gt;</h3>
+<p>这个数据类型分为两部分</p>
+<ul>
+<li><strong>length</strong> (<a href="https://dev.mysql.com/doc/internals/en/describing-packets.html#type-lenenc_int">int<!-- raw HTML omitted --></a>) &ndash; string 数据的占用字节长度</li>
+<li><strong>string</strong> (<a href="https://dev.mysql.com/doc/internals/en/describing-packets.html#type-string.fix_len">string<!-- raw HTML omitted --></a>) &ndash; [len=$length] string</li>
+</ul>
+<p>其中 length 这个数据通过上面 int&lt;lenenc&gt; 的方法获得，然后 string 的数据的字节长度就是 length 的值</p>
+<h2 id="发送命令">发送命令</h2>
+<p>当我们连接成功后，这时就可以向服务端发送命令了，命令如下表：</p>
+<table>
+<thead>
+<tr>
+<th><strong>HEX 值</strong></th>
+<th><strong>NAME</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-sleep.html#packet-COM_SLEEP">COM_SLEEP</a></td>
+</tr>
+<tr>
+<td>01</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-quit.html#packet-COM_QUIT">COM_QUIT</a></td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-init-db.html#packet-COM_INIT_DB">COM_INIT_DB</a></td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-query.html#packet-COM_QUERY">COM_QUERY</a></td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-field-list.html#packet-COM_FIELD_LIST">COM_FIELD_LIST</a></td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-create-db.html#packet-COM_CREATE_DB">COM_CREATE_DB</a></td>
+</tr>
+<tr>
+<td>06</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-drop-db.html#packet-COM_DROP_DB">COM_DROP_DB</a></td>
+</tr>
+<tr>
+<td>07</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-refresh.html#packet-COM_REFRESH">COM_REFRESH</a></td>
+</tr>
+<tr>
+<td>08</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-shutdown.html#packet-COM_SHUTDOWN">COM_SHUTDOWN</a></td>
+</tr>
+<tr>
+<td>09</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-statistics.html#packet-COM_STATISTICS">COM_STATISTICS</a></td>
+</tr>
+<tr>
+<td>0a</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-process-info.html#packet-COM_PROCESS_INFO">COM_PROCESS_INFO</a></td>
+</tr>
+<tr>
+<td>0b</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-connect.html#packet-COM_CONNECT">COM_CONNECT</a></td>
+</tr>
+<tr>
+<td>0c</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-process-kill.html#packet-COM_PROCESS_KILL">COM_PROCESS_KILL</a></td>
+</tr>
+<tr>
+<td>0d</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-debug.html#packet-COM_DEBUG">COM_DEBUG</a></td>
+</tr>
+<tr>
+<td>0e</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-ping.html#packet-COM_PING">COM_PING</a></td>
+</tr>
+<tr>
+<td>0f</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-time.html#packet-COM_TIME">COM_TIME</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-delayed-insert.html#packet-COM_DELAYED_INSERT">COM_DELAYED_INSERT</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-change-user.html#packet-COM_CHANGE_USER">COM_CHANGE_USER</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-binlog-dump.html#packet-COM_BINLOG_DUMP">COM_BINLOG_DUMP</a></td>
+</tr>
+<tr>
+<td>13</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-table-dump.html#packet-COM_TABLE_DUMP">COM_TABLE_DUMP</a></td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-connect-out.html#packet-COM_CONNECT_OUT">COM_CONNECT_OUT</a></td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-register-slave.html#packet-COM_REGISTER_SLAVE">COM_REGISTER_SLAVE</a></td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-prepare.html#packet-COM_STMT_PREPARE">COM_STMT_PREPARE</a></td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-execute.html#packet-COM_STMT_EXECUTE">COM_STMT_EXECUTE</a></td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-send-long-data.html#packet-COM_STMT_SEND_LONG_DATA">COM_STMT_SEND_LONG_DATA</a></td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-close.html#packet-COM_STMT_CLOSE">COM_STMT_CLOSE</a></td>
+</tr>
+<tr>
+<td>1a</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-reset.html#packet-COM_STMT_RESET">COM_STMT_RESET</a></td>
+</tr>
+<tr>
+<td>1b</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-set-option.html#packet-COM_SET_OPTION">COM_SET_OPTION</a></td>
+</tr>
+<tr>
+<td>1c</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-stmt-fetch.html#packet-COM_STMT_FETCH">COM_STMT_FETCH</a></td>
+</tr>
+<tr>
+<td>1d</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-daemon.html#packet-COM_DAEMON">COM_DAEMON</a></td>
+</tr>
+<tr>
+<td>1e</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-binlog-dump-gtid.html#packet-COM_BINLOG_DUMP_GTID">COM_BINLOG_DUMP_GTID</a></td>
+</tr>
+<tr>
+<td>1f</td>
+<td><a href="https://dev.mysql.com/doc/internals/en/com-reset-connection.html#packet-COM_RESET_CONNECTION">COM_RESET_CONNECTION</a></td>
+</tr>
+</tbody>
+</table>
+<p>一般我们用的最多的就是 COM_QUERY 这个命令，像 CRUD 都可以通过这个命令来发送，例如我们发送一个查询当前数据库，就可以发送下面的字节数据给服务端</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>0f <span style="color:#f99b15">00</span> <span style="color:#f99b15">00</span> <span style="color:#f99b15">00</span> 	<span style="color:#f99b15">03</span> <span style="color:#f99b15">73</span> <span style="color:#f99b15">68</span> 6f <span style="color:#f99b15">77</span> <span style="color:#f99b15">20</span> <span style="color:#f99b15">64</span> <span style="color:#f99b15">61</span> <span style="color:#f99b15">74</span> <span style="color:#f99b15">61</span> <span style="color:#f99b15">62</span> <span style="color:#f99b15">61</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">73</span> <span style="color:#f99b15">65</span> <span style="color:#f99b15">73</span>
+</span></span></code></pre></div><p>其中前 4 个字节代表这个包的大小和序号 ID，后面的字节数据就是我们发送的命令。
+03 代表这个命令是 COM_QUERY。
+后面所有的字节数据都是 show databses 转换 byte 后的字节数据</p>
+<h2 id="结果集">结果集</h2>
+<p>当你发送的 COM_QUERY 命令时，它返回三种数据包的其中一种。我们可以通过第一个字节来判断它：</p>
+<ul>
+<li>当第一个字节数据等于 0x00：返回的是 OK_Packet</li>
+<li>当第一个字节的数据等于 0xff：返回的是 ERR_Packet</li>
+<li>当第一个字节的数据不是以上两个值时：返回一个结果集，并且第一个字节的值代表返回结果集中列（columns）的总数。</li>
+</ul>
+<p><strong>结果集分 3 个部分来读取：</strong></p>
+<ul>
+<li>第一个数据包表示返回结果集中列（columns）的总数。</li>
+<li>然后通过第一个数据包获取的列总数来读取相关列的所有数据包，一列有一个数据包，比如说上面得到列总数为 3，那么接下来的 3 个数据包就是这 3 列的说明。</li>
+<li>读完列的所有数据包后，紧接着就是没行数据的数据包了，一个数据包代表一行数据，每个数据包中有所有列的字段值。其中，如果值长度的值为 0xfe 时，则代表这行中这列的数据为 NULL。行数据直到读取到 OK_Packet/EOF_Packet 包出现为止。</li>
+</ul>
+<h3 id="com_query_response-格式">COM_QUERY_Response 格式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8d8687">// 字节长度计算方法见上面的 int&lt;lenenc&gt; 介绍
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span><span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>     <span style="color:#ef6155">结果集中列（</span>columns<span style="color:#ef6155">）的总数。</span>
+</span></span></code></pre></div><h3 id="列数据包格式">列数据包格式</h3>
+<p>列数据包格式也分为两种格式，也是通过客户端上传的 <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PROTOCOL_41">CLIENT_PROTOCOL_41</a> 能力标志来觉得的。
+如果客户端支持 <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PROTOCOL_41">CLIENT_PROTOCOL_41</a> 这个能力标志，服务端返回 <strong>ColumnDefinition41</strong> 这个列数据包。
+如果客户端不支持  <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html#flag-CLIENT_PROTOCOL_41">CLIENT_PROTOCOL_41</a>  这个能力标志的话，服务端就返回 <strong>ColumnDefinition320</strong> 这个版本的列数据包。
+现在一般都使用 <strong>ColumnDefinition41</strong> 这个数据包，这个数据包描述如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      catalog				<span style="color:#ef6155">目录</span> (<span style="color:#ef6155">固定为</span> <span style="color:#48b685">&#34;def&#34;</span>)
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      schema				<span style="color:#ef6155">数据库</span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      table				<span style="color:#ef6155">虚拟表</span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      org_table			<span style="color:#ef6155">源表</span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      name				<span style="color:#ef6155">虚拟名称</span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      org_name			<span style="color:#ef6155">源名称</span>
+</span></span><span style="display:flex;"><span>string<span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>      length of fixed<span style="color:#5bc4bf">-</span>length fields [<span style="color:#f99b15">0</span>c]
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">2</span>              		character set		<span style="color:#ef6155">字符集</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">4</span>              		column length		<span style="color:#ef6155">字段的最大长度</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">1</span>              		type				<span style="color:#ef6155">列类型</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">2</span>              		flags				<span style="color:#ef6155">标志</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">1</span>              		decimals			<span style="color:#ef6155">显示的小数位数</span>
+</span></span><span style="display:flex;"><span><span style="color:#f99b15">2</span>              		filler [<span style="color:#f99b15">00</span>] [<span style="color:#f99b15">00</span>]	<span style="color:#ef6155">两个空占位符</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> command was COM_FIELD_LIST {
+</span></span><span style="display:flex;"><span>    <span style="color:#fec418">int</span><span style="color:#5bc4bf">&lt;</span>lenenc<span style="color:#5bc4bf">&gt;</span>     length of <span style="color:#815ba4">default</span><span style="color:#5bc4bf">-</span>values
+</span></span><span style="display:flex;"><span>    string[<span style="color:#ef6155">$</span>len]   	<span style="color:#815ba4">default</span> values
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="行数据包格式">行数据包格式</h3>
+<p>行数据包里面包含了所有列的字段数据，每个列的字段的数据可以通过 string&lt;lenenc&gt; 数据类型的计算的方式获得，其中要注意的是，如果字段长度描述字节的数据等于 0xfe 时，代表这行中这列的数据为 NULL。
+下图是行数据包的表现形式：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5ee42af3f32e41739eb78d61b027987d~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"></p>
+<h2 id="代码实现">代码实现</h2>
+<p>通过以上的介绍，现在我们可以用代码来实现不用第三方驱动的情况下手动连接 MySQL 服务器，然后发送一条查询 databses 的命令。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/greycodee/images@main/images/2022/03/28/Untitled-2022-02-10-1029.png" alt="Untitled-2022-02-10-1029"></p>
+<p>下面的是代码片段，完整代码连接：<a href="https://gist.github.com/greycodee/22f98464fece7792a83433a1fba58e2a">https://gist.github.com/greycodee/22f98464fece7792a83433a1fba58e2a</a></p>
+<h3 id="连接-mysql-服务器">连接 MySQL 服务器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#815ba4">type</span> <span style="color:#06b6ef">MySQLClient</span> <span style="color:#815ba4">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">conn</span> <span style="color:#06b6ef">net</span>.<span style="color:#06b6ef">Conn</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">addr</span> <span style="color:#fec418">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">username</span> <span style="color:#fec418">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">password</span>	<span style="color:#fec418">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> (<span style="color:#06b6ef">m</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">MySQLClient</span>) <span style="color:#06b6ef">init</span>()  {
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 连接阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">handshake</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">startConn</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">sendHandshakeResponse41</span>(<span style="color:#06b6ef">handshake</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	连接 MySQL 服务器
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> (<span style="color:#06b6ef">m</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">MySQLClient</span>) <span style="color:#06b6ef">startConn</span>() <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">HandshakeV10</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">conn</span>, <span style="color:#06b6ef">_</span> = <span style="color:#06b6ef">net</span>.<span style="color:#06b6ef">Dial</span>(<span style="color:#48b685">&#34;tcp&#34;</span>,<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">addr</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">initResp</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">byte</span>,<span style="color:#f99b15">1024</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">readLen</span>, <span style="color:#06b6ef">_</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">conn</span>.<span style="color:#06b6ef">Read</span>(<span style="color:#06b6ef">initResp</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">return</span> <span style="color:#06b6ef">ReadHandShakeV10</span>(<span style="color:#06b6ef">initResp</span>[:<span style="color:#06b6ef">readLen</span>])
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="解析初始握手数据包">解析初始握手数据包</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	解析初始握手包 HandShakeV10
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> <span style="color:#06b6ef">ReadHandShakeV10</span>(<span style="color:#06b6ef">data</span> []<span style="color:#fec418">byte</span>) <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">HandshakeV10</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">var</span> <span style="color:#06b6ef">h</span> = <span style="color:#5bc4bf">&amp;</span><span style="color:#06b6ef">HandshakeV10</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">ProtocolVersion</span>= int32(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">var</span> <span style="color:#06b6ef">serverVersion</span> []<span style="color:#fec418">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>]<span style="color:#5bc4bf">!=</span><span style="color:#f99b15">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">serverVersion</span> = append(<span style="color:#06b6ef">serverVersion</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">ServerVersion</span> = string(<span style="color:#06b6ef">serverVersion</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">connectByte</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>:<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">4</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">i</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">connectByte</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">ConnectionId</span><span style="color:#5bc4bf">+=</span>int32(<span style="color:#06b6ef">connectByte</span>[<span style="color:#06b6ef">i</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">var</span> <span style="color:#06b6ef">apdp1</span> []<span style="color:#fec418">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">apdp1Byte</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>:<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">8</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">i</span> <span style="color:#5bc4bf">:=</span> <span style="color:#815ba4">range</span> <span style="color:#06b6ef">apdp1Byte</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">apdp1</span> = append(<span style="color:#06b6ef">apdp1</span>, <span style="color:#06b6ef">apdp1Byte</span>[<span style="color:#06b6ef">i</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">AuthPluginDataPart_1</span> = string(<span style="color:#06b6ef">apdp1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">9</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 能力低2位
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">c_flag_low_1</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">Split</span>(<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Sprintf</span>(<span style="color:#48b685">&#34;%b\n&#34;</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>]),<span style="color:#48b685">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">c_flag_low_2</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">Split</span>(<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Sprintf</span>(<span style="color:#48b685">&#34;%b\n&#34;</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>]),<span style="color:#48b685">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 编码获取
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">CharacterSet</span> = int32(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 服务器状态
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 能力高2位
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">c_flag_up_1</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">Split</span>(<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Sprintf</span>(<span style="color:#48b685">&#34;%b\n&#34;</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>]),<span style="color:#48b685">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">c_flag_up_2</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">Split</span>(<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Sprintf</span>(<span style="color:#48b685">&#34;%b\n&#34;</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>]),<span style="color:#48b685">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">var</span> <span style="color:#06b6ef">capabilityFlags</span> []<span style="color:#fec418">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">capabilityFlags</span> = append(<span style="color:#06b6ef">capabilityFlags</span>,<span style="color:#06b6ef">c_flag_up_1</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">capabilityFlags</span> = append(<span style="color:#06b6ef">capabilityFlags</span>,<span style="color:#06b6ef">c_flag_up_2</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">capabilityFlags</span> = append(<span style="color:#06b6ef">capabilityFlags</span>,<span style="color:#06b6ef">c_flag_low_1</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">capabilityFlags</span> = append(<span style="color:#06b6ef">capabilityFlags</span>,<span style="color:#06b6ef">c_flag_low_2</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">EqualFold</span>(<span style="color:#48b685">&#34;1&#34;</span>,<span style="color:#06b6ef">capabilityFlags</span>[<span style="color:#f99b15">19</span>]){
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">AuthPluginDataLen</span>= int32(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">10</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">EqualFold</span>(<span style="color:#48b685">&#34;1&#34;</span>,<span style="color:#06b6ef">capabilityFlags</span>[<span style="color:#f99b15">15</span>]){
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">p2Len</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">13</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">p2len1</span> <span style="color:#5bc4bf">:=</span> int(<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">AuthPluginDataLen</span><span style="color:#5bc4bf">-</span><span style="color:#f99b15">8</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">if</span> <span style="color:#06b6ef">p2Len</span> &lt; <span style="color:#06b6ef">p2len1</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#06b6ef">p2Len</span> = <span style="color:#06b6ef">p2len1</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">AuthPluginDataPart_2</span> = string(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>:<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#06b6ef">p2Len</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#06b6ef">p2Len</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">strings</span>.<span style="color:#06b6ef">EqualFold</span>(<span style="color:#48b685">&#34;1&#34;</span>,<span style="color:#06b6ef">capabilityFlags</span>[<span style="color:#f99b15">19</span>]) {
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">var</span> <span style="color:#06b6ef">authPlugName</span> []<span style="color:#fec418">byte</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">for</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>] <span style="color:#5bc4bf">!=</span> <span style="color:#f99b15">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#06b6ef">authPlugName</span> = append(<span style="color:#06b6ef">authPlugName</span>,<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">index</span>])
+</span></span><span style="display:flex;"><span>			<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">h</span>.<span style="color:#06b6ef">AuthPluginName</span> = string(<span style="color:#06b6ef">authPlugName</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">return</span> <span style="color:#06b6ef">h</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">type</span> <span style="color:#06b6ef">HandshakeV10</span> <span style="color:#815ba4">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">ProtocolVersion</span>      <span style="color:#fec418">int32</span>  <span style="color:#48b685">`protobuf:&#34;varint,1,opt,name=protocol_version,json=protocolVersion,proto3&#34; json:&#34;protocol_version,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">ServerVersion</span>        <span style="color:#fec418">string</span> <span style="color:#48b685">`protobuf:&#34;bytes,2,opt,name=server_version,json=serverVersion,proto3&#34; json:&#34;server_version,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">ConnectionId</span>         <span style="color:#fec418">int32</span>  <span style="color:#48b685">`protobuf:&#34;varint,3,opt,name=connection_id,json=connectionId,proto3&#34; json:&#34;connection_id,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">AuthPluginDataPart_1</span> <span style="color:#fec418">string</span> <span style="color:#48b685">`protobuf:&#34;bytes,4,opt,name=auth_plugin_data_part_1,json=authPluginDataPart1,proto3&#34; json:&#34;auth_plugin_data_part_1,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">CharacterSet</span>         <span style="color:#fec418">int32</span>  <span style="color:#48b685">`protobuf:&#34;varint,6,opt,name=character_set,json=characterSet,proto3&#34; json:&#34;character_set,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">StatusFlags</span>          <span style="color:#fec418">int32</span>  <span style="color:#48b685">`protobuf:&#34;varint,7,opt,name=status_flags,json=statusFlags,proto3&#34; json:&#34;status_flags,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">AuthPluginDataLen</span>    <span style="color:#fec418">int32</span>  <span style="color:#48b685">`protobuf:&#34;varint,8,opt,name=auth_plugin_data_len,json=authPluginDataLen,proto3&#34; json:&#34;auth_plugin_data_len,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">AuthPluginDataPart_2</span> <span style="color:#fec418">string</span> <span style="color:#48b685">`protobuf:&#34;bytes,9,opt,name=auth_plugin_data_part_2,json=authPluginDataPart2,proto3&#34; json:&#34;auth_plugin_data_part_2,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">AuthPluginName</span>       <span style="color:#fec418">string</span> <span style="color:#48b685">`protobuf:&#34;bytes,10,opt,name=auth_plugin_name,json=authPluginName,proto3&#34; json:&#34;auth_plugin_name,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="发送初始响应数据包">发送初始响应数据包</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	发送初始响应数据包 HandshakeResponse41，包含登陆信息
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> (<span style="color:#06b6ef">m</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">MySQLClient</span>) <span style="color:#06b6ef">sendHandshakeResponse41</span>(<span style="color:#06b6ef">serverResp</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">HandshakeV10</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">byte</span>,<span style="color:#f99b15">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#06b6ef">Int32ToBytesOfLittle</span>(<span style="color:#f99b15">19833351</span>)<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#06b6ef">Int32ToBytesOfLittle</span>(<span style="color:#f99b15">16777215</span>)<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#f99b15">33</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">reserved</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">byte</span>,<span style="color:#f99b15">23</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#06b6ef">reserved</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, []byte(<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">username</span>)<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#f99b15">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#f99b15">20</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#06b6ef">CalcPassword</span>([]byte(<span style="color:#06b6ef">serverResp</span>.<span style="color:#06b6ef">AuthPluginDataPart_1</span><span style="color:#5bc4bf">+</span><span style="color:#06b6ef">serverResp</span>.<span style="color:#06b6ef">AuthPluginDataPart_2</span>)[:<span style="color:#f99b15">20</span>],[]byte(<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">password</span>))<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, []byte(<span style="color:#48b685">&#34;mysql_native_password&#34;</span>)<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#f99b15">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">_</span>, <span style="color:#06b6ef">_</span> = <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">conn</span>.<span style="color:#06b6ef">Write</span>(<span style="color:#06b6ef">Pack</span>(<span style="color:#06b6ef">resp</span>,<span style="color:#f99b15">1</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">flag</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">handleResponse</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">flag</span> <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0xff</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#48b685">&#34;连接失败&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="判断连接结果">判断连接结果</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	解析通用响应数据包 OK_Packet、ERR_Packet、数据集
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> (<span style="color:#06b6ef">m</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">MySQLClient</span>) <span style="color:#06b6ef">handleResponse</span>() <span style="color:#fec418">uint8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">byte</span>,<span style="color:#f99b15">1024</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">readLen</span>, <span style="color:#06b6ef">_</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">conn</span>.<span style="color:#06b6ef">Read</span>(<span style="color:#06b6ef">resp</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">data</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">resp</span>[:<span style="color:#06b6ef">readLen</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">data</span> = <span style="color:#06b6ef">data</span>[<span style="color:#f99b15">4</span>:]
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">switch</span> <span style="color:#06b6ef">data</span>[<span style="color:#f99b15">0</span>] {
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">case</span> <span style="color:#f99b15">0x00</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Println</span>(<span style="color:#48b685">&#34;成功&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">return</span> <span style="color:#f99b15">0x00</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">case</span> <span style="color:#f99b15">0xff</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Println</span>(<span style="color:#48b685">&#34;失败&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">return</span> <span style="color:#f99b15">0xff</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">default</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">parseResultSet</span>(<span style="color:#06b6ef">data</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">return</span> <span style="color:#f99b15">0xfe</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="发送命令-1">发送命令</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8d8687">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	CommandQuery
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">	发送 COM_QUERY 命令，并读取数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> (<span style="color:#06b6ef">m</span> <span style="color:#5bc4bf">*</span><span style="color:#06b6ef">MySQLClient</span>) <span style="color:#06b6ef">CommandQuery</span>(<span style="color:#06b6ef">sql</span> <span style="color:#fec418">string</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">byte</span>,<span style="color:#f99b15">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, <span style="color:#f99b15">3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">resp</span> = append(<span style="color:#06b6ef">resp</span>, []byte(<span style="color:#06b6ef">sql</span>)<span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">_</span>, <span style="color:#06b6ef">_</span> = <span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">conn</span>.<span style="color:#06b6ef">Write</span>(<span style="color:#06b6ef">Pack</span>(<span style="color:#06b6ef">resp</span>,<span style="color:#f99b15">0</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">m</span>.<span style="color:#06b6ef">handleResponse</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="解析结果集">解析结果集</h3>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#815ba4">func</span> <span style="color:#06b6ef">parseResultSet</span>(<span style="color:#06b6ef">resp</span> []<span style="color:#fec418">byte</span>)  {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">fieldLen</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">resp</span>[<span style="color:#f99b15">0</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">headRows</span> <span style="color:#5bc4bf">:=</span> make([]<span style="color:#fec418">string</span>,<span style="color:#f99b15">0</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">headIndex</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 读取列数据
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">headIndex</span> <span style="color:#5bc4bf">&lt;=</span> int(<span style="color:#06b6ef">fieldLen</span>){
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">n</span>,<span style="color:#06b6ef">l</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">readColumn</span>(<span style="color:#06b6ef">resp</span>,<span style="color:#06b6ef">index</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#06b6ef">l</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">headRows</span> = append(<span style="color:#06b6ef">headRows</span>, <span style="color:#06b6ef">n</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">headIndex</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">table</span>, <span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">gotable</span>.<span style="color:#06b6ef">Create</span>(<span style="color:#06b6ef">headRows</span><span style="color:#5bc4bf">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">if</span> <span style="color:#06b6ef">err</span> <span style="color:#5bc4bf">!=</span> <span style="color:#815ba4">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Println</span>(<span style="color:#48b685">&#34;Create table failed: &#34;</span>, <span style="color:#06b6ef">err</span>.<span style="color:#06b6ef">Error</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#815ba4">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 读取行内容
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#815ba4">for</span>  {
+</span></span><span style="display:flex;"><span>		<span style="color:#8d8687">// 判断是否是 EOF 数据包
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>		<span style="color:#815ba4">if</span> <span style="color:#06b6ef">resp</span>[<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">4</span>] <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0xfe</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#06b6ef">packLen</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">0</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#815ba4">for</span> <span style="color:#06b6ef">_</span>,<span style="color:#06b6ef">v</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">resp</span>[<span style="color:#06b6ef">index</span>:<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">3</span>]{
+</span></span><span style="display:flex;"><span>				<span style="color:#06b6ef">packLen</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">v</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#815ba4">if</span> <span style="color:#06b6ef">packLen</span>&lt;<span style="color:#f99b15">9</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#815ba4">break</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">rows</span>,<span style="color:#06b6ef">ll</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">readRow</span>(<span style="color:#06b6ef">resp</span>,<span style="color:#06b6ef">index</span>, int(<span style="color:#06b6ef">fieldLen</span>))
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">table</span>.<span style="color:#06b6ef">AddRow</span>(<span style="color:#06b6ef">rows</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">index</span><span style="color:#5bc4bf">+=</span><span style="color:#06b6ef">ll</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8d8687">// 打印
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>	<span style="color:#06b6ef">fmt</span>.<span style="color:#06b6ef">Println</span>(<span style="color:#06b6ef">table</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> <span style="color:#06b6ef">readColumn</span>(<span style="color:#06b6ef">data</span> []<span style="color:#fec418">byte</span>, <span style="color:#06b6ef">startIndex</span> <span style="color:#fec418">int</span>) (<span style="color:#06b6ef">name</span> <span style="color:#fec418">string</span>,<span style="color:#06b6ef">length</span> <span style="color:#fec418">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">packLen</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">3</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">i</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">packLen</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">length</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">packLen</span>[<span style="color:#06b6ef">i</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">length</span> <span style="color:#5bc4bf">+=</span> <span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>]<span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>]<span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>]<span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>]<span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">nameLen</span> <span style="color:#5bc4bf">:=</span> int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">name</span> = string(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#06b6ef">nameLen</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">func</span> <span style="color:#06b6ef">readRow</span>(<span style="color:#06b6ef">data</span> []<span style="color:#fec418">byte</span>, <span style="color:#06b6ef">startIndex</span> <span style="color:#fec418">int</span>, <span style="color:#06b6ef">fieldNum</span> <span style="color:#fec418">int</span>) (<span style="color:#06b6ef">name</span> []<span style="color:#fec418">string</span>,<span style="color:#06b6ef">length</span> <span style="color:#fec418">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">packLen</span> <span style="color:#5bc4bf">:=</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">3</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">i</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">packLen</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">length</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">packLen</span>[<span style="color:#06b6ef">i</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">length</span> <span style="color:#5bc4bf">+=</span> <span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+=</span><span style="color:#f99b15">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#06b6ef">f</span><span style="color:#5bc4bf">:=</span><span style="color:#f99b15">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">for</span> <span style="color:#06b6ef">f</span> &lt; <span style="color:#06b6ef">fieldNum</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">dataLen</span> <span style="color:#5bc4bf">:=</span> <span style="color:#f99b15">0</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8d8687">// 计算字节数据长度
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>		<span style="color:#815ba4">if</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>] &lt; <span style="color:#f99b15">0xfb</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#8d8687">// NULL
+</span></span></span><span style="display:flex;"><span><span style="color:#8d8687"></span>			<span style="color:#06b6ef">dataLen</span> = int(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>])
+</span></span><span style="display:flex;"><span>		}<span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>] <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0xfc</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#815ba4">for</span> <span style="color:#06b6ef">_</span>,<span style="color:#06b6ef">v</span> <span style="color:#5bc4bf">:=</span> <span style="color:#815ba4">range</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">3</span>]{
+</span></span><span style="display:flex;"><span>				<span style="color:#06b6ef">dataLen</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">v</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}<span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>] <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0xfd</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#815ba4">for</span> <span style="color:#06b6ef">_</span>,<span style="color:#06b6ef">v</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">5</span>]{
+</span></span><span style="display:flex;"><span>				<span style="color:#06b6ef">dataLen</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">v</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}<span style="color:#815ba4">else</span> <span style="color:#815ba4">if</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span>] <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0xfe</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#815ba4">for</span> <span style="color:#06b6ef">_</span>,<span style="color:#06b6ef">v</span> <span style="color:#5bc4bf">:=</span><span style="color:#815ba4">range</span> <span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">9</span>]{
+</span></span><span style="display:flex;"><span>				<span style="color:#06b6ef">dataLen</span><span style="color:#5bc4bf">+=</span>int(<span style="color:#06b6ef">v</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">name</span> = append(<span style="color:#06b6ef">name</span>, string(<span style="color:#06b6ef">data</span>[<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>:<span style="color:#06b6ef">startIndex</span><span style="color:#5bc4bf">+</span><span style="color:#06b6ef">dataLen</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>]))
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">startIndex</span> <span style="color:#5bc4bf">+=</span> <span style="color:#06b6ef">dataLen</span><span style="color:#5bc4bf">+</span><span style="color:#f99b15">1</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#06b6ef">f</span><span style="color:#5bc4bf">++</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#815ba4">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="控制台结果输出">控制台结果输出</h3>
+<p>执行上面的代码后，控制台就会输出所有的数据库名字</p>
+<div class="highlight"><pre tabindex="0" style="color:#2f1e2e;background-color:#e7e9db;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>+--------------------+
+</span></span><span style="display:flex;"><span>|      Database      |
+</span></span><span style="display:flex;"><span>+--------------------+
+</span></span><span style="display:flex;"><span>| information_schema |
+</span></span><span style="display:flex;"><span>|      greycode      |
+</span></span><span style="display:flex;"><span>|       mysql        |
+</span></span><span style="display:flex;"><span>| performance_schema |
+</span></span><span style="display:flex;"><span>|        sys         |
+</span></span><span style="display:flex;"><span>+--------------------+
+</span></span></code></pre></div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://dev.mysql.com/doc/internals/en/client-server-protocol.html">https://dev.mysql.com/doc/internals/en/client-server-protocol.html</a></p>
+
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">All posts</a></li>
+         
+          <li><a href="/categories">Categories</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </div>
+
+    
+    <div id="toc-footer" style="display: none">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#协议简介">协议简介</a></li>
+    <li><a href="#初始握手包">初始握手包</a></li>
+    <li><a href="#能力标志">能力标志</a></li>
+    <li><a href="#字符编码">字符编码</a></li>
+    <li><a href="#客户端握手响应包handshakeresponse">客户端握手响应包（HandshakeResponse）</a>
+      <ul>
+        <li><a href="#handshakeresponse41">HandshakeResponse41</a></li>
+        <li><a href="#密码加密方式">密码加密方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#响应数据包">响应数据包</a>
+      <ul>
+        <li><a href="#ok_packet-格式">OK_Packet 格式</a></li>
+        <li><a href="#err_packet-格式">ERR_Packet 格式</a></li>
+        <li><a href="#eof_packet-格式">EOF_Packet 格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据包数据类型介绍">数据包数据类型介绍</a>
+      <ul>
+        <li><a href="#intlenenc">int&lt;lenenc&gt;</a></li>
+        <li><a href="#stringlenenc">string&lt;lenenc&gt;</a></li>
+      </ul>
+    </li>
+    <li><a href="#发送命令">发送命令</a></li>
+    <li><a href="#结果集">结果集</a>
+      <ul>
+        <li><a href="#com_query_response-格式">COM_QUERY_Response 格式</a></li>
+        <li><a href="#列数据包格式">列数据包格式</a></li>
+        <li><a href="#行数据包格式">行数据包格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#代码实现">代码实现</a>
+      <ul>
+        <li><a href="#连接-mysql-服务器">连接 MySQL 服务器</a></li>
+        <li><a href="#解析初始握手数据包">解析初始握手数据包</a></li>
+        <li><a href="#发送初始响应数据包">发送初始响应数据包</a></li>
+        <li><a href="#判断连接结果">判断连接结果</a></li>
+        <li><a href="#发送命令-1">发送命令</a></li>
+        <li><a href="#解析结果集">解析结果集</a></li>
+        <li><a href="#控制台结果输出">控制台结果输出</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&text=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&is_video=false&description=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f&body=Check out this article: http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&title=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&name=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f&description=%e5%89%8d%e8%a8%80%20%e6%88%91%e4%bb%ac%e5%b9%b3%e5%b8%b8%e4%bd%bf%e7%94%a8%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%9c%ba%e6%99%af%e4%b8%80%e8%88%ac%e6%98%af%e7%a8%8b%e5%ba%8f%e9%87%8c%e9%9d%a2%e4%bb%a3%e7%a0%81%e7%9b%b4%e6%8e%a5%e8%bf%9e%e6%8e%a5%e4%bd%bf%e7%94%a8%ef%bc%8c%e7%84%b6%e5%90%8e%e8%bf%9b%e8%a1%8c%20CRUD%20%e6%93%8d%e4%bd%9c%e3%80%82%e6%88%96%e8%80%85%e4%bd%bf%e7%94%a8%e6%9c%89%20GUI%20%e7%95%8c%e9%9d%a2%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e8%bd%af%e4%bb%b6%e6%9d%a5%e6%89%8b%e5%8a%a8%e6%93%8d%e4%bd%9c%e6%95%b0%e6%8d%ae%e5%ba%93%ef%bc%8c%20%e8%bf%99%e7%b1%bb%e8%bd%af%e4%bb%b6%e6%9c%89%20DataGrip%e3%80%81Navicat%e7%ad%89%e7%ad%89%26hellip%3b%e3%80%82%e5%b9%b3%e5%b8%b8%e5%be%88%e5%b0%91%e5%85%b3%e5%bf%83%e5%ae%83%e4%bb%ac%e7%9a%84%e5%ba%95%e5%b1%82%e6%95%b0%e6%8d%ae%e4%ba%a4%e4%ba%92%e6%98%af%e6%80%8e%e4%b9%88%e6%a0%b7%e7%9a%84%ef%bc%8c%e7%9b%b8%e4%bf%a1%e4%bd%a0%e7%9c%8b%e4%ba%86%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0%e4%b8%80%e5%ae%9a%e8%83%bd%e6%9c%89%e5%a4%a7%e6%a6%82%e7%9a%84%e4%ba%86%e8%a7%a3%e3%80%82%e6%9c%ac%e7%af%87%e6%96%87%e7%ab%a0%e7%9a%84%e4%bb%a3%e7%a0%81%e4%bd%bf%e7%94%a8%20Go%20%e8%af%ad%e8%a8%80%e6%9d%a5%e5%ae%9e%e7%8e%b0%20MySQL%20%e7%9a%84%e5%8d%8f%e8%ae%ae%e3%80%82%0a%e5%8d%8f%e8%ae%ae%e7%ae%80%e4%bb%8b%20MySQL%20%e5%8d%8f%e8%ae%ae%e4%b8%80%e8%88%ac%e5%88%86%e4%b8%ba%e4%b8%a4%e4%b8%aa%e9%98%b6%e6%ae%b5%ef%bc%8c%e4%b8%80%e4%b8%aa%e6%98%af%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%ef%bc%8c%e4%b8%80%e4%b8%aa%e6%98%af%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%e3%80%82%20%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%e4%b8%bb%e8%a6%81%e6%98%af%e5%ae%a2%e6%88%b7%e7%ab%af%e5%92%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%bf%9b%e8%a1%8c%e7%9b%b8%e4%ba%92%e8%ae%a4%e8%af%81%e7%9a%84%e9%98%b6%e6%ae%b5%ef%bc%8c%e5%b0%b1%e5%83%8f%e6%88%91%e4%bb%ac%e5%b9%b3%e5%b8%b8%e7%99%bb%e9%99%86%e6%9f%90%e4%b8%aa%e7%bd%91%e7%ab%99%e7%9a%84%e4%b8%80%e4%b8%aa%e6%93%8d%e4%bd%9c%e3%80%82%20%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%e4%b8%bb%e8%a6%81%e6%98%af%e5%ae%a2%e6%88%b7%e7%ab%af%e5%90%91%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%bf%9b%e8%a1%8c%e7%9a%84%e4%b8%80%e4%ba%9b%e6%8c%87%e4%bb%a4%e7%9a%84%e5%8f%91%e9%80%81%ef%bc%8c%e7%84%b6%e5%90%8e%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%a4%84%e7%90%86%e6%8c%87%e4%bb%a4%e5%b9%b6%e8%bf%94%e5%9b%9e%e7%bb%93%e6%9e%9c%e7%9a%84%e4%b8%80%e4%b8%aa%e8%bf%87%e7%a8%8b%e3%80%82%20%e5%9c%a8%e5%ae%a2%e6%88%b7%e7%ab%af%e5%92%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%8f%91%e9%80%81%e7%9a%84%e6%95%b0%e6%8d%ae%e5%8c%85%e4%b8%ad%ef%bc%8c%e5%89%8d%203%20%e4%b8%aa%e5%ad%97%e8%8a%82%e8%a1%a8%e7%a4%ba%e8%bf%99%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%9a%84%e5%a4%a7%e5%b0%8f%ef%bc%8c%e6%89%80%e4%bb%a5%e8%bf%99%e9%87%8c%e5%b0%b1%e6%9c%89%e4%b8%80%e4%b8%aa%e9%97%ae%e9%a2%98%ef%bc%8c%e5%b0%b1%e6%98%af%e5%ae%83%e6%9c%89%e4%b8%80%e4%b8%aa%e5%a4%a7%e5%b0%8f%e7%9a%84%e9%99%90%e5%88%b6%ef%bc%8c%e6%95%b0%e6%8d%ae%e5%8c%85%e5%a4%a7%e5%b0%8f%e4%b8%8d%e8%83%bd%e8%b6%85%e8%bf%8716777215%20%28%242%5e%7b24%7d-1%24%29%20bytes%ef%bc%8c%e4%b9%9f%e5%b0%b1%e6%98%af%2016M%20%e5%a4%a7%e5%b0%8f%ef%bc%8816%e8%bf%9b%e5%88%b6%e8%a1%a8%e7%a4%ba%ef%bc%9aff%20ff%20ff%ef%bc%8c%e5%88%9a%e5%88%9a%203%20%e4%b8%aa%e5%ad%97%e8%8a%82%ef%bc%89%e3%80%82%e8%bf%99%e5%b0%b1%e4%bc%9a%e6%9c%89%e4%b8%89%e7%a7%8d%e6%83%85%e5%86%b5%e5%87%ba%e7%8e%b0%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e6%95%b0%e6%8d%ae%e5%8c%85%e5%b0%8f%e4%ba%8e%2016M%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e7%ad%89%e4%ba%8e%ef%bc%8c%e4%b8%80%e7%a7%8d%e6%98%af%e5%a4%a7%e4%ba%8e%e3%80%82%e6%89%80%e4%bb%a5%e5%9c%a8%20MySQL%20%e5%8d%8f%e8%ae%ae%e4%b8%ad%e6%98%af%e8%bf%99%e6%a0%b7%e5%a4%84%e7%90%86%e7%9a%84%ef%bc%9a%0a%e5%b0%8f%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e4%b8%80%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%20%e7%ad%89%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e4%b8%a4%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%ef%bc%8c%e7%ac%ac%e4%ba%8c%e4%b8%aa%e5%8c%85%e4%b8%ba%e7%a9%ba%e5%8c%85%20%e5%a4%a7%e4%ba%8e%2016M%ef%bc%9a%e5%8f%91%e9%80%81%e5%a4%9a%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%ef%bc%8c%e6%af%8f%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e5%a4%a7%e5%b0%8f%e6%9c%80%e5%a4%a7%e4%b8%ba%2016M%ef%bc%8c%e5%bd%93%e6%9c%80%e5%90%8e%e4%b8%80%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%ad%89%e4%ba%8e%2016M%20%e6%97%b6%ef%bc%8c%e5%86%8d%e5%a4%9a%e5%8f%91%e9%80%81%e4%b8%80%e4%b8%aa%e7%a9%ba%e6%95%b0%e6%8d%ae%e5%8c%85%20%e6%af%8f%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e4%b8%ad%e7%9a%84%e7%ac%ac%204%20%e4%b8%aa%e5%ad%97%e8%8a%82%e8%a1%a8%e7%a4%ba%e8%bf%99%e4%b8%aa%e6%95%b0%e6%8d%ae%e5%8c%85%e7%9a%84%e5%ba%8f%e5%8f%b7ID%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e5%9c%a8%e4%b8%8d%e5%90%8c%e9%98%b6%e6%ae%b5%e4%bc%9a%e9%80%92%e5%a2%9e%ef%bc%8c%e6%af%94%e5%a6%82%e5%9c%a8%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e4%bc%9a%e9%9a%8f%e7%9d%80%e5%8c%85%e7%9a%84%e6%95%b0%e9%87%8f%e8%80%8c%e9%80%92%e5%a2%9e%ef%bc%8c%e5%bd%93%e8%bf%9e%e6%8e%a5%e9%98%b6%e6%ae%b5%e5%ae%8c%e6%88%90%e5%90%8e%e8%bf%9b%e5%85%a5%e5%91%bd%e4%bb%a4%e9%98%b6%e6%ae%b5%ef%bc%8c%e8%bf%99%e4%b8%aa%20ID%20%e5%8f%88%e4%bc%9a%e4%bb%8e%200%20%e5%bc%80%e5%a7%8b%e9%80%92%e5%a2%9e%ef%bc%8c%e7%9b%b4%e5%88%b0%e8%bf%99%e4%b8%aa%e5%91%bd%e4%bb%a4%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f%e7%bb%93%e6%9d%9f%e3%80%82%0a%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%20%e5%bd%93%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bf%9b%e8%a1%8c%e5%b0%9d%e8%af%95%e4%bd%bf%e7%94%a8%20TCP%20%e8%bf%9e%e6%8e%a5%20MySQL%20%e6%9c%8d%e5%8a%a1%e7%ab%af%e6%97%b6%ef%bc%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%b0%b1%e4%bc%9a%e5%93%8d%e5%ba%94%e4%b8%80%e4%b8%aa%e5%88%9d%e5%a7%8b%e7%9a%84%e6%8f%a1%e6%89%8b%e5%8c%85%ef%bc%8c%e8%bf%99%e4%b8%aa%e6%8f%a1%e6%89%8b%e5%8c%85%e6%9c%89%20V9%e3%80%81V10%20%e4%b8%a4%e4%b8%aa%e7%89%88%e6%9c%ac%e3%80%82%e4%b8%8d%e8%bf%87%e7%8e%b0%e5%9c%a8%e4%b8%80%e8%88%ac%e7%94%a8%e7%9a%84%e9%83%bd%e6%98%af%20V10%20%e7%89%88%e6%9c%ac%ef%bc%8c%e5%a6%82%e6%9e%9c%20MySQL%20%e7%9a%84%e7%89%88%e6%9c%ac%e5%9c%a8%203.21.0%20%e4%b9%8b%e5%89%8d%ef%bc%8c%e9%82%a3%e4%b9%88%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%93%8d%e5%ba%94%e7%9a%84%e6%98%af%20V9%20%e7%89%88%e6%9c%ac%e7%9a%84%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%e3%80%82%e6%9c%ac%e7%af%87%e6%96%87%e7%ab%a0%e5%b0%b1%e8%ae%b2%e8%ae%b2%e7%8e%b0%e5%9c%a8%e5%b8%b8%e7%94%a8%e7%9a%84%20V10%20%e7%89%88%e6%9c%ac%e7%9a%84%e5%88%9d%e5%a7%8b%e6%8f%a1%e6%89%8b%e5%8c%85%e3%80%82%0a%e6%88%91%e4%bb%ac%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%e4%bb%a5%e4%b8%8b%e4%bb%a3%e7%a0%81%e6%9d%a5%e5%b0%9d%e8%af%95%e8%bf%9e%e6%8e%a5%e6%88%91%e4%bb%ac%e6%9c%ac%e5%9c%b0%e7%9a%84%20MySQL%20%e6%9c%8d%e5%8a%a1%3a" aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2852f14d7d13471798ce28c544741e89%2f&t=MySQL%e6%98%af%e6%80%8e%e6%a0%b7%e9%80%9a%e8%ae%af%e7%9a%84%ef%bc%9f" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="toc-toggle" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;" aria-label="TOC">
+          <i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2022  Greycode&#39;s Blog 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">All posts</a></li>
+         
+        <li><a href="/categories">Categories</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+  
+
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+</html>

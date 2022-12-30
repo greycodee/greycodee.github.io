@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UML on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/tags/uml/</link>
+    <description>Recent content in UML on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Jul 2021 20:17:38 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/uml/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UML箭头在Java中的含义</title>
+      <link>http://localhost:1313/posts/234c81b9931c44cb9b88e0e53210bb48/</link>
+      <pubDate>Sun, 18 Jul 2021 20:17:38 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/234c81b9931c44cb9b88e0e53210bb48/</guid>
+      <description>泛化 在 Java 中表示继承关系，空心箭头指向父类
+示例：
+class Parent { } class Son extends Parent { } 实现 表示实现接口，箭头指向接口类
+示例：
+interface Iter { } class TerImpl implements Iter { } 依赖 表示依赖关系，某个类的方法必须依赖另一个类才可以执行，箭头指向被依赖的类
+示例：
+class A { public void testA(){ System.out.println(&amp;#34;这是 A 类&amp;#34;); } } class B { public void testB(A a){ a.testA(); } } 关联关系 关联 表示关联关系，两个类的关系是平等的
+可以双向关联，A 可以关联 B，B 也可以关联 A
+箭头指向被关联的类
+示例：
+class A { public void testA(){ System.out.println(&amp;#34;这是 A 类&amp;#34;); } } class B { private A a; public B(A a) { this.</description>
+    </item>
+    
+  </channel>
+</rss>

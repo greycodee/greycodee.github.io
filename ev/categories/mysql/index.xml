@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on Greycode&#39;s Blog</title>
+    <link>http://localhost:1313/categories/mysql/</link>
+    <description>Recent content in MySQL on Greycode&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Apr 2020 17:16:27 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>插入emoji到mysql时提示了一个表里不存在的字段的错误</title>
+      <link>http://localhost:1313/posts/mysql-utf8mb4-error/</link>
+      <pubDate>Wed, 29 Apr 2020 17:16:27 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/mysql-utf8mb4-error/</guid>
+      <description>1.问题描述 由于公司前端有需求，需要在tiny_user_info表的nickname这个字段里存入emoji表情，于是我熟练地将这个字段修改为utf8mb4，改好后测试插入一条带emoji数据。于是报了这个错误：
+[2020-04-29 15:57:25] [HY000][1366] Incorrect string value: &amp;#39;\xF0\x9F\x98\x98&amp;#39; for column &amp;#39;user_name&amp;#39; at row 14 当时我就傻了，我这个表里也没有user_name这个字段啊，怎么会报这个字段错误,我明明修改的是nickname这个字段啊。于是google和百度搜了一圈，无解。
+２.解决方案 试了好几种方法，删字段，重新建。删表，重新建。都不行。。。。。静下心来，于是打算从mysql服务器入手。进入到mysql对应库的文件夹，发现tiny_user_info这个表有三个文件
+和常见的多了一个TRG文件。这是一个触发器文件，打开一看，发现了user_name字段。。。。。。
+原来是同事在这个表里加了个触发器，当tiny_user_info里新增数据时，会触发新增到另一张表里，nickname的值同时会插入到另一张表的user_name字段，而他那张表的字段没有设置utf8mb4编码,所以导致插入失败。于是叫同事把他那张表设置一下utf8mb4编码后，就可以正常插入了。</description>
+    </item>
+    
+    <item>
+      <title>更新驱动到mysql-connector-java-8遇到的一些问题</title>
+      <link>http://localhost:1313/posts/mysql-update-driver-connector-8/</link>
+      <pubDate>Wed, 25 Dec 2019 17:07:12 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/mysql-update-driver-connector-8/</guid>
+      <description>更新驱动到mysql-connector-java-8遇到的一些问题 问题 POM &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.16&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; application.properties spring.datasource.driver-class-name=com.mysql.jdbc.Driver 项目是SpringBoot构建的,数据库版本是:MySQL5.7,用了mysql-connector-java-8来链接数据库,application.properties也配置成spring.datasource.driver-class-name=com.mysql.jdbc.Driver,中间遇到了几个问题;
+问题一 描述 如上配置后,控制台报了一下错误:
+Loading class `com.mysql.jdbc.Driver&amp;#39;. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver&amp;#39;. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary. 翻译过来后就是:
+加载类 com.mysql.jdbc.Driver。 不推荐使用。 新的驱动程序类为 com.mysql.cj.jdbc.Driver。 通过SPI自动注册驱动程序，通常不需要手动加载驱动程序类。
+解决 根据提示,解决方法有两种:
+更改application.properties文件 spring.datasource.driver-class-name=com.mysql.jdbc.Driver //改成下面这样 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver 去掉application.properties文件中的spring.datasource.driver-class-name,因为它说会通过SPI自动注册的; 问题二 描述 数据库的数据时间总是和实际时间差8个小时
+解决 在数据库url添加serverTimezone=GMT%2B8
+spring.datasource.url=jdbc:mysql://10.25.0.01:3307/db?useUnicode=true&amp;amp;autoReconnect=true&amp;amp;characterEncoding=UTF-8&amp;amp;serverTimezone=GMT%2B8 总结 mysql-connector-java5.X的版本驱动名是:com.mysql.jdbc.Driver; 6.X及以上版本的驱动名是:com.mysql.cj.jdbc.Driver</description>
+    </item>
+    
+  </channel>
+</rss>

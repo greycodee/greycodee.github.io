@@ -1,7 +1,7 @@
 ---
 title: "Understand Rust Ownership"
-date: 2022-12-29T14:37:51+08:00
-draft: true
+date: 2022-12-30T14:37:51+08:00
+draft: false
 ---
 
 ## what's ownership?
