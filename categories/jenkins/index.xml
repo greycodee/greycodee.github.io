@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jenkins on Greycode's Blog</title><link>https://greycode.top/categories/jenkins/</link><description>Recent content in Jenkins on Greycode's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 13 Dec 2019 15:38:02 +0000</lastBuildDate><atom:link href="https://greycode.top/categories/jenkins/index.xml" rel="self" type="application/rss+xml"/><item><title>Jenkins教程-集成SonarQube</title><link>https://greycode.top/posts/build-jenkins-sonarqube/</link><pubDate>Fri, 13 Dec 2019 15:38:02 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-sonarqube/</guid><description>什么是SonarQube? 看看维基百科的说明： SonarQube与CI/CD架构图 Docker运行SonarQube 简单了解之后，开始安装SonarQube.这里用Docker安装
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jenkins on Greycode's Blog</title><link>https://blog.greycode.top/categories/jenkins/</link><description>Recent content in Jenkins on Greycode's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 13 Dec 2019 15:38:02 +0000</lastBuildDate><atom:link href="https://blog.greycode.top/categories/jenkins/index.xml" rel="self" type="application/rss+xml"/><item><title>Jenkins教程-集成SonarQube</title><link>https://blog.greycode.top/posts/build-jenkins-sonarqube/</link><pubDate>Fri, 13 Dec 2019 15:38:02 +0000</pubDate><guid>https://blog.greycode.top/posts/build-jenkins-sonarqube/</guid><description>什么是SonarQube? 看看维基百科的说明： SonarQube与CI/CD架构图 Docker运行SonarQube 简单了解之后，开始安装SonarQube.这里用Docker安装
 注：这里用mysql来存储SonarQube的数据，SonarQube7.9起已经不在支持mysql了，可以安装官方推荐的PostgreSQL
 SonarQube 6.7.7 Docker-CE 19.03.1 Mysql 5.7 安装 直接运行这个docker命令来安装，网上其他的教程有什么挂载文件什么的，我试了都会安装失败，原因还是因为权限原因，因为SonarQube不是以root用户运行的，导致没权限读写挂载出来的文件夹．
 注意：创建容器前一定要先保证你连的容器有对应的数据库
@@ -15,12 +15,12 @@ Administration-&amp;gt;Security-&amp;gt;Users
 设置SonarQube servers 进入　系统管理-&amp;gt;系统设置-&amp;gt;SonarQube servers　设置好后点保存
 因为我SonarQube和Jenkins安装在同一台机器不同的Docker容器里的,所以这里URL直接填SonarQube的Docker容器的IP和端口
 安装SonarQube Scanner 下载压缩包 下载SonarQube Scanner压缩包：SonarQube Scanner 解压到Jenkins挂载出来的目录里 只有解压到挂载出来的Jenkins的目录里，Docker容器安装的Jenkins才能读取到,我这里是宿主机的/opt/jenkins挂载到了Jenkins容器里的/var/jenkins_home目录上，所以我只要解压到宿主机的/opt/jenkins目录中就可以了
-Jenkins配置全局工具 进入　系统管理-&amp;gt;全局工具配置-&amp;gt;SonarQube Scanner 找到模块后点击新增SonarQube Scanner</description></item><item><title>Jenkins插件版本太旧的更新方法</title><link>https://greycode.top/posts/problem-jenkins-01/</link><pubDate>Tue, 12 Nov 2019 17:27:27 +0000</pubDate><guid>https://greycode.top/posts/problem-jenkins-01/</guid><description>前言 Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况： Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.
+Jenkins配置全局工具 进入　系统管理-&amp;gt;全局工具配置-&amp;gt;SonarQube Scanner 找到模块后点击新增SonarQube Scanner</description></item><item><title>Jenkins插件版本太旧的更新方法</title><link>https://blog.greycode.top/posts/problem-jenkins-01/</link><pubDate>Tue, 12 Nov 2019 17:27:27 +0000</pubDate><guid>https://blog.greycode.top/posts/problem-jenkins-01/</guid><description>前言 Jenkins的插件好多都是互相依赖的，如果有的插件版本太低，而另一个插件就会导致用不了，就会出现下面的情况： Durable Task Plugin version 1.29 is older than required. To fix, install version 1.33 or later.
 查看本地已安装版本 可以看到，本地安装的版本和刚才提示的一样，是1.29版本的，刚才提示说太旧了，要更新到1.33版本。
 搜索插件 当你理所应当的去这个界面准备搜索这个插件并更新时。。。。你傻了，，怎么搜不到？？？WTF
 不要慌，天无绝人之路，这里找不到，可以去另外的地方找。浏览器打开这个网站
 Jenkins插件下载
-进入后在输入框里输入你刚才要下载的插件: 选择对应的插件 然后点击右上角 下载刚才提示的1.33版本 下载完成后是一个hpi文件 导入插件 到插件管理界面，找到Upload Plugin 然后选择刚才下载的插件，点击导入 可以看到插件正在导入 导入完成后，重启Jenkins就OK了</description></item><item><title>Jenkins教程-Docker+GitLab持续部署持续集成</title><link>https://greycode.top/posts/build-jenkins-ci-cd/</link><pubDate>Tue, 12 Nov 2019 17:27:02 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-ci-cd/</guid><description>目录 Jenkins教程-搭建(Docker版)
+进入后在输入框里输入你刚才要下载的插件: 选择对应的插件 然后点击右上角 下载刚才提示的1.33版本 下载完成后是一个hpi文件 导入插件 到插件管理界面，找到Upload Plugin 然后选择刚才下载的插件，点击导入 可以看到插件正在导入 导入完成后，重启Jenkins就OK了</description></item><item><title>Jenkins教程-Docker+GitLab持续部署持续集成</title><link>https://blog.greycode.top/posts/build-jenkins-ci-cd/</link><pubDate>Tue, 12 Nov 2019 17:27:02 +0000</pubDate><guid>https://blog.greycode.top/posts/build-jenkins-ci-cd/</guid><description>目录 Jenkins教程-搭建(Docker版)
 Jenkins教程-创建Maven项目
 Jenkins教程-Docker+GitLab持续部署持续集成
 环境 地址 系统 安装的软件 主机１ 10.25.0.72 Centos 7 Docker　,　Jenkins(Docker版) 主机２ 10.25.0.50 Cnetos 7 Docker Jenkins所需添加插件 Git Parameter
@@ -32,7 +32,7 @@ SSH
 配置Job 进入上篇文章创建好的Job,在此基础上进行改造
 配置Git Parameter,来获取gitlab的Tag数据 配置触发器 点击最下面的Generate,生成秘钥。然后记下URL:http://172.16.54.131:8080/project/JenkinsTest 和生成的秘钥：60327d68d10f1f7621696edd42719d1c
 添加构建完成后的动作 添加Execute shell 和Execute shell script on remote host using ssh Execute shell ： 执行Jenkins所在服务器的脚本 Execute shell script on remote host using ssh：登录远程服务器执行脚本 编写你要执行的脚本 由于是自定义的，内容我就不粘贴出来了.编写好后点击保存
-开始构建 手动构建 选择你要构建的tag标签，点击Build开始构建并自动部署 自动构建 自动构建是当你push或打tag上传代码的时候，Jenkins就会自动构建部署</description></item><item><title>Jenkins教程-创建Maven项目</title><link>https://greycode.top/posts/build-jenkins-mavne/</link><pubDate>Tue, 12 Nov 2019 17:26:19 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-mavne/</guid><description>目录 Jenkins教程-搭建(Docker版)
+开始构建 手动构建 选择你要构建的tag标签，点击Build开始构建并自动部署 自动构建 自动构建是当你push或打tag上传代码的时候，Jenkins就会自动构建部署</description></item><item><title>Jenkins教程-创建Maven项目</title><link>https://blog.greycode.top/posts/build-jenkins-mavne/</link><pubDate>Tue, 12 Nov 2019 17:26:19 +0000</pubDate><guid>https://blog.greycode.top/posts/build-jenkins-mavne/</guid><description>目录 Jenkins教程-搭建(Docker版)
 Jenkins教程-创建Maven项目
 Jenkins教程-Docker+GitLab持续部署持续集成
 前期准备 本教程是和gitlab集成,所以要有gitlab仓库。注意：如果后期要弄自动部署的话,你Jenkins的地址gitlab必须能访问到。不然gitlab监听到事件就通知不了Jenkins了；
@@ -41,10 +41,10 @@ Maven Integration 安装Maven 点击侧边栏的Manage Jenkins,然后点击Globa
 创建Git登录凭证 点击侧边栏的凭证，然后按图点击 这边Kind有很多选项，这边选择Username with password,用账户密码来设置；然后在Username和Password输入框中分别输入gitlab的账号和密码。点击OK保存；
 保存后就会出现你保存好的凭证；
 创建JOB 创建Maven项目 输入你的gitlab项目地址，然后选择刚才配置的凭证 输入Maven打包命令，然后点击保存 开始构建 查看构建项目日志 第一次构建会比慢，因为他要下载maven相关构建的包
-查看构建好的jar包 到此，构建maven项目已结束，可以下载这个jar包进行部署。后面会有自动构建部署的教程</description></item><item><title>Jenkins初始化界面插件安装失败解决方法</title><link>https://greycode.top/posts/problem-jenkins-02/</link><pubDate>Thu, 07 Nov 2019 17:19:52 +0000</pubDate><guid>https://greycode.top/posts/problem-jenkins-02/</guid><description>前言 在初始化安装界面可能由于网络问题会出现插件下载失败，就像下面这个界面
+查看构建好的jar包 到此，构建maven项目已结束，可以下载这个jar包进行部署。后面会有自动构建部署的教程</description></item><item><title>Jenkins初始化界面插件安装失败解决方法</title><link>https://blog.greycode.top/posts/problem-jenkins-02/</link><pubDate>Thu, 07 Nov 2019 17:19:52 +0000</pubDate><guid>https://blog.greycode.top/posts/problem-jenkins-02/</guid><description>前言 在初始化安装界面可能由于网络问题会出现插件下载失败，就像下面这个界面
 别着急，直接点击继续，先完成初始化步骤。
 设置源 插件下载失败，一般都是网络的原因，只要更换到国内的软件源就可以了，点击Manage Jenkins 点击Correct 点击Advanced 下拉找到Update Site 然后把输入框的内容换成
-https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.89/update-center.json 重新下载插件 然后重新下载刚才那些下载失败的插件,这里随机选一个 在刚才设置源的那个界面点击 Available，搜索插件，选择，点击install 插件正在安装 安装完全部插件后然后重启Jenkins，插件界面的报错信息才会消失;如果遇到插件下载不下来或搜不到，可以看这篇文章：Jenkins插件版本太旧的更新方法</description></item><item><title>Jenkins教程-搭建(Docker版)</title><link>https://greycode.top/posts/build-jenkins-docker/</link><pubDate>Thu, 07 Nov 2019 17:19:34 +0000</pubDate><guid>https://greycode.top/posts/build-jenkins-docker/</guid><description>目录 Jenkins教程-搭建(Docker版)
+https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.89/update-center.json 重新下载插件 然后重新下载刚才那些下载失败的插件,这里随机选一个 在刚才设置源的那个界面点击 Available，搜索插件，选择，点击install 插件正在安装 安装完全部插件后然后重启Jenkins，插件界面的报错信息才会消失;如果遇到插件下载不下来或搜不到，可以看这篇文章：Jenkins插件版本太旧的更新方法</description></item><item><title>Jenkins教程-搭建(Docker版)</title><link>https://blog.greycode.top/posts/build-jenkins-docker/</link><pubDate>Thu, 07 Nov 2019 17:19:34 +0000</pubDate><guid>https://blog.greycode.top/posts/build-jenkins-docker/</guid><description>目录 Jenkins教程-搭建(Docker版)
 Jenkins教程-创建Maven项目
 Jenkins教程-Docker+GitLab持续部署持续集成
 环境 主机：172.16.54.131
