@@ -2,17 +2,17 @@
   "list": [
       {
         "name":"Rust 笔记",
-        "url":"https://greycode.top/rust-study-book/",
+        "url":"https://blog.greycode.top/rust-study-book/",
         "desc":"Rust 学习笔记"
       },
       {
         "name":"Go笔记",
-        "url":"https://greycode.top/golang-wiki/",
+        "url":"https://blog.greycode.top/golang-wiki/",
         "desc":"学习 Go 中记的一些笔记"
       },
       {
         "name":"TypeScript笔记",
-        "url":"https://greycode.top/ts-wiki/",
+        "url":"https://blog.greycode.top/ts-wiki/",
         "desc":"在学习 TypeScript 时的笔记"
       }
   ]

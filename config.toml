@@ -1,4 +1,4 @@
-baseURL = "https://greycode.top/"
+baseURL = "https://blog.greycode.top/"
 languageCode = "en-us"
 title = "Greycode's Blog"
 theme = "cactus"
