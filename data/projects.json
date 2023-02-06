@@ -14,6 +14,11 @@
         "name":"TypeScript笔记",
         "url":"https://blog.greycode.top/ts-wiki/",
         "desc":"在学习 TypeScript 时的笔记"
+      },
+      {
+        "name":"日本語",
+        "url":"https://blog.greycode.top/nihongo-learning/",
+        "desc":"日本語を勉強します"
       }
   ]
 }
