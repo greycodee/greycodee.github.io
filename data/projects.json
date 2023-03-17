@@ -1,5 +1,10 @@
 {
   "list": [
+    {
+      "name":"日常笔记",
+      "url":"https://blog.greycode.top/issues-blog/",
+      "desc":"工作学习中遇到的一些问题解决记录"
+    },
       {
         "name":"Rust 笔记",
         "url":"https://blog.greycode.top/rust-study-book/",
