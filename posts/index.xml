@@ -100,7 +100,7 @@ new 语法用于创建对象
 异常处理
 命令行工具 aviator
 使用 AviatorScript 可以单纯的作为脚本语言使用，也可以和 Java 配合使用。
-单纯的作为脚本语言使用 作为脚本语言使用时，需要下载一个 aviator，然后用它去执行脚本文件。</description></item><item><title>ZooKeeper客户端详解及可视化客户端</title><link>https://blog.greycode.top/posts/8b8235def437432c99c81e97d68d0644/</link><pubDate>Mon, 09 Aug 2021 14:54:39 +0000</pubDate><guid>https://blog.greycode.top/posts/8b8235def437432c99c81e97d68d0644/</guid><description>下载 我们可以去 ZooKeeper 官网 下载，这里我下载了 ZooKeeper 3.7.0 版本
+单纯的作为脚本语言使用 作为脚本语言使用时，需要下载一个 aviator，然后用它去执行脚本文件。</description></item><item><title>ZooKeeper客户端详解及可视化客户端</title><link>https://blog.greycode.top/posts/8b8235def437432c99c81e97d68d0644/</link><pubDate>Mon, 09 Aug 2021 14:54:39 +0000</pubDate><guid>https://blog.greycode.top/posts/8b8235def437432c99c81e97d68d0644/</guid><description>下载 我们可以去 ZooKeeper 官网 下载，这里我下载了 ZooKeeper 3.7.0 版本。
 下载解压后，进入 apache-zookeeper-3.7.0-bin/bin 目录，这里有客户端、服务端和一些工具。在 Windows 中可以执行.cmd 结尾的执行文件，在 Mac 或 Linux 中可以执行 .sh 结尾的可执行文件。名为 zkCli 的文件就是 ZooKeeper 的客户端了，我们可以用这个客户端来连接到 ZooKeeper 注册中心，来对节点进行查看或增删操作。
 使用 我是在 Mac 环境下演示使用的
 接下来就说下这个客户端怎么使用。
